@@ -25,6 +25,7 @@ char err_updateprocmailrc[] = "Can't update ~/.procmailrc, please contact the we
 char err_cookietimeout[] = "Cookie timeout exceeded...\n";
 char err_cracklib[]    =  "BAD PASSWORD:\n";
 char err_mailcfgscript[] = "run_mailcfg exits with a non-null value:";
+char err_setuidzero  =  "script permission problem, please contact the webmaster\n";
 char msg_changed[]   =	"Password changed...\n";
 char msg_updated[]   =  "Mail configuration updated...\n";
 char *err_chpw[]     ={	"Couldn't open passwd file",                 /* 0 */

@@ -11,7 +11,12 @@ main()
 #include "cgipaf_vars.h"
 
    unsetenv("IFS");
-   setuid(0);
+   if (setuid(0)==-1) {
+      write_log(LOG_USER,7,"setuid(0) failed");
+      print_txt_msg(err_setuidzero);
+      exit(0);
+   }
+   
    set_memerr(out_of_memory);
 
    /*

@@ -1,0 +1,37 @@
+.\" changepass 1.0.0
+.\"
+.TH CHANGEPASS 8 "JUL 15, 2002"
+.AT 8
+.SH NAME
+    \fBchangepass\fP \- update an user's password
+
+.SH SYNOPSIS
+    changepass
+    
+.SH DESCRIPTION
+\fBchangepass\fP is a chpasswd clone, it might be useful on 
+platforms that doesn't have such a command like Solaris.
+.br 
+Most GNU/Linux distributions have chpasswd (8), FreeBSD has 
+a similar chpass command but many commercial Un*xen doesn't 
+have tool like this.  An alternative is to update the user's 
+password in script with \fBusermod\fP
+.br
+but it's possible to see the encrypted password in the process
+list, which is not very secure.
+.br    
+.SH USAGE
+.br 
+echo "username:new_password" | changepass
+.br
+
+.SH AUTHOR
+Written by Staf Wagemakers <staf@patat.org>
+    
+.SH COPYRIGHT
+Copyright (c)2002 Staf Wagemakers.
+.br    
+You are free to distribute this software under the terms of the 
+GNU General Public License. The complete text of the GNU General
+Public License can be found at http://www.gnu.org/licenses/gpl.html
+.br

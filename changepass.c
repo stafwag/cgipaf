@@ -16,7 +16,7 @@ void usage() {
       fprintf(stderr,"%s %s",txt_usage,prgname);
 }
 
-int main (int argn,char argv[]) 
+int main (int argn,char * argv[]) 
 {
    int i;
    char line[1024]="\0";

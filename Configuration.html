@@ -3,7 +3,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff">
-<h1>CGIpaf 1.0rc3 Configuration</h1>
+<h1>CGIpaf 1.0rc4 Configuration</h1>
 <h1>Content</h1>
 <UL>
 <li><a href="#syntax">Syntax</a></li>
@@ -391,7 +391,7 @@ accessdb.\n Please contact the webmaster"<br>
      runs a script is a password / mail configuration is successfully
      updated. Example:
 <pre><tt><code>
-     run_success "/usr/sbin/smbpasswd -U %{name}" "%{password}\n%{password} > /dev/null 2.&1"
+     run_success "/usr/sbin/smbpasswd -U %{name}" "%{password}\n%{password}\n > /dev/null 2.&1"
 </code></tt></pre>    
      Will update the SAMBA password file.
 </p> 

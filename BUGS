@@ -1,6 +1,13 @@
+version 1.0rc4pre2
+  
+  + run_success, run_locked didn't always work due a buffer overflow in 
+    xstring.c
+  + typo the sample samba passwd script the configuration file & documentation
+    the second %{password} have to terminated with a "\n".
+  
 version 1.0rc4pre1
  
-  mailcfg.cgi failed, if another cookie exists
+  + mailcfg.cgi failed, if another cookie exists
 
 version 1.0rc3
   
@@ -9,9 +16,9 @@ version 1.0rc3
 
 version 1.0rc2
 
-  accessdb bug, the database wasn' always closed  ( thanks to Andreas Liebe 
-  for his patch )
+  + accessdb bug, the database wasn' always closed  ( thanks to Andreas Liebe 
+    for his patch )
 
 version 1.0rc1
 
-  Configure doesn't work on non PAM systems
+  + Configure doesn't work on non PAM systems

@@ -32,7 +32,7 @@ while(c) {
      break;
    }
    ret=(char *)xrealloc(ret,strlen(ret)+(s-c)+strlen(value)+1);
-   strncpy(ret+strlen(ret),c,s-c);
+   strncat(ret+strlen(ret),c,s-c);
    strcat(ret,value);
    c=ss;
    if((*ss!='$')&&(*ss!='\0')) ++c;
@@ -118,11 +118,13 @@ int ephp_parse(char *phpstr,char *values[][2])
    char *s,*php_instr,*buf;
    int i;
    php_instr=(char *)xmalloc(sizeof(char *));
+   php_instr[0]='\0';
    buf=phpstr;
    do {
       s=strstr(buf,";");
       if(s!=NULL) {
 	 php_instr=(char *)xrealloc(php_instr,(s-buf)+1);
+	 memset(php_instr,'\0',sizeof(php_instr));
 	 php_instr[s-buf]='\0'; 
 	 strncpy(php_instr,buf,s-buf);
       }

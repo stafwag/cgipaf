@@ -146,7 +146,7 @@ char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *hea
 	 break;                             /* needle not found, so we can have a break() */
       }
       ret=(char *) xrealloc(ret,strlen(ret)+(s-c)+strlen(replace)+1);
-      strncpy(ret+strlen(ret),c,s-c);
+      strncat(ret+strlen(ret),c,s-c);
       strcat(ret,replace);
       c=s+strlen(needle);
    }
@@ -208,7 +208,7 @@ char * real_cut_between(char *txt,char *head, char *tail) {
       }
    ret=(char *) xrealloc(ret,strlen(ret)+s-c+1);
    ret[strlen(ret)+(s-c)]='\0';
-   strncpy(ret+strlen(ret),c,s-c);    /* ret is the part before the head */
+   strncat(ret+strlen(ret),c,s-c);    /* ret is the part before the head */
    c=s+strlen(head);
    s=strstr(c,tail);                  /* Where is the tail??? */
    if (s!=NULL) {;                /* doesnt seems to end so bye,bye */

@@ -120,7 +120,7 @@ fi
    echo "# run_locked            /usr/local/bin/notify_script %{name}" >> $CFGFILE
    echo "error_toolong           cgipasswd_errlong.php" >> $CFGFILE
    echo "msg_success             cgipasswd_msgchanged.php" >> $CFGFILE
-   echo "# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\"" >> $CFGFILE
+   echo "# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\n\"" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# set the minimum & maximum password length" >> $CFGFILE

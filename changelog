@@ -1,3 +1,9 @@
+* version 1.0rc4pre3 ( 27 oct 2001)
+  + fixed: run_success, run_locked didn't always work due a buffer overflow in
+    xstring.c
+  + fixed: typo the sample samba passwd script the configuration file & 
+    documentation the second %{password} have to terminated with a "\n".
+
 * version 1.0rc4pre2 ( 23 oct 2001 )
   + fixed: mailcfg.cgi failed, if another cookie exists
 

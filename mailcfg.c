@@ -361,6 +361,17 @@ main()
 	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
    }
 
+   /* copy the user's message to $HOME/vacations.txt */
+      
+   if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
+      write_log(LOG_USER,1,err_openvacations);	
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,options);
+   }
+   fputs(autoreply_msg,fp);
+   fclose(fp);
+
+   /* use run_mailcfg instead of built-in? */
+   
    if((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
       free(cp);
       i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options);
@@ -405,14 +416,6 @@ main()
 	 free(c);
       }
       
-      /* copy the user's messages to $HOME/vacations.txt */
-      
-      if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
-	 write_log(LOG_USER,1,err_openvacations);	
-	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,options);
-      }
-      fputs(autoreply_msg,fp);
-      fclose(fp);
       
       /* if auto replay if enabled create a new .procmailrc */
       
@@ -462,10 +465,12 @@ main()
    /* start run_success if defined */
    
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
-   if(i==-1)
-     write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
+   if(i<0) {
+      if(i==-1)
+	write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
+   }
    else
      if((i=WEXITSTATUS(i)))
-       write_log(LOG_USER,1,"run_succes returns a non-null value",i);
+       write_log(LOG_USER,1,"run_success returns a non-null value",i);
    if(config_file!=NULL) fclose(config_file);
 }

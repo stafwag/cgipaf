@@ -58,6 +58,12 @@ CONFIGURATION
     The configuration file ( cgipaf.conf ) allow you to set several options 
     see Configuration.html for more information.
 
+    If you're upgrading from a previous version of CGIpaf and want to cracklib
+    you have to set cracklib_dictpath to your cracklib dictpath in cgipaf.conf
+
+    If cgipaf fails to update your password, try to set
+    "set_PAM_CHANGE_EXPIRED_AUTHTOK" to off. 
+
     With the "pam_service" directive you can set the pam service name, if not
     set "passwd" is used. The passwd pam service ( /etc/pam.d/passwd ) usually 
     doesn't have an entry for user authentication, therefor /etc/pam.d/other 

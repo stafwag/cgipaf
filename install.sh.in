@@ -142,6 +142,7 @@ fi
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "# cracklib on" >> $CFGFILE
+   echo "# cracklib_dictpath    /var/cache/cracklib/cracklib_dict" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# set PAM_CHANGE_EXPIRED_AUTHTOK flag" >> $CFGFILE

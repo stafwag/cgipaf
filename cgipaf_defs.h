@@ -37,6 +37,7 @@
 #define  CFG_LOGLEVEL		"loglevel"
 #define  CFG_CRACKLIB		"cracklib"
 #define  CFG_PAM_CHANGE_EXPIRED_AUTHTOK	"set_PAM_CHANGE_EXPIRED_AUTHTOK"
+#define  CFG_CRACKLIB_DICTPATH	"cracklib_dictpath"
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
 #define  MINLENGTH 		6

@@ -1,13 +1,21 @@
-/* ------------------------------------------------------------------- */
-/* pass.h                                           (GPL) 1999 Belgium */
-/*                                                     Staf Wagemakers */
-/* ------------------------------------------------------------------- */
+/*
+ * pass.h					 (GPL) 1999,2002 Belgium
+ *                                                     staf wagemakers
+ */
+
 #include "config.h"
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef HAVE_CRYPT_H
 #include <crypt.h>
+#endif
+
+#ifdef HAVE_SHADOW_H
 #include <shadow.h>
+#endif
+
 #include "xmalloc.h"
 #include <unistd.h>
 #include <fcntl.h>

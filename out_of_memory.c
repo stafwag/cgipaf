@@ -3,6 +3,11 @@
  */
 
 #include "out_of_memory.h"
+
+/*
+ * xmalloc, xrealloc out of memory handler
+ */
+
 void out_of_memory(void) 
 {
    print_txt_msg("[CGIpaf]: out of memory\n");

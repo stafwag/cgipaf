@@ -1,8 +1,9 @@
 /*
  * xmalloc.c					(c) 2001  Staf Wagemakers
  */
-#include <malloc.h>
-#include <stdio.h>
+
+#include "xmalloc.h"
+
 void xmalloc_out_of_memory() {
    fprintf(stderr,"Out of memory\n");
    exit(1);

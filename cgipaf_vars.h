@@ -5,6 +5,7 @@ int    enable_cracklib=0;
 struct pw_info *pw;
 WEBDATA *data;
 char   *name,*pass;
+char   *cracklib_dictpath=NULL;
 FILE   *config_file;
 char   *doc_root;
 char   txt_name[]="name";

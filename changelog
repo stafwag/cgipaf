@@ -1,3 +1,9 @@
+* version 1.0.0pre1.0    ( 19 Mar 2002 )
+  + new cracklib_dictpath directive
+  + FIXED cgipaf did't compile on systems where CRACKLIB_DICTPATH wasn't 
+    defined
+  + update to configure
+
 * version 1.0rc5         ( 28 Jan 2002 )
   + documentation update
   + php files update

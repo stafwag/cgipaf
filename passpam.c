@@ -1,20 +1,24 @@
-/* ---------------------------------------------------------------------- */
-/* passpam.c                                                              */
-/*                                                                        */
-/* (GPL) 2000,2001 Belgium                   http://stafwag.home7.dk3.com */
-/* Staf Wagemakers                                      stafwag@yahoo.com */
-/* ---------------------------------------------------------------------- */
+/*
+ * passpam.c
+ * (GPL) 2000 - 02 Belgium                   http://stafwag.home7.dk3.com
+ * Staf Wagemakers					stafwag@yahoo.com
+ */
+
 #include "pass.h"
-static char *oldpw;
-static char *newpw;
-static char *pam_msg=NULL;
-static int pwstate;
+
+static char *oldpw;			    /* The old password */
+static char *newpw;		            /* The new password */
+static char *pam_msg=NULL;                  /* pam error message */
+static int pwstate;			    /* current pam conversation
+					       function state */
+
 static int chauth_flag=PAM_CHANGE_EXPIRED_AUTHTOK;
 
 char passwd_service[]="passwd";
 int  set_pam_chauth_flag (int flag) {
      chauth_flag=flag;
 }
+
 char * set_pam_service(char *s)
 {
     static char *pam_service=passwd_service;
@@ -78,16 +82,49 @@ static struct pam_conv conv = {
 struct pw_info * get_pw(char *name)
 {
 struct pw_info *pw;
+/*
+ * init pw
+ */
+
 pw=(struct pw_info *) xmalloc(sizeof(struct pw_info));
 pw->p=NULL;
 pw->sp=NULL;
 pw->pamh=0;
+
+/*
+ * pwstate = authenticate
+ */
+
 pwstate=0;
+
+/*
+ * copy the user's /etc/passwd entry to pw->p and /etc/shadow to pw->sp
+ * if the user doesn't exsists return NULL
+ */
+
 if(!(pw->p=getpwnam(name))) return(NULL);
 if (!strcmp(pw->p->pw_passwd,"x")) {
+#ifdef HAVE_SHADOW_H
    if(!(pw->sp=getspnam(name))) return(NULL);
+#else
+   /* 
+    * shadow.h is unavailable, unable to copy useful shadow info in pw 
+    */
+   
+   pw->sp=NULL;
+#endif
    }
+
+/*
+ * start pam authentication
+ */
+
 if(pam_start(set_pam_service(NULL),name, &conv, &pw->pamh)!=PAM_SUCCESS) return(NULL);
+
+/* 
+ * the user exists and there is no pam error -> return the uses's info
+ */
+
 return(pw);
 }
 /* ---------------------------------------------- */

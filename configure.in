@@ -41,6 +41,9 @@ if test "$ARG" = "WITHPAM"; then
    fi
 fi
 
+
+AC_CHECK_HEADERS(crypt.h,[ HAVE_CRYPT_H=1 ],AC_MSG_WARN(crypt.h not found))
+
 if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
    AC_MSG_WARN(you are compiling passwd.cgi viewmailcfg.cgi mailcfg.cgi)
@@ -49,7 +52,10 @@ if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(location /etc/passwd /etc/shadow and uses the crypt)
    AC_MSG_WARN(function to encrypt the passwords)
    AC_MSG_WARN(***********************************************************)
-   AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found, i'm giving up))
+   AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
+   if test "$HAVE_CRYPT_H" != "1"; then
+      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
+   fi
    LIBOBJS="$LIBOBJS pass.o"
  else
    AC_CHECK_LIB(pam,pam_authenticate,[ ], \ 
@@ -140,7 +146,7 @@ AC_CHECK_HEADERS(stdlib.h,,AC_MSG_ERROR(stdlib.h not found))
 AC_CHECK_HEADERS(stdio.h,,AC_MSG_ERROR(stdio.h not found))
 AC_CHECK_HEADERS(string.h,,AC_MSG_ERROR(string.h not found))
 AC_CHECK_HEADERS(fcntl.h,,AC_MSG_ERROR(fcntl.h not found))
-AC_CHECK_HEADERS(malloc.h,,AC_MSG_ERROR(malloc.h not found))
+AC_CHECK_HEADERS(malloc.h,,)
 AC_CHECK_HEADERS(errno.h,,AC_MSG_ERROR(errno.h not found))
 AC_CHECK_HEADERS(sys/stat.h,,AC_MSG_ERROR(sys/stat.h not found))
 AC_CHECK_HEADERS(pwd.h,,AC_MSG_ERROR(pwd.h not found))

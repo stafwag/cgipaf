@@ -1,3 +1,8 @@
+version 1.0.0pre1
+
+  + cgipaf did't compile on systems where CRACKLIB_DICTPATH wasn't
+    defined
+
 version 1.0rc5pre1
 
   + passwd.cgi didn't work on solaris

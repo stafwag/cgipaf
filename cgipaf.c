@@ -297,7 +297,14 @@ if ((i=ckpw(pw,pass))!=PASS_SUCCESS) {
 
 #ifdef HAVE_LIBCRACK
 if(enable_cracklib) {
-    char const * const crack_msg = FascistCheck(newpass1,CRACKLIB_DICTPATH);
+if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB_DICTPATH))!=NULL) {
+   cracklib_dictpath=xmalloc(strlen(cp)+1);
+   strcpy(cracklib_dictpath,cp);
+   free(cp);
+   write_log(LOG_INFO,7,"cracklib_dictpath set to \"%s\"",cracklib_dictpath);
+}
+if (cracklib_dictpath!=NULL) {
+    char const * const crack_msg = FascistCheck(newpass1,cracklib_dictpath);
     if (0 != crack_msg) {
        options[16][1]=(char *) xmalloc(strlen(crack_msg)+1);
        strcpy(options[16][1],crack_msg);
@@ -305,6 +312,10 @@ if(enable_cracklib) {
        if(show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options)==2) printf("%s\n",options[16][1]);
        if (config_file!=NULL) fclose(config_file);   
        exit(0);
+       }
+    }
+    else {
+    write_log(LOG_INFO,4,"cracklib_dictpath not set, cracklib is disabled");
     }
 }
 #endif

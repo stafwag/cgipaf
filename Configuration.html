@@ -4,7 +4,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.2.0RC1 Configuration</h1>
+<h1>CGIpaf 1.3.0pre2 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -49,6 +49,9 @@
 <li><a href="#accessdb">accessdb</a></li>
 <li><a href="#cracklib">cracklib</a></li>
 <li><a href="#cracklib">cracklib_dictpath</a></li>
+<li><a href="#vmail_support">vmail_support</a></li>
+<li><a href="#passwd_location">passwd_location</a></li>
+<li><a href="#shadow_location">shadow_location</a></li>
 <li><a href="#illegal_words">illegal_words</a></li>
 <li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>This directive is absolete, and will be removed...</li>
 <li><a href="#max_invalid">max_invalid</a></li>
@@ -91,7 +94,7 @@
   If a directive appears more than ones the last one is used. 
     
   Sections are grouped between &lt;section_name&gt; ...
-&lt/section_name&gt, the
+&lt;/section_name&gt;, the
   section names are like the directive names case insensitive.
 </p> 
 <h1><a name="sections">Sections</a></h1>
@@ -450,10 +453,35 @@ error_illegalword  Redirect    <em>location</em><br>
    Set the cracklib_dictpath, the cracklib_dictpath should be set to the 
    dictionary filename without the extension ( .pwi ), not the directory path.
 </p>
+<h2><a name="vmail_support">vmail_support</a></h2>
+<strong>Syntax:</strong> vmail_support  <em>yes|no</em><br>
+<strong>Default:</strong> off<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+   Enable support for Linuxconf virtual email domains passwords<br>
+   This directive is only available if you've compiled CGIpaf without
+   PAM support and isn't supported on *BSD systems.
+</p>
+<h2><a name="passwd_location">passwd_location</a></h2>
+<strong>Syntax:</strong> passwd_location  <em>/path/to/your/passwd_file</em><br>
+<strong>Default:</strong> system passwd<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+   Set the password file location. This directive is only available if you've
+   compiled CGIpaf without PAM support and isn't supported on *BSD systems.
+</p>
+<h2><a name="shadow_location">shadow_location</a></h2>
+<strong>Syntax:</strong> passwd_location  <em>/path/to/your/shadow_file</em><br>
+<strong>Default:</strong> system shadow<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+   Set the shadow file location. This directive is only available if you've
+   compiled CGIpaf without PAM support and isn't supported on *BSD systems.
+</p>
 <h2><a name="illegal_words">illegal_words</a></h2>
 <strong>Syntax:</strong> illegal_words <em>word1 word2</em><br>
 <strong>Default:</strong> not set<br>
-<strong>Context:</strong> &lt;mailcfg&gt;
+<strong>Context:</strong> &t;passwd&lt;
 <p>
    Specify a list of words that are illegal to use as a part of a new password
 </p>
@@ -710,6 +738,7 @@ seconds</td></tr>
 run_mailcfg script</a></td></tr>
 <tr><td><b>homedir</b></td><td>the user's home directory</td></tr>
 <tr><td><b>domain</b></td><td>the <a href="#domain">domain</a>name, only set by mailcfg.cgi</td></tr>
+<tr><td><b>user_maildomain</b></td><td>The user maildomain ( only available if <a href="#vmail_support">vmail support</a> is enabled</td>
 </table>
 <h1><a name="redirect">Redirect</a></h1>
 <p> 

@@ -152,11 +152,26 @@ void print_txt_msg(char *msg)
    if (msg!=NULL) {
        puts(msg);
        }
-   return;
    fflush(stdout);
+   return;
+}
+/* ---------------------------------------------------------------------
+ * prints a formatted string as plain text
+ * --------------------------------------------------------------------- */
+void printf_txt_msg(char *fmt, ...)
+{
+   va_list ap;
+   printf("Content-type: text/plain\n\n");
+   if (fmt!=NULL) {
+       va_start(ap,fmt);
+       vprintf(fmt,ap);
+       va_end(ap);
+       }
+   fflush(stdout);
+   return;
 }
 /* ----------------------------------------------------------------------
- * prints a string a html
+ * prints a formatted html string
  * ---------------------------------------------------------------------- */
 void print_html_msg(char *msg)
 {
@@ -167,6 +182,24 @@ void print_html_msg(char *msg)
    fflush(stdout);
    return;
 }
+
+/* ----------------------------------------------------------------------
+ *  prints a formatted html string
+ *  ---------------------------------------------------------------------- */
+void printf_html_msg(char *fmt, ...)
+{
+   va_list ap;
+   printf("Content-type: text/html\n\n");
+   if (fmt!=NULL) {
+       va_start(ap,fmt);
+       vprintf(fmt,ap);
+       va_end(ap);
+   }
+   fflush(stdout);
+   return;
+}
+
+
 void set_cookie(char *name, char *cookie,char *extra)
 {
 if (extra==NULL) {

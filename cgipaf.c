@@ -123,8 +123,7 @@ main()
    /* viewmailcfg.cgi can't work without a configfile */
    
    if(config_file==NULL) {
-      print_txt_msg(err_mcfg_configfile);
-      puts(CONFIGFILE);
+      printf_txt_msg("%s %s",err_mcfg_configfile,CONFIGFILE);
       puts(txt_contact_webmaster);
       write_log(LOG_USER,3,"%s %s",err_mcfg_configfile,CONFIGFILE);
       exit(0);
@@ -523,7 +522,7 @@ main()
    /* store the cookie and cookie timeout into the accessdb */
    
    if (save_access_status(accessdb,name,0,invalid_timeout,cookie)==-1) {
-      print_txt_msg("Warning: failed to update");puts(accessdb);
+      printf_txt_msg("Warning: failed to update %s", accessdb);
       write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
    }
    

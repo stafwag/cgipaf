@@ -6,8 +6,7 @@
 
    if ((i=get_useraclorder(config_file,CFGSECTION))==-1) {
       write_log(LOG_USER,7,"get_useraclorder() failed, check configuration file");
-      print_txt_msg(err_cfg);
-      printf("%s",err_useraclorder);
+      printf_txt_msg("%s, %s",err_cfg,err_useraclorder);
       exit(0);
    }
    else {
@@ -26,8 +25,7 @@
 
    if ((i=get_groupaclorder(config_file,CFGSECTION))==-1) {
       write_log(LOG_USER,7,"get_groupaclorder() failed, check configuration file");
-      print_txt_msg(err_cfg);
-      printf("%s",err_groupaclorder);
+      printf_txt_msg("%s, %s",err_cfg,err_groupaclorder);
       exit(0);
    }
    else {

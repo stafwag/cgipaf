@@ -14,7 +14,7 @@ sysconfdir      = @sysconfdir@
 localstatedir   = @localstatedir@
 srcdir          = @srcdir@
 HAVE_GDBMDIR_NDBM_H   = -D@HAVE_GDBMDIR_NDBM_H@
-inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h
+inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h cgipaf_acl.c
 CC=@CC@
 CFLAGS=@CFLAGS@
 

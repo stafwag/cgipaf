@@ -89,10 +89,15 @@ char   txt_usermaildomain[]="user_maildomain";
 char   txt_message[]="message";
 char   txt_admin[]="admin";
 char   txt_user[]="user";
+char   txt_cgipath[]="cgi_path";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
 int    max_postlength=150;
 int    set_script_filename=0;
+char   *cgi_path=NULL;
+char   *next_actionfull=NULL;
+char   txt_nextaction[]="next_action";
+char   txt_nextactionfull[]="next_action_full";
 
 WEBDATA *cookies=NULL;
 

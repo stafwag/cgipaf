@@ -72,6 +72,9 @@ Configuration</h1>
 <li><a href="#run_viewmailcfg">run_viewmailcfg</a></li>
 <li><a href="#set_script_filename">set_script_filename</a></li>
 <li><a href="#unset_script_filename">unset_script_filename</a></li>
+<li><a href="#set_cgi_path">set_cgi_path</a></li>
+<li><a href="#set_next_action">set_next_action</a></li>
+<li><a href="#set_next_action_full">set_next_action_full</a></li>
 <li><a href="#cookie_timeout">cookie_timeout</a></li>
 <li><a href="#mailcfg_document">mailcfg_document</a></li>
 <li><a href="#error_deldotforward">error_deldotforward</a></li>
@@ -695,6 +698,32 @@ error_illegalword  Redirect    <em>location</em><br>
 <p>
      unset the SCRIPT_FILENAME environment variable.
 </p>
+<h2><a name="set_cgi_path">set_cgi_path</a></h2>
+<strong>Syntax:</strong> set_cgi_path   <em>on|off</em><br>
+<strong>Default:</strong> off <br>
+<strong>Run as:</strong> user<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+     set the CGI_PATH environment variable to %{cgi_path}.
+</p>
+<h2><a name="set_next_action">set_next_action</a></h2>
+<strong>Syntax:</strong> set_next_action   <em>on|off</em><br>
+<strong>Default:</strong> off <br>
+<strong>Run as:</strong> user<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+     set the NEXT_ACTION environment variable to %{next_action}.
+</p>
+<h2><a name="set_next_action_full">set_next_action_full</a></h2>
+<strong>Syntax:</strong> set_next_action_full  <em>on|off</em><br>
+<strong>Default:</strong> off <br>
+<strong>Run as:</strong> user<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+     set the NEXT_ACTION_FULL environment variable to %{next_action_full}.
+</p>
+
+
 <h2><a name="cookie_timeout">cookie_timeout</a></h2>
 <strong>Syntax:</strong>   cookie_timeout    <em>seconds</em>
 <strong>Default:</strong> 300<br>
@@ -832,6 +861,9 @@ run_viewmailcfg script</a></td></tr>
 <tr><td><b>user_maildomain</b></td><td>The user maildomain ( only available if <a href="#vmail_support">vmail support</a> is enabled</td></tr>
 <tr><td><b>message</b></td><td>A string with the default message</td></tr>
 <tr><td><b>post_string</b></td><td>A string with the original HTTP POST</td></tr>
+<tr><td><b>cgi_path</b></td><td>A string to the /cgi-bin/</td></tr>
+<tr><td><b>next_action</b></td><td>Location of the next cgi action</td></tr>
+<tr><td><b>next_action_full</b></td><td>Location of the next cgi action full path</td></tr>
 <tr><td><b>_POST[]</b></td><td>An associative array of variables with the original HTTP POST</td></tr>
 <tr><td><b>_GET[]</b></td><td>An associative array of variables with the original HTTP GET</td></tr>
 <tr><td><b>_ENV[]</b></td><td>An associative array of variables with the environment</td></tr>

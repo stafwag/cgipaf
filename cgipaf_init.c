@@ -60,8 +60,10 @@ options=add_2_string_pair(options,txt_badpassword,txt_NULL);		       			/* 21 */
 options=add_2_string_pair(options,txt_usermaildomain,txt_NULL);	       				/* 22 */
 options=add_2_string_pair(options,txt_message,txt_NULL);	       				/* 23 */
 options=add_2_string_pair(options,txt_viewmailcfg_exitcode,viewmailcfg_exitcode_txt);          	/* 24 */
-options=add_2_string_pair(options,txt_admin,txt_NULL);          	
-	        /* 25 */
+options=add_2_string_pair(options,txt_admin,txt_NULL);          				/* 25 */
+options=add_2_string_pair(options,txt_cgipath,txt_NULL);          				/* 26 */
+options=add_2_string_pair(options,txt_nextaction,NEXT_ACTION);         				/* 27 */
+options=add_2_string_pair(options,txt_nextactionfull,txt_NULL);         			/* 27 */
 options=add_env_2_string_pair(options);
 
 get_data=read_get();
@@ -119,7 +121,84 @@ if (setuid(0)==-1) {
 	    else set_script_filename=1;
 	 xfree(cp);
       }
+
+      /* set_NEXT_ACTION */
+      
+      if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SET_NEXT_ACTION))!=NULL) {
+	 if (is_var_yes(cp)) {
+		 
+				setenv("NEXT_ACTION",NEXT_ACTION,1);
+
+	 }
+	 xfree(cp);
+      }
+
+
    }
+
+   /*
+    * cgi_path
+    */
+
+   	cgi_path=malloc(strlen("/cgi-bin/")+1);
+
+	strcpy(cgi_path,"/cgi-bin/");
+
+
+	if((cp=getenv("SCRIPT_NAME"))!=NULL) {
+
+		char *p;
+
+		for(p=cp+strlen(cp);p!=cp;p--) {
+
+			if(*p=='/') {
+				
+				cgi_path=xrealloc(cgi_path,p-cp+3);
+				strncpy(cgi_path,cp,p-cp+1);
+				cgi_path[p-cp+1]='\0';
+
+				break;
+
+			}
+
+		}
+
+	}
+
+	next_actionfull=xmalloc(strlen(cgi_path)+strlen(NEXT_ACTION)+1);
+	strcpy(next_actionfull,cgi_path);
+	strcat(next_actionfull,NEXT_ACTION);
+
+	update_string_pair_item(options,txt_cgipath,cgi_path,0);
+	update_string_pair_item(options,txt_nextactionfull,next_actionfull,0);
+
+	if(config_file) { 
+		
+		if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SET_CGI_PATH))!=NULL) {
+			
+			if (is_var_yes(cp)) {
+
+				setenv("CGI_PATH",cgi_path,1);
+
+			}
+			
+			xfree(cp);
+		
+		}
+
+      		if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SET_NEXT_ACTION_FULL))!=NULL) {
+	 
+			if (is_var_yes(cp)) {
+		 
+				setenv("NEXT_ACTION_FULL",next_actionfull,1);
+	 
+			}
+	 
+			xfree(cp);
+      
+		}
+	}
+
 
 
 #if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG) || defined(CGIPAF_PWADMIN)

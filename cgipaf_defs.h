@@ -77,6 +77,9 @@
 #define	 CFG_MAILCFG_CHECK	"mailcfg_check"
 #define	 CFG_SET_SCRIPT_FILENAME	"set_SCRIPT_FILENAME"
 #define	 CFG_UNSET_SCRIPT_FILENAME	"unset_SCRIPT_FILENAME"
+#define	 CFG_SET_CGI_PATH	"set_CGI_PATH"
+#define	 CFG_SET_NEXT_ACTION	"set_NEXT_ACTION"
+#define	 CFG_SET_NEXT_ACTION_FULL	"set_NEXT_ACTION_FULL"
 #define  CFG_ADMIN_PASSWD	"admin_passwd"
 #define  CFG_SELECT_USER	"select_user"
 
@@ -130,18 +133,21 @@
 #define  CFGSECTION             "passwd"
 #define  UPDATESECTION		"passwd"
 #define  LOGIN                  "name"
+#define  NEXT_ACTION		"passwd.cgi"
 #endif   /* CGIPAF_PASSWD */
 
 #ifdef   CGIPAF_PWADMIN
 #define  CFGSECTION             "pwadmin"
 #define  UPDATESECTION		"passwd"
 #define  LOGIN                  "admin"
+#define	 NEXT_ACTION		"pwadmin.cgi"
 #endif   /* CGIPAF_PWADMIN */
 
 #ifdef   CGIPAF_VIEWMAILCFG
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "name"
+#define	 NEXT_ACTION		"mailadmin.cgi"
 #include "mailconfig.h"
 #endif   /* CGIPAF_VIEWMAILCFG */
 
@@ -149,6 +155,7 @@
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "name"
+#define  NEXT_ACTION		"mailcfg.cgi"
 #include "mailconfig.h"
 #endif   /* CGIPAF_MAILCFG */
 
@@ -157,6 +164,7 @@
 #define  CFGSECTION             "mailadmin"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "admin"
+#define	 NEXT_ACTION		"mailadmin.cgi"
 #endif   /* CGIPAF_MAILADMIN */
 
 #include <pwd.h>

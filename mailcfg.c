@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------------ */
 /* mail control web interface                                         */
-/* author : staf wagemakers                          date: 26 NOV 99  */
+/* author : staf wagemakers                         (c) 1999,2001-02  */
 /* ------------------------------------------------------------------ */
 
 #define  FORWARD               "forward"

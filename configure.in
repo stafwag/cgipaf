@@ -102,13 +102,22 @@ dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
 dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
 dnl   fi
-   LIBOBJS="$LIBOBJS pass.o salt.o fgetpwnam.o"
+   LIBOBJS="$LIBOBJS pass.o salt.o"
+   
    if test "$enable_md5crypt" != "no"; then
 
 dnl freebsd has built-in md5 support
  
    if test "$host" != "freebsd"; then
       LIBOBJS="$LIBOBJS md5.o md5crypt.o"
+   fi
+
+   echo $host | grep -i "bsd" > /dev/null 2>&1
+
+   if test "$?"; then
+      LIBOBJS="$LIBOBJS fgetpwnam.o";
+   else
+      AC_MSG_WARN "BSD host detected vmail password are disabled"
    fi
 
       AC_DEFINE(MD5_CRYPT)

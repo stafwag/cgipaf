@@ -55,7 +55,6 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    }
    time(&t);
    if(t-access.ti>timeout) {
-      puts("debug: real timeout");
       return(0);
    }
    return(1);

@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+#
+
+use warnings;
+use strict;
+
+my ($NAME,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO)=<>;
+chomp ($NAME,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
+my   $DOTFORWARD="$HOMEDIR/.forward";
+
+if(("$FORWARD" ne "yes") and ("$AUTOREPLY" ne "yes")) {
+  unlink("$DOTFORWARD") or die "Unable to delete $DOTFORWARD";
+  exit 0;
+  }
+
+open(FH,">$DOTFORWARD") or die "Unable to create $DOTFORWARD";
+
+if("$FORWARD" eq "yes") {
+   print FH "$FORWARDTO";
+   if("$KEEPMSG" eq "yes") {
+      print FH ",\\$NAME";
+   }
+}
+
+if("$AUTOREPLY" eq "yes" ) {
+   if("$FORWARD" eq "yes" ) {
+      print FH ",";
+   }
+   else {
+      print FH "\\$NAME,";
+   }
+   print FH "\"|/usr/bin/vacation -m vacations.txt $NAME\"";
+}
+exit 0;

@@ -29,53 +29,75 @@
 
 WEBDATA *str2webdata(char equals, char end, char *str) 
 { 
-WEBDATA *wp;
-char *tmp=NULL;
-char *cp;
-char *c=str;
-int t;
-wp=(WEBDATA *) xmalloc(sizeof(WEBDATA));
-wp->n=0;
-wp->name=NULL;
-wp->value=NULL;
-wp->string=NULL;
 
-t=0;
-while (1) {
+	WEBDATA *wp;
+	char *tmp=NULL;
+	char *cp;
+	char *c=str;
+	int t=0;
+	wp=(WEBDATA *) xmalloc(sizeof(WEBDATA));
+	wp->n=0;
+	wp->name=NULL;
+	wp->value=NULL;
+	wp->string=NULL;
 
-if (tmp==NULL) {
-   tmp=(char *)xmalloc(1);
-   tmp[0]='\0';
-}
+	for(;;) { 
+		
+		if (tmp==NULL) {
 
-if (*c!=equals && *c!=end && *c!='\n' && *c!='\0') {
-   tmp=(char *)xrealloc(tmp,t+2);
-   tmp[t]=*c; 
-   tmp[++t]='\0';
-   }
-   else {
-      if (*c==equals) {
-         if (tmp) {
-            cp=mv_2_next(tmp);
-	    wp->name=(char **) xrealloc(wp->name,sizeof(char *)*(wp->n+1));
-	    wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1); 
-	    strcpy(wp->name[wp->n],cp);
-	    }
-	 }
-	 else {
-	     if (strlen(tmp)) {
-	        wp->value=xrealloc(wp->value,sizeof(char *)*(wp->n+1));
-	        wp->value[wp->n]=xmalloc(strlen(tmp)+1);
-	        strcpy(wp->value[wp->n],tmp);
-	        ++wp->n;
+   		tmp=(char *)xmalloc(1);
+   		tmp[0]='\0';
+
 		}
-	 }
-      t=0;free(tmp);tmp=NULL;
-   };
- if (!*c) break;
- ++c;
- }
-return wp;
+
+		if (*c!=equals && *c!=end && *c!='\n' && *c!='\0') {
+			
+			tmp=(char *)xrealloc(tmp,t+2);
+   			tmp[t]=*c; 
+   			tmp[++t]='\0';
+
+   		}
+   		else { 
+			if (*c==equals || wp->name==NULL) { 
+				
+				if (tmp) { 
+				
+					cp=mv_2_next(tmp);
+	    				wp->name=(char **) xrealloc(wp->name,sizeof(char *)*(wp->n+1));
+	    				wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1); 
+	    				strcpy(wp->name[wp->n],cp);
+
+				} 
+			} 
+			else {
+
+				if(wp->name!=NULL) { 
+					
+					wp->value=xrealloc(wp->value,sizeof(char *)*(wp->n+1));
+					if (strlen(tmp)) { 
+
+		      				wp->value[wp->n]=xmalloc(strlen(tmp)+1);
+		      				strcpy(wp->value[wp->n],tmp); 
+				
+					}
+					else {
+					
+						wp->value[wp->n]=xmalloc(1);
+						wp->value[wp->n][0]='\0';
+					}
+
+	      				++wp->n;
+
+				}
+			} 
+			
+			t=0;xfree(tmp);tmp=NULL; 
+		};
+		if (!*c) break;
+		++c;
+	}
+	
+	return wp;
 }
 
 /*

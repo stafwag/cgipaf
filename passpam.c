@@ -2,14 +2,19 @@
 /* passpam.c                                                              */
 /*                                                                        */
 /* (GPL) 2000,2001 Belgium                         http://stafwag.f2g.net */
-/* Staf Wagemakers                                       staf@digibel.org */
+/* Staf Wagemakers                                      stafwag@yahoo.com */
 /* ---------------------------------------------------------------------- */
 #include "pass.h"
 static char *oldpw;
 static char *newpw;
 static char *pam_msg=NULL;
 static int pwstate;
+static int chauth_flag=PAM_CHANGE_EXPIRED_AUTHTOK;
+
 char passwd_service[]="passwd";
+int  set_pam_chauth_flag (int flag) {
+     chauth_flag=flag;
+}
 char * set_pam_service(char *s)
 {
     static char *pam_service=passwd_service;
@@ -112,6 +117,6 @@ int chpw(struct pw_info *pw,char *pass)
 int ret;
 pwstate=0;
 newpw=pass;
-ret=pam_chauthtok(pw->pamh,PAM_CHANGE_EXPIRED_AUTHTOK);
+ret=pam_chauthtok(pw->pamh,chauth_flag); 
 return(ret);
 }

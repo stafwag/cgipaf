@@ -35,6 +35,7 @@
 #include <security/pam_appl.h>
 char *set_pam_service(char *s);
 char *last_pam_msg();
+int  set_pam_chauth_flag (int flag);
 #define PASS_SUCCESS PAM_SUCCESS
 #endif
 #ifndef _WITHPAM

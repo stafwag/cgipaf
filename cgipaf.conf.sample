@@ -3,6 +3,19 @@
 #
 
 #
+# set the pam service name, if not set passwd is used
+#
+
+# pam_service		 cgipaf
+
+#
+# enable syslog messages
+#
+
+syslog			 on
+loglevel		 6
+
+#
 # accessdb configuration
 
 accessdb                /etc/cgipaf/accessdb
@@ -38,15 +51,29 @@ error_tooshort          cgipasswd_errshort.php
 error_locked            cgipasswd_errlocked.php
 # run_locked            /usr/local/bin/notify_script %{name}
 error_toolong           cgipasswd_errlong.php
+error_cracklib          cgipasswd_errbadpassword.php
+error_pam               cgipasswd_errpam.php
 msg_success             cgipasswd_msgchanged.php
-run_success             "/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1" 	"%{password}\n%{password}"
+# run_success             "/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1" 	"%{password}\n%{password}\n"
 
 #
 # set the minimum & maximum password length
 #
 
 min_length              5
-max_length              8
+max_length              10
+
+#
+# enable cracklib support
+#
+
+# cracklib on
+
+#
+# set PAM_CHANGE_EXPIRED_AUTHTOK flag
+#
+
+set_PAM_CHANGE_EXPIRED_AUTHTOK  on
 
 </passwd>
 
@@ -78,7 +105,7 @@ error_deldotforward	 mailcfg_errdeldotforward.php
 error_deldotprocmailrc  mailcfg_errdeldotprocmailrc.php
 error_openvacations	 mailcfg_erropenvacations.php
 msg_success		 mailcfg_msgupdated.php
-# sendmail              /usr/lib/sendmail.php
+# sendmail              /usr/lib/sendmail
 # domain		 your_domain_name
 
 </mailcfg>

@@ -1,3 +1,7 @@
+version 1.0rc5pre1
+
+  + passwd.cgi didn't work on solaris
+
 version 1.0rc4pre3
 
   + it wasn't possible to use special characters as the loginname/password.

@@ -23,7 +23,7 @@ INSTALLATION
     type: 
 
           ./configure --bindir=/usr/local/apache/cgi-bin \ 
-                      --datadir=/usr/local/apache/htdocs/cgipasswd \ 
+                      --datadir=/usr/local/apache/htdocs/cgipaf \ 
                       --sysconfdir=/etc/cgipaf
     
     Update the above command with your real cgi-bin and htdocs directory
@@ -78,8 +78,10 @@ CONFIGURATION
     you've to update /etc/pam.conf.
 
     If your system don't support md5 passwords remove md5 in the password line.
-    passwd.cgi support all pam opties in the PAM configuration (cracklib, 
-    minium/ maxium password length etc.)
+    
+    If "set_PAM_CHANGE_EXPIRED_AUTHTOK" is to "on" passwd.cgi support all 
+    pam opties in the PAM configuration (cracklib, minium/ maxium password 
+    length etc.).
 
 THAT'S ALL FOLKS
 

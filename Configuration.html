@@ -47,6 +47,7 @@
 <li><a href="#max_length">max_length</a></li>
 <li><a href="#accessdb">accessdb</a></li>
 <li><a href="#cracklib">cracklib</a></li>
+<li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
@@ -406,8 +407,16 @@ error_pam  Redirect    <em>location</em><br>
      is displayed.
 </p>
 <p>
-     if cracklib is enabled in your PAM configuration, you should cracklib
-     to off.
+  if cracklib is enabled in your PAM configuration and 
+  <a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>
+  is "on", you should set cracklib to off.
+</p>
+<h2><a name="set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></h2>
+<strong>Syntax:</strong> set_PAM_CHANGE_EXPIRED_AUTHTOK <em>on</em>|<em>off</em><br>
+<strong>Default:</strong> on<br>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>
+     Set the PAM_CHANGE_EXPIRED_AUTHTOK flag
 </p>
 <h2><a name="max_invalid">max_invalid</a></h2>
 <strong>Syntax:</strong> max_invalid  <em>tries</em><br>

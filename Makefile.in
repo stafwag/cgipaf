@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
 # (GPL) 2001 Belgium                              http://stafwag.f2g.net
-# Staf Wagemakers	                                staf@digibel.org
+# Staf Wagemakers	                               stafwag@yahoo.com
 # ----------------------------------------------------------------------
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@

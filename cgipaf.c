@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------- */
 /* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
 /* http://stafwag.f2g.net                               Staf Wagemakers    */
-/*                                                     staf@digibel.org    */
+/* stafwag@yahoo.com                                                       */
 /* ----------------------------------------------------------------------- */
 #include "cgipaf_defs.h"
 
@@ -44,6 +44,14 @@ if ((pam_servicename=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL)
 }
    pam_servicename=set_pam_service(NULL);
    write_log(LOG_USER,7,"pam service name set to %s",pam_servicename);
+#ifdef CGIPAF_PASSWD
+
+if ((cp=get_sg_item(config_file,CFGSECTION,CFG_PAM_CHANGE_EXPIRED_AUTHTOK))!=NULL) {
+   if (!strcasecmp(cp,"off")) set_pam_chauth_flag(0);
+   free(cp);
+}
+
+#endif
    
 #endif
 

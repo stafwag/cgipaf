@@ -2,7 +2,7 @@
 /* pass.c						                  */
 /*									  */
 /* (GPL) 2000 Belgium                              http://stafwag.f2g.net */
-/* Staf Wagemakers                                       staf@digibel.org */
+/* Staf Wagemakers                                      stafwag@yahoo.com */
 /* ---------------------------------------------------------------------- */
 #include "pass.h"
 /* ---------------------------------------------- */

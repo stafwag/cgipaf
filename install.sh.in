@@ -1,6 +1,6 @@
 #!/bin/sh
 # cgipasswd install script			staf wagemakers
-#                                               staf@digibel.org
+#                                               stafwag@yahoo.com
 #                                               http://stafwag.f2g.net
 read_yesno () {
 read INPUT
@@ -138,10 +138,20 @@ fi
    echo "max_length              8" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
-   echo "# enabled cracklib support" >> $CFGFILE
+   echo "# enable cracklib support" >> $CFGFILE
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "# cracklib on" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# set PAM_CHANGE_EXPIRED_AUTHTOK flag" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   if [ `uname` = "SunOS" ]; then
+   echo "set_PAM_CHANGE_EXPIRED_AUTHTOK  off" >> $CFGFILE
+   else
+   echo "set_PAM_CHANGE_EXPIRED_AUTHTOK  on" >> $CFGFILE
+   fi
    echo >> $CFGFILE
    echo "</passwd>" >> $CFGFILE
    echo >> $CFGFILE
@@ -181,5 +191,5 @@ fi
  
    fi
    
-echo "Thank you for using cgipasswd!"
+echo "Thank you for using cgipaf!"
 echo "Goodbye....."

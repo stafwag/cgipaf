@@ -3,7 +3,7 @@
  * 
  * (c) 2001 Belgium
  * staf wagemakers
- * stafwag@f2s.com
+ * staf@digibel.org
  */
 #include "config.h"
 #include <stdlib.h>

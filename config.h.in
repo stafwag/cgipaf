@@ -75,6 +75,9 @@
 /* Define if you have the vsnprintf function.  */
 #undef HAVE_VSNPRINTF
 
+/* Define if you have the <crack.h> header file.  */
+#undef HAVE_CRACK_H
+
 /* Define if you have the <db1/ndbm.h> header file.  */
 #undef HAVE_DB1_NDBM_H
 
@@ -128,6 +131,9 @@
 
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
+
+/* Define if you have the crack library (-lcrack).  */
+#undef HAVE_LIBCRACK
 
 /* Define if you have the crypt library (-lcrypt).  */
 #undef HAVE_LIBCRYPT

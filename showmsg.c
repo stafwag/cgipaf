@@ -32,6 +32,7 @@ int show_alt_msg(char *alt_msg)
 int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char *parms[][2])
 {
 char *cp,*fullname,**cc;
+struct stat statbuf;
 if (section_name==NULL)
    cc=get_global_config_array(config_file,msgfile);
 else cc=get_section_config_array(config_file,section_name,msgfile);
@@ -57,6 +58,7 @@ else {
    if(root!=NULL) strcpy(fullname,root);
    strcat(fullname,"/");
    strcat(fullname,*cc);
+   if(stat(fullname,&statbuf)==-1) return(show_alt_msg(alt_msg));
    printf("Content-type: text/html\n\n");
    
    if(print_phpfile(fullname,parms)==-1) {

@@ -3,7 +3,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff">
-<h1>CGIpaf 1.0rc4 Configuration</h1>
+<h1>CGIpaf 1.0rc5 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -39,11 +39,14 @@
 <li><a href="#error_cookie">error_cookie</a></li>
 <li><a href="#error_cookietimeout">error_cookietimeout</a></li>
 <li><a href="#error_accessdb">error_accessdb</a></li>
+<li><a href="#error_cracklib">error_cracklib</a></li>
+<li><a href="#error_pam">error_pam</a></li>
 <li><a href="#min_uid">min_uid</a></li>
 <li><a href="#max_uid">max_uid</a></li>
 <li><a href="#min_length">min_length</a></li>
 <li><a href="#max_length">max_length</a></li>
 <li><a href="#accessdb">accessdb</a></li>
+<li><a href="#cracklib">cracklib</a></li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
@@ -72,7 +75,7 @@
 </ul>
 <h1><a name="syntax">Syntax</a></h1>
 <p>    
-  The configuration file (cgipaf.conf) contains one directive per lines. 
+  The configuration file (cgipaf.conf) contains one directive per line. 
   The directive names are case insensitive, the values are case sensitive.
   Everything after a hash ( # ) is ignored. Empty lines and whitespaces are 
   also ignored.
@@ -134,15 +137,14 @@ Set the pam service name, if not set "passwd" is used. The passwd pam service
 therefor /etc/pam.d/other has to have a line auth set to pam_unix.so.
 <pre><code><tt>
 	auth     required       pam_unix.so
+	account  required       pam_unix.so
 </tt></code></pre>
 If you don't like this for security reason etc, you can set the pam_service
 directive to "cgipaf" and create the file /etc/pam.d/cgipaf that looks like this<pre><code><tt>
 	auth     required       pam_unix.so
+	account  required       pam_unix.so
         password required       pam_unix.so md5
 </tt></code></pre>
-If your system don't support md5 passwords remove md5 in the password line.
-CGIpaf doesn't support crack_lib or minimum / maximum password length options.
-You can set the <a href="#min_length">minimum</a> / <a href="#max_length">maximum</a> password length in cgipaf.conf.
 </p>
 </p>
 <h2><a name="document_root">document_root</a></h2>
@@ -339,6 +341,22 @@ accessdb.\n Please contact the webmaster"<br>
     (view)mailcfg.cgi can't work without an 
     <a href="#accessdb">accessdb</a>
 </p>
+<h2><a name="error_cracklib">error_cracklib</a></h2>
+<strong>Syntax:</strong> error_cracklib  <em>filename</em> <b>OR</b>
+error_cracklib  Redirect    <em>location</em><br>
+<strong>Default:</strong> "BAD PASSWORD, %{cracklib_error}<br>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>
+    cracklib error
+</p>
+<h2><a name="error_pam">error_pam</a></h2>
+<strong>Syntax:</strong> error_pam  <em>filename</em> <b>OR</b>
+error_pam  Redirect    <em>location</em><br>
+<strong>Default:</strong> "Can't update password, errno, %{pam_error}<br>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>
+    pam error
+</p>
 <h2><a name="min_uid">min_uid</a></h2>
 <strong>Syntax:</strong> min_uid <em>uid</em><br>
 <strong>Default:</strong> 100<br>
@@ -377,6 +395,19 @@ accessdb.\n Please contact the webmaster"<br>
      accessdb path, if not set no access database is used. If not set Users 
      can try to change their password as many times they like.
      (view)mailcfg.cgi don't work without an accessdb. 
+</p>
+<h2><a name="cracklib">cracklib</a></h2>
+<strong>Syntax:</strong> cracklib  <em>on|off</em><br>
+<strong>Default:</strong> off<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;
+<p>       
+     enable cracklib test, the new password is tested with cracklib.
+     if the password is invalid <a href="#error_cracklib">error_cracklib</a>
+     is displayed.
+</p>
+<p>
+     if cracklib is enabled in your PAM configuration, you should cracklib
+     to off.
 </p>
 <h2><a name="max_invalid">max_invalid</a></h2>
 <strong>Syntax:</strong> max_invalid  <em>tries</em><br>
@@ -523,6 +554,8 @@ autoreply</td></tr>
 <tr><td><b>autoreply_msg</b></td><td>the autoreply message</td></tr>
 <tr><td><b>cookietimeout</b></td><td>cookie lifetime is
 seconds</td></tr>
+<tr><td><b>cracklib_error</b></td><td>cracklib error message</td></tr>
+<tr><td><b>pam_error</b></td><td>pam error message</td></tr>
 <tr><td><b>password</b></td><td>the user's new password, is only set at
 <a href="#run_success">run_success</a></td></tr>
 </table>

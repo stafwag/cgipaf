@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------- */
 /* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
-/* http://www.stafwag.f2s.com                           Staf Wagemakers    */
-/*                                                      stafwag@f2s.com    */
+/* http://stafwag.f2g.net                               Staf Wagemakers    */
+/*                                                     staf@digibel.org    */
 /* ----------------------------------------------------------------------- */
 #include "cgipaf_defs.h"
 
@@ -47,6 +47,19 @@ if ((pam_servicename=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL)
    
 #endif
 
+#ifdef HAVE_LIBCRACK
+if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB))!=NULL) {
+      if (!strcasecmp(cp,"off")) {
+	 enable_cracklib=0;
+         write_log(LOG_USER,7,"cracklib disabled");
+      }
+      else {
+	 enable_cracklib=1;
+	 write_log(LOG_USER,7,"cracklib enabled");
+      }
+      free(cp);
+}
+#endif
 /*
  * Should we use an accessdb, if yes get max_invalid & invalid_timeout
  */
@@ -273,6 +286,21 @@ if ((i=ckpw(pw,pass))!=PASS_SUCCESS) {
 }
 
 #ifdef CGIPAF_PASSWD
+
+#ifdef HAVE_LIBCRACK
+if(enable_cracklib) {
+    char const * const crack_msg = FascistCheck(newpass1,CRACKLIB_DICTPATH);
+    if (0 != crack_msg) {
+       options[16][1]=(char *) xmalloc(strlen(crack_msg)+1);
+       strcpy(options[16][1],crack_msg);
+       write_log(LOG_USER,7,"%s %s",err_cracklib,options[16][1]);
+       if(show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options)==2) printf("%s\n",options[16][1]);
+       if (config_file!=NULL) fclose(config_file);   
+       exit(0);
+    }
+}
+#endif
+
 if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
    show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options);
    fflush(stdout);
@@ -291,6 +319,14 @@ if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
 }
 else {
 #ifdef _WITHPAM
+   if(last_pam_msg()!=NULL) {
+     options[17][1]=last_pam_msg();
+     if(show_msg(config_file,doc_root,CFGSECTION,ERR_PAMERROR,NULL,options)<3) {
+     write_log(LOG_AUTHPRIV,1,"pam err %s",options[17][1]);
+       if (config_file!=NULL) fclose(config_file);   
+       exit(0);
+     }
+   }
      i=brol;
      brol=-13;
 #endif
@@ -298,7 +334,8 @@ else {
            printf("<BR>Can't update password<BR>%s",err_chpw[abs(brol)-1]);
            if (errno) printf(", %s<BR>",strerror(errno));
 #ifdef _WITHPAM
-           printf(", %s<BR>",pam_strerror(pw->pamh,i));
+           if(last_pam_msg()!=NULL) printf(", %s<BR>",last_pam_msg());
+           else printf(", %s<BR>",pam_strerror(pw->pamh,i));
 #endif
 	   printf("</I></B></H1></CENTER>");
            write_log(LOG_AUTHPRIV,1,"Can't update password %s",err_chpw[abs(brol)-1]);
@@ -376,7 +413,7 @@ printf("<P>\n");
 printf("<FORM ACTION=\"/cgi-bin/mailcfg.cgi\" METHOD=POST>\n");
 printf("<TABLE WIDTH=100%>\n");
 printf("<TR>\n");
-printf("<TD>Login name:</TD>\n");
+printf("<TD>Login name: %s</TD>\n",name);
 printf("<TD ALIGN=\"LEFT\"><INPUT NAME=name VALUE=\"%s\" TYPE=HIDDEN SIZE=10 MAXLENGTH=15></TD>\n",name);
 printf("</TR>\n");
 printf("</TABLE>\n");

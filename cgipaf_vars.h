@@ -1,6 +1,7 @@
 int    i,brol;
 int    max_invalid=3;
 int    invalid_timeout=600;
+int    enable_cracklib=0;
 struct pw_info *pw;
 WEBDATA *data;
 char   *name,*pass;
@@ -46,6 +47,8 @@ char   txt_yes[]="yes";
 char   txt_no[]="no";
 char   txt_password[]="password";
 char   txt_passwd[]="passwd";
+char   txt_crackliberror[]="cracklib_error";
+char   txt_pamerrormsg[]="pam_error";
 char   *pam_servicename=txt_passwd;
 int    max_length, min_length;
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
@@ -56,7 +59,7 @@ char   *options[][2]={
        txt_max_invalid,max_invalid_txt,                  /* 3 */
        txt_invalid_timeout,max_invalid_txt,              /* 4 */
        txt_invalid_wait,invalid_wait_txt,                /* 5 */
-       txt_forward_to,txt_NULL,                        /* 6 */
+       txt_forward_to,txt_NULL,                          /* 6 */
        txt_forward,forward,                              /* 7 */
        txt_not_forward,not_forward,                      /* 8 */
        txt_keep_msg,keep_msg,                            /* 9 */
@@ -66,4 +69,6 @@ char   *options[][2]={
        txt_autoreply_msg,txt_NULL,                       /* 13 */
        txt_cookietimeout,cookie_timeout_txt,             /* 14 */
        txt_password,txt_NULL,                            /* 15 */
+       txt_crackliberror,txt_NULL,			 /* 16 */
+       txt_pamerrormsg,txt_NULL,			 /* 17 */
        NULL,NULL};

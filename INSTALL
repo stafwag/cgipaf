@@ -64,22 +64,22 @@ CONFIGURATION
     has to have a line auth set to pam_unix.so.
 
     auth     required       pam_unix.so
+    account  required       pam_unix.so
 
     If you don't like this for security reason etc, you can set the pam_service
     directive to "cgipaf" and create the file /etc/pam.d/cgipaf that looks like
     this
 
     auth     required       pam_unix.so
+    account  required       pam_unix.so
     password required       pam_unix.so md5 
 
     If your system has a single PAM configuration file (usually /etc/pam.conf)
     you've to update /etc/pam.conf.
 
     If your system don't support md5 passwords remove md5 in the password line.
-    CGIpaf doesn't support crack_lib or minium / maxium password length options
-    in the PAM configuration.
-
-    You can set the minium / maxium password length in cgipaf.conf
+    passwd.cgi support all pam opties in the PAM configuration (cracklib, 
+    minium/ maxium password length etc.)
 
 THAT'S ALL FOLKS
 

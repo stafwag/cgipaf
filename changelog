@@ -1,3 +1,7 @@
+* version 1.0rc5pre1     ( 20 Dec 2001 )
+  + cracklib support
+  + support for all common pam messages ( cracklib, minimum password length etc )
+
 * version 1.0rc4     ( 4 Dec 2001 )
   + documentation update
 

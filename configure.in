@@ -20,6 +20,7 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
 	ENABLE_PAM="yes"
       fi ],
    [ ARG="WITHPAM" ]) 
+AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
 
 dnl Checks for libraries.
 
@@ -57,6 +58,13 @@ if test "$ARG" != "WITHPAM"; then
      AC_MSG_ERROR(no valid pam library found))
    AC_CHECK_LIB(pam,pam_end,,AC_MSG_ERROR(no valid pam library found))
    LIBOBJS="$LIBOBJS passpam.o"
+fi
+
+if test "$with_libcrack" != "no"; then
+   AC_CHECK_HEADERS(crack.h,[ HAVE_CRACK_H=1 ],AC_MSG_WARN(crack.h not found cracklib support is disabled!!!!))
+   if test "$HAVE_CRACK_H" = "1"; then 
+      AC_CHECK_LIB(crack,FascistCheck,,AC_MSG_WARN(cracklib not found cracklib support is disabled!!!!))
+   fi
 fi
 
 AC_CHECK_FUNCS(dbm_open dbm_fetch dbm_store dbm_close,,NEED_NDBMLIB="yes")

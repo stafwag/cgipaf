@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
-# (GPL) 2001 Belgium                          http://www.stafwag.f2s.com
-# Staf Wagemakers	                                 stafwag@f2s.com
+# (GPL) 2001 Belgium                              http://stafwag.f2g.net
+# Staf Wagemakers	                                staf@digibel.org
 # ----------------------------------------------------------------------
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@
@@ -89,3 +89,4 @@ dist-clean: clean
 	rm -f config.cache config.h config.log config.status
 	rm -f Makefile
 	rm -f install.sh
+	rm -f *~

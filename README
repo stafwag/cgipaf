@@ -30,7 +30,7 @@ OVERVIEW
     cgipaf is a combination of three cgi programs:
     
          passwd.cgi:       allow users to update their password
-	 viewmailcfg.cgi:  allow users to view thier current mail 
+	 viewmailcfg.cgi:  allow users to view their current mail 
 	                   configuration.
 	 mailcfg.cgi:      update the mail configuration
 	 
@@ -68,7 +68,7 @@ CONFIGURATION
 
 CONTACT INFO
 
-    email:  stafwag@f2s.com
+    email:  staf@digibel.org
     
-    Future improvements will be available at http://www.stafwag.f2s.com
+    Future improvements will be available at http://stafwag.f2g.net
     

@@ -19,6 +19,7 @@ char err_delprocmail[] = "Can't delete, ~/.procmail please contact the webmaster
 char err_openvacations[] = "Can't open ~/vacations.txt, please contact the webmaster";
 char err_updateprocmailrc[] = "Can't update ~/.procmailrc, please contact the webmaster";
 char err_cookietimeout[] = "Cookie timeout exceeded...\n";
+char err_cracklib[]    =  "BAD PASSWORD:\n";
 char msg_changed[]   =	"Password changed...\n";
 char msg_updated[]   =  "Mail configuration updated...\n";
 char *err_chpw[]     ={	"Couldn't open passwd file",                 /* 0 */

@@ -1,3 +1,4 @@
+#include "config.h"
 #define  LOGIN                  "name"
 #define  ROOT                   "root"
 #define  PASSWORD               "passwd"
@@ -22,6 +23,8 @@
 #define  ERR_OPENVACATIONS      "error_openvacations"
 #define  ERR_UPDATEPROCMAILRC   "error_updateprocmailrc"
 #define  ERR_READNAME           "error_readname"
+#define  ERR_CRACKLIB           "error_cracklib"
+#define  ERR_PAMERROR           "error_pam"
 #define  CFG_MINUID             "min_uid"
 #define  CFG_MAXUID             "max_uid"
 #define  CFG_MINLENGTH          "min_length"
@@ -32,6 +35,7 @@
 #define  CFG_COOKIETIMEOUT      "cookie_timeout"
 #define  CFG_SYSLOG		"syslog"
 #define  CFG_LOGLEVEL		"loglevel"
+#define  CFG_CRACKLIB		"cracklib"
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
 #define  MINLENGTH 		6
@@ -50,27 +54,41 @@
 #define  RUN_SUCCESS            "run_success"
 #define  RUN_LOCKED             "run_locked"
 #define  CFG_PAM_SERVICE            "pam_service"
+
 #ifdef   CGIPAF_PASSWD
 #define  CFGSECTION             "passwd"
-#endif
+#endif   /* CGIPAF_PASSWD */
+
 #ifdef   CGIPAF_VIEWMAILCFG
 #define  CFGSECTION             "mailcfg"
 #include "mailconfig.h"
-#endif
+#endif   /* CGIPAF_VIEWMAILCFG */
+
 #ifdef   CGIPAF_MAILCFG
 #define  CFGSECTION             "mailcfg"
 #include "mailconfig.h"
-#endif
+#endif   /* CGIPAF_MAILCFG */
+
 #include <pwd.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef   HAVE_CRYPT_H
 #include <crypt.h>
+#endif   /* HAVE_CRYPT_H */
+
+#ifdef   HAVE_CRACK_H
+#include <crack.h>
+#endif   /* HAVE_CRACK_H */
+
 #include <stdlib.h>
 #include <errno.h>
 #include <syslog.h>
+
 #ifndef LOG_AUTHPRIV
 #define LOG_AUTHPRIV LOG_AUTH
-#endif
+#endif  /* LOG_AUTHPRIV */
+
 #include "pass.h"
 #include "ccgi.h"
 #include "configfile.h"
@@ -79,9 +97,11 @@
 #include "createcookie.h"
 #include "xmalloc.h"
 #include "out_of_memory.h"
+
 #ifdef NEED_COMPAT_H
 #include "compat.h"
-#endif
+#endif /* NEED_COMPAT_H */
+
 #include "mailconfig.h"
 #include "showmsg.h"
 #include "write_log.h"

@@ -1,51 +1,73 @@
 /* ---------------------------------------------------------------------- */
-/* passpam.c						                  */
-/*									  */
-/* (GPL) 2000,2001 Belgium                     http://www.stafwag.f2s.com */
-/* Staf Wagemakers                                        stafwag@f2s.com */
+/* passpam.c                                                              */
+/*                                                                        */
+/* (GPL) 2000,2001 Belgium                         http://stafwag.f2g.net */
+/* Staf Wagemakers                                       staf@digibel.org */
 /* ---------------------------------------------------------------------- */
 #include "pass.h"
-char *oldpw;
-char *newpw;
+static char *oldpw;
+static char *newpw;
+static char *pam_msg=NULL;
 static int pwstate;
 char passwd_service[]="passwd";
 char * set_pam_service(char *s)
 {
-     static char *pam_service=passwd_service;
-     if (s!=NULL) pam_service=s;
-     return pam_service;
+    static char *pam_service=passwd_service;
+    if (s!=NULL) pam_service=s;
+    return pam_service;
+}
+char *last_pam_msg()
+{
+return(pam_msg);   
 }
 
 int chpasswd(num_msg, msg, resp, appdata_ptr)
-    int         num_msg;
+    int          num_msg;
     const struct pam_message **msg;
     struct       pam_response **resp;
     void         *appdata_ptr;
 {
     int i;
     struct pam_response *rp = xmalloc(sizeof(struct pam_response) * num_msg);
-    if (rp==NULL) return(PAM_SESSION_ERR);
-    if (!rp) return(PAM_CONV_ERR);
+    if (rp==NULL) return(PAM_CONV_ERR);
     if (num_msg<=0) return(PAM_CONV_ERR);
     for (i=0; i<num_msg; i++) {
-	if(msg[i]->msg_style==PAM_ERROR_MSG) return(PAM_CONV_ERR);
-	rp[i].resp_retcode = 0;
-        if ((msg[i]->msg_style!=PAM_PROMPT_ECHO_OFF)&&(msg[i]->msg_style!=PAM_PROMPT_ECHO_ON)) return(PAM_CONV_ERR);
-        if (pwstate) rp[i].resp=(char *) strdup(newpw);
-            else rp[i].resp=(char *) strdup(oldpw);
-   }
-   *resp=rp;
-   return PAM_SUCCESS;
+      if(msg[i]->msg_style==PAM_PROMPT_ECHO_OFF) {
+	rp[i].resp_retcode=PAM_SUCCESS;
+	if (pwstate==0) {
+	   rp[i].resp=(char *)strdup(oldpw);
+	   pwstate=1;
+	}
+	else {
+	   rp[i].resp=(char *)strdup(newpw);
+	}
+	continue;
+      }
+      if((msg[i]->msg_style==PAM_TEXT_INFO)||(msg[i]->msg_style==PAM_ERROR_MSG)) {
+	if(pam_msg!=NULL) free(pam_msg);
+	pam_msg=xmalloc(strlen(msg[i]->msg)+1);
+	strcpy(pam_msg,msg[i]->msg);
+	rp[i].resp_retcode = PAM_SUCCESS;
+	rp[i].resp = NULL;
+	continue;
+      }
+      free (rp);
+      return(PAM_CONV_ERR);
+ }
+  *resp = rp;
+  return PAM_SUCCESS;
 }
-struct pam_conv conv = {
-       chpasswd,NULL
-       };
+
+static struct pam_conv conv = {
+	chpasswd, 
+	NULL
+};
 /* ---------------------------------------------- */
 /* reads the passwd info out /etc/passwd and      */
-/* /etc/shadow					  */
+/* /etc/shadow                                    */
 /*                                                */
-/* name = loginname				  */
-/* returns         passwd info		          */
+/* name = loginname                               */
+/* returns         passwd info                    */
 /*                 0 = error                      */
 /* ---------------------------------------------- */
 struct pw_info * get_pw(char *name)
@@ -65,25 +87,31 @@ return(pw);
 }
 /* ---------------------------------------------- */
 /* test a passwd                                  */
-/* *p = passwd info				  */
-/* *pass = password				  */
-/* returns:        0 = wrong passwd               */
-/*                 1 = ok			  */
+/* *p = passwd info                               */
+/* *pass = password                               */
+/* returns:        PAM_SUCCESS = ok               */
+/*                 OTHER = error                  */
 /* ---------------------------------------------- */
 int ckpw(struct pw_info *pw,char *pass)
 {
-int i;
+int ret;
 pwstate=0;
-oldpw=pass;
-if((i=pam_authenticate(pw->pamh,0))!=PAM_SUCCESS) return(i);
-return(0);
+oldpw = pass;
+if((ret=pam_authenticate(pw->pamh,0))!=PAM_SUCCESS) {
+   pam_end(pw->pamh,ret);
+   return(ret);
+}
+if((ret=pam_acct_mgmt(pw->pamh,0))!=PAM_SUCCESS) {
+   pam_end(pw->pamh,ret);
+    return(ret);
+}
+return(ret);
 }
 int chpw(struct pw_info *pw,char *pass)
 {
-int i;
-pwstate=1;
+int ret;
+pwstate=0;
 newpw=pass;
-if ((i=pam_chauthtok(pw->pamh,0))!=PAM_SUCCESS) return(i);
-pam_end(pw->pamh,0);
-return(PAM_SUCCESS);
+ret=pam_chauthtok(pw->pamh,PAM_CHANGE_EXPIRED_AUTHTOK);
+return(ret);
 }

@@ -118,8 +118,10 @@ main()
    /* set the mailerdomain */ 
    
    domain=get_section_config_item(config_file,CFGSECTION,CFGDOMAIN);
-   if(domain!=NULL) write_log(LOG_USER,7,"domain set to %s",domain);
+   if(domain!=NULL) 
+     write_log(LOG_USER,7,"domain set to %s",domain);
    else write_log(LOG_USER,7,"domain not set");
+   domain=options[20][1]=get_maildomain(domain);
 
    /* set cookie timeout */
    

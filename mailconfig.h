@@ -24,5 +24,6 @@ int enable_kforward(struct pw_info *pw, char *mailadres,char *domain);
 int tst_emailaddress(char *emailaddress);
 int write_procmailrchead(struct pw_info *pw, char *sendmail);
 int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,int autoreply);
+char *get_maildomain(char *domain);
 
 #endif

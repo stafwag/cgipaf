@@ -4,9 +4,10 @@
 use warnings;
 use strict;
 
-my ($NAME,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO)=<>;
+my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO,@MSG)=<>;
 chomp ($NAME,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
 my   $DOTFORWARD="$HOMEDIR/.forward";
+my   $DOTVACATIONMSG="$HOMEDIR/.vacation.msg";
 
 if(("$FORWARD" ne "yes") and ("$AUTOREPLY" ne "yes")) {
   unlink("$DOTFORWARD") or die "Unable to delete $DOTFORWARD";
@@ -30,5 +31,13 @@ if("$AUTOREPLY" eq "yes" ) {
       print FH "\\$NAME,";
    }
    print FH "\"|/usr/bin/vacation -m vacations.txt $NAME\"";
+   open(FH_MSG,">$DOTVACATIONMSG") or die "Unable to create $DOTVACATIONMSG";
+   print FH_MSG "From: $NAME\@$DOMAIN\n";
+   print FH_MSG "Subject: I am on vacation\n";
+   print FH_MSG "Delivered-By-The-Graces-Of: The Vacation program\n";
+   print FH_MSG "Precedence: bulk\n\n";
+   print FH_MSG @MSG;
+   close FH_MSG;
 }
+close FH;
 exit 0;

@@ -1,0 +1,30 @@
+CGIpaf has two admin programs:
+
+
+pwadmin.cgi:  password admin
+mailadmin:    mailcfg  admin
+
+
+They aren't install by default. If you want to try copy them to your cgi-bin
+and correct the permissions.
+
+Add the next lines to your cgipaf.conf:
+
+<pwadmin>
+
+cookie_timeout          300
+document_root           /etc/cgipaf
+login_document          pwadminlogin.php
+admin_users             admin1 admin2
+
+
+</pwadmin>
+<mailadmin>
+
+cookie_timeout          300
+document_root           /etc/cgipaf
+login_document          mailadminlogin.php
+admin_users             admin1 admin2
+
+</mailadmin>
+

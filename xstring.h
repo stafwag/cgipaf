@@ -27,3 +27,5 @@ int is_var_yes(char *var);
 void free_string_array (char **array);
 int number_of_strings (char **array);
 int copy_string_array_pointers (char **dest, char **src);
+char *** add_2_string_pair (char ***str_array,char *str1, char *str2);
+int number_of_string_pairs (char *** str_pair);

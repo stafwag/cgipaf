@@ -387,4 +387,45 @@ int copy_string_array_pointers (char **dest, char **src) {
 	return(0);
 }
 
+char *** add_2_string_pair (char ***str_array,char *str1, char *str2) {
+
+	int n;
+	char ***ret;
+
+	if(str_array!=NULL) {
+
+		n=number_of_string_pairs(str_array);
+		ret=(char ***) xrealloc(str_array,(n+2)*sizeof(char **));
+		ret[n+1]=xcalloc(2,sizeof(char *));
+
+	}
+
+	else { 
+
+		ret=(char ***) xcalloc(2,sizeof(char **));
+		ret[0] = xcalloc(2,sizeof(char *));
+		ret[1] = xcalloc(2,sizeof(char *));
+
+		n = 0;
+
+	}
+
+	ret[n][0]=str1;
+	ret[n][1]=str2;
+
+	return(ret);
+
+
+}
+
+int number_of_string_pairs (char *** str_pair) {
+
+	char ***pt;
+	int ret=0;
+
+	for(pt=str_pair;**pt!=NULL;pt++) ret++;
+
+	return(ret);
+
+}
 

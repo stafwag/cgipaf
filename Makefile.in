@@ -13,6 +13,7 @@ libexecdir      = @libexecdir@
 sysconfdir      = @sysconfdir@
 localstatedir   = @localstatedir@
 srcdir          = @srcdir@
+HAVE_GDBMDIR_NDBM_H   = -D@HAVE_GDBMDIR_NDBM_H@
 inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h
 CC=@CC@
 CFLAGS=@CFLAGS@
@@ -55,7 +56,7 @@ showmsg.o: showmsg.c showmsg.h configfile.o
 	$(CC) $(CFLAGS) -c showmsg.c
 
 accessdb.o: accessdb.c accessdb.h
-	$(CC) $(CFLAGS) -c accessdb.c
+	$(CC) $(CFLAGS) -c accessdb.c ${HAVE_GDBMDIR_NDBM_H}
 
 createcookie.o: createcookie.c createcookie.h
 	$(CC) $(CFLAGS) -c createcookie.c

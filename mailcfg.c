@@ -42,7 +42,7 @@ unsetenv("IFS");
 set_memerr(out_of_memory);
    
 memset(forward,'\0',sizeof(forward));
-memset(forward_to,'\0',sizeof(forward_to));
+forward_to=txt_NULL;
 memset(keep_msg,'\0',sizeof(keep_msg));
 memset(autoreply,'\0',sizeof(autoreply));
      
@@ -69,6 +69,16 @@ else {
    write_log(LOG_USER,3,"%s %s",err_mcfg_configfile,CONFIGFILE);
    exit(0);
    }
+#ifdef _WITHPAM
+
+if ((cp=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL) {
+   set_pam_service(cp);
+   free(cp);
+   write_log(LOG_USER,7,"pam service name set to %s",set_pam_service(NULL));
+}
+
+#endif
+
    
 if ((accessdb=get_sg_item(config_file,CFGSECTION,CFG_ACCESSDB))==NULL) {
    write_log(LOG_USER,3,"%s",err_mcfg_accessdb);
@@ -80,7 +90,7 @@ if ((sendmail=get_section_config_item(config_file,CFGSECTION,SENDMAIL))==NULL)
    sendmail=txt_sendmail;
 write_log(LOG_USER,7,"sendmail set to %s",sendmail);
 domain=get_section_config_item(config_file,CFGSECTION,CFGDOMAIN);
-if(domain==NULL) write_log(LOG_USER,7,"domain set to %s",domain);
+if(domain!=NULL) write_log(LOG_USER,7,"domain set to %s",domain);
   else write_log(LOG_USER,7,"domain not set");
 
 c=get_section_config_item(config_file,CFGSECTION,CFG_COOKIETIMEOUT);
@@ -102,12 +112,18 @@ if (!data) {
    write_log(LOG_USER,7,"no POST data, display login_document");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options);
    }
-
-name=get_postitem(data,LOGIN);
+name=NULL;
+if ((cp=get_postitem(data,LOGIN))!=NULL) {
+   name=textarea2asc(cp);
+   free(cp);
+}
+   
 c=get_postitem(data,FORWARD);
 yes_no(c,forward,not_forward);
 if(c!=NULL) free(c);
+
 c=get_postitem(data,FORWARD_TO);
+
 if(c!=NULL) {
    char *c2;
    c2=textarea2asc(c);
@@ -117,7 +133,8 @@ if(c!=NULL) {
       exit(0);
    }
    free(c);
-   strncpy(forward_to,c2,98);
+   forward_to=xmalloc(strlen(c2)+1);
+   strcpy(forward_to,c2);
    free(c2);
 }
 c=get_postitem(data,KEEP_MSG);
@@ -249,13 +266,36 @@ if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
      }
 fputs(autoreply_msg,fp);
 fclose(fp);
-
-if (!strcmp(autoreply,"yes")) enable_reply(pw,sendmail,domain); 
+   
+if(!strcmp(autoreply,"yes")||!strcmp(forward,"yes")) {
+   if(write_procmailrchead(pw,sendmail)==-1) {
+      write_log(LOG_USER,1,"%s write_procmailrchead() failed",err_updateprocmailrc);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options);
+   }
+}
+   
+if (!strcmp(autoreply,"yes")) {
+   if(enable_reply(pw,domain)==-1) {
+      write_log(LOG_USER,1,"%s enable_reply() failed",err_updateprocmailrc);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options);
+   }
+}
    
 if (!strcmp(forward,"yes")) {
-   if (!strcmp(keep_msg,"yes")) enable_kforward(pw,textarea2asc(forward_to));
-      else enable_forward(pw,forward_to);
+   if (!strcmp(keep_msg,"yes")) {
+      if (enable_kforward(pw,textarea2asc(forward_to),domain)==-1) {
+         write_log(LOG_USER,1,"%s enable_kforward() failed",err_updateprocmailrc);
+         show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options);
+      }
    }
+   else {
+      if(enable_forward(pw,textarea2asc(forward_to),domain)==-1) {
+         write_log(LOG_USER,1,"%s enable_forward() failed",err_updateprocmailrc);
+         show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options);
+      }
+   }
+}
+   
 
 show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
 write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);

@@ -38,6 +38,14 @@ if (doc_root!=NULL) {
    write_log(LOG_USER,7,"doc_root set to %s",doc_root);
    if (chdir(doc_root)==-1) write_log(LOG_USER,7,"chdir(%s) failed, %s",doc_root,strerror(errno));
 }
+#ifdef _WITHPAM
+if ((pam_servicename=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL) {
+   set_pam_service(pam_servicename);
+}
+   pam_servicename=set_pam_service(NULL);
+   write_log(LOG_USER,7,"pam service name set to %s",pam_servicename);
+   
+#endif
 
 /*
  * Should we use an accessdb, if yes get max_invalid & invalid_timeout
@@ -99,7 +107,7 @@ if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAXLENGTH))==NULL) ma
    
    if ((cp=getenv("CONTENT_LENGTH"))!=NULL) {
    sscanf(cp,"%d",&brol);
-   if (brol>100) {
+   if (brol>150) {
       print_html_msg(txt_too_much);
       write_log(LOG_USER,3,"%s",txt_too_much);
       exit(1);
@@ -124,11 +132,12 @@ if (!data) {
    }
 /* If there is no loginname ask for it */
    
-if (!(name=get_postitem(data,LOGIN))) {
+if (!(cp=get_postitem(data,LOGIN))) {
    write_log(LOG_USER,7,"name not set, show err_login");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options);
    }
-
+name=textarea2asc(cp);
+free(cp);
 /* Make the login available to a redirect / ePHP */
    
 if (name!=NULL) {
@@ -152,22 +161,29 @@ if (!strcmp(name,ROOT)) {
 
 /* no password = no login */
 
-if (!(pass=get_postitem(data,PASSWORD))) {
+if (!(cp=get_postitem(data,PASSWORD))) {
    write_log(LOG_USER,7,"user forgot to type his password");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    }
 
+pass=textarea2asc(cp);
+free(cp);
+
 #ifdef CGIPAF_PASSWD
 /* get the new password or die */
 
-if (!(newpass1=get_postitem(data,NEWPASS1))) {
+if (!(cp=get_postitem(data,NEWPASS1))) {
    write_log(LOG_USER,7,"newpass1 not set");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
    }
-if (!(newpass2=get_postitem(data,NEWPASS2))) {
+newpass1=textarea2asc(cp);
+free(cp);
+if (!(cp=get_postitem(data,NEWPASS2))) {
    write_log(LOG_USER,7,"newpass2 not set");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
    }
+newpass2=textarea2asc(cp);
+free(cp);
 /* match or die */
 if (strcmp(newpass1,newpass2)) {
    write_log(LOG_USER,7,"new passwords don't match");
@@ -238,8 +254,11 @@ if (accessdb) {
       exit(0);
    }
 }
-if (ckpw(pw,pass)==-1) {
+if ((i=ckpw(pw,pass))!=PASS_SUCCESS) {
    write_log(LOG_USER,7,"ckpw() failed, probably wrong password");
+#ifdef _WITHPAM
+   write_log(LOG_USER,7,"ckpw() failed, pam error = %s",pam_strerror(pw->pamh,i));
+#endif
    show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
    if (accessdb) {
@@ -254,7 +273,7 @@ if (ckpw(pw,pass)==-1) {
 }
 
 #ifdef CGIPAF_PASSWD
-if ((brol=chpw(pw,newpass1))==0) {
+if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
    show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options);
    fflush(stdout);
    write_log(LOG_AUTHPRIV,6,"Password for %s was changed",name);
@@ -271,11 +290,21 @@ if ((brol=chpw(pw,newpass1))==0) {
    }
 }
 else {
+#ifdef _WITHPAM
+     i=brol;
+     brol=-13;
+#endif
            print_html_msg("<CENTER><H1><B><I>");
-           printf("<BR>Can't update password<BR><BR>%s",err_chpw[abs(brol)-1]);
+           printf("<BR>Can't update password<BR>%s",err_chpw[abs(brol)-1]);
            if (errno) printf(", %s<BR>",strerror(errno));
+#ifdef _WITHPAM
+           printf(", %s<BR>",pam_strerror(pw->pamh,i));
+#endif
 	   printf("</I></B></H1></CENTER>");
-	   write_log(LOG_AUTHPRIV,1,"Can't update password %s",err_chpw[abs(brol)-1]);
+           write_log(LOG_AUTHPRIV,1,"Can't update password %s",err_chpw[abs(brol)-1]);
+#ifdef _WITHPAM
+           write_log(LOG_AUTHPRIV,1,"pam error %s",pam_strerror(pw->pamh,i));
+#endif
 	   }
 #endif
 #ifdef CGIPAF_VIEWMAILCFG
@@ -300,21 +329,26 @@ if (setuid(pw->p->pw_uid)==-1) {
 }
 write_log(LOG_USER,7,"set umask to 0177");
 umask(0177);
-forward_to[0]='\0';
+
 write_log(LOG_USER,7,"reading current mail configuration....");
-if(get_kforward(pw,forward_to)) {
+if((forward_to=get_kforward(pw))!=NULL) {
    strcpy(forward,"yes"); strcpy(keep_msg,"yes");
    write_log(LOG_USER,7,"forwarding with keepmsg is enabled in current cfg, mail are forwarded to %s",forward_to);
 }
+   
 else {
-     if ((get_forward(pw,forward_to))) {
+     if ((forward_to=get_forward(pw))!=NULL) {
 	strcpy(forward,"yes");
 	write_log(LOG_USER,7,"forwarding is enabled in current cfg, mail are forwarded to %s",forward_to);
      }
-     else { 
+	 
+     else {
+	forward_to=txt_NULL;
 	write_log(LOG_USER,7,"mailforwarding is not enabeled");
      }
-  };
+};
+options[6][1]=forward_to;
+  
 
 if (get_reply(pw)) {
    strcpy(autoreply,"yes");
@@ -394,7 +428,7 @@ printf("</TD></TR></TABLE>\n");
 printf("</CENTER>\n");
 printf("</FORM>");
 printf("</BODY>");   
-   
+fflush(stdout);   
 }
 write_log(LOG_AUTHPRIV,6,"User %s has login successfully",name);
 #endif

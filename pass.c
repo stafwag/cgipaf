@@ -58,7 +58,7 @@ c[0]=p[0];
 c[1]=p[1];
 c[2]='\0';
 if (strcmp(p,crypt(pass,c))) return(-1);
-return(0);
+return(PASS_SUCCESS);
 }
 /* ---------------------------------------------- */
 /* update the password file                       */
@@ -127,7 +127,7 @@ chown(TMPFILE,st.st_uid,st.st_gid);
 if (uf) { if (rename(TMPFILE,pwfilename)==-1) return(-11); }
    else { errno=0; return(-12);}
 errno=0;
-return(0);
+return(PASS_SUCCESS);
 }
 
 int chpw(struct pw_info *pw,char *pass)
@@ -177,5 +177,5 @@ if (!strcmp(passwdfile,SHADOWFILE)) {
       if((i=update_pwfile(OSHADOWFILE,pw->p->pw_name,encrypt_pass))<0) return(i);
       }
    }
-return(0);
+return(PASS_SUCCESS);
 }

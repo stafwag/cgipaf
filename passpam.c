@@ -8,6 +8,14 @@
 char *oldpw;
 char *newpw;
 static int pwstate;
+char passwd_service[]="passwd";
+char * set_pam_service(char *s)
+{
+     static char *pam_service=passwd_service;
+     if (s!=NULL) pam_service=s;
+     return pam_service;
+}
+
 int chpasswd(num_msg, msg, resp, appdata_ptr)
     int         num_msg;
     const struct pam_message **msg;
@@ -52,7 +60,7 @@ if(!(pw->p=getpwnam(name))) return(NULL);
 if (!strcmp(pw->p->pw_passwd,"x")) {
    if(!(pw->sp=getspnam(name))) return(NULL);
    }
-if(pam_start("passwd",name, &conv, &pw->pamh)!=PAM_SUCCESS) return(NULL);
+if(pam_start(set_pam_service(NULL),name, &conv, &pw->pamh)!=PAM_SUCCESS) return(NULL);
 return(pw);
 }
 /* ---------------------------------------------- */
@@ -64,16 +72,18 @@ return(pw);
 /* ---------------------------------------------- */
 int ckpw(struct pw_info *pw,char *pass)
 {
+int i;
 pwstate=0;
 oldpw=pass;
-if(pam_authenticate(pw->pamh,0)!=PAM_SUCCESS) return(-1);
+if((i=pam_authenticate(pw->pamh,0))!=PAM_SUCCESS) return(i);
 return(0);
 }
 int chpw(struct pw_info *pw,char *pass)
 {
+int i;
 pwstate=1;
 newpw=pass;
-if (pam_chauthtok(pw->pamh,0)!=PAM_SUCCESS) return(-13);
+if ((i=pam_chauthtok(pw->pamh,0))!=PAM_SUCCESS) return(i);
 pam_end(pw->pamh,0);
-return(0);
+return(PAM_SUCCESS);
 }

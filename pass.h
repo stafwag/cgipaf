@@ -20,17 +20,26 @@
 #endif
 
 #include <errno.h>
-#define SHADOWFILE "/etc/shadow"
-#define OSHADOWFILE "/etc/oshadow"
-#define TMPFILE "/etc/tmp_passwd"
-#define TMPLOCK "/var/lock/cgipasswd"
-#define BUFFERLEN 200
-#ifdef _WITHPAM
-#include <security/pam_appl.h>
-#endif
 
 #ifndef __PASS_H
 #define __PASS_H
+
+#define SHADOWFILE "/etc/shadow"
+#define OSHADOWFILE "/etc/oshadow"
+#define TMPFILE "/etc/tmp_passwd"
+
+#define TMPLOCK "/var/lock/cgipaf"
+#define BUFFERLEN 200
+
+#ifdef _WITHPAM
+#include <security/pam_appl.h>
+char *set_pam_service(char *s);
+#define PASS_SUCCESS PAM_SUCCESS
+#endif
+#ifndef _WITHPAM
+#define PASS_SUCCESS 0
+#endif
+
 struct pw_info {
     struct passwd *p;
     struct spwd *sp;

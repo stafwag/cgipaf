@@ -54,7 +54,7 @@ OVERVIEW
     User with too many invalid logins can be locked.
     
     The minimum and maximum uid can be set in the configuration file, so
-    you can specify a range of uid's that are allowed to use cgipasswd.
+    you can specify a range of uid's that are allowed to use cgipaf.
   
     You can specify html files with a few PHP extensions for the login screen
     and error messages.

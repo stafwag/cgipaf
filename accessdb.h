@@ -11,6 +11,10 @@
 #include <gdbm-ndbm.h>
 #endif
 
+#ifdef HAVE_GDBMDIR_NDBM_H
+#include <gdbm/ndbm.h>
+#endif
+
 #ifdef HAVE_NDBM_H
 #include <ndbm.h>
 #endif

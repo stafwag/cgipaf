@@ -29,7 +29,7 @@ char   forward[10]="no";
 char   txt_not_forward[]="not_forward";
 char   not_forward[10]="yes";
 char   txt_forward_to[]="forward_to";
-char   forward_to[100];
+char   *forward_to;
 char   txt_keep_msg[]="keep_msg";
 char   keep_msg[10]="no";
 char   txt_not_keep_msg[]="not_keep_msg";
@@ -45,6 +45,8 @@ char   *autoreply_msg=txt_NULL;
 char   txt_yes[]="yes";
 char   txt_no[]="no";
 char   txt_password[]="password";
+char   txt_passwd[]="passwd";
+char   *pam_servicename=txt_passwd;
 int    max_length, min_length;
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   *options[][2]={
@@ -54,7 +56,7 @@ char   *options[][2]={
        txt_max_invalid,max_invalid_txt,                  /* 3 */
        txt_invalid_timeout,max_invalid_txt,              /* 4 */
        txt_invalid_wait,invalid_wait_txt,                /* 5 */
-       txt_forward_to,forward_to,                        /* 6 */
+       txt_forward_to,txt_NULL,                        /* 6 */
        txt_forward,forward,                              /* 7 */
        txt_not_forward,not_forward,                      /* 8 */
        txt_keep_msg,keep_msg,                            /* 9 */

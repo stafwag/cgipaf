@@ -1,3 +1,16 @@
+* version 1.0rc4     ( 4 Dec 2001 )
+  + documentation update
+
+* version 1.0rc4pre5 ( 28 Nov 2001 )
+  + new pam_service directive, you can change the pam service name.
+  + added test for gdbm/ndbm.h header file
+  + fixed: mailcfg.cgi failed, if it couldn't determine the domain name.
+  
+* version 1.0rc4pre4 ( 11 Nov 2001 )
+  + new forwarding method to avoid mail looping
+  + fixed: it wasn't possible to use special characters ( $ space ) as the
+    loginname / password.
+
 * version 1.0rc4pre3 ( 27 oct 2001)
   + fixed: run_success, run_locked didn't always work due a buffer overflow in
     xstring.c
@@ -12,7 +25,8 @@
   + fixed: setgid() failed because it was performed after setuid()
 
 * version 1.0.rc3 ( 18 oct 2001)
-  + improved PAM detection
+  + improved PAM detection ( thanks to Gary for reporting his installation
+    problem )
   + loglevel + debug messages
   + fixed: accessdb bug, the database wasn't always closed  ( thanks to 
     Andreas Liebe for his patch )

@@ -12,11 +12,11 @@ SUPPORTED SYSTEMS
     function to encrypt the password. For this reason OpenBSD isn't supported.
 
     If you're using cgipaf on a system without pam support a lock file
-    /var/lock/cgipasswd.lock is used. The directory /var/lock have to exist
+    /var/lock/cgipaf.lock is used. The directory /var/lock have to exist
     on our system or you can modify pass.h to your own needs.
 
-    cgipasswd depends on the ndbm or compatible library. The GNU dbm library
-    is also supported and is automaticaly detected by configure.
+    CGIpaf depends on the ndbm or compatible library. The GNU dbm library
+    is also supported and is automatically detected by configure.
 
 INSTALLATION
 
@@ -53,5 +53,35 @@ INSTALLATION
 
     and owned by root.
 
-    Point your browser to http://your_webserver/cgi-bin/passwd.cgi or
+CONFIGURATION
+
+    The configuration file ( cgipaf.conf ) allow you to set several options 
+    see Configuration.html for more information.
+
+    With the "pam_service" directive you can set the pam service name, if not
+    set "passwd" is used. The passwd pam service ( /etc/pam.d/passwd ) usually 
+    doesn't have an entry for user authentication, therefor /etc/pam.d/other 
+    has to have a line auth set to pam_unix.so.
+
+    auth     required       pam_unix.so
+
+    If you don't like this for security reason etc, you can set the pam_service
+    directive to "cgipaf" and create the file /etc/pam.d/cgipaf that looks like
+    this
+
+    auth     required       pam_unix.so
+    password required       pam_unix.so md5 
+
+    If your system has a single PAM configuration file (usually /etc/pam.conf)
+    you've to update /etc/pam.conf.
+
+    If your system don't support md5 passwords remove md5 in the password line.
+    CGIpaf doesn't support crack_lib or minium / maxium password length options
+    in the PAM configuration.
+
+    You can set the minium / maxium password length in cgipaf.conf
+
+THAT'S ALL FOLKS
+
+    Point your browser to http://your_webserver/cgi-bin/passwd.cgi or 
     http://your_webserver/cgi-bin/viewmailcfg.cgi and enjoy

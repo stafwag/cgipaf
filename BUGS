@@ -1,3 +1,7 @@
+version 1.0rc4pre3
+
+  + it wasn't possible to use special characters as the loginname/password.
+
 version 1.0rc4pre2
   
   + run_success, run_locked didn't always work due a buffer overflow in 

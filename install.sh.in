@@ -77,6 +77,12 @@ fi
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
+   echo "# set the pam service name, if not set passwd is used" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# pam_service		 cgipaf" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
    echo "# enable syslog messages" >> $CFGFILE
    echo "#" >> $CFGFILE
    echo >> $CFGFILE

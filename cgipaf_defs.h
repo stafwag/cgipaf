@@ -20,6 +20,7 @@
 #define  ERR_DELFORWARD		"error_deldotforward"
 #define  ERR_DELPROCMAIL	"error_deldotprocmailrc"
 #define  ERR_OPENVACATIONS      "error_openvacations"
+#define  ERR_UPDATEPROCMAILRC   "error_updateprocmailrc"
 #define  ERR_READNAME           "error_readname"
 #define  CFG_MINUID             "min_uid"
 #define  CFG_MAXUID             "max_uid"
@@ -48,6 +49,7 @@
 #define  CFG_MAILCFG            "mailcfg_document"
 #define  RUN_SUCCESS            "run_success"
 #define  RUN_LOCKED             "run_locked"
+#define  CFG_PAM_SERVICE            "pam_service"
 #ifdef   CGIPAF_PASSWD
 #define  CFGSECTION             "passwd"
 #endif
@@ -83,4 +85,3 @@
 #include "mailconfig.h"
 #include "showmsg.h"
 #include "write_log.h"
-

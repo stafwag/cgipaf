@@ -16,23 +16,25 @@ char err_autoreplymsg[] =  "Can't read autoreply_msg...\n";
 char err_cookie[]    =  "To update your mail configuration your browser need to support cookies...\n";
 char err_delforward[] =  "Can't delete, ~/.forward please contact the webmaster";
 char err_delprocmail[] = "Can't delete, ~/.procmail please contact the webmaster";
-char err_openvacations[] = "Can't open ~/vacations.txt, plaese contact the webmaster";
+char err_openvacations[] = "Can't open ~/vacations.txt, please contact the webmaster";
+char err_updateprocmailrc[] = "Can't update ~/.procmailrc, please contact the webmaster";
 char err_cookietimeout[] = "Cookie timeout exceeded...\n";
 char msg_changed[]   =	"Password changed...\n";
 char msg_updated[]   =  "Mail configuration updated...\n";
-char *err_chpw[]     ={	"Couldn't open passwd file",
-			"Couldn't lock passwd file",
-			"Couldnt't lock lockfile",
-			"Couldn't open tmp file",
-			"fileno() failed",
-			"fchmod() failed",
-			"bufferlength too small",
-			"error while writting to tmpfile",
-			"out of memory",
-			"lsstat() failed",
-			"rename() failed",
-			"user not found",
-		        "pam error","\0","\0","\0","\0","\0"
+char *err_chpw[]     ={	"Couldn't open passwd file",                 /* 0 */
+			"Couldn't lock passwd file",                 /* 1 */
+			"Couldnt't lock lockfile",                   /* 2 */
+			"Couldn't open tmp file",                    /* 3 */
+			"fileno() failed",                           /* 4 */
+			"fchmod() failed",                           /* 5 */
+			"bufferlength too small",                    /* 6 */
+			"error while writting to tmpfile",           /* 7 */
+			"out of memory",                             /* 8 */
+			"lsstat() failed",                           /* 9 */
+			"rename() failed",                           /* 10 */
+			"user not found",                            /* 12 */
+		        "pam error",                                 /* 13 */
+			"\0","\0","\0","\0","\0"
 		      };
 char err_mcfg_readname[]    = "[CGIpaf] Can't read loginname\n";
 char err_mcfg_configfile[]  = "[CGIpaf] configuration error, can't open";

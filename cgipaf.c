@@ -481,6 +481,15 @@ main()
       fflush(stdout);
       write_log(LOG_AUTHPRIV,6,"Password for %s was changed",name);
       options[15][1]=newpass1;
+
+      /*
+       * reset uid to run the run_success script
+       */
+
+      if(setuid(0)==-1) {
+        write_log(LOG_USER,7,"setuid(0) failed: %s",strerror(errno));
+      };
+
       i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
       options[15][1]=txt_NULL;
       if(i<0) {

@@ -1,3 +1,5 @@
+dnl ugly configure script dont use as an example
+
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(cgipaf.c)
 AC_CONFIG_HEADER(config.h)
@@ -5,16 +7,8 @@ AC_SUBST(ARG)
 AC_SUBST(NEED_COMPAT_H)
 AC_SUBST(LIBOBJS)
 
-dnl Test for the system host and OS
-dnl AC_PROG_INSTALL
-dnl AC_CANONICAL_HOST
-
 AC_SUBST(host)
 AC_DEFINE_UNQUOTED(HOST,"$host")
-
-dnl AC_SUBST(host_cpu)
-dnl AC_SUBST(host_os)
-
 
 NEED_COMPAT_H="COMPAT"
 
@@ -25,12 +19,18 @@ LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_MAKE_SET
+
+dnl extra configure arguments
+
 AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
    [ if test "$enableval" != "no"; then
         ARG="WITHPAM"
-	ENABLE_PAM="yes"
+	if test "$enableval" = "yes"; then
+	   ENABLE_PAM="yes"
+	fi
       fi ],
    [ ARG="WITHPAM" ]) 
+
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
 AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       include MD5-compatible crypt
 function (default)])
@@ -42,6 +42,8 @@ if test "$host" = "freebsd"; then
     ARG="NOPAM"
 fi
 
+dnl pam support test
+
 if test "$ARG" = "WITHPAM"; then
    AC_MSG_CHECKING(checking for PAM support...)
    ls -l /etc/pam* > /dev/null 2>&1
@@ -50,13 +52,25 @@ if test "$ARG" = "WITHPAM"; then
       AC_MSG_RESULT("yes");
       else
          AC_MSG_RESULT("no");
+	 dnl only disable pam if it isnt enabled with --enable-pam
+	 if test "$ENABLE_PAM" != "yes"; then
+	    ARG="NOPAM"
+            AC_MSG_WARN("PAM support is disabled...")
+	 fi
    fi
-   AC_CHECK_LIB(pam,pam_start,ARG="WITHPAM",ARG="")
-if test "$ENABLE_PAM"="yes"; then
-      if test "$ARG" != "WITHPAM"; then
-      AC_MSG_ERROR("PAM support enabled but pam_start function not found install the pam development package and rerun configure")
+
+   if test "$ARG" != "NOPAM"; then
+
+      AC_CHECK_LIB(pam,pam_start,ARG="WITHPAM",ARG="")
+      if test "$ENABLE_PAM"="yes"; then
+         if test "$ARG" != "WITHPAM"; then
+            AC_MSG_ERROR("PAM support enabled but pam_start function not found install the pam development package and rerun configure")
+         fi
       fi
-   fi
+
+    fi
+
+
 fi
 
 dnl freebsd has crypt() defined in unstd.h

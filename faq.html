@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf FAQ</title>
+    <title>CGIpaf 1.0.1RC1 FAQ</title>
   </head>
 
   <body>
     
-    <h1>CGIpaf FAQ</h1>
+    <h1>CGIpaf 1.0.1RC1 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -16,6 +16,7 @@
       <li>1.4 <a href="#ss1.4">Mailinglist</a></li>
       <li>1.5 <a href="#ss1.5">License</a></li>
     </ul>
+    
     <p>
     <h2>2 <a href="#s2">Installation</a></h2>
     <ul>
@@ -24,6 +25,8 @@
       <li>2.3 <a href="#ss2.3">Does CGIpaf depends on PHP?</a></li>
       <li>2.4 <a href="#ss2.4">Common installation problems</a></li>
     </ul>
+    
+    <p>
     <h2>3 <a href="#s3">Common configuration problems</a></h2>
     <ul>
       <li>3.1 <a href="#ss3.1">passwd.cgi is unable to update the system password</a></li>
@@ -40,7 +43,8 @@
       <li>3.12 <a href="#ss3.11">I get a "file not found" error message</a></li>
       <li>3.13 <a href="#ss3.12">Mail forwarding and autoreply doesn't work</a></li>
       <li>3.14 <a href="#ss3.13">Can I create my own html pages?</a></li>
-   </ul>
+     </ul>
+ 
    <p>
    <h2>4 <a href="#s4">Future Plans</a></h2>
    <ul>
@@ -66,36 +70,42 @@ a security risk, I try to keep them so secure as possible...<br>
 If you use CGIpaf on the internet you must use CGIpaf over https otherwise the users passwords
 are send unencrypted over the internet.
 </p>
+
 <h2><a name="ss1.3">1.3 </a>Website</h2>
+
 <p>
 I've to move my homepage about every year :-( Apparently it get more and more 
 difficult to find a stable free webspace..
 </p>
+
 <p>
 The current locations are:
 </p>
+
 <ul>
 <li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/ (Canada)</a></li>
 <li><a
 href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/
 (Europe / Belgium)</a></li>
 </ul>
+
 <p>
 The last one is hosted by my current employer, we're moving to a new location
 and I'm not sure my employer will continue to provide free webspace.
 </p>
+
 <p>
 If you're unable to access the website check
 <a href="http://freshmeat.net/projects/cgipaf">http://freshmeat.net/projects/cgipaf</a>
 for the correct location.
 </p>
+
 <h2><a name="ss1.4">1.4 </a>Mailinglist</h2>
 
 <p>
 <a href="http://groups.yahoo.com/group/cgipaf/">http://groups.yahoo.com/group/cgipaf/</a></p>
 
 <p>
-
 <table border="0" cellspacing="1" cellpadding="1">
 <tr>
 <td><font face="arial,helvetica" size=-1>Post message</font></td>
@@ -131,9 +141,8 @@ href="http://www.gnu.org/copyleft.html">http://www.gnu.org/licenses/gpl.html</a>
 <ul>
 <li><b>GNU/Linux</b>
 <p>
-CGIpaf should compile and run on most GNU/Linux distributions. Please note that Slackware is
-only supported if it uses standard crypt passwords since Slackware doesn't have PAM support.
-I hope to resolve this in the future...
+CGIpaf should compile and run on most GNU/Linux distributions. Slackware is
+only supported if you compile CGIpaf without PAM support since Slackware doesn't support PAM. Both passwd types (standard, md5) are supported on a non-PAM system.
 </p>
 </li>
 <li><b>SUN Solaris</b>
@@ -141,17 +150,21 @@ I hope to resolve this in the future...
 CGIpaf works on Solaris ( only tested with solaris 7 &amp;  8 )
 </p>
 </li>
-<li><b>BSD</b>
+<li><b>FreeBSD</b></li>
 <p>
-Unfortunately BSD isn't supported (yet). I hope start a port some day.<br>
-FreeBSD has PAM support, CGIpaf might work on FreeBSD I doubt it'll works without trouble
+FreeBSD is supported, add <kdb>--host=freebsd</kdb> to <kdb>./configure</kdb>
+this will compile CGIpaf with FreeBSD support but without PAM support.
+</p>
+<li><b>OpenBSD, NetBSD</b>
+<p>
+Unfortunately OpenBSD and NetBSD arn't supported (yet). I hope start a port some day.
 </p>
 </li>
 <li><b>Other</b>
 <p>
 CGIpaf might work on other Un*ces with pam support. Systems without pam support are only 
-supported if they use the standard password file location /etc/passwd /etc/shadow and the 
-standard crypt function to encrypt the password. md5 passwords aren't supported (yet)
+supported if they use the standard password file location /etc/passwd /etc/shadow and 
+standard crypt or md5 passwords.
 </p>
 </li>
 </ul>
@@ -341,9 +354,16 @@ CGIpaf started as GNU/Linux project I needed to create site that allowed users t
 mailconfiguration. I have added solaris support because we it at my work and I was tired to 
 explain users how they've to update their Un*x password.
 </p>
+<p>I've added slackware 8.0 and FreeBSD support because some users requested a port to these
+platforms. I hoped that I could reuse the FreeBSD code for the Open|Net BSD port, but the odds 
+were against me. The FreeBSD port doesn't works without trouble on the other BSD versions.
+</p>
 <p>
-I'll add md5 password support in the near future. BSD support is also in the pipeline but
-I first need to free some diskspace to install BSD. I'll probably start with the FreeBSD port.
+I still want to support FreeBSD with PAM enabled ( the non-pam code works fine, but PAM is more
+flexible ) the authentication works but the PAM password changer doesn't -weird-.
+<p>
+The Open|Net BSD port is still in the pipeline, the NetBSD port seems to be the easiest, so
+I'll probably start with this one.
 </p>
 <h2><a name="ss4.2">4.2</a> Vacation and others</h2>
 <p>
@@ -355,11 +375,11 @@ separate mailboxes etc they lose their configuration.
 I'm not sure how I'll resolve this problem I'm thinking of a "run_before_mailcfg" and a "run_after_mailcfg" scripts. This should make it possible to backup the user's mailcfg and copy it back if the user disables mail forwarding and autoreply. Or to let the "run_before_mailcfg" script to create the .procmailrc from a template, this should also add .forward/vacation support to CGIpaf
 </p> 
  
-    <hr>
+<hr>
     <address><a href="mailto:staf.wagemakers@advalvas.be">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Sat Apr 13 01:53:25 CEST 2002
+Last modified: Wed May 22 05:42:00 CEST 2002
 <!-- hhmts end -->
   </body>
 </html>

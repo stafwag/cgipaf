@@ -17,8 +17,8 @@ SUPPORTED SYSTEMS
 
     FreeBSD is also supported, although FreeBSD has PAM support the
     PAM password changer doesn't seem to work on FreeBSD. Add 
-    "--host=freebsd"  to compile CGIpaf with FreeBSD support. This
-    will compile CGIpaf without PAM support but with built-in BSD
+    "--host=freebsd" to configure to compile CGIpaf with FreeBSD support. 
+    This will compile CGIpaf without PAM support but with built-in BSD
     support.
 
     CGIpaf depends on the ndbm or compatible library. The GNU dbm library

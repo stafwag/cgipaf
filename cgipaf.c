@@ -43,6 +43,7 @@ main()
 #endif
 #ifdef CGIPAF_VIEWMAILCFG
 
+#include "cgipaf_createauthcookie.c"
 #include "cgipaf_viewmailcfg.c"
 	write_log(LOG_AUTHPRIV,6,"User %s has login successfully",login);
 #endif

@@ -51,7 +51,7 @@
 	 
 	 /* i dont like old cookies */
 
-	 if (!cmp_access_cookie(accessdb,login,cookie,cookie_timeout)) {
+	 if (cmp_access_cookie(accessdb,login,cookie,cookie_timeout)!=1) {
 	    write_log(LOG_AUTHPRIV,6,"cookie timeout for user %s",login);
 	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIETIMEOUT,err_cookietimeout,options,txt_message);
 	 }

@@ -76,7 +76,7 @@
    
       if (!strcasecmp(forward,txt_yes)) {
 
-     	 write_log(LOG_USER,7,"User %s want to enable mailforwarding",login);
+     	 write_log(LOG_USER,7,"User %s want to enable mailforwarding",options[0][1]);
       
       	 /* forward_to has no length or is an invalid mailaddress, exit */
       
@@ -286,7 +286,7 @@
       /* mail config update, inform the user */
       
       show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options,txt_message);
-      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",login);
+      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",options[0][1]);
       
       /* create the user's .cgipaf_state */
       

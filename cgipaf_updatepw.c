@@ -24,7 +24,7 @@
    if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
       show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options,txt_message);
       fflush(stdout);
-      write_log(LOG_AUTHPRIV,6,"Password for %s was changed",login);
+      write_log(LOG_AUTHPRIV,6,"Password for %s was changed",options[0][1]);
       options[15][1]=newpass1;
 
       /*

@@ -1,5 +1,5 @@
 /*
- * cgipaf_init.c
+ * cgipaf_viewmailcfg.c
  *
  * Copyright (C) 2002-04 Staf Wagemakers Belgie/Belgium
  *
@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
-#include "cgipaf_createauthcookie.c"
 
    /* Gods become human */
    
@@ -117,7 +115,7 @@
  	else
 		strcpy(not_autoreply,"yes");
 
-   	write_log(LOG_USER,7,"got the mailconfiguration for user %s",login);
+   	write_log(LOG_USER,7,"got the mailconfiguration for user %s",options[0][1]);
 
    	if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options,txt_message)==3) {
 

@@ -104,8 +104,8 @@
        }
 
        /* they can not use their login name for a password */
-       if (strcmp(newpass2, login) == 0) {
-       options[21][1] = login;
+       if (strcmp(newpass2, options[0][1]) == 0) {
+       options[21][1] = options[0][1];
        show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options,txt_message);
        }
     }

@@ -69,18 +69,36 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    key.dptr=(void *)loginname;
    key.dsize=strlen(loginname);
    data=dbm_fetch(db,key);
-   if(!data.dptr) { dbm_close(db); return(0); }
+   if(!data.dptr) { 
 
-   if(sizeof(access)!=data.dsize) { dbm_close(db); return(-1); }
+	   fprintf(stderr,"DEBUG: data.dptr not valid\n");
+	   dbm_close(db); 
+	   return(0); 
+   
+   }
+
+   if(sizeof(access)!=data.dsize) { 
+	   
+	   dbm_close(db); 
+	   return(-1); 
+   
+   }
 
    memcpy(&access,data.dptr,data.dsize);
    dbm_close(db);
    if(strcmp(access.cookie,cookie)) { 
-      return(0);
+
+	   fprintf(stderr,"%s %s are not equal\n",access.cookie,cookie);
+      	   return(0);
+
    }
+
    time(&t);
    if(t-access.ti>timeout) {
-      return(0);
+
+	   fprintf(stderr,"cookie time out\n");
+      	   return(0);
+
    }
    return(1);
 }

@@ -62,11 +62,9 @@ main()
 
    		user=cp;
 
-		options[26][1]=user;
 		options[0][1]=user;
                 write_log(LOG_USER,7,"user set to %s",user);
                 write_log(LOG_USER,7,"name set to %s",user);
-                write_log(LOG_USER,7,"login set to %s",login);
 
 		#include "cgipaf_setname2postname.c"
 		#include "cgipaf_noroot.c"
@@ -215,17 +213,10 @@ if(user==NULL) {
       }
       else {
 	
-	login=user;
-	options[0][1]=login;
-	write_log(LOG_USER,7,"admin setto %s",admin);
-	write_log(LOG_USER,7,"name setto %s",options[0][1]);
-	write_log(LOG_USER,7,"user setto %s",user);
+	      pw=get_pw(options[0][1]);
 
-	      pw=get_pw(login);
-
-        
 	      if(pw==NULL) {
-		      write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",login);
+		      write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",options[0][1]);
 		      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NOSUCHUSER,err_nosuchuser,options,txt_message);
 	}
 
@@ -241,16 +232,10 @@ if(user==NULL) {
 
 else {
 
-	login=user;
-	options[0][1]=login;
-	write_log(LOG_USER,7,"admin setto %s",admin);
-	write_log(LOG_USER,7,"name setto %s",options[0][1]);
-	write_log(LOG_USER,7,"user setto %s",user);
-
-	pw=get_pw(login);
+	pw=get_pw(options[0][1]);
 
         if(pw==NULL) {
-		write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",login);
+		write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",options[0][1]);
       		show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NOSUCHUSER,err_nosuchuser,options,txt_message);
 	}
 
@@ -273,6 +258,18 @@ else {
 
 #endif
 #ifdef CGIPAF_MAILADMIN
+
+	write_log(LOG_USER,7,"Saving cookie (%s) with timeout %d for user %s",cookie,invalid_timeout,options[0][1]);
+
+	if (save_access_status(accessdb,options[0][1],0,invalid_timeout,cookie)==-1) {
+
+		printf_txt_msg("Warning: failed to update %s", accessdb);
+		write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
+		if (config_file != NULL) fclose(config_file);
+		exit(0); 
+	
+	}
+
 
 	#include "cgipaf_viewmailcfg.c"
 

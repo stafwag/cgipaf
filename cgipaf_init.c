@@ -177,6 +177,7 @@ if (setuid(0)==-1) {
 	strcpy(login_actionfull,cgi_path);
 	strcat(login_actionfull,LOGIN_ACTION);
 	update_string_pair_item(options,txt_nextactionfull,login_actionfull,0);
+	update_string_pair_item(options,txt_nextaction,LOGIN_ACTION,0);
 
 #endif
 

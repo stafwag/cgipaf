@@ -31,6 +31,7 @@ main()
 #ifdef LOGIN_ACTION
 
    update_string_pair_item(options,txt_nextactionfull,next_actionfull,0);
+   update_string_pair_item(options,txt_nextaction,NEXT_ACTION,0);
 
 #endif
 	

@@ -4,6 +4,7 @@
 
 #include "mailconfig.h"
 #define  PROCMAIL ".procmailrc"
+#define  CGIPAFSTATEFILE ".cgipaf_state"
 
 /* 
  * return $HOME/dir
@@ -247,3 +248,31 @@ int tst_emailaddress(char *emailaddress)
    }
    return(ret);
 }
+
+/*
+ * save the user current mail config to $HOME/.cgipaf_status
+ */
+
+int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply)
+{
+   FILE *fp;
+   char buf[11];
+   char *filename=add2home(p,CGIPAFSTATEFILE);
+   if((fp=fopen(filename,"w"))==NULL) return (-1);
+   if (keep)
+     forward=1;
+   fputs("# CGIPAF state file",fp);
+   fputs("# Please don't edit!!!!!!!",fp);
+   snprintf(buf,10,"%d",forward);
+   save_config(fp,"forward",buf);
+   snprintf(buf,10,"%d",keep);
+   save_config(fp,"keep_msg",buf);
+   snprintf(buf,10,"%d",autoreply);
+   save_config(fp,"autoreply",buf);
+   fclose(fp);
+   return(0);
+}
+
+     
+     
+   

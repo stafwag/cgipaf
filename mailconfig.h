@@ -5,6 +5,7 @@
 #include "pass.h"
 #include "searchdomain.h"
 #include "xmalloc.h"
+#include "configfile.h"
 #include <string.h>
 char *add2home(struct passwd *p,char *dir);
 int get_reply(struct pw_info *pw);

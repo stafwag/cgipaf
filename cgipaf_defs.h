@@ -1,3 +1,6 @@
+#ifndef  _CGIPAF_DEFS_H
+#define  _CGIPAF_DEFS_H
+
 #include "config.h"
 #define  LOGIN                  "name"
 #define  ROOT                   "root"
@@ -113,3 +116,5 @@ extern char const * FascistCheck(char const password[], char const dictpath[]);
 #include "mailconfig.h"
 #include "showmsg.h"
 #include "write_log.h"
+
+#endif /* _CGIPAF_DEFS_H */

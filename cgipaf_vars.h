@@ -1,3 +1,6 @@
+#ifndef _CGIPAF_VARS_H
+#define _CGIPAF_VARS_H
+
 int    i,brol;
 int    max_invalid=3;
 int    invalid_timeout=600;
@@ -73,3 +76,6 @@ char   *options[][2]={
        txt_crackliberror,txt_NULL,			 /* 16 */
        txt_pamerrormsg,txt_NULL,			 /* 17 */
        NULL,NULL};
+
+#endif  /* _CGIPAF_VARS_H */
+	 

@@ -1,3 +1,6 @@
+#ifndef _CGIPAF_MSG_H
+#define _CGIPAF_MSG_H
+
 char err_readdata[]  = "Error reading data, please contact the webmaster\n";
 char err_loginname[] = "Can't read loginname\n";
 char err_access[]    = "Access denied...\n";
@@ -49,3 +52,5 @@ char warn_root[]            = "Someone try to login as root";
 char warn_uid[]             = "Someone try to login as UID ";
 char warn_below_minuid[]    = " which is below the min_uid";
 char warn_above_maxuid[]    = " which is above the max_uid";
+
+#endif /* _CGIPAF_MSG_H */

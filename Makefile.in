@@ -66,7 +66,7 @@ createcookie.o: createcookie.c createcookie.h
 	$(CC) $(CFLAGS) -c createcookie.c
 
 mailconfig.o: mailconfig.h mailconfig.c pass.h searchdomain.o
-	$(CC) $(CFLAGS) -c mailconfig.c
+	$(CC) $(CFLAGS) $(ARG) -c mailconfig.c
 	
 compat.o: compat.c compat.h
 	$(CC) $(CFLAGS) -c compat.c
@@ -81,7 +81,7 @@ out_of_memory.o:  out_of_memory.c out_of_memory.h write_log.o
 	$(CC) $(CFLAGS) -c out_of_memory.c
 
 run_cmd.o: run_cmd.c run_cmd.h configfile.o
-	$(CC) $(CFLAGS) -c run_cmd.c
+	$(CC) $(CFLAGS) $(ARG) -c run_cmd.c
 
 md5.o:	md5.c md5.h
 	$(CC) $(CFLAGS) -c md5.c

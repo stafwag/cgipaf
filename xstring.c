@@ -165,7 +165,7 @@ char * replace_needle(char *txt, char *needle, char *replace)
  * replaces an array of head-tail needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
  * ------------------------------------------------------------------------ */
-char * replace_headtail_needles(char *txt, char *needles[][2],char *head,char *tail)
+char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail)
 {
    int i=0,first=1;
    char *txt2,*ret;
@@ -174,6 +174,7 @@ char * replace_headtail_needles(char *txt, char *needles[][2],char *head,char *t
    strcpy(txt2,txt);
    while (needles[i][0]!=NULL) {
       if(ret!=NULL) free(ret);
+      fprintf(stderr,"DEBUG: current needle: %s\n",needles[i][0]);
       ret=replace_headtail_needle(txt2,needles[i][0],needles[i][1],head,tail);
       if(ret==NULL) break;
       txt2=(char *) xrealloc(txt2,strlen(ret)+1);
@@ -188,7 +189,7 @@ char * replace_headtail_needles(char *txt, char *needles[][2],char *head,char *t
  * replaces an array of needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
  * ------------------------------------------------------------------------ */
-char * replace_needles(char *txt, char *needles[][2])
+char * replace_needles(char *txt, char ***needles)
 {
    return(replace_headtail_needles(txt,needles,"",""));
 }
@@ -418,7 +419,7 @@ char *** add_2_string_pair (char ***str_array,char *str1, char *str2) {
 
 }
 
-int number_of_string_pairs (char *** str_pair) {
+int number_of_string_pairs (char ***str_pair) {
 
 	char ***pt;
 	int ret=0;

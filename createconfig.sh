@@ -3,12 +3,12 @@
 #                                               staf@patat.org
 #                                               http://staf.patat.org
 
-prefix="/usr/lib/cgi-bin/"
+prefix="/usr/local"
 exec_prefix="${prefix}"
 exec_suffix="@exec_suffix@"
 cgi_suffix="@cgi_suffix@"
 top_srcdir="."
-bindir="${exec_prefix}/bin"
+bindir="/usr/lib/cgi-bin/"
 libexecdir="${exec_prefix}/libexec"
 sysconfdir="/etc/cgipaf"
 localstatedir="${prefix}/var"

@@ -5,7 +5,7 @@
  *                 stat_val
  */
 #include "run_cmd.h"
-int run_cmd(FILE *config_file,char *section,char *directive,char *vars[][2])
+int run_cmd(FILE *config_file,char *section,char *directive,char ***vars)
 {
    char **cc,*cmd_name=NULL,*c=NULL;
    FILE *cmd=NULL;

@@ -3,10 +3,14 @@
  * emulate php                                  email: staf@patat.org
  *                                              http://staf.patat.org
  */
+
 #include "ephp.h"
 #include <string.h>
+
 /*
+ *
  * replace var with value
+ *
  */
 char *replace_var(char *str,char *var,char *value)
 {
@@ -40,10 +44,13 @@ while(c) {
 free(varname);
 return(ret);
 }
+
 /*
+ *
  * replace all vars in a string
+ *
  */
-char *replace_vars(char *txt,char *vars[][2])
+char *replace_vars(char *txt,char ***vars)
 {
   int i=0,first=1;
   char *txt2,*ret;
@@ -62,10 +69,12 @@ char *replace_vars(char *txt,char *vars[][2])
   return(ret);
 }
 
-/* 
+/*
+ *
  * execute a php command
+ *
  */
-int ephp_exec(char *command, char *value,char *values[][2])
+int ephp_exec(char *command, char *value,char ***values)
 {
    char *c;
    c=replace_vars(value,values);
@@ -80,11 +89,13 @@ int ephp_exec(char *command, char *value,char *values[][2])
    return(0);
 }
    
-/* ---------------------------------------------------------------------
+/*
+ *
  * split an instruction in a command and a value
  * and send them to ephp_exec
- * --------------------------------------------------------------------- */
-int ephp_split(char *phpinstr,char *values[][2])
+ *
+ */
+int ephp_split(char *phpinstr,char ***values)
 {
    char *c,*command,*value,*malloc_value;
    size_t size;
@@ -110,10 +121,12 @@ int ephp_split(char *phpinstr,char *values[][2])
  
 }
          
-/* --------------------------------------------------------------------
+/*
+ *
  * split a php string into instructions and send them to ephp_split
- * -------------------------------------------------------------------- */
-int ephp_parse(char *phpstr,char *values[][2])
+ *
+ */
+int ephp_parse(char *phpstr,char ***values)
 {
    char *s,*php_instr,*buf;
    int i;
@@ -140,12 +153,14 @@ int ephp_parse(char *phpstr,char *values[][2])
    return(0);
 }
    
-/* -------------------------------------------------------------------
+/*
+ *
  * displays a php file
  *
  * returns -1 on error
- * ------------------------------------------------------------------- */
-int print_phpfile (char * filename,char *values[][2])
+ * 
+ */
+int print_phpfile (char * filename,char ***values)
 {
 FILE *fp;
 char buffer[500],buffer2[500],*s;

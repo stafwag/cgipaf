@@ -8,7 +8,11 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 	int i;
 	char buffer[256];
 
-	if(data==NULL) return ret;
+	if(data==NULL) {
+		fprintf(stderr,"data is NULL\n");
+		return ret;
+	}
+
 
 	for (i=0;i<data->n;i++) {
 

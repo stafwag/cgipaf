@@ -5,10 +5,13 @@
 #include "configfile.h"
 #define BUFFER_LEN 200
 /*
+ *
  * converts line to a string with only the global part
  * current_section = hulp string
  * global = help int
+ *
  */
+
 char *only_global(char *line,char **current_section,int *global)
 {
 char *c,*s=line,*globals,*found,*end_section;
@@ -49,6 +52,7 @@ return(globals);
 }
      
 /*
+ *
  * reads a variable out the configfile
  * fp           = stream
  * var_name     = variable name
@@ -58,6 +62,7 @@ return(globals);
  *                1 -> get only global variables
  * return       = value 
  *              = NULL bij een fout                
+ *
  */
 char * real_get_config(FILE *fp,char *section_name,char *var_name,int mode)
 {
@@ -123,28 +128,38 @@ if(current_section!=NULL) free(current_section);
 return(r);
 }
 
-/* 
+/*
+ *
  * get a section variable
+ *
  */
 char * get_section_config(FILE *fp,char *section_name,char *var_name)
 {
 return (real_get_config(fp,section_name,var_name,0));
 }
+
 /*
+ *
  * get a global variable
+ *
  */
 char* get_global_config(FILE *fp,char *var_name)
 {
 return(real_get_config(fp,NULL,var_name,1));
 }
+
 /*
+ *
  * get any variable
+ *
  */
 char * get_config(FILE *fp,char *var_name)
 {
 return(get_section_config(fp,NULL,var_name));
 }
+
 /*
+ *
  * fetch the first part of a variable
  * fp           = stream
  * section_name = section_name
@@ -154,6 +169,7 @@ return(get_section_config(fp,NULL,var_name));
  *                1 -> global mode
  * returns char * item 
  *         NULL = error
+ *
  */
 char * real_get_config_item(FILE *fp,char *section_name,char *var_name,int mode) 
 {
@@ -169,28 +185,39 @@ xrealloc(c,strlen(c)+1);
 }
 return(c);
 }
-/* 
+
+/*
+ *
  * get a section item
+ *
  */
 char * get_section_config_item(FILE *fp,char *section_name,char *var_name) 
 {
 return(real_get_config_item(fp,section_name,var_name,0));
 }
-/* 
+
+/*
+ *
  * get any item
+ *
  */
 char * get_config_item(FILE *fp,char *var_name) 
 {
 return(get_section_config_item(fp,NULL,var_name));
 }
+
 /*
+ *
  * get a global item
+ *
  */
 char * get_global_config_item(FILE *fp,char *var_name)
 {
 return(real_get_config_item(fp,NULL,var_name,1));
 }
+
 /*
+ *
  * fetch a variable out the cfg file, and
  * split into an array
  *
@@ -202,6 +229,7 @@ return(real_get_config_item(fp,NULL,var_name,1));
  *                1 -> global mode
  * returns char ** items array ends with a NULL
  *         NULL = error
+ *
  */
 char ** real_get_config_array(FILE *fp,char *section_name,char *var_name,int mode)
 {
@@ -211,7 +239,7 @@ c=real_get_config(fp,section_name,var_name,mode);
 if (c==NULL) return (NULL);
 c2=c;
 c2=mv_2_next(c2);
-cc=(char **) xmalloc(sizeof(char **)*n+2);
+cc=(char **) xmalloc(sizeof(char **)*(n+2));
 do {
    c2=mv_2_next(c2);
 if (c2[0]=='\"') {
@@ -234,39 +262,52 @@ cc[--n]=NULL;
 free(c);
 return(cc);
 }
-/* 
+
+/*
+ *
  * get a section config array
+ *
  */
 char ** get_section_config_array(FILE *fp,char *section_name,char *var_name)
 {
 return(real_get_config_array(fp,section_name,var_name,0));
 }
+
 /* 
+ *
  * get any config array
+ *
  */
 char ** get_config_array(FILE *fp,char *var_name)
 {
 return(get_section_config_array(fp,NULL,var_name));
 }
+
 /*
+ *
  * get a global config array
+ *
  */
 char ** get_global_config_array(FILE *fp,char *var_name)
 {
 return(real_get_config_array(fp,NULL,var_name,1));
 }
+
 /*
+ *
  * replaces %{variable_name} with a new string
  * 
  * parms[0][0] = variable name , parms[0][1] = value , ...
+ *
  */
-char * add_parms(char *txt,char *parms[][2]) {
+char * add_parms(char *txt,char ***parms) {
 char *ret,*c,*txt2;
 c=txt2=replace_headtail_needles(txt,parms,"%{","}");
 ret=cut_between(txt2,"%{","}");
 free(c);
 return(ret);
 }
+
 /* ------------------------------------------- */
 /* bewaard een variable in een config bestand  */
 /*                                             */

@@ -72,7 +72,7 @@ compat.o: compat.c compat.h
 	$(CC) $(CFLAGS) -c compat.c
 	
 searchdomain.o: searchdomain.c searchdomain.h xstring.o configfile.o
-	$(CC) $(CFLAGS) -c searchdomain.c
+	$(CC) $(CFLAGS) $(ARG) -c searchdomain.c
 
 xmalloc.o:  xmalloc.c xmalloc.h out_of_memory.o
 	$(CC) $(CFLAGS) -c xmalloc.c

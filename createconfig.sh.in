@@ -146,5 +146,11 @@ WWW="${datadir}"
    echo "# sendmail              /usr/lib/sendmail" >> $CFGFILE
    echo "# domain		 your_domain_name" >> $CFGFILE
    echo >> $CFGFILE
+   echo "# create a backup of the user's .procmailrc and restore it" >> $CFGFILE
+   echo "# when mail forwarding and autoreply is disabled" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# run_before_mailcfg      \"cp %{homedir}/.procmailrc %{homedir}/.procmailrc_backup\"" >> $CFGFILE
+   echo "# run_after_mailcfg       \"cp %{homedir}/.procmailrc_backup %{homedir}/.procmailrc\"" >> $CFGFILE
+   echo >> $CFGFILE
    echo "</mailcfg>" >> $CFGFILE
    chmod 644 $CFGFILE

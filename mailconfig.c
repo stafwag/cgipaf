@@ -109,8 +109,8 @@ char * realget_forward(struct pw_info *pw,int mode)
    char needle_forward2[]=":0 E";
    char needle_kforward[]=":0 c";
    char needle_kforward2[]=":0 c E";
-   char *needles_forward[]={needle_forward,needle_forward2,NULL};
-   char *needles_kforward[]={needle_kforward,needle_kforward2,NULL};
+   char *needles_forward[]={needle_forward,needle_forward2,NULL}; 
+   char *needles_kforward[]={needle_kforward,needle_kforward2,NULL}; 
    char **needles;
    char **current_needle;
    char *needle;
@@ -121,7 +121,10 @@ char * realget_forward(struct pw_info *pw,int mode)
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"r"))) return(NULL);
    i=0;
    while (fgets(buf,1000,fp)) {
-      buf[strlen(buf)-1]='\0';
+      if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
+
+      if(i&&!strstr(buf,"FROM_DAEMON")) break;
+      	else i=0;
 
       current_needle=needles;
       for(needle=*current_needle;needle!=NULL;needle=*(++current_needle)) {
@@ -131,12 +134,10 @@ char * realget_forward(struct pw_info *pw,int mode)
 	 	break;
       		}
        	}
-      	if(i) break; 
 
    }
 
-   if (!i) {fclose(fp); return(NULL);}
-   if (!(fgets(buf,1000,fp))) {fclose(fp);return(NULL);}
+   if ((!i)||(buf==NULL)) {fclose(fp); return(NULL);}
    if (strstr(buf,"X-Loop")==NULL) {
       strcpy(mailadres,buf+2);
    }

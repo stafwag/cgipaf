@@ -1,6 +1,6 @@
    /* Is mailcfg check enabled? */
 
-   if((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))==NULL) {
+   if((cp=get_section_config_item(config_file,UPDATESECTION,RUN_MAILCFG))==NULL) {
 
       /* if there is no run_mailcfg script, mailcfg_check is always enabled */
 
@@ -14,7 +14,7 @@
 
 	 /* get the mailcfg_check setting out the cfgfile */
    
-         if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAILCFG_CHECK))!=NULL) {
+         if ((cp=get_section_config_item(config_file,UPDATESECTION,CFG_MAILCFG_CHECK))!=NULL) {
 
             if (is_var_yes(cp)==0) {
 
@@ -151,7 +151,7 @@
    
       if (!oldstate&&newstate) {
 
-         i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options,set_script_filename);
+         i=run_cmd(config_file,UPDATESECTION,RUN_BEFORE_MAILCFG,options,set_script_filename);
 
          if (i<0) {
 
@@ -179,11 +179,11 @@
 
    /* use run_mailcfg instead of built-in? */
    
-   if ((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
+   if ((cp=get_section_config_item(config_file,UPDATESECTION,RUN_MAILCFG))!=NULL) {
 
       xfree(cp);
       write_log(LOG_USER,7,"starting run_mailcfg");
-      i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options,set_script_filename);
+      i=run_cmd(config_file,UPDATESECTION,RUN_MAILCFG,options,set_script_filename);
       if(i<0)
 	write_log(LOG_USER,1,"run_mailcfg failed, run_cmd() returns %d",i);
       else
@@ -278,7 +278,7 @@
    
       /* start run_success if defined */
    
-      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options,set_script_filename);
+      i=run_cmd(config_file,UPDATESECTION,RUN_SUCCESS,options,set_script_filename);
       if (i<0) {
          if (i==-1)
 	    write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
@@ -294,7 +294,7 @@
    
       if (oldstate&&!newstate) {
 
-	 i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options,set_script_filename);
+	 i=run_cmd(config_file,UPDATESECTION,RUN_AFTER_MAILCFG,options,set_script_filename);
 
       if(i<0) {
 	 if(i==-1)

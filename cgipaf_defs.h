@@ -145,6 +145,7 @@
 
 #ifdef   CGIPAF_MAILCFG
 #define  CFGSECTION             "mailcfg"
+#define  UPDATESECTION		"mailcfg"
 #include "mailconfig.h"
 #endif   /* CGIPAF_MAILCFG */
 

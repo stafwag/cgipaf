@@ -16,10 +16,10 @@
 
    /* use run_viewmailcfg instead of built-in? */
 
-   if((cp=get_sg_item(config_file,CFGSECTION,RUN_VIEWMAILCFG))!=NULL) {
+   if((cp=get_sg_item(config_file,UPDATESECTION,RUN_VIEWMAILCFG))!=NULL) {
 
       	xfree(cp);
-      	i=run_cmd(config_file,CFGSECTION,RUN_VIEWMAILCFG,options,set_script_filename);
+      	i=run_cmd(config_file,UPDATESECTION,RUN_VIEWMAILCFG,options,set_script_filename);
 
       	if(i<0)
 		write_log(LOG_USER,1,"run_viewmailcfg failed, run_cmd() returns %d",i);

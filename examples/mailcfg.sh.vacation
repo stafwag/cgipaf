@@ -1,0 +1,34 @@
+#!/bin/sh
+
+unset IFS
+
+read FORWARD
+read KEEPMSG
+read AUTOREPLY
+read FORWARDTO
+
+DOTFORWARD="$HOME/.forward"
+
+echo "forward: $FORWARD"
+echo "KEEPMSG: $KEEPMSG"
+echo "AUTOREPLY: $AUTOREPLY"
+echo "FORWARDTO: $FORWARDTO"
+
+rm -f "$DOTFORWARD"
+if [ "$FORWARD" = "1" ]; then
+   echo -en "$FORWARDTO" >> "$DOTFORWARD"
+   if [ "$KEEPMSG" = "1" ]; then
+      echo -en ",\\$USER" >> "$DOTFORWARD"
+   fi
+fi
+if [ "$AUTOREPLY" = "1" ]; then
+   if [ "$FORWARD" = "1" ]; then
+      if [ "$KEEPMSG" != "1" ]; then
+         echo -en ",\\$USER" >> "$DOTFORWARD"
+      fi
+      echo -en "," >> $DOTFORWARD
+   else
+      echo -en "\\$USER," >> "$DOTFORWARD"
+   fi
+   echo -en "\"|/usr/bin/vacation -m vacations.txt $USER\"" >> $DOTFORWARD
+fi

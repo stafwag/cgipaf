@@ -1,3 +1,10 @@
+* version 1.2.1
+  + example in Brazilian Portuguese added ( Thanks to Fabricio Machado )
+  + improved forward_to emailaddress testing 
+  + added test for mail headers like 'Precedence: bulk' to avoid 
+    replying to maillings etc.
+  + code cleanup
+
 * version 1.2.0         (  7 Dec 2002)
   + 1.2.0RC1 has been released as 1.2.0
 

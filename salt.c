@@ -1,7 +1,7 @@
 /*
  * salt.c                                          (c) 2002 Staf Wagemakers
- *                                                 http://stafwag.netfirms.com
- *                                                 staf.wagemakers@advalvas.be
+ *                                                    http://staf.patat.org
+ *                                                           staf@patat.org
  */
 
 #include "salt.h"

@@ -3093,7 +3093,7 @@ EOF
 fi
 
 
-for ac_func in free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog
+for ac_func in free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
 echo "configure:3100: checking for $ac_func" >&5

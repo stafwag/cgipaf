@@ -1,8 +1,8 @@
 /*
  * pass.c
  * 
- * (GPL) 2000,2002 Belgium                    http://stafwag.netfirms.com
- * Staf Wagemakers                            staf.wagemakers@advalvas.be 
+ * (GPL) 2000,2002 Belgium                           http://staf.patat.org
+ * Staf Wagemakers                                          staf@patat.org
 */
 #include "pass.h"
 

@@ -219,7 +219,7 @@ AC_C_CONST
 AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog)
+AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 
 AC_CHECK_FUNCS(getdomainname,,NO_GETDOMAINNAME=yes)

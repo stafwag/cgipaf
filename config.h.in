@@ -37,6 +37,9 @@
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME
 
+/* Define if you have the getuid function.  */
+#undef HAVE_GETUID
+
 /* Define if you have the malloc function.  */
 #undef HAVE_MALLOC
 
@@ -45,6 +48,12 @@
 
 /* Define if you have the realloc function.  */
 #undef HAVE_REALLOC
+
+/* Define if you have the setreuid function.  */
+#undef HAVE_SETREUID
+
+/* Define if you have the setuid function.  */
+#undef HAVE_SETUID
 
 /* Define if you have the strdup function.  */
 #undef HAVE_STRDUP

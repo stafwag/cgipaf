@@ -3,7 +3,7 @@
  * 
  * (c) 2001 Belgium
  * staf wagemakers
- * staf.wagemakers@advalvas.be
+ * staf@patat.org
  */
 #include "config.h"
 #include <stdlib.h>

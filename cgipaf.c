@@ -63,7 +63,7 @@ main()
    pam_servicename=set_pam_service(NULL);
    write_log(LOG_USER,7,"pam service name set to %s",pam_servicename);
 
-# ifdef CGIPAF_PASSWD
+#ifdef CGIPAF_PASSWD
 
    /* set the pam_chauth_flag */
    
@@ -351,6 +351,21 @@ main()
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
+
+#ifdef _WITHPAM
+#ifdef CGIPAF_PASSWD
+  
+   /*
+    * Set the real uid to the user's uid, set the effective uid to root
+    */
+   
+   if(setreuid(pw->p->pw_uid,0)==-1) {
+        write_log(LOG_USER,7,"setreuid() failed: %s",strerror(errno));
+   }; 
+
+#endif
+#endif
+
    
    /* include access control lists */
    

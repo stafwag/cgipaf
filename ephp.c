@@ -1,7 +1,7 @@
 /*
  * ephp.c                                       (GPL) 2001 Staf Wagemakers
- * emulate php                           email: staf.wagemakers@advalvas.be
- *                                              http://stafwag.netfirms.com
+ * emulate php                                  email: staf@patat.org
+ *                                              http://staf.patat.org
  */
 #include "ephp.h"
 #include <string.h>

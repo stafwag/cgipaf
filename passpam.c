@@ -1,7 +1,7 @@
 /*
  * passpam.c
- * (GPL) 2000 - 02 Belgium                    http://stafwag.netfirms.com
- * Staf Wagemakers			      staf.wagemakers@advalvas.be
+ * (GPL) 2000 - 02 Belgium                       http://staf.patat.org
+ * Staf Wagemakers			                staf.patat.org
  */
 
 #include "pass.h"
@@ -12,7 +12,7 @@ static char *pam_msg=NULL;                  /* pam error message */
 static int pwstate;			    /* current pam conversation
 					       function state */
 
-static int chauth_flag=PAM_CHANGE_EXPIRED_AUTHTOK;
+static int chauth_flag=0;
 
 char passwd_service[]="passwd";
 int  set_pam_chauth_flag (int flag) {

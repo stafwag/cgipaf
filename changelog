@@ -1,3 +1,7 @@
+* version 1.2.2		( 28 Apr 2003 )
+  + BUGFIX: setuid(0) added before the passwd run_success script, to re-enable
+    smbpasswd support. which was broken in the previous release.
+
 * version 1.2.1         ( 20 Jan 2003 )
   + example in Brazilian Portuguese added ( Thanks to Fabricio Machado )
   + improved forward_to emailaddress testing 

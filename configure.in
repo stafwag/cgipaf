@@ -8,8 +8,40 @@ AC_SUBST(NEED_COMPAT_H)
 dnl AC_SUBST(AC_LIBOBJ)
 
 AC_CANONICAL_SYSTEM
+
+AC_MSG_CHECKING(Is your system compatible with CGIpaf?);
+
+case $host_os in
+
+ freebsd*) 
+ 		AC_MSG_RESULT(yes)
+		;;
+   linux*) 
+   		AC_MSG_RESULT(yes)
+		;;
+  netbsd*) 
+  		AC_MSG_RESULT(yes)
+  		;;
+ openbsd*) 
+ 		AC_MSG_RESULT(no)
+ 	   	AC_MSG_ERROR($host_os isn't supported)
+		;;
+ solaris*) 
+ 		AC_MSG_RESULT(yes, the biggest unix vendor) 
+		;;
+        *) 
+		AC_MSG_RESULT(unkown)
+	   	AC_MSG_WARN(CGIpaf isn't tested with your system: $host_os)
+	   	AC_MSG_WARN(Please inform me about the result)
+		;;
+
+esac
+
+
 AC_SUBST(host)
+AC_SUBST(host_os)
 AC_DEFINE_UNQUOTED(HOST,"$host",system host)
+AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
 
 NEED_COMPAT_H="COMPAT"
 
@@ -38,13 +70,13 @@ function (default)])
 
 dnl freebsd support
 
-if test "$host" = "freebsd"; then
+if test "$host_os" = "freebsd"; then
     AC_DEFINE(BSDHOST,1,BSD system)
     AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
     ARG="NOPAM"
 fi
 
-if test "$host" = "netbsd"; then
+if test "$host_os" = "netbsd"; then
     AC_DEFINE(BSDHOST,1,BSD system)
     AC_DEFINE(NETBSDHOST,1,NetBSD system)
     ARG="NOPAM"
@@ -109,11 +141,11 @@ dnl   fi
 
 dnl freebsd has built-in md5 support
  
-     if test "$host" != "freebsd"; then
+     if test "$host_os" != "freebsd"; then
         AC_LIBOBJ(md5 md5crypt)
      fi
 
-     echo $host | grep -i "bsd" > /dev/null 2>&1
+     echo $host_os | grep -i "bsd" > /dev/null 2>&1
 
      if test "$?" = "1"; then
         AC_LIBOBJ(fgetpwnam);
@@ -223,7 +255,8 @@ fi
 AC_CHECK_HEADERS(sys/time.h)
 AC_HEADER_TIME
 
-dnl AC_CHECK_HEADERS(sys/time.h,,AC_CHECK_HEADERS(time.h,,AC_MSG_ERROR(time.h not found)))
+AC_HEADER_SYS_WAIT
+
 
 AC_CHECK_HEADERS(unistd.h,,AC_MSG_ERROR(unistd.h not found))
 AC_CHECK_HEADERS(stdlib.h,,AC_MSG_ERROR(stdlib.h not found))
@@ -261,10 +294,17 @@ AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 
-AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid)
+AC_CHECK_FUNCS(free realloc strdup strerror strstr strcasecmp strncasecmp strrchr strchr strnchr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid getspnam gettimeofday memset)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 
 AC_CHECK_FUNCS(getdomainname,,NO_GETDOMAINNAME=yes)
+AC_FUNC_CHOWN
+AC_FUNC_FORK
+AC_FUNC_LSTAT
+AC_FUNC_STAT
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_VPRINTF
 
 if test "$NO_GETDOMAINNAME" = "yes"; then
 

@@ -17,6 +17,7 @@ to64(char *s, long v, int n)
         }
 }
 #endif
+
 /*
  * retruns a random char with valid ascii char's
  *

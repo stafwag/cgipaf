@@ -112,7 +112,17 @@ extern char const * FascistCheck(char const password[], char const dictpath[]);
 #include <errno.h>
 #include <syslog.h>
 #include <sys/types.h>
-#include <sys/wait.h>
+#include <sys/types.h>
+
+#if HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
+#ifndef WEXITSTATUS
+# define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+#endif
+#ifndef WIFEXITED
+# define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
+#endif
 
 #ifndef LOG_AUTHPRIV
 #define LOG_AUTHPRIV LOG_AUTH

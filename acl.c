@@ -151,7 +151,7 @@ int get_aclorder(FILE *config_file,char *section_name) {
  * returns 0  -> deny
  *         1  -> allowed
  */
-int acl (FILE *config_file,char *section_name, struct pw_info *p,char *usermaildomain) {
+int acl(FILE *config_file,char *section_name, struct pw_info *p,char *usermaildomain) {
     char **grpdeny=NULL,**grpallow=NULL;
     char **usrdeny=NULL,**usrallow=NULL;
     char **usermaildomain_deny=NULL,**usermaildomain_allow=NULL;

@@ -76,13 +76,17 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef   HAVE_LIBCRACK
+#ifndef  HAVE_CRACK_H
+extern char const * FascistCheck(char const password[], char const dictpath[]);
+#else
+#include <crack.h>
+#endif   /* HAVE_CRACK_H */
+#endif   /* HAVE_LIBCRACK */
+
 #ifdef   HAVE_CRYPT_H
 #include <crypt.h>
 #endif   /* HAVE_CRYPT_H */
-
-#ifdef   HAVE_CRACK_H
-#include <crack.h>
-#endif   /* HAVE_CRACK_H */
 
 #include <stdlib.h>
 #include <errno.h>

@@ -117,9 +117,9 @@ dnl freebsd has built-in md5 support
 fi
 
 if test "$with_libcrack" != "no"; then
-   AC_CHECK_HEADERS(crack.h,[ HAVE_CRACK_H=1 ],AC_MSG_WARN(crack.h not found cracklib support is disabled!!!!))
-   if test "$HAVE_CRACK_H" = "1"; then 
-      AC_CHECK_LIB(crack,FascistCheck,,AC_MSG_WARN(cracklib not found cracklib support is disabled!!!!))
+   AC_CHECK_LIB(crack,FascistCheck,[ HAVE_LIBCRACK=1 ],AC_MSG_WARN(cracklib not found cracklib support is disabled!!!!))
+   if test "$HAVE_LIBCRACK" = "1"; then 
+   AC_CHECK_HEADERS(crack.h,,AC_MSG_WARN(crack.h not found usign built-in FascistCheck define...))
    fi
 fi
 

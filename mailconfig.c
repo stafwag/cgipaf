@@ -183,8 +183,8 @@ char *get_maildomain(char *domain)
 {
    char domainname[100],hostname[100];
    char *hostdomainname;
-   hostdomainname=xmalloc(200);
    if (domain!=NULL) return(domain);
+   hostdomainname=xmalloc(200);
    hostdomainname[0]='\0';
    gethostname(hostname,99);
    searchdomain(domainname,99);

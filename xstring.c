@@ -22,21 +22,25 @@
  */
 void cut_after_char (char *c,char ch)
 {
-do {
-   if (ch=='\0') {
-      if (isspace(*c)) { 
-         *c='\0';
-         break;
-	 }
-      }
-      else {
-         if (*c==ch) { 
-            *c='\0';
-	    break;
-	 }
-      }
-   ++c;
-   } while (*c);
+
+	if(c==NULL) return;
+	if(strlen(c)==0) return;
+
+	do {
+   		if (ch=='\0') {
+      			if (isspace(*c)) { 
+         			*c='\0';
+         			break;
+	 		}
+      	}
+      		else {
+         		if (*c==ch) { 
+            		*c='\0';
+	    		break;
+	 		}
+      		}
+   		++c;
+   	} while (*c);
 }
 
 /*

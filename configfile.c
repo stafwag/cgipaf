@@ -28,7 +28,6 @@ char *c,*s=line,*globals,*found,*end_section;
 int first=1;
 globals=(char *)calloc(strlen(line)+1,sizeof(char *));
 end_section=(char *)xmalloc(1);
-strcpy(globals,line);
 while(1) {
    if (*global) {
       if((found=strstr(s,"<"))==NULL) {
@@ -75,66 +74,86 @@ return(globals);
  */
 char * real_get_config(FILE *fp,char *section_name,char *var_name,int mode)
 {
-int l,ii=0;
-int sect=0,global=1;
-char *r=NULL,*c=NULL,*ss=NULL,s[BUFFER_LEN],*start_section=NULL;
-char *end_section=NULL,*current_section=NULL;
-if(var_name==NULL) return(NULL);
-if(fp==NULL) return NULL;
-fseek(fp,0,SEEK_SET);
-if (s==NULL) return(NULL);
-if (section_name!=NULL) {
-   start_section=(char *)xmalloc(strlen(section_name)+1+strlen("<")+strlen(">"));
-   end_section=(char *)xmalloc(strlen(section_name)+1+strlen("</")+strlen(">"));
-   strcpy(start_section,"<");
-   strcat(start_section,section_name);
-   strcat(start_section,">");
-   strcpy(end_section,"</");
-   strcat(end_section,section_name);
-   strcat(end_section,">");
-}
-else sect=1;
-while (fgets(s,BUFFER_LEN,fp)) {
-  if(!(strrchr(s,'\n'))) {errno=E2BIG;return(NULL);} /* line too long */
-  s[strlen(s)-1]='\0';
-  cut_rem (s);
-  if(mode==1) ss=only_global(s,&current_section,&global);
-    else ss=s;
-  if(ss==NULL) return (NULL);
-  if (section_name!=NULL) {
-     if (!sect) {
-        if((c=istrstr(ss,start_section))!=NULL) {
-          ss=c;sect=1;
-        }
-     }
- 
-   if (sect) {
-      if ((c=istrstr(ss,end_section))!=NULL) {
-         ss=c;sect=0;
-      }
-    }
-  }
-  if ((sect)&&(ss!=NULL)) {
-     c=mv_2_next(ss);
-     l=strlen(var_name);
-     if (get_item_size(c)==l) {
-        if (!strncasecmp(c,var_name,l)) {
-	   c+=l;
-	   c=mv_2_next(c);
-           if (r==NULL) r=(char *)xmalloc(strlen(c)+1);
-              else r=(char *) xrealloc(r,strlen(c)+1);
-              if(r==NULL) break; 
-              strcpy(r,c);
-	}
-     }
-  }
-}
 
-if((mode==1)&&(ss!=NULL)) free(ss); 
-if(start_section!=NULL) free(start_section); 
-if(end_section!=NULL) free(end_section);
-if(current_section!=NULL) free(current_section);
-return(r);
+	int l,ii=0;
+	int sect=0,global=1;
+	char *r=NULL,*c=NULL,*ss=NULL,s[BUFFER_LEN],*start_section=NULL;
+	char *end_section=NULL,*current_section=NULL;
+
+	if(var_name==NULL) 
+		return(NULL);
+
+	if(fp==NULL) 
+		return NULL;
+
+	fseek(fp,0,SEEK_SET);
+
+	if (s==NULL) 
+		return(NULL);
+
+	if (section_name!=NULL) {
+   		start_section=(char *)xmalloc(strlen(section_name)+1+strlen("<")+strlen(">"));
+   		end_section=(char *)xmalloc(strlen(section_name)+1+strlen("</")+strlen(">"));
+   		strcpy(start_section,"<");
+   		strcat(start_section,section_name);
+   		strcat(start_section,">");
+   		strcpy(end_section,"</");
+   		strcat(end_section,section_name);
+   		strcat(end_section,">");
+	}
+	else 
+		sect=1;
+
+	while (fgets(s,BUFFER_LEN,fp)) {
+
+  		if(!(strrchr(s,'\n'))) 
+			{errno=E2BIG;return(NULL);} /* line too long */
+  
+		s[strlen(s)-1]='\0';
+  		cut_rem(s);
+  		if(mode==1) { 
+			ss=only_global(s,&current_section,&global);
+		}
+    		else ss=s;
+  		if(ss==NULL) return (NULL);
+  		if (section_name!=NULL) {
+     			if (!sect) {
+        			if((c=istrstr(ss,start_section))!=NULL) {
+          			ss=c;sect=1;
+        			}
+     			}
+ 
+   			if (sect) {
+      				if ((c=istrstr(ss,end_section))!=NULL) {
+         			ss=c;sect=0;
+      				}
+    			}
+  		}
+  		if ((sect)&&(ss!=NULL)) {
+     			c=mv_2_next(ss);
+     			l=strlen(var_name);
+     			if (get_item_size(c)==l) {
+        			if (!strncasecmp(c,var_name,l)) {
+	   				c+=l;
+	   				c=mv_2_next(c);
+           				if (r==NULL) r=(char *)xmalloc(strlen(c)+1);
+              					else r=(char *) xrealloc(r,strlen(c)+1);
+              				if(r==NULL) break; 
+              				strcpy(r,c);
+				}
+     			}
+  		}
+	}
+
+	if((mode==1)&&(ss!=NULL)) 
+		xfree(ss); 
+	if(start_section!=NULL) 
+		xfree(start_section); 
+	if(end_section!=NULL)
+		xfree(end_section);
+	if(current_section!=NULL) 
+		xfree(current_section);
+	return(r);
 }
 
 /*
@@ -184,13 +203,22 @@ char * real_get_config_item(FILE *fp,char *section_name,char *var_name,int mode)
 {
 char *c;
 c=real_get_config(fp,section_name,var_name,mode);
+
 if(c!=NULL) {
    if (c[0]=='\"') {
       rmpos(c,0);
       cut_after_quote(c);
    }
-   else cut_space(c);
-xrealloc(c,strlen(c)+1); 
+   else {
+	   cut_space(c);
+   }
+   if(strlen(c)==0) {
+	   xfree(c);
+	   c=NULL;
+   }
+   else {
+   	xrealloc(c,strlen(c)+1); 
+   }
 }
 return(c);
 }
@@ -342,7 +370,9 @@ char *get_sg_item(FILE *fp,char *section_name,char *var_name)
 char *ret;
 ret=get_section_config_item(fp,section_name,var_name);
 
-if(ret==NULL) ret=get_global_config_item(fp,var_name);
+if(ret==NULL) {
+	ret=get_global_config_item(fp,var_name);
+}
    
 return(ret);
 }

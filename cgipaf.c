@@ -148,7 +148,9 @@ main()
    
    /*  get the cookie time out */
    
-   cp=get_section_config_item(config_file,CFGSECTION,CFG_COOKIETIMEOUT);
+   cp=get_section_config_item(config_file,CFGSECTION,CFG_COOKIETIMEOUT); 
+
+   cp=NULL;
    if(cp!=NULL) sscanf(cp,"%d",&cookie_timeout);
 
    write_log(LOG_USER,7,"cookie_timeout set to %d",cookie_timeout);
@@ -198,6 +200,8 @@ main()
 
    
    /* We dont want too much data */
+	   
+    max_postlength=MAXPOSTLENGTH;
 
    if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAXPOSTLENGTH))==NULL) {
 	   max_postlength=MAXPOSTLENGTH;
@@ -207,7 +211,7 @@ main()
 	}
    
    write_log(LOG_USER,7,"max_postlength set to %d",max_postlength);
-   
+
    if ((cp=getenv("CONTENT_LENGTH"))!=NULL) {
       sscanf(cp,"%d",&brol);
       if (brol>max_postlength) {

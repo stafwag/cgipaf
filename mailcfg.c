@@ -106,12 +106,20 @@ main()
       write_log(LOG_USER,3,"%s",err_mcfg_accessdb);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESSDB,err_mcfg_accessdb,options);
    }
+      write_log(LOG_USER,7,"accessdb set to %s",accessdb);
 
    /* set the sendmail cmd path */
+
+
    
    if ((sendmail=get_section_config_item(config_file,CFGSECTION,SENDMAIL))==NULL)
+   
      sendmail=txt_sendmail;
+
+
+   
    write_log(LOG_USER,7,"sendmail set to %s",sendmail);
+
    
    /* set the mailerdomain */ 
    

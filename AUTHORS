@@ -1,0 +1,15 @@
+Authors of CGIpaf
+
+Staf Wagemakers, Main author.
+
+Andreas Liebe, fixed some bugs 
+
+ * created a patch that allows it to use mailcfg.cgi for users with 
+   non-interactive shell such as /bin/false
+ * created a patch that fixed a accessdb bug, the database wasn't always 
+   closed.
+
+Daniel R.,
+
+ * created a patch with the ability to list words in /etc/cgipaf.conf that 
+   should not be a part of new passwords.

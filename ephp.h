@@ -1,7 +1,7 @@
 /*
  * ephp.h                                 (GPL)     2001 Staf Wagemakers
  *                                        email   : stafwag@yahoo.com
- *                                        homepage: http://stafwag.f2g.net
+ *                                        http://stafwag.home7.dk3.com
  */
 #include <string.h>
 #include <stdio.h>

@@ -1,7 +1,7 @@
 <HR>
 <P>
 <FORM ACTION="/cgi-bin/mailcfg.cgi" METHOD=POST>
-<TABLE WIDTH=100%>
+<TABLE WIDTH="100%">
 <TR>
 <TD>Login name:</TD>
 <TD ALIGN="LEFT"><INPUT NAME=name VALUE="<? echo $name ?>" TYPE=TEXT SIZE=10 MAXLENGTH=15></TD>
@@ -13,7 +13,7 @@
 <TABLE>
 <TR>
 <TD>Forward mailbox:</TD>
-<TD WIDTH=20>
+<TD>
 <SELECT NAME="forward">
 <OPTION value="<? echo $forward ?>"><? echo $forward ?> 
 <OPTION value="<? echo $not_forward ?>"><? echo $not_forward ?>
@@ -31,7 +31,6 @@
 </TR>
 </TABLE>
 <HR>
-</TABLE>
 <TABLE>
 <TR>
 <TD>Enable autoReply:</TD>

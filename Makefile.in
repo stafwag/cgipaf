@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# (GPL) 2001 Belgium                              http://stafwag.f2g.net
+# (GPL) 2001 Belgium                        http://stafwag.home7.dk3.com
 # Staf Wagemakers	                               stafwag@yahoo.com
 # ----------------------------------------------------------------------
 
@@ -35,10 +35,10 @@ install: all
 	 su root -c "/bin/sh ./install.sh"
 
 pass.o: pass.c pass.h
-	$(CC) $(CFLAGS) -O2 -c pass.c
+	$(CC) $(CFLAGS) -c pass.c
 
 passpam.o: passpam.c pass.h
-	   $(CC) $(CFLAGS) $(ARG) -O2 -c passpam.c 
+	   $(CC) $(CFLAGS) $(ARG) -c passpam.c 
 
 ccgi.o: ccgi.c ccgi.h
 	$(CC) $(CFLAGS) -c ccgi.c

@@ -1,7 +1,7 @@
 /*
  * ephp.c                                  (GPL) 2001 Staf Wagemakers
  * emulate php                             email: stafwag@yahoo.com
- *                                         homepage: http://stafwag.f2g.net
+ *                                         http://stafwag.home7.dk3.com
  */
 #include "ephp.h"
 #include <string.h>

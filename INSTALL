@@ -80,7 +80,7 @@ CONFIGURATION
     If your system don't support md5 passwords remove md5 in the password line.
     
     If "set_PAM_CHANGE_EXPIRED_AUTHTOK" is to "on" passwd.cgi support all 
-    pam opties in the PAM configuration (cracklib, minium/ maxium password 
+    pam opties in the PAM configuration (cracklib, minimum/ maximum password 
     length etc.).
 
 THAT'S ALL FOLKS

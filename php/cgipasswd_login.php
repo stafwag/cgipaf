@@ -11,14 +11,13 @@
 </TR>
 <TR>
 <TD>Re-enter new password</TD><TD>:</TD><TD><input name=newpass2 size="<? echo $max_length ?>" type=password></TD>
-</TD>
 </TR>
 </TABLE>
-</P>
 <P>
 <input type=submit value="Change">
 <input type=reset  value="Clear">
 </P>
+</CENTER>
 </FORM>
 </BODY>
 </HTML>

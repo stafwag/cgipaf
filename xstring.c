@@ -1,7 +1,7 @@
 /* --------------------------------------------------------------------------
  * xstring.c                                       (GPL) 2001 Staf Wagemakers
- *                                                     http://stafwag.f2g.net
- *                                                         stafwag@yahoo.com
+ *                                               http://stafwag.home7.dk3.com
+ *                                                          stafwag@yahoo.com
  * 
  * Tried of writing these things over and over again
  * ----------------------------------------------------------------------- */

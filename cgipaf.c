@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------- */
 /* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
-/* http://stafwag.f2g.net                               Staf Wagemakers    */
+/* http://stafwag.home7.dk3.com                         Staf Wagemakers    */
 /* stafwag@yahoo.com                                                       */
 /* ----------------------------------------------------------------------- */
 #include "cgipaf_defs.h"
@@ -409,7 +409,7 @@ if (strcmp(autoreply,"no")) strcpy(not_autoreply,"no");
 write_log(LOG_USER,7,"got the mailconfiguration for user %s",name);
 if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options)==3) {
 write_log(LOG_USER,7,"couldn't load mailcfg_document using default");
-print_html_msg("<!DOCTYPE HTML PUBLIC \"-//IETH/DTD HTML 3.0//EN\">\n");
+print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>Change your mailbox configuration</TITLE>");
@@ -447,7 +447,6 @@ printf("</SELECT><TD>\n");
 printf("</TR>\n");
 printf("</TABLE>\n");
 printf("<HR>\n");
-printf("</TABLE>\n");
 printf("<TABLE>\n");
 printf("<TR>\n");
 printf("<TD>Enable autoReply:</TD>\n");

@@ -1,7 +1,7 @@
 #!/bin/sh
 # cgipasswd install script			staf wagemakers
 #                                               stafwag@yahoo.com
-#                                               http://stafwag.f2g.net
+#                                               http://stafwag.home7.dk3.com
 read_yesno () {
 read INPUT
   case "$INPUT" in

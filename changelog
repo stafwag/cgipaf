@@ -1,3 +1,7 @@
+* version 1.0rc5         ( 28 Jan 2002 )
+  + documentation update
+  + php files update
+
 * version 1.0rc5pre2     ( 16 Jan 2002 )
   + new pam conversation function
   + new set_PAM_CHANGE_EXPIRED_AUTHOK directive

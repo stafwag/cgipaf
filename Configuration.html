@@ -1,18 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>CGIpaf configuration</title>
 </head>
-<body bgcolor="#ffffff">
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
 <h1>CGIpaf 1.0rc5 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
-</ul>
-<ul>
 <li><a href="#sections">Sections</a></li>
-</ul>
-<ul>
-<li><a href="#directives">Directives</a></li>
+<li><a href="#directives">Directives</a>
 <ul>
 <li><a href="#syslog">syslog</a></li>
 <li><a href="#loglevel">loglevel</a></li>
@@ -61,17 +58,10 @@
 <li><a href="#error_openvacations">error_openvacations</a></li>
 <li><a href="#error_updateprocmailrc">error_updateprocmailrc</a></li>
 </ul>
-</ul>
-<ul>
+</li>
 <li><a href="#variables">Variables</a></li>
-</ul>
-<ul>
 <li><a href="#redirect">Redirect</a></li>
-</ul>
-<ul>
 <li><a href="#htmlfile">HTML files</a></li>
-</ul>
-<ul>
 <li><a href="#command">run_success and run_locked scripts</a></li>
 </ul>
 <h1><a name="syntax">Syntax</a></h1>
@@ -105,16 +95,17 @@
 <p><strong>Syntax:</strong> syslog <em>on|off</em><br>
 <strong>Default:</strong> on<br>
 <strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+</p>
 <p>enable syslog messages</p>
 <p>all the authentication events are logged with LOG_AUTHPRIV facility, other events are logged with the LOG_USER facility</p>
-</p>
 <h2><a name="loglevel">loglevel</a></h2>
 <p><strong>Syntax:</strong> loglevel <em>number</em><br>
 <strong>Default:</strong> 6<br>
 <strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+</p>
 <p>set the syslog level, messages of a higher significance will be reported as well.<BR>
 e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) are also reported.
-<p>
+</p>
 <table>
 <tr><td><b>0</b></td><td>LOG_EMERG</td><td> system is unusable</td></tr>
 <tr><td><b>1</b></td><td>LOG_ALERT</td><td> action must be taken immediately</td></tr>
@@ -125,9 +116,6 @@ e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) ar
 <tr><td><b>6</b></td><td>LOG_INFO</td><td> informational message</td></tr>
 <tr><td><b>7</b></td><td>LOG_DEBUG</td><td> debug-level message</td></tr>
 </table>
-</p>
-</p>
-</p>
 <h2><a name="pam_service">pam_service</a></h2>
 <p><strong>Syntax:</strong> pam_service <em>pam service name</em><br>
 <strong>Default:</strong> passwd<br>
@@ -136,24 +124,23 @@ e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) ar
 Set the pam service name, if not set "passwd" is used. The passwd pam service
 ( /etc/pam.d/passwd ) usually doesn't have an entry for user authentication, 
 therefor /etc/pam.d/other has to have a line auth set to pam_unix.so.
+</p>
 <pre><code><tt>
 	auth     required       pam_unix.so
 	account  required       pam_unix.so
 </tt></code></pre>
-If you don't like this for security reason etc, you can set the pam_service
-directive to "cgipaf" and create the file /etc/pam.d/cgipaf that looks like this<pre><code><tt>
+<p>If you don't like this for security reason etc, you can set the pam_service directive to "cgipaf" and create the file /etc/pam.d/cgipaf that looks like this</p>
+<pre><code><tt>
 	auth     required       pam_unix.so
 	account  required       pam_unix.so
         password required       pam_unix.so md5
 </tt></code></pre>
-</p>
-</p>
 <h2><a name="document_root">document_root</a></h2>
 <p><strong>Syntax:</strong> document_root <em>path</em><br>
 <strong>Default:</strong> not set<br>
 <strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
-<p>location of the custom html message files</p>
 </p>
+<p>location of the custom html message files</p>
 <h2><a name="login_document">login_document</a></h2>
 <p><strong>Syntax:</strong> login_document <em>filename</em> <b>OR</b>
  login_document Redirect <em>location</em><br>
@@ -196,7 +183,7 @@ error_newpassord  Redirect  <em>location</em><br>
 <p>       
     can't read new password
 </p>
-<h2><a name"error_match">error_match</a></h2>
+<h2><a name="error_match">error_match</a></h2>
 <strong>Syntax:</strong>   error_match  <em>filename</em> <b>OR</b>
 error_math    Redirect <em>location</em><BR>
 <strong>Default:</strong> "They don't match\n"<BR>
@@ -260,7 +247,7 @@ msg_changed  Redirect <em>location</em><br>
 <strong>Default:</strong> not set<br>	     
 <strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
 <p>    
-    see <a href=#msg_success>msg_success</a>
+    see <a href="#msg_success">msg_success</a>
 </p>
 <h2><a name="msgmsg_updated">msg_updated</a></h2>
 <strong>Syntax:</strong> msg_updated  <em>filename</em> <b>OR</b>
@@ -268,7 +255,7 @@ msg_updated  Redirect <em>location</em><br>
 <strong>Default:</strong> not set<br>	     
 <strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
 <p>    
-    see <a href=#msg_success>msg_success</a>
+    see <a href="#msg_success">msg_success</a>
 </p>
 <h2><a name="error_read">error_readname</a></h2>
 <strong>Syntax:</strong> error_readname <em>filename</em> <b>OR</b>
@@ -306,7 +293,7 @@ error_readkeepmsg   Redirect   <em>location</em><br>
     mailcfg.cgi is unable to read autoreply, this is probably an error in 
     <a href="mailcfg_document">mailcfg_document</a>.
 </p>
-<h2><a name=error_autoreply_msg>error_autoreply_msg</a></h2>
+<h2><a name="error_autoreply_msg">error_autoreply_msg</a></h2>
 <strong>Syntax:</strong> error_autoreplymsg   <em>filename</em> <b>OR</b>
 error_autoreplymsg   Redirect   <em>location</em><br>
 <strong>Default:</strong> "Can't read autoreply_msg...\n"<br>
@@ -462,9 +449,11 @@ error_pam  Redirect    <em>location</em><br>
 <p>       
      runs a script is a password / mail configuration is successfully
      updated. Example:
+</p>
 <pre><tt><code>
      run_success "/usr/sbin/smbpasswd -U %{name} &gt; /dev/null 2&gt;&amp;1" "%{password}\n%{password}\n"
-</code></tt></pre>    
+</code></tt></pre>
+<p>
      Will update the SAMBA password file.
 </p> 
 <h2><a name="run_locked">run_locked</a></h2>
@@ -539,9 +528,9 @@ webmaster"<br>
 </p>
 <table>
 <tr><td><b>Variable name</b></td><td><b>Description</b></td></tr>
-<tr><td> </td><td> <td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td><b>name</b></td><td>loginname</td></tr>
-<tr><td><b>min_length</b></td><td>minimum password length</td><tr>
+<tr><td><b>min_length</b></td><td>minimum password length</td></tr>
 <tr><td><b>max_length</b></td><td>maximum password length</td></tr>
 <tr><td><b>max_invalid</b></td><td>maximum invalid tries</td></tr>
 <tr><td><b>invalid_timeout</b></td><td>time in seconds that a user
@@ -572,11 +561,9 @@ seconds</td></tr>
 <p> 
 example:
 </p>
-<p>
-<code><tt><pre>      
+<pre><code><tt>      
        msg_success   redirect  /pwchanged.php?name="%{name}"
-</pre></tt></code>
-</p>
+</tt></code></pre>
 <p>
     Will redirect to /pwchanged.php?name="loginname" after a user has succeed
     to change his password.
@@ -587,9 +574,9 @@ example:
     extensions "include" and "echo". The same variables as by a redirect are 
     available.
 </p>
-<code><tt><pre>
+<pre><code><tt>
       &lt;? echo $name; include "bottom.php" ?&gt;
-</pre></tt></code>
+</tt></code></pre>
 <p>
     Will print the user's name and include bottom.php. Please note that the
     PHP implementation is very limited. include("bottom.php") won't work for
@@ -611,6 +598,5 @@ example:
   <pre><tt><code>
   run_success "/usr/sbin/smbpasswd -U %{name} &gt; /dev/null 2&gt;&amp;1" "%{password}\n%{password}\n"
   </code></tt></pre>
-</p>
 </body>
 </html>

@@ -155,7 +155,7 @@ else
 fi
 
 if test -z "$PRESET_CFLAGS"; then
-   CFLAGS=`echo "$CFLAGS" | sed -e 's/-g//'`
+    CFLAGS=`echo "$CFLAGS" | sed -e 's/-g//'`
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.

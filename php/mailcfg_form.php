@@ -30,7 +30,6 @@
 </TR>
 </TABLE>
 <HR>
-</TABLE>
 <TABLE>
 <TR>
 <TD>Enable autoReply:</TD>

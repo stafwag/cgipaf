@@ -58,6 +58,7 @@
 #define  MINLENGTH 		6
 #define  MAXLENGTH 		8
 #define  MINUID 		10
+#define  MAXPOSTLENGTH		150
 #define  ERR_NEWPASS 		"error_newpassword"
 #define  ERR_MATCH   		"error_match"
 #define  ERR_UNCHANGED  	"error_unchanged"
@@ -70,6 +71,8 @@
 #define  CFG_MINLENGTH 		"min_length"
 #define  CFG_MAXLENGTH 		"max_length"
 #define  CFG_MAILCFG            "mailcfg_document"
+#define  CFG_MAXPOSTLENGTH	"max_postlength"
+#define  CFG_RUN_AS		"run_as"
 #define  RUN_SUCCESS            "run_success"
 #define  RUN_LOCKED             "run_locked"
 #define  RUN_BEFORE_MAILCFG     "run_before_mailcfg"

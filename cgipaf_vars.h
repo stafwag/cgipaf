@@ -65,5 +65,6 @@ int    max_length, min_length;
 char   txt_usermaildomain[]="user_maildomain";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
+int    max_postlength=150;
 #endif  /* _CGIPAF_VARS_H */
 	 

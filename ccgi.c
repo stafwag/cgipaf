@@ -22,16 +22,18 @@
  *
  */
 
-WEBDATA *str2webdata(char equals, char end, char *c) 
+WEBDATA *str2webdata(char equals, char end, char *str) 
 { 
 WEBDATA *wp;
 char *tmp=NULL;
 char *cp;
+char *c=str;
 int t;
 wp=(WEBDATA *) xmalloc(sizeof(WEBDATA));
 wp->n=0;
 wp->name=NULL;
 wp->value=NULL;
+wp->string=NULL;
 
 t=0;
 while (1) {
@@ -133,7 +135,7 @@ c=(char *)xmalloc(bytes+1);
 fgets(c,bytes,stdin);
 wp=str2webdata('=','&',c);
 if(wp==NULL) return NULL;
-free(c);
+wp->string=c;			/* save the orignal post */
 return wp;
 }
 
@@ -265,6 +267,7 @@ WEBDATA *get_cookies()
    if (c==NULL) return NULL;   /* There are no cookies */
    wp=str2webdata('=',';',c);
    if (wp==NULL) return NULL;
+   wp->string=c;		/* save the cookies for later */
    return wp;
 }
 

@@ -26,9 +26,7 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 	int i;
 
-	if(data==NULL) {
-		return ret;
-	}
+	if(data==NULL)  return ret;
 
 
 	for (i=0;i<data->n;i++) {
@@ -47,51 +45,12 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 
 	}
+	c=xmalloc(strlen(txt_poststring)+1);
+	strcpy(c,txt_poststring);
 
-	/*
-
-	c=webdata_2_post_string(data);
-
-	ret=add_2_string_pair(ret,txt_poststring,c);
-
-	*/
+	ret=add_2_string_pair(ret,c,data->string);
 
 	return(ret);
-
-}
-
-char * webdata_2_post_string(WEBDATA *data) {
-
-	int i,n;
-	int bufferlen=200;
-	char *strbuf=xmalloc(bufferlen*sizeof(char));
-
-	strbuf[0]='\0';
-
-	if(data==NULL) return(0);
-
-	for (i=0;i<data->n;i++) {
-		int prev_size=bufferlen;
-		if (data->name[i]) {
-			n=strlen(strbuf)+strlen(data->name[i])+strlen("=")+strlen(data->value[i])+strlen("&")+1;
-
-			while (n>bufferlen) {
-				bufferlen*=2;
-			}
-
-			if(prev_size!=bufferlen) strbuf=xrealloc(strbuf,bufferlen*sizeof(char));
-
-			strcat(strbuf,data->name[i]);
-			strcat(strbuf,"=");
-			strcat(strbuf,data->value[i]);
-			strcat(strbuf,"&");
-		}
-	}
-
-	if(strbuf[strlen(strbuf)-1]=='&') strbuf[strlen(strbuf)-1]='\0';
-	strbuf=xrealloc(strbuf,strlen(strbuf)+1);
-
-	return(strbuf);
 
 }
 

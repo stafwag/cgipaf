@@ -198,10 +198,19 @@ main()
 
    
    /* We dont want too much data */
+
+   if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAXPOSTLENGTH))==NULL) {
+	   max_postlength=MAXPOSTLENGTH;
+   }
+	else {
+		sscanf(cp,"%d",&max_postlength);
+	}
+   
+   write_log(LOG_USER,7,"max_postlength set to %d",max_postlength);
    
    if ((cp=getenv("CONTENT_LENGTH"))!=NULL) {
       sscanf(cp,"%d",&brol);
-      if (brol>150) {
+      if (brol>max_postlength) {
 	 print_html_msg(txt_too_much);
 	 write_log(LOG_USER,3,"%s",txt_too_much);
 	 exit(1);

@@ -14,6 +14,7 @@
 
 typedef struct w {
 int n;
+char *string;
 char **name;
 char **value;
 } WEBDATA;

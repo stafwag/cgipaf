@@ -28,6 +28,7 @@ int get_access_status (char *accessdb, char *loginname, int max_invalid, int del
    if(t-access.ti>delay) return 0;
    return(delay-(t-access.ti));
 }
+
 /*
  * test_access_cookie
  * 

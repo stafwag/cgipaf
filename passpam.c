@@ -6,8 +6,8 @@
 
 #include "pass.h"
 
-static char *oldpw;			    /* The old password */
-static char *newpw;		            /* The new password */
+static char *oldpw=NULL;		    /* The old password */
+static char *newpw=NULL;		    /* The new password */
 static char *pam_msg=NULL;                  /* pam error message */
 static int pwstate;			    /* current pam conversation
 					       function state */
@@ -151,9 +151,10 @@ return(ret);
 }
 int chpw(struct pw_info *pw,char *pass)
 {
-int ret;
-pwstate=0;
-newpw=pass;
-ret=pam_chauthtok(pw->pamh,chauth_flag); 
-return(ret);
+   int ret;
+   if(oldpw==NULL) pwstate=1;
+     else pwstate=0;
+   newpw=pass;
+   ret=pam_chauthtok(pw->pamh,chauth_flag); 
+   return(ret);
 }

@@ -20,7 +20,7 @@ CFLAGS=@CFLAGS@
 
 CONFIGFILE=$(sysconfdir)/cgipaf.conf
 
-all: passwd.cgi viewmailcfg.cgi mailcfg.cgi
+all: passwd.cgi viewmailcfg.cgi mailcfg.cgi changepass
 
 passwd.cgi: cgipaf.c @LIBOBJS@ ${inc_files}
 	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c @LIBOBJS@ @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
@@ -31,6 +31,9 @@ mailcfg.cgi: mailcfg.c @LIBOBJS@ mailconfig.o ${inc_files}
 viewmailcfg.cgi: cgipaf.c @LIBOBJS@ mailconfig.o ${inc_files}
 	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c @LIBOBJS@ mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
 	
+changepass: changepass.c @LIBOBJS@ ${inc_files}
+	$(CC) $(CFLAGS) -o changepass changepass.c @LIBOBJS@ @LIBS@ ${ARG} 
+
 install: all
 	 su root -c "/bin/sh ./install.sh"
 

@@ -29,7 +29,7 @@ INSTALLATION
     type: 
 
           ./configure --bindir=/usr/local/apache/cgi-bin \ 
-                      --datadir=/usr/local/apache/htdocs/cgipaf \ 
+                      --datadir=//etc/cgipaf/data \ 
                       --sysconfdir=/etc/cgipaf
     
     add "--host=freebsd" to compile CGIpaf with freeBSD support
@@ -117,7 +117,7 @@ CONFIGURATION
     mail-forwarding and autoreply is disabled. Set "use_statefile" to "yes" to
     avoid that the original procmail config confuses CGIpaf and use 
     "run_before_mailcfg" to copy the user's procmail config to a backup file
-    and "run_after_mailcfg" to restore it. See Configuration for more 
+    and "run_after_mailcfg" to restore it. See Configuration.html for more 
     information.
     
 THAT'S ALL FOLKS

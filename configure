@@ -2517,6 +2517,8 @@ if test "${enable_pam+set}" = set; then
 	if test "$enableval" = "yes"; then
 	   ENABLE_PAM="yes"
 	fi
+      else
+        ARG="NOPAM"
       fi
 
 fi;

@@ -8,8 +8,8 @@ SUPPORTED SYSTEMS
     cgipaf has been tested with Debian GNU/Linux (potato and woody) and
     Solaris 8 and should work on other Un*ces with pam support. Systems
     without pam support are only supported if they use the standard  
-    password file location /etc/passwd /etc/shadow and the standard crypt
-    function to encrypt the password. For this reason OpenBSD isn't supported.
+    password file location /etc/passwd /etc/shadow and standard crypt or
+    md5 passwords.
 
     If you're using cgipaf on a system without pam support a lock file
     /var/lock/cgipaf.lock is used. The directory /var/lock have to exist

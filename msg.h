@@ -35,7 +35,8 @@ char *err_chpw[]     ={	"Couldn't open passwd file",                 /* 0 */
 			"lsstat() failed",                           /* 9 */
 			"rename() failed",                           /* 10 */
 			"user not found",                            /* 12 */
-		        "pam error",                                 /* 13 */
+                        "unsupported crypt type",                    /* 13 */
+		        "pam error",                                 /* 14 */
 			"\0","\0","\0","\0","\0"
 		      };
 char err_mcfg_readname[]    = "[CGIpaf] Can't read loginname\n";

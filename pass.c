@@ -1,42 +1,29 @@
-/* ---------------------------------------------------------------------- */
-/* pass.c						                  */
-/*									  */
-/* (GPL) 2000 Belgium                         http://stafwag.netfirms.com */
-/* Staf Wagemakers                            staf.wagemakers@advalvas.be */
-/* ---------------------------------------------------------------------- */
+/*
+ * pass.c
+ * 
+ * (GPL) 2000,2002 Belgium                    http://stafwag.netfirms.com
+ * Staf Wagemakers                            staf.wagemakers@advalvas.be 
+*/
 #include "pass.h"
-/* ---------------------------------------------- */
-/* retruns a random seed with valid ascii char's  */
-/*                                                */
-/* s should be a random integer                   */
-/* ---------------------------------------------- */
-int gen_random(int s)
-{
-int i;
-srand(s);
-i=rand();
-i=i/(RAND_MAX/63);
-if(i<0) i=0;
-if(i>63) i=63;
-if(i<12) return (i+46);
-if((i>=12)&&(i<38)) return (i+(65-12));
-if(i>=38) return (i+(97-38));
-}
-/* ---------------------------------------------- */
-/* reads the passwd info out /etc/passwd and      */
-/* /etc/shadow					  */
-/*                                                */
-/* name = loginname				  */
-/* returns         passwd info		          */
-/*                 0 = error                      */
-/* ---------------------------------------------- */
+#ifdef MD5_CRYPT
+#include "md5crypt.h"
+#endif
+#include "salt.h"
+/*
+ * reads the passwd info out /etc/passwd and
+ * /etc/shadow
+ *
+ * name = loginname
+ * returns         passwd info
+ *                 NULL = error
+*/
 struct pw_info * get_pw(char *name)
 {
 struct pw_info *pw;
 pw=(struct pw_info *) xmalloc(sizeof(struct pw_info));
 pw->p=NULL;
 pw->sp=NULL;
-if(!(pw->p=getpwnam(name))) return(NULL);
+if(!(pw->p=getpwnam(name))) return(NULL);   /* User doesn't exist... */
 if (!strcmp(pw->p->pw_passwd,"x")) {
 #ifdef HAVE_SHADOW_H
    if(!(pw->sp=getspnam(name))) return(NULL);
@@ -49,45 +36,79 @@ if (!strcmp(pw->p->pw_passwd,"x")) {
    }
 return(pw);
 }
-/* ---------------------------------------------- */
-/* test a passwd                                  */
-/* *p = passwd info				  */
-/* *pass = password				  */
-/* returns:        -1 = wrong passwd              */
-/*                 0 = ok			  */
-/* ---------------------------------------------- */
+/*
+ * returns 0 if p is a std password
+ *         1 if p is a md5 password
+ */
+int is_md5password(char *p) {
+   if (strncmp(p,"$1$",3) == 0) return(1);
+   return(0);
+}
+/*
+ * returns a pointer to the password field
+ */
+char * get_pwfield (struct pw_info *pw) 
+{
+     if(pw->sp==NULL) return(pw->p->pw_passwd);
+#ifdef HAVE_SHADOW_H
+     return(pw->sp->sp_pwdp);
+#endif
+     return(NULL);
+};
+/*
+ * returns password crypt type
+ *         0 = std crypt
+ *         1 = md5
+ */
+int get_crypttype (struct pw_info *pw)
+{
+char *pass=get_pwfield(pw);
+if (pass==NULL) return(-1);
+return (is_md5password(pass));
+}
+/*
+ * test a passwd
+ * *p = passwd info
+ * *pass = password
+ * returns:        -1 = wrong passwd
+ *                 0 = ok
+*/
 int ckpw(struct pw_info *pw,char *pass)
 {
-char c[3],*p;
-if (pw->sp==NULL) p=pw->p->pw_passwd;
-#ifdef HAVE_SHADOW_H
-   else p=pw->sp->sp_pwdp;
-#endif
-c[0]=p[0];
-c[1]=p[1];
-c[2]='\0';
-if (strcmp(p,crypt(pass,c))) return(-1);
+char *c,*p,salt[3];
+if((p=get_pwfield(pw))==NULL) return(-1);  /* error! */
+if (is_md5password(p)) {
+   c=p;  	  /* p is a md5 password use complete password as salt */ 
+   }
+else {
+   salt[0]=p[0];  /* p in no md5 password use std salt; */
+   salt[1]=p[1];
+   salt[2]='\0';
+   c=salt;
+}
+if (strcmp(p,crypt(pass,c))) return(-1);   /* wrong password */
 return(PASS_SUCCESS);
 }
-/* ---------------------------------------------- */
-/* update the password file                       */
-/* *pwfilename = passwd filename                  */
-/* *name = username				  */
-/* *encrypt_pass = new encrypted password         */
-/* returns  0  = ok                               */
-/*         -1  = error open pwfilename            */
-/*         -2  = reserved (locking)		  */
-/*         -3  = reserved (locking)	          */
-/*         -4  = error open TMPFILE               */
-/*         -5  = fileno failed                    */
-/*         -6  = fchmod failed                    */
-/*         -7  = bufferlength too small           */
-/*         -8  = error updating tmpfile           */
-/*         -9  = out of memory                    */ 
-/*         -10 = lsstat failed                    */
-/*         -11 = rename failed                    */
-/*	   -12 = user not found			  */
-/* ---------------------------------------------- */
+/*
+ * update the password file
+ * *pwfilename = passwd filename
+ * *name = username
+ * *encrypt_pass = new encrypted password
+ * returns  0  = ok
+ *         -1  = error open pwfilename
+ *         -2  = reserved (locking)
+ *         -3  = reserved (locking)
+ *         -4  = error open TMPFILE
+ *         -5  = fileno failed
+ *         -6  = fchmod failed
+ *         -7  = bufferlength too small
+ *         -8  = error updating tmpfile
+ *         -9  = out of memory
+ *         -10 = lsstat failed
+ *         -11 = rename failed
+ *	   -12 = user not found
+ *         -13 = reserved (unsupported crypt type)
+ */
 int update_pwfile(char *pwfilename,char *name,char *encrypt_pass)
 {
 FILE *pwfile;
@@ -177,7 +198,7 @@ int chpw(struct pw_info *pw,char *pass)
 FILE *pwfile;
 FILE *tmpfile;
 int fd,fd_tmplock,lock,count,i;
-char c[3];
+char *c;
 char passwdfile[50];
 char *encrypt_pass;
 struct stat st;
@@ -218,21 +239,21 @@ while (count--) {
    
 if (fd_tmplock==-1) return(-3); /* can't create lock */
 
-/*
- * create a random seed
- */
-   
-srand(getpid());
-c[0] = gen_random(time(0)-rand());
-c[1] = gen_random(time(0)+getpid());
-c[2] = '\0';
+switch(get_crypttype(pw))
+{
+	case 0:      c=std_seed();           /* standard crypt password */
+                     encrypt_pass=crypt(pass,c);
+		     break;
+#ifdef MD5_CRYPT
+        case 1:	     c=md5_seed();           /* md5 password            */
+		     encrypt_pass=libshadow_md5_crypt(pass,c); 
+		     break;
+#endif
+        default:     c=NULL;                 /* unsupported crypt type! */
+		     i=-13;
+}
 
-/*
- * encrypt the password
- */
-   
-encrypt_pass=xmalloc(strlen(pass)+1);
-encrypt_pass=crypt(pass,c);
+if (c!=NULL) {
 
 /*
  * set passwdfile to the real password file
@@ -245,6 +266,8 @@ if (pw->sp) strcpy(passwdfile,SHADOWFILE);
  * try to update the user's password
  */
 i=update_pwfile(passwdfile,pw->p->pw_name,encrypt_pass);
+
+}
 
 unlink(TMPLOCK);
 ulckpwdf();

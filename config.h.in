@@ -9,6 +9,8 @@
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
+#undef MD5_CRYPT
+
 /* Define if you have the closelog function.  */
 #undef HAVE_CLOSELOG
 

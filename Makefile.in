@@ -79,6 +79,15 @@ out_of_memory.o:  out_of_memory.c out_of_memory.h write_log.o
 run_cmd.o: run_cmd.c run_cmd.h configfile.o
 	$(CC) $(CFLAGS) -c run_cmd.c
 
+md5.o:	md5.c md5.h
+	$(CC) $(CFLAGS) -c md5.c
+
+md5crypt.o:  md5crypt.c md5crypt.h md5.o
+	$(CC) $(CFLAGS) -c md5crypt.c
+
+salt.o:	salt.c salt.h md5crypt.o
+	$(CC) $(CFLAGS) -c salt.c
+
 write_log.o: write_log.c write_log.h 
 	$(CC) $(CFLAGS) -c write_log.c
 

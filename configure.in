@@ -21,6 +21,8 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
       fi ],
    [ ARG="WITHPAM" ]) 
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
+AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       include MD5-compatible crypt
+function (default)])
 
 dnl Checks for libraries.
 
@@ -56,7 +58,12 @@ if test "$ARG" != "WITHPAM"; then
    if test "$HAVE_CRYPT_H" != "1"; then
       AC_MSG_ERROR(pam support is disabled and crypt.h not found)
    fi
-   LIBOBJS="$LIBOBJS pass.o"
+   LIBOBJS="$LIBOBJS pass.o salt.o"
+   if test "$enable_md5crypt" != "no"; then
+      LIBOBJS="$LIBOBJS md5.o md5crypt.o"
+      AC_DEFINE(MD5_CRYPT)
+   fi
+
  else
    AC_CHECK_LIB(pam,pam_authenticate,[ ], \ 
      AC_MSG_ERROR(no valid pam library found))

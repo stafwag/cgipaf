@@ -7,7 +7,8 @@
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "md5crypt.h"
+#include "salt.h"
 #ifdef HAVE_CRYPT_H
 #include <crypt.h>
 #endif

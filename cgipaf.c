@@ -149,7 +149,7 @@ main()
    /* use a statefile or not */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_USE_STATEFILE))!=NULL) {
-      if(is_var_yes(cp)!=0);
+      if(is_var_yes(cp)!=0)
 	use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
       free(cp);

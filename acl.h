@@ -12,5 +12,4 @@ int check_useracl(struct pw_info *p,char **users);
 int check_grpacl(struct pw_info *p,char **groups);
 int get_useraclorder(FILE *config_file,char *section_name);
 int get_groupaclorder(FILE *config_file,char *section_name);
-int user_acl(FILE *config_file,char *section_name, struct pw_info *p);
-int group_acl (FILE *config_file,char *section_name, struct pw_info *p); 
+int acl (FILE *config_file,char *section_name, struct pw_info *p); 

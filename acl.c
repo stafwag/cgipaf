@@ -7,8 +7,7 @@
 #include "acl.h"
 #include "configfile.h"
 
-#define  CFG_USERACLORDER   	"UserAclOrder"
-#define  CFG_GRPACLORDER    	"GroupAclOrder"
+#define  CFG_ACLORDER    	"AclOrder"
 #define  CFG_ALLOWUSERS 	"AllowUsers"
 #define  CFG_DENYUSERS  	"DenyUsers"
 #define  CFG_ALLOWGRPS  	"AllowGroups"
@@ -17,14 +16,12 @@
 #define  DENY           	"deny"
 
 
-static int useraclorder=0;
-static int grpaclorder=0;
+static int aclorder=1;          /* default = deny,allow */
 
 /*
  * check if *p is a member of an Unix group
  * returns  1: is a member of grpname
  *          0: if not
- *         -1: error
  */
 int memberofgrp (struct pw_info *p,char *grpname) {
     struct group *grp;
@@ -32,7 +29,7 @@ int memberofgrp (struct pw_info *p,char *grpname) {
     
     grp=getgrnam(grpname);
 
-    if(grp==NULL) return(-1);
+    if(grp==NULL) return(0);
     if(grp->gr_gid==p->p->pw_gid) return(1);
     for (gmem=grp->gr_mem; *gmem != NULL; gmem++) 
 	if(!strcmp(*gmem,p->p->pw_name)) return(1);
@@ -81,10 +78,8 @@ int check_grpacl(struct pw_info *p,char **groups) {
 /*
  * real aclorder function
  *
- * set *var to 0 if "allow,deny"
- *             1 if "deny,allow"
- *            -1 if none of above
- * returns     *var
+ * set *var to 0 -> ok
+ *            -1 -> error 
  */ 
 int real_aclorder(FILE *config_file,char *section_name,char *itemname,int *var) {
     char *c,*item,*part1,*part2;
@@ -92,16 +87,12 @@ int real_aclorder(FILE *config_file,char *section_name,char *itemname,int *var) 
 
     item=get_sg_config(config_file,section_name,itemname);
 
-    if (item==NULL) {
-	     *var=0;
-	     return(*var);
-	   }
-
+    if (item==NULL) return(0);
 
     c=strchr(item,',');
     if(c==NULL) {
       *var=-1;
-      return(*var);
+      return(-1);
     }
     
     i=c-item;
@@ -116,99 +107,62 @@ int real_aclorder(FILE *config_file,char *section_name,char *itemname,int *var) 
       else
       if(!strcasecmp(part1,DENY)&&!strcasecmp(part2,ALLOW)) *var=1;
       else
-	      *var=-1;
-    free(part1);
-    free(part2);
-    return(*var);
-}
-/*
- * Get UserAclOrder out the configuration file
- *
- * set useraclorder to 0 if "allow,deny"
- *                     1 if "deny,allow"
- * returns useraclorder
- */                     
-int get_useraclorder(FILE *config_file,char *section_name) {
-    return(real_aclorder(config_file,section_name,CFG_USERACLORDER,&useraclorder));
+	      return(-1);
+    xfree(part1);
+    xfree(part2);
+    return(0);
 }
 
 /*
  * Get GroupAclOrder out the configuration file
  *
- * set grpaclorder  to 0 if "allow,deny"
- *                     1 if "deny,allow"
- * returns grpaclorder
+ * set aclorder  to 0 if "allow,deny"
+ *                  1 if "deny,allow"
+ * returns aclorder
  */                     
-int get_groupaclorder(FILE *config_file,char *section_name) {
-    return(real_aclorder(config_file,section_name,CFG_GRPACLORDER,&grpaclorder));
+int get_aclorder(FILE *config_file,char *section_name) {
+    return(real_aclorder(config_file,section_name,CFG_ACLORDER,&aclorder));
 }
 
 /*
- * test the user access control list
+ * test the access control list
  *
  * returns 0  -> deny
  *         1  -> allowed
  */
-int user_acl (FILE *config_file,char *section_name, struct pw_info *p) {
-    char **deny,**allow;
-    int ret=1; 
-
-    if(useraclorder==-1)  return(0); 	/* deny on aclorder error */
+int acl (FILE *config_file,char *section_name, struct pw_info *p) {
+    char **grpdeny,**grpallow;
+    char **usrdeny,**usrallow;
+    int ret=0; 
     
-    deny=get_sg_config_array(config_file,section_name,CFG_DENYUSERS);
-
-    allow=get_sg_config_array(config_file,section_name,CFG_ALLOWUSERS);
+    usrdeny=get_sg_config_array(config_file,section_name,CFG_DENYUSERS);
+    usrallow=get_sg_config_array(config_file,section_name,CFG_ALLOWUSERS);
     
-    if((deny==NULL)&&(allow==NULL)&&!useraclorder) return(1);
+    grpdeny=get_sg_config_array(config_file,section_name,CFG_DENYGRPS);
+    grpallow=get_sg_config_array(config_file,section_name,CFG_ALLOWGRPS);
+ 
+    if(aclorder!=-1) {
     
-    if(!useraclorder) {
-      if(check_useracl(p,allow)) ret=1;
-        else
-         if(check_useracl(p,deny)) ret=0;
+      if(!aclorder) {
+        ret=0;
+        if(check_useracl(p,usrallow)) ret=1;
+        if(check_grpacl(p,grpallow)) ret=1;
+        if(check_useracl(p,usrdeny)) ret=0;
+        if(check_grpacl(p,grpdeny)) ret=0;
+      }
+      else {
+        ret=1;
+        if(check_useracl(p,usrdeny)) ret=0;
+        if(check_grpacl(p,grpdeny)) ret=0;
+        if(check_useracl(p,usrallow)) ret=1;
+        if(check_grpacl(p,grpallow)) ret=1;
+      }
+    
     }
-    else {
-      if(check_useracl(p,deny)) ret=0;
-	else
-         if(check_useracl(p,allow)) ret=1;
-    }
-
-    free(allow);
-    free(deny);
-
-    return(ret);
-
-}
-
-/*
- * test the group access control list
- *
- * returns 0  -> deny
- *         1  -> allowed
- */
-int group_acl (FILE *config_file,char *section_name, struct pw_info *p) {
-    char **deny,**allow;
-    int ret=1; 
-
-    if(grpaclorder==-1)  return(0);   /* deny on aclorder error */
-    
-    deny=get_sg_config_array(config_file,section_name,CFG_DENYGRPS);
-    allow=get_sg_config_array(config_file,section_name,CFG_ALLOWGRPS);
-    
-    if((deny==NULL)&&(allow==NULL)&&!grpaclorder) return(1);
-    
-    if(!grpaclorder) {
-      if(check_grpacl(p,allow)) ret=1;
-        else
-         if(check_grpacl(p,deny)) ret=0;
-    }
-    else {
-      if(check_grpacl(p,deny)) ret=0;
-	else
-         if(check_grpacl(p,allow)) ret=1;
-    }
-
-    free(allow);
-    free(deny);
+    xfree(grpallow);
+    xfree(usrallow);
+    xfree(grpdeny);
+    xfree(usrdeny);
 
     return(ret);
 }

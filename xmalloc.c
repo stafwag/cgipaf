@@ -34,3 +34,7 @@ void *xrealloc (void *ptr, size_t size)
    }
  return (value);
 }
+void xfree(void *ptr) 
+{
+  if(ptr!=NULL) free(ptr);
+}

@@ -514,7 +514,7 @@ error_illegalword  Redirect    <em>location</em><br>
 </p>
 <h2><a name="run_mailcfg">run_mailcfg</a></h2>
 <strong>Syntax:</strong> run_mailcfg   <em>path_to_script</em>
-<strong>Default:</strong> built-in procmailrc update</br>
+<strong>Default:</strong> built-in procmailrc update<br>
 <strong>Run as:</strong> user<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>
@@ -542,7 +542,7 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Syntax:</strong>   run_locked    <em>path_to_script</em>
 <em>stdout</em>
 <strong>Default:</strong> not set<br>
-<strong>Run as:</strong>   root<br \>
+<strong>Run as:</strong>   root<br>
 <strong>Context:</strong>  &lt;passwd&gt;,  &lt;mailcfg&gt;<br>
 <p>	
      run a script is a user is locked.
@@ -550,7 +550,7 @@ error_illegalword  Redirect    <em>location</em><br>
 <h2><a name="run_before_mailcfg">run_before_mailcfg</a></h2>
 <strong>Syntax:</strong>   run_before_mailcfg  <em>script</em>
 <strong>Default:</strong>   not set<br>
-<strong>Run as:</strong>     <em>mail user</em><br \>
+<strong>Run as:</strong>     <em>mail user</em><br>
 <strong>Context:</strong>  &lt;mailcfg&gt;<br>
 <p>
      run a script before the mail configuration. mailcfg.cgi will 
@@ -665,7 +665,7 @@ seconds</td></tr>
 <tr><td><b>password</b></td><td>the user's new password, is only set at
 <a href="#run_success">run_success</a></td></tr>
 <tr><td><b>mailcfg_exitcode</b></td><td>exitcode of the <a href="#run_mailcfg">
-run_mailcfg script</td></tr>
+run_mailcfg script</a></td></tr>
 <tr><td><b>homedir</b></td><td>the user's home directory</td></tr>
 <tr><td><b>domain</b></td><td>the <a href="#domain">domain</a>name, only set by mailcfg.cgi</td></tr>
 </table>

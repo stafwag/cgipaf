@@ -1,3 +1,6 @@
+* version 1.1.0
+  + Documentation update
+
 * version 1.1.0rc2      (  07 Aug 2002 )
   + The ability to list words in /etc/cgipasswd that should not be a part of
     new passwords  ( Thanks to Daniel R for his patch )

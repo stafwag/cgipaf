@@ -21,7 +21,7 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 	char txt_post1[]="_POST[";
 	char txt_post2[]="]";
-	char txt_post_string[]="post";
+	char txt_poststring[]="poststring";
 	char *c;
 
 	int i;
@@ -33,7 +33,7 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 	for (i=0;i<data->n;i++) {
 
-		if (data->name[i]) {
+		if (data->name[i]) { 
 
 			c=xmalloc(strlen(txt_post1)+strlen(data->name[i])+strlen(txt_post2)+1);
 
@@ -41,16 +41,18 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 			strcat(c,data->name[i]);
 			strcat(c,txt_post2);
 
-			ret=add_2_string_pair(ret,c,data->value[i]);
+			ret=add_2_string_pair(ret,c,data->value[i]); 
 
-		}
+		}  
 
 
 	}
 
-	/* c=webdata_2_post_string(data);
+	/*
 
-	ret=add_2_string_pair(ret,txt_post_string,c);
+	c=webdata_2_post_string(data);
+
+	ret=add_2_string_pair(ret,txt_poststring,c);
 
 	*/
 
@@ -62,7 +64,7 @@ char * webdata_2_post_string(WEBDATA *data) {
 
 	int i,n;
 	int bufferlen=200;
-	char *strbuf=xmalloc(bufferlen);
+	char *strbuf=xmalloc(bufferlen*sizeof(char));
 
 	strbuf[0]='\0';
 
@@ -77,7 +79,7 @@ char * webdata_2_post_string(WEBDATA *data) {
 				bufferlen*=2;
 			}
 
-			if(prev_size!=bufferlen) strbuf=xrealloc(strbuf,bufferlen);
+			if(prev_size!=bufferlen) strbuf=xrealloc(strbuf,bufferlen*sizeof(char));
 
 			strcat(strbuf,data->name[i]);
 			strcat(strbuf,"=");

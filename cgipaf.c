@@ -1,8 +1,18 @@
-/* ----------------------------------------------------------------------- */
-/* cgipaf.c                                     (GPL) 2000,01,02 Belgium   */
-/* http://staf.patat.org                                 Staf Wagemakers   */
-/* staf@patat.org                                                          */
-/* ----------------------------------------------------------------------- */
+/*
+ *
+ * cgiPAF.c     		
+ *
+ *
+ * Copyright (C) 2000-03 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
+
 
 #include "cgipaf_defs.h"
 
@@ -74,7 +84,7 @@ main()
       else {   
 	 write_log(LOG_USER,7,"set PAM_CHANGE_EXPIRED_AUTHOK to on");
       }
-      free(cp);
+      xfree(cp);
    }
 
 #endif /* CGIPAF_PASSWD */
@@ -95,7 +105,7 @@ main()
 	 enable_cracklib=1;
 	 write_log(LOG_USER,7,"cracklib enabled");
       }
-      free(cp);
+      xfree(cp);
 }
 #endif  /* HAVE_LIBCRACK */
 #endif  /* CGIPAF_PASSWD */
@@ -151,13 +161,13 @@ main()
       if(is_var_yes(cp)!=0);
 	use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
-      free(cp);
+      xfree(cp);
    }
    
    if ((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
       use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"run_mailcfg enabled, enable use_state_file");
-      free(cp);
+      xfree(cp);
    }
 
 #endif
@@ -208,7 +218,6 @@ main()
    /* Get the post variables */
    
    data=read_post();
-   options=add_post_2_string_pair(data,options);
    
    /* No Post? -> Ask the user to login */
    
@@ -217,6 +226,8 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options);
    }
    
+	options=add_post_2_string_pair(data,options); 
+   
    /* If there is no loginname ask for it */
    
    if (!(cp=get_postitem(data,LOGIN))) {
@@ -224,7 +235,7 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options);
    }
    name=textarea2asc(cp);
-   free(cp);
+   /* xfree(cp); */			/* keep the orginal post array */
    
    /* Make the login available to a redirect / ePHP */
    
@@ -256,7 +267,8 @@ main()
    }
 
    pass=textarea2asc(cp);
-   free(cp);
+   
+   /* free(cp); */			/* keep the orginal postarray */
 
 #ifdef CGIPAF_PASSWD
    
@@ -267,13 +279,13 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
    }
    newpass1=textarea2asc(cp);
-   free(cp);
+   /* free(cp); */			/* keep the orginal postarray */
    if (!(cp=get_postitem(data,NEWPASS2))) {
       write_log(LOG_USER,7,"newpass2 not set");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
    }
    newpass2=textarea2asc(cp);
-   free(cp);
+   /* free(cp); */			/* keep the orginal postarray */
    
    /* match or die */
    
@@ -453,7 +465,7 @@ main()
       if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB_DICTPATH))!=NULL) {
 	 cracklib_dictpath=xmalloc(strlen(cp)+1);
 	 strcpy(cracklib_dictpath,cp);
-	 free(cp);
+	 xfree(cp);
 	 write_log(LOG_INFO,7,"cracklib_dictpath set to \"%s\"",cracklib_dictpath);
       }
       if (cracklib_dictpath!=NULL) {

@@ -32,13 +32,6 @@ int  found;
 if(var==NULL) var=txt_null;
 if(value==NULL) value=txt_null; 
 
-puts("name=");
-puts(var);
-puts("----------------");
-puts("value=");
-puts(value);
-puts("================\n\n");
-
 ret=(char *)xmalloc(sizeof(char *));
 varname=(char *)xmalloc(strlen(var)+strlen("$")+1);
 strcpy(varname,"$");

@@ -13,6 +13,7 @@
 
 #include "configfile.h"
 #define BUFFER_LEN 256
+
 /*
  *
  * converts line to a string with only the global part

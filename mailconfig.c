@@ -110,7 +110,6 @@ char * realget_forward(struct pw_info *pw,int mode)
    char *needle;
    char *mailadres=xmalloc(1000);
    int i;
-   
    if(mode) needle=needle_kforward;
    else  needle=needle_forward;
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"r"))) return(NULL);
@@ -278,7 +277,7 @@ int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,in
    fputs("# CGIPAF state file\n",fp);
    fputs("# Please don't edit!!!!!!!\n",fp);
    fprintf(fp,"%s\t\t%d\n",STATEFORWARD,forward);
-   fprintf(fp,"%s\t\"%s\"\n",STATEFORWARDTO,forwardto);
+   fprintf(fp,"%s\t%s\n",STATEFORWARDTO,forwardto);
    fprintf(fp,"%s\t\t%d\n",STATEKEEPMSG,keep);
    fprintf(fp,"%s\t%d\n",STATEAUTOREPLY,autoreply);
    fclose(fp);
@@ -345,17 +344,11 @@ char * real_get_mailcfg_forward(struct pw_info *pw,int mode)
    if(!strcmp(buf,"1")) keep=1;
    free(buf);
    buf=NULL;
-   switch (mode) 
-     {
-      case 0:
-	if(forward&&!keep) 
-	  buf=get_config(fp,STATEFORWARDTO);
-	break;
-      default:
-	if(forward||keep)
-	  buf=get_config(fp,STATEFORWARDTO);
-	break;
-     }
+   if(!mode)
+     if(forward&&!keep) buf=get_config(fp,STATEFORWARDTO);
+   else
+     if(forward&&keep)
+       buf=get_config(fp,STATEFORWARDTO);
    return(buf);
 }
 char * get_mailcfg_forward(struct pw_info *pw) 

@@ -118,6 +118,14 @@ write_log(LOG_USER,7,"cookie_timeout set to %d",cookie_timeout);
    
 snprintf(cookie_timeout_txt,80,"%d",cookie_timeout);
 
+   /* use statefile or not */
+   
+   if ((cp=get_sg_item(config_file,CFGSECTION,CFG_USE_STATEFILE))!=NULL) {
+      if(!strcasecmp(cp,"yes")||strcmp(cp,"1"))
+	use_mailcfg_statefile(1);
+      write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
+   }
+
 #endif
 #ifdef CGIPAF_PASSWD
 
@@ -406,22 +414,20 @@ write_log(LOG_USER,7,"set umask to 0177");
 umask(0177);
 
 write_log(LOG_USER,7,"reading current mail configuration....");
-if((forward_to=get_kforward(pw))!=NULL) {
-   strcpy(forward,"yes"); strcpy(keep_msg,"yes");
-   write_log(LOG_USER,7,"forwarding with keepmsg is enabled in current cfg, mail are forwarded to %s",forward_to);
-}
-   
-else {
-     if ((forward_to=get_forward(pw))!=NULL) {
-	strcpy(forward,"yes");
-	write_log(LOG_USER,7,"forwarding is enabled in current cfg, mail are forwarded to %s",forward_to);
-     }
-	 
-     else {
-	forward_to=txt_NULL;
-	write_log(LOG_USER,7,"mailforwarding is not enabeled");
-     }
-};
+   if((forward_to=get_kforward(pw))!=NULL) {
+      strcpy(forward,"yes"); strcpy(keep_msg,"yes");
+      write_log(LOG_USER,7,"forwarding with keepmsg is enabled in current cfg, mail are forwarded to %s",forward_to);
+   }
+   else {
+      if ((forward_to=get_forward(pw))!=NULL) {
+	 strcpy(forward,"yes");
+	 write_log(LOG_USER,7,"forwarding is enabled in current cfg, mail are forwarded to %s",forward_to);
+      }
+      else {
+	 forward_to=txt_NULL;
+	 write_log(LOG_USER,7,"mailforwarding is not enabeled");
+      }
+   };
 options[6][1]=forward_to;
   
 

@@ -1,3 +1,23 @@
+/*
+ * cgipaf_auth.c
+ *
+ * Copyright (C) 2004 Staf Wagemakers Belgie/Belgium
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 
 
     #include "cgipaf_pwlocation.c"
@@ -8,9 +28,9 @@
    
    /* fetch the user data, if the user dont exist... dont tell them */
    
-   if (!(pw=get_pw(name))) {
-      write_log(LOG_USER,7,"get_pw(%s) failed, user %s doesn't exists",name,name);
-      write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
+   if (!(pw=get_pw(login))) {
+      write_log(LOG_USER,7,"get_pw(%s) failed, user %s doesn't exists",login,login);
+      write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",login);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_message);
    };
    write_log(LOG_USER,7,"pw->p->pwuid = %d",pw->p->pw_uid);
@@ -85,7 +105,7 @@
       write_log(LOG_USER,7,"ckpw() failed, pam error = %s",pam_strerror(pw->pamh,i));
 #endif
       show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_message);
-      write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
+      write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",login);
       options[19][1]=pw->p->pw_dir;
       if (accessdb) {
 	 if (save_access_status(accessdb,options[0][1],1,invalid_timeout,cookie)==-1) {

@@ -28,7 +28,6 @@
 #include "fgetpwnam.h"
 #endif
 
-#define  LOGIN                  "name"
 #define  ROOT                   "root"
 #define  USER			"user"
 #define  PASSWORD               "passwd"
@@ -130,22 +129,26 @@
 #ifdef   CGIPAF_PASSWD
 #define  CFGSECTION             "passwd"
 #define  UPDATESECTION		"passwd"
+#define  LOGIN                  "name"
 #endif   /* CGIPAF_PASSWD */
 
 #ifdef   CGIPAF_PWADMIN
 #define  CFGSECTION             "pwadmin"
 #define  UPDATESECTION		"passwd"
+#define  LOGIN                  "admin"
 #endif   /* CGIPAF_PWADMIN */
 
 #ifdef   CGIPAF_VIEWMAILCFG
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
+#define  LOGIN                  "name"
 #include "mailconfig.h"
 #endif   /* CGIPAF_VIEWMAILCFG */
 
 #ifdef   CGIPAF_MAILCFG
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
+#define  LOGIN                  "name"
 #include "mailconfig.h"
 #endif   /* CGIPAF_MAILCFG */
 
@@ -153,6 +156,7 @@
 #ifdef   CGIPAF_MAILADMIN
 #define  CFGSECTION             "mailadmin"
 #define  UPDATESECTION		"mailcfg"
+#define  LOGIN                  "admin"
 #endif   /* CGIPAF_MAILADMIN */
 
 #include <pwd.h>

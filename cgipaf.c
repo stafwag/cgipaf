@@ -44,7 +44,7 @@ main()
 #ifdef CGIPAF_VIEWMAILCFG
 
 #include "cgipaf_viewmailcfg.c"
-	write_log(LOG_AUTHPRIV,6,"User %s has login successfully",name);
+	write_log(LOG_AUTHPRIV,6,"User %s has login successfully",login);
 #endif
    if (config_file != NULL) fclose(config_file);
    exit(0);

@@ -71,19 +71,19 @@ main()
 	}
 
 	/*
-	 * is name an admin???
+	 * is login an admin???
 	 */
 
 	for(ccp=admins;*ccp!=NULL;ccp++) {
 
-		if(!strcmp(name,*ccp)) {
+		if(!strcmp(login,*ccp)) {
 
 			/*
 			 * update options table and exit
 			 */
 
 			is_admin=1;
-			admin=name;
+			admin=login;
 			update_string_pair_item(options,txt_admin,admin,0);
 			break;
 
@@ -97,7 +97,7 @@ if(!is_admin) {
 
 	/* not an admin -> exit  */
 
-      	write_log(LOG_AUTHPRIV,6,"%s is not an admin",name);
+      	write_log(LOG_AUTHPRIV,6,"%s is not an admin",login);
       	show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_message);
 
 }
@@ -131,7 +131,7 @@ if(user==NULL) {
       puts("<body>");
       printf("<h1>Welcome %s</h1>",options[25][1]);
       puts("<form action=\"/cgi-bin/pwadmin.cgi\" method=\"POST\">");
-      printf("<input type=\"hidden\" name=\"name\" value=\"%s\">",options[25][1]);
+      printf("<input type=\"hidden\" name=\"admin\" value=\"%s\">",options[25][1]);
       puts("<center>");
       puts("<table>");
       puts("<tr>");
@@ -144,12 +144,12 @@ if(user==NULL) {
       puts("<tr>");
       puts("<td>New password</td>");
       puts("<td>:</td>");
-      puts("<td><input name=newpass1 size=\"16\" type=password></td>");
+      puts("<td><input name=\"newpass1\" size=\"16\" type=\"password\"></td>");
       puts("</tr>");
       puts("<tr>");
       puts("<td>Re-enter new password</td>");
       puts("<td>:</td>");
-      puts("<td><input name=newpass2 size=\"16\" type=password></td>");
+      puts("<td><input name=\"newpass2\" size=\"16\" type=\"password\"></td>");
       puts("</tr>");
       puts("</table>");
       puts("<p>");
@@ -185,7 +185,7 @@ if(user==NULL) {
       puts("<body>");
       printf("<h1>Welcome %s</h1>",options[25][1]);
       puts("<form action=\"/cgi-bin/mailadmin.cgi\" method=\"POST\">");
-      printf("<input type=\"hidden\" name=\"name\" value=\"%s\">",options[25][1]);
+      printf("<input type=\"hidden\" name=\"admin\" value=\"%s\">",options[25][1]);
       puts("<center>");
       puts("<table>");
       puts("<tr>");
@@ -209,11 +209,17 @@ if(user==NULL) {
       }
       else {
 	
-	      pw=get_pw(name);
+	login=user;
+	options[0][1]=login;
+	write_log(LOG_USER,7,"admin setto %s",admin);
+	write_log(LOG_USER,7,"name setto %s",options[0][1]);
+	write_log(LOG_USER,7,"user setto %s",user);
+
+	      pw=get_pw(login);
 
         
 	      if(pw==NULL) {
-		      write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",name,name);
+		      write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",login);
 		      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NOSUCHUSER,err_nosuchuser,options,txt_message);
 	}
 
@@ -229,15 +235,16 @@ if(user==NULL) {
 
 else {
 
-	name=user;
-	options[0][1]=name;
+	login=user;
+	options[0][1]=login;
 	write_log(LOG_USER,7,"admin setto %s",admin);
+	write_log(LOG_USER,7,"name setto %s",options[0][1]);
 	write_log(LOG_USER,7,"user setto %s",user);
 
-	pw=get_pw(name);
+	pw=get_pw(login);
 
         if(pw==NULL) {
-		write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",name,name);
+		write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",login);
       		show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NOSUCHUSER,err_nosuchuser,options,txt_message);
 	}
 

@@ -1,4 +1,25 @@
-   /* Is mailcfg check enabled? */
+/*
+ * cgipaf_updatemailcfg.c
+ *
+ * Copyright (C) 2004 Staf Wagemakers Belgie/Belgium
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+/* Is mailcfg check enabled? */
 
    if((cp=get_section_config_item(config_file,UPDATESECTION,RUN_MAILCFG))==NULL) {
 
@@ -55,7 +76,7 @@
    
       if (!strcasecmp(forward,txt_yes)) {
 
-     	 write_log(LOG_USER,7,"User %s want to enable mailforwarding",name);
+     	 write_log(LOG_USER,7,"User %s want to enable mailforwarding",login);
       
       	 /* forward_to has no length or is an invalid mailaddress, exit */
       
@@ -265,7 +286,7 @@
       /* mail config update, inform the user */
       
       show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options,txt_message);
-      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
+      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",login);
       
       /* create the user's .cgipaf_state */
       

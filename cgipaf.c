@@ -437,7 +437,8 @@ if (strcmp(forward,"no")) strcpy(not_forward,"no");
 if (strcmp(keep_msg,"no")) strcpy(not_keep_msg,"no");
 if (strcmp(autoreply,"no")) strcpy(not_autoreply,"no");
 write_log(LOG_USER,7,"got the mailconfiguration for user %s",name);
-if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options)==3) {
+
+   if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options)==3) {
 write_log(LOG_USER,7,"couldn't load mailcfg_document using default");
 print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
 printf("<HTML>\n");

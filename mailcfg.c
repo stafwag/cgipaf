@@ -2,6 +2,7 @@
 /* mail control web interface                                         */
 /* author : staf wagemakers                          date: 26 NOV 99  */
 /* ------------------------------------------------------------------ */
+
 #define  FORWARD               "forward"
 #define  FORWARD_TO            "forward_to"
 #define  AUTOREPLY             "autoreply"
@@ -126,6 +127,8 @@ main()
    if (chdir(doc_root)==-1) write_log(LOG_USER,7,"chdir(%s) failed, %s",doc_root,strerror(errno));
    }
 
+   
+   
    /* read the POST data */
    
    write_log(LOG_USER,7,"Reading POST data...");

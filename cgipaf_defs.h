@@ -56,7 +56,8 @@
 #define  CFG_MAILCFG            "mailcfg_document"
 #define  RUN_SUCCESS            "run_success"
 #define  RUN_LOCKED             "run_locked"
-#define  CFG_PAM_SERVICE            "pam_service"
+#define  CFG_PAM_SERVICE        "pam_service"
+#define  CGIPAFSTATEFILE        ".cgipaf_state"
 
 #ifdef   CGIPAF_PASSWD
 #define  CFGSECTION             "passwd"

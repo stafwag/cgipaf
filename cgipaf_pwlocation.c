@@ -1,8 +1,7 @@
 #ifndef _WITHPAM
 #ifdef  BSDHOST
      set_shadow_location(NULL);
-     set_passwd_locayion(NULL);
-#endif
+     set_passwd_location(NULL);
 #else
 
     /*

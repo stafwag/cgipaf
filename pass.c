@@ -391,7 +391,7 @@ switch(get_crypttype(pw))
 #ifdef MD5_CRYPT
         case 1:
          	     c=md5_seed();           /* md5 password            */
-#ifndef BSDHOST
+#ifndef FREEBSDHOST
 		     encrypt_pass=libshadow_md5_crypt(pass,c); 
 #else
 		     encrypt_pass=xmalloc(_PASSWORD_LEN+1);

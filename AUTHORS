@@ -4,7 +4,7 @@ Staf Wagemakers, Main author.
 
 Andreas Liebe, fixed some bugs 
 
- * created a patch which allow it to use mailcfg.cgi for users with 
+ * created a patch which allows it to use mailcfg.cgi for users with 
    non-interactive shell such as /bin/false
  * fixed a accessdb bug, the database wasn't always closed.
 

@@ -49,8 +49,8 @@ Autoreply message:<BR>
 <TABLE>
 <TR>
 <TD>
-<INPUT TYPE=SUBMIT VALUE="Submit">
-<INPUT TYPE=RESET VALUE="Clear">
+<INPUT TYPE="RESET" VALUE="Clear">
+<INPUT TYPE="SUBMIT" VALUE="Submit">
 </TD></TR></TABLE>
 </CENTER>
 </FORM>

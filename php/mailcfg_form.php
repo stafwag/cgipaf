@@ -47,8 +47,8 @@ Autoreply message:<br>
 <table>
 <tr>
 <td>
-<input type="submit" value="Submit">
 <input type="reset" value="Clear">
+<input type="submit" value="Submit">
 </td></tr></table>
 </center>
 </form>

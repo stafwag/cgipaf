@@ -14,8 +14,8 @@
 </tr>
 </table>
 <p>
-<input type=submit value="Change">
-<input type=reset  value="Clear">
+<input type="reset"  value="Clear">
+<input type="submit" value="Change">
 </p>
 </center>
 </form>

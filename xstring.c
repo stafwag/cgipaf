@@ -580,4 +580,76 @@ int update_string_pair_item(char ***str_pair,char *item, char *value, int free_m
 
 }
 
+int delete_string_pair_item(char ***str_pair,char *item,int free_mode) {
+
+	char ***pt;
+	int ret=0;
+	int n=0;
+
+	if(str_pair==NULL) return(-1);
+	
+	for(pt=str_pair;pt[0][0]!=NULL;pt++) {
+
+		if(!strcmp(pt[0][0],item)) {
+
+			char ***pt2;
+
+			if(free_mode) {
+				xfree(pt[0][0]);
+				xfree(pt[0][1]);
+			}
+
+
+			for(pt2=pt;pt2[0][0]!=NULL;pt2++) {
+
+				pt2[0][0]=(pt2+1)[0][0];
+				pt2[0][1]=(pt2+1)[0][1];
+
+			}
+
+			ret=1;
+
+			break;
+		}
+
+	
+	}
+		
+
+	return(ret);
+
+
+}
+
+void free_string_pair (char ***str_pair) {
+
+
+	char ***pt;
+
+	if(str_pair==NULL) return;
+
+	for(pt=str_pair;pt[0][0]!=NULL;pt++) {
+		xfree(pt[0][0]);
+		xfree(pt[0][1]);
+		xfree(pt);
+		}
+
+	xfree(str_pair);
+
+}
+
+char * clone_string(char *str) {
+
+
+	char *ret=NULL;
+
+	if(str==NULL) return(ret);
+
+	ret = xmalloc(strlen(str)+1);
+	strcpy(ret,str);
+
+	return(ret);
+
+}
+
 

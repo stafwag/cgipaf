@@ -1,4 +1,9 @@
 #ifndef _WITHPAM
+#ifdef  BSDHOST
+     set_shadow_location(NULL);
+     set_passwd_locayion(NULL);
+#endif
+#else
 
     /*
      * vmail support
@@ -55,5 +60,5 @@
            write_log(LOG_USER,7,"passwd_location set to %s",set_passwd_location(NULL));
    }
 
-
+#endif
 #endif

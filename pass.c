@@ -7,9 +7,9 @@
 #include "pass.h"
 
 /*
- * if FREEBSDHOST is not defined assume /etc/passwd
+ * if BSDHOST is not defined assume /etc/passwd
  */
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
 #define PASSWDFILE	"/etc/passwd"
 #else
 #define PASSWDFILE	_PATH_MASTERPASSWD
@@ -101,25 +101,33 @@ pw=(struct pw_info *) xmalloc(sizeof(struct pw_info));
 pw->p=NULL;
 pw->sp=NULL;
 
+#ifndef BSDHOST
 if(passwd_location==NULL) {
+#endif
   	if(!(pw->p=getpwnam(name))) return(NULL);   /* User doesn't exist... */
+#ifndef BSDHOST
 }
 else {
 	if((pw_file=fopen(passwd_location,"r"))==NULL) return(NULL);
 	if(!(pw->p=fgetpwnam(pw_file,name))) return(NULL);
 }
-
+#endif
 
   if (!strcmp(pw->p->pw_passwd,"x")) {
 
 #ifdef HAVE_SHADOW_H
+
+#ifndef BSDHOST
      if(set_shadow_location(NULL)==NULL) {
+#endif
        if(!(pw->sp=getspnam(name))) return(NULL);
+#ifndef BSDHOST
      }
      else {
 	     if((sh_file=fopen(shadow_location,"r"))==NULL) return(NULL);
 	     if(!(pw->sp=fgetspnam(sh_file,name))) return(NULL);
      }
+#endif
 
 
 #else
@@ -281,17 +289,24 @@ chown(TMPFILE,st.st_uid,st.st_gid);
 
 if (uf) {
    /* user found, rename tmpfile to pwfile */
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
    if (rename(TMPFILE,pwfilename)==-1) return(-11); 
 #else
 
 /*
- * freebsd password changer
+ * Free|Net Bsd password changer
  * use pw_mkdb (8) to update the passwd db, TMPFILE is the input file
  */
    int pstat;
    pid_t pid;
+
+#ifdef NETBSDHOST
+/* use / if NETBSD */
+   char *mppath = "/";
+#else
+   /* assume FREEBSD */
    char *mppath = _PATH_PWD;
+#endif
    
    if(!( pid=fork() )) {
       if (!name)
@@ -376,7 +391,7 @@ switch(get_crypttype(pw))
 #ifdef MD5_CRYPT
         case 1:
          	     c=md5_seed();           /* md5 password            */
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
 		     encrypt_pass=libshadow_md5_crypt(pass,c); 
 #else
 		     encrypt_pass=xmalloc(_PASSWORD_LEN+1);
@@ -415,7 +430,7 @@ i=update_pwfile(passwdfile,pw,encrypt_pass);
 
 unlink(TMPLOCK);
 
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
 ulckpwdf();
 #endif
 
@@ -425,7 +440,7 @@ if (i<0) return(i);   /* can't update password */
  * Solaris compatibility
  */
 
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
 
 if (!strcmp(passwdfile,SHADOWFILE)) {
    if(lstat(OSHADOWFILE,&st)!=-1) {

@@ -38,7 +38,14 @@ function (default)])
 dnl freebsd support
 
 if test "$host" = "freebsd"; then
+    AC_DEFINE(BSDHOST)
     AC_DEFINE(FREEBSDHOST)
+    ARG="NOPAM"
+fi
+
+if test "$host" = "netbsd"; then
+    AC_DEFINE(BSDHOST)
+    AC_DEFINE(NETBSDHOST)
     ARG="NOPAM"
 fi
 

@@ -63,9 +63,14 @@ main()
    		user=cp;
 
 		options[26][1]=user;
+		options[0][1]=user;
+                write_log(LOG_USER,7,"user set to %s",user);
+                write_log(LOG_USER,7,"name set to %s",user);
+                write_log(LOG_USER,7,"login set to %s",login);
 
 		#include "cgipaf_setname2postname.c"
 		#include "cgipaf_noroot.c"
+                write_log(LOG_USER,7,"login set to %s",login);
 		#include "cgipaf_cookieauth.c"
 
 	}
@@ -85,6 +90,7 @@ main()
 			is_admin=1;
 			admin=login;
 			update_string_pair_item(options,txt_admin,admin,0);
+                        write_log(LOG_USER,7,"admin set to %s",admin);
 			break;
 
 		}
@@ -138,7 +144,7 @@ if(user==NULL) {
       puts("<td>User</td>");
       puts("<td>:</td>");
       puts("<td>");
-      puts("<input name=\"user\">");
+      puts("<input name=\"name\">");
       puts("</td>");
       puts("</tr>");
       puts("<tr>");
@@ -192,7 +198,7 @@ if(user==NULL) {
       puts("<td>User</td>");
       puts("<td>:</td>");
       puts("<td>");
-      puts("<input name=\"user\"");
+      puts("<input name=\"name\"");
       puts("</td>");
       puts("</tr>");
       puts("</table>");

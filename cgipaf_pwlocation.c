@@ -1,7 +1,7 @@
 /*
  * cgipaf_pwlocation.c
  *
- * Copyright (C) 2002,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
     /*
      * vmail support
-     * set name to name - @some.domain
+     * set login to login - @some.domain
      * set usermaildomain to @some.domain
      */
 
@@ -36,22 +36,22 @@
 	
 	/* we don't like ".." in the loginname for security reasons */
 
-	if(strstr(name,"..")) {
+	if(strstr(login,"..")) {
             write_log(LOG_USER,7,"vmail: loginname contains \"..\"");
             show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_message);
 
 	}
-    	if((cp=strchr(name,'@'))!=NULL) {
+    	if((cp=strchr(login,'@'))!=NULL) {
       	  int l;
       	  usermaildomain=(char *) xmalloc(strlen(cp+1)+1);
 	  options[22][1]=usermaildomain;
       	  strcpy(options[22][1],cp+1);
-      	  l=cp-name;
-      	  cp=name;
-      	  name=xmalloc(l+1);
-      	  strncpy(name,cp,l);
-          name[l]='\0';
-      	  write_log(LOG_USER,7,"vmail: loginname set to %s",name);
+      	  l=cp-login;
+      	  cp=login;
+      	  login=xmalloc(l+1);
+      	  strncpy(login,cp,l);
+          login[l]='\0';
+      	  write_log(LOG_USER,7,"vmail: loginname set to %s",login);
       	  write_log(LOG_USER,7,"vmail: options[0][1] set to %s",options[0][1]);
       	  write_log(LOG_USER,7,"vmail: usermaildomain set to %s",options[22][1]);
 	};

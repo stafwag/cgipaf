@@ -29,7 +29,7 @@
 #endif
 
 #define  ROOT                   "root"
-#define  USER			"user"
+#define  USER			"name"
 #define  PASSWORD               "passwd"
 #define  MINUID                 10
 #define  LOGIN_DOCUMENT         "login_document"

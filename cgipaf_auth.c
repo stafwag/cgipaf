@@ -80,7 +80,7 @@
    /* lock the user if he has too many invalid logins */
    
    if (accessdb) {
-      if ((brol=get_access_status(accessdb,options[0][1],max_invalid,invalid_timeout))>0) {
+      if ((brol=get_access_status(accessdb,login,max_invalid,invalid_timeout))>0) {
 	 snprintf(invalid_wait_txt,80,"%d",brol);
 	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options,txt_message);
 	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options,set_script_filename);
@@ -92,7 +92,7 @@
 	   if((i=WEXITSTATUS(i)))
 	     write_log(LOG_USER,1,"run_locked returns a non-null exit code %d",i);
 	 if(config_file!=NULL) fclose(config_file);
-	 write_log(LOG_AUTHPRIV,5,"User %s is locked",options[0][1]);
+	 write_log(LOG_AUTHPRIV,5,"User %s is locked",login);
 	 exit(0);
       }
    }
@@ -108,7 +108,7 @@
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",login);
       options[19][1]=pw->p->pw_dir;
       if (accessdb) {
-	 if (save_access_status(accessdb,options[0][1],1,invalid_timeout,cookie)==-1) {
+	 if (save_access_status(accessdb,login,1,invalid_timeout,cookie)==-1) {
 	    printf("%s %s",warn_update_accessdb,accessdb);
 	    write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
 	 }

@@ -7,6 +7,7 @@
    /* set forward_to */
    
    c=get_postitem(data,FORWARD_TO);
+   
    if(c!=NULL) {
       char *c2;
       c2=textarea2asc(c);

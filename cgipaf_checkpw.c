@@ -1,6 +1,8 @@
 /* get the new password or die */
+   
+   cp=get_postitem(data,NEWPASS1);
 
-   if (!(cp=get_postitem(data,NEWPASS1))) {
+   if (!cp || !strlen(cp)) {
       write_log(LOG_USER,7,"newpass1 not set");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options,txt_message);
    }
@@ -8,7 +10,9 @@
 
    /* free(cp); */			/* keep the orginal postarray */
 
-   if (!(cp=get_postitem(data,NEWPASS2))) {
+   cp=get_postitem(data,NEWPASS2);
+
+   if (!cp || !strlen(cp)) {
       write_log(LOG_USER,7,"newpass2 not set");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options,txt_message);
    }

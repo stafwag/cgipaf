@@ -56,18 +56,17 @@ main()
 
 	#include "cgipaf_auth.c"
 
-}
+	}
 
-else {
+	else {
 
+   		user=cp;
 
-   	user=cp;
+		#include "cgipaf_setname2postname.c"
+		#include "cgipaf_noroot.c"
+		#include "cgipaf_cookieauth.c"
 
-	#include "cgipaf_setname2postname.c"
-	#include "cgipaf_noroot.c"
-	#include "cgipaf_cookieauth.c"
-
-}
+	}
 
 	/*
 	 * is name an admin???
@@ -137,7 +136,7 @@ if(user==NULL) {
       puts("<td>User</td>");
       puts("<td>:</td>");
       puts("<td>");
-      puts("<input name=\"user\"");
+      puts("<input name=\"user\">");
       puts("</td>");
       puts("</tr>");
       puts("<tr>");
@@ -149,6 +148,7 @@ if(user==NULL) {
       puts("<td>Re-enter new password</td>");
       puts("<td>:</td>");
       puts("<td><input name=newpass2 size=\"16\" type=password></td>");
+      puts("</tr>");
       puts("</table>");
       puts("<p>");
       puts("<input type=\"reset\" value=\"Clear\">");

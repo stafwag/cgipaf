@@ -1,6 +1,8 @@
    /* If there is no loginname ask for it */
    
-   if (!(cp=get_postitem(data,LOGIN))) {
+   cp=get_postitem(data,LOGIN);
+
+   if (!cp || !strlen(cp)) {
       write_log(LOG_USER,7,"name not set, show err_login");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options,txt_message);
    }
@@ -32,7 +34,9 @@
 
    /* no password = no login */
 
-   if (!(cp=get_postitem(data,PASSWORD))) {
+   cp=get_postitem(data,PASSWORD);
+
+   if ( !cp || !strlen(cp) ) {
       write_log(LOG_USER,7,"user forgot to type his password");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_message);
    }

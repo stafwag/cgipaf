@@ -28,7 +28,6 @@ int i=-1;
    }
    domainname[0]='\0';
    if(buf!=NULL) {
-	   fprintf(stderr,"buf is not null");
      strncat(domainname,buf,len-1);
      i=0;
    } 

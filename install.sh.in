@@ -1,7 +1,7 @@
 #!/bin/sh
 # cgipaf install script			        staf wagemakers
-#                                               staf@patat.org
-#                                               http://staf.patat.org
+#                                               staf@wagemakers.be
+#                                               http://www.wagemakers.be
 read_yesno () {
 read INPUT
   case "$INPUT" in

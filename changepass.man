@@ -26,7 +26,7 @@ echo "username:new_password" | changepass
 .br
 
 .SH AUTHOR
-Written by Staf Wagemakers <staf@patat.org>
+Written by Staf Wagemakers <staf@wagemakers.be>
     
 .SH COPYRIGHT
 Copyright (c)2002 Staf Wagemakers.

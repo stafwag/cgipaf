@@ -1,0 +1,74 @@
+WHAT IS CGIPAF?
+
+   "cgipaf" allows users to change their un*x Password, Autoreply and
+   mail Forwarding by a web interface.
+   
+   This program is still a beta version, use at your own risk!
+
+REQUIREMENTS
+  
+    + a Un*x server ( only tested with Debian gnu/Linux woody & potato and
+      solaris 8 )
+    + a mailserver that uses procmail
+    + webserver
+    + gcc, ndbm or gdbm
+    
+BUGS
+   
+    see BUGS
+    
+LICENSE
+
+    GNU General Public License.
+
+INSTALLATION
+
+    see INSTALL
+
+OVERVIEW
+
+    cgipaf is a combination of three cgi programs:
+    
+         passwd.cgi:       allow users to update their password
+	 viewmailcfg.cgi:  allow users to view thier current mail 
+	                   configuration.
+	 mailcfg.cgi:      update the mail configuration
+	 
+    All programs use PAM for user authentication, systems without PAM
+    are only supported if they use the standard password file location
+    (/etc/passwd /etc/shadow) and the standard crypt function to encrypt
+    the passwords.
+    
+    If a password is changed it is possible to run a script to update
+    SAMBA passwords, NIS configuration, etc.
+	 
+    The mail configuration is done by procmail, mailcfg.cgi creates a
+    .procmailrc in the user's home directory. If autoreply is enabled the 
+    autoreply message is stored in ~/vacations.txt. When a user enables
+    mail forwarding the user can choose to keep the messages.
+    
+    For user authentication viewmailcfg.cgi creates a cookie, this cookie 
+    is stored in the accessdb. mailcfg.cgi reads the cookie out the accessdb 
+    and compares it with the cookie send by the users browser.
+    
+    User with too many invalid logins can be locked.
+    
+    The minimum and maximum uid can be set in the configuration file, so
+    you can specify a range of uid's that are allowed to use cgipasswd.
+  
+    You can specify html files with a few PHP extensions for the login screen
+    and error messages.
+    
+    It's possible to use a redirect for the error messages, instead of plain 
+    html files.
+
+CONFIGURATION
+ 
+    see Configuration.html
+
+CONTACT INFO
+
+    email:  stafwag@f2s.com
+    
+    Future improvements will be available at http://www.stafwag.f2s.com
+    

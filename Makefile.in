@@ -1,0 +1,87 @@
+# ----------------------------------------------------------------------
+# (GPL) 2001 Belgium                          http://www.stafwag.f2s.com
+# Staf Wagemakers	                                 stafwag@f2s.com
+# ----------------------------------------------------------------------
+
+ARG=-D_@ARG@ -D@NEED_COMPAT_H@
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+top_srcdir      = @top_srcdir@
+bindir          = @bindir@
+libexecdir      = @libexecdir@
+sysconfdir      = @sysconfdir@
+localstatedir   = @localstatedir@
+srcdir          = @srcdir@
+inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h
+CC=@CC@
+CFLAGS=@CFLAGS@
+
+CONFIGFILE=$(sysconfdir)/cgipaf.conf
+
+all: passwd.cgi viewmailcfg.cgi mailcfg.cgi
+
+passwd.cgi: cgipaf.c @LIBOBJS@ ${inc_files}
+	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c @LIBOBJS@ @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
+
+mailcfg.cgi: mailcfg.c @LIBOBJS@ mailconfig.o ${inc_files}
+	$(CC) $(CFLAGS) -o mailcfg.cgi mailcfg.c @LIBOBJS@ mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
+
+viewmailcfg.cgi: cgipaf.c @LIBOBJS@ mailconfig.o ${inc_files}
+	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c @LIBOBJS@ mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
+	
+install: all
+	 su root -c "/bin/sh ./install.sh"
+
+pass.o: pass.c pass.h
+	$(CC) $(CFLAGS) -O2 -c pass.c
+
+passpam.o: passpam.c pass.h
+	   $(CC) $(CFLAGS) $(ARG) -O2 -c passpam.c 
+
+ccgi.o: ccgi.c ccgi.h
+	$(CC) $(CFLAGS) -c ccgi.c
+	
+configfile.o: configfile.c configfile.h xstring.o
+	$(CC) $(CFLAGS) -c configfile.c
+
+xstring.o: xstring.c xstring.h
+	   $(CC) $(CFLAGS) -c xstring.c
+	   
+ephp.o: ephp.c ephp.h xstring.o
+	$(CC) $(CFLAGS) -c ephp.c
+
+showmsg.o: showmsg.c showmsg.h configfile.o
+	$(CC) $(CFLAGS) -c showmsg.c
+
+accessdb.o: accessdb.c accessdb.h
+	$(CC) $(CFLAGS) -c accessdb.c
+
+createcookie.o: createcookie.c createcookie.h
+	$(CC) $(CFLAGS) -c createcookie.c
+
+mailconfig.o: mailconfig.h mailconfig.c pass.h searchdomain.o
+	$(CC) $(CFLAGS) -c mailconfig.c
+	
+compat.o: compat.c compat.h
+	$(CC) $(CFLAGS) -c compat.c
+	
+searchdomain.o: searchdomain.c searchdomain.h xstring.o configfile.o
+	$(CC) $(CFLAGS) -c searchdomain.c
+
+xmalloc.o:  xmalloc.c xmalloc.h
+	$(CC) $(CFLAGS) -c xmalloc.c
+
+out_of_memory.o:  out_of_memory.c out_of_memory.h
+	$(CC) $(CFLAGS) -c out_of_memory.c
+
+run_cmd.o: run_cmd.c run_cmd.h configfile.o
+	$(CC) $(CFLAGS) -c run_cmd.c
+
+clean:
+	rm -f *.cgi *.o 
+
+dist-clean: clean
+	rm -f config.cache config.h config.log config.status
+	rm -f Makefile
+	rm -f install.sh

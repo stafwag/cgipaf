@@ -1,0 +1,57 @@
+NOTE
+
+    Please make a backup of your password files ( /etc/passwd, /etc/shadow, 
+    /etc/oshadow ) before you try this program.
+
+SUPPORTED SYSTEMS
+
+    cgipaf has been tested with Debian GNU/Linux (potato and woody) and
+    Solaris 8 and should work on other Un*ces with pam support. Systems
+    without pam support are only supported if they use the standard  
+    password file location /etc/passwd /etc/shadow and the standard crypt
+    function to encrypt the password. For this reason OpenBSD isn't supported.
+
+    If you're using cgipaf on a system without pam support a lock file
+    /var/lock/cgipasswd.lock is used. The directory /var/lock have to exist
+    on our system or you can modify pass.h to your own needs.
+
+    cgipasswd depends on the ndbm or compatible library. The GNU dbm library
+    is also supported and is automaticaly detected by configure.
+
+INSTALLATION
+
+    type: 
+
+          ./configure --bindir=/usr/local/apache/cgi-bin \ 
+                      --datadir=/usr/local/apache/htdocs/cgipasswd \ 
+                      --sysconfdir=/etc/cgipaf
+    
+    Update the above command with your real cgi-bin and htdocs directory
+
+    This will create Makefile, install.sh and config.h
+    
+    If you want to disable pam support you can add "--disable-pam" 
+    configure should normally detect pam and no-pam systems.
+          
+    type: 
+          make
+    
+    To compile the sources.
+
+    type: make install
+    
+    The installation script will install "passwd.cgi","viewmailcfg.cgi" and 
+    "mailcfg.cgi" in cgi-bin, copy "php/*.php" in the htdocs directory, and 
+    create a sample config file. 
+    
+    "passwd.cgi", "viewmailcfg.cgi", "mailcfg.cgi"  should have the following 
+    permissions:
+    
+    -r-sr-xr-x    1 root     root        33391 Aug 10 22:16 mailcfg.cgi
+    -r-sr-xr-x    1 root     root        30333 Aug 10 22:16 passwd.cgi
+    -r-sr-xr-x    1 root     root        34658 Aug 10 22:16 viewmailcfg.cgi
+
+    and owned by root.
+
+    Point your browser to http://your_webserver/cgi-bin/passwd.cgi or
+    http://your_webserver/cgi-bin/viewmailcfg.cgi and enjoy

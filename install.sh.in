@@ -1,0 +1,163 @@
+#!/bin/sh
+# cgipasswd install script			staf wagemakers
+#                                               stafwag@f2s.com
+#                                               http://www.stafwag.f2s.com
+read_yesno () {
+read INPUT
+  case "$INPUT" in
+         "yes")
+                 YESNO=1
+                 ;;
+         "y")
+                 YESNO=1
+                 ;;
+         *)
+                 YESNO=0
+                 ;;
+   esac
+return $YESNO
+}
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+exec_suffix="@exec_suffix@"
+cgi_suffix="@cgi_suffix@"
+top_srcdir="@top_srcdir@"
+bindir="@bindir@"
+libexecdir="@libexecdir@"
+sysconfdir="@sysconfdir@"
+localstatedir="@localstatedir@"
+srcdir="@srcdir@"
+datadir="@datadir@"
+
+
+if [ ! -x ./passwd.cgi ]; then
+   echo "type make to compile cgipaf"
+   exit 1
+fi
+CFGFILE="${sysconfdir}/cgipaf.conf"
+CGIBIN="${bindir}"
+   if [ -d $CGIBIN ] 
+      then
+         mkdir -p @sysconfdir@
+         cp -i passwd.cgi viewmailcfg.cgi mailcfg.cgi $CGIBIN
+         chown root:root $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
+         chmod 4555 $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
+       else
+         echo "$CGIBIN doesn't exist...."
+       fi
+WWW="${datadir}"
+if [ -d $WWW ]
+      then
+         cp -i php/*.php $WWW
+         chmod 644 $WWW/cgipasswd*.php $WWW/mailcfg*.php $WWW/viewmailcfg*.php 
+      else
+         echo "$WWW doesn't exist...."
+	 echo "Create $WWW? (yes/no)"
+	 read_yesno
+	 if [ "$YESNO" = "1" ]
+	    then
+	      mkdir $WWW
+              cp -i php/*.php $WWW
+              chmod 644 $WWW/cgipasswd*.php $WWW/mailcfg*.php $WWW/viewmailcfg*.php 
+	 else
+	    echo "Couldn't copy standard php files"
+	 fi		   
+fi
+   if [ -f $CFGFILE ]
+      then
+        echo "$CFGFILE already exists. Overwrite? (yes/no)"
+	read_yesno
+      else
+        YESNO=1
+   fi
+   if [ "$YESNO" = "1" ]; then
+   echo "#" > $CFGFILE
+   echo "# sample cgipaf config file" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# accessdb configuration" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "accessdb                /etc/cgipaf/accessdb" >> $CFGFILE
+   echo "max_invalid             10" >> $CFGFILE
+   echo "invalid_timeout         60" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# set the minimum uid & maximum uid, if min_uid isn't set the" >> $CFGFILE
+   echo "# default (10) is used. if max_uid isn't set there is no" >> $CFGFILE
+   echo "# maximum" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "min_uid                 101" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# passwd.cgi configuration" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "<passwd>" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# syntax:      document      document_name" >> $CFGFILE
+   echo "#              document      redirect          location" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "document_root           $WWW" >> $CFGFILE
+   echo "login_document          cgipasswd.php" >> $CFGFILE
+   echo "error_loginname         cgipasswd_errlogin.php" >> $CFGFILE
+   echo "error_access            cgipasswd_erraccess.php" >> $CFGFILE
+   echo "error_invalid           cgipasswd_errinvalid.php" >> $CFGFILE
+   echo "error_newpassword       cgipasswd_errnewpass.php" >> $CFGFILE
+   echo "error_match             cgipasswd_errmatch.php" >> $CFGFILE
+   echo "error_tooshort          cgipasswd_errshort.php" >> $CFGFILE
+   echo "error_locked            cgipasswd_errlocked.php" >> $CFGFILE
+   echo "# run_locked            /usr/local/bin/notify_script %{name}" >> $CFGFILE
+   echo "error_toolong           cgipasswd_errlong.php" >> $CFGFILE
+   echo "msg_success             cgipasswd_msgchanged.php" >> $CFGFILE
+   echo "# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\"" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# set the minimum & maximum password length" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "min_length              5" >> $CFGFILE
+   echo "max_length              8" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "</passwd>" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# mailcfg configuration" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "<mailcfg>" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "cookie_timeout          300" >> $CFGFILE
+   echo "document_root           $WWW" >> $CFGFILE
+   echo "login_document          viewmailcfg.php" >> $CFGFILE
+   echo "mailcfg_document        mailcfg.php" >> $CFGFILE
+   echo "error_readname		 mailcfg_errreadname" >> $CFGFILE
+   echo "error_accessdb		 mailcfg_erraccessdb.php" >> $CFGFILE
+   echo "error_loginname         mailcfg_errloginname.php" >> $CFGFILE
+   echo "error_access		 mailcfg_erraccess.php" >> $CFGFILE
+   echo "error_invalid           mailcfg_errinvalid.php" >> $CFGFILE
+   echo "error_locked            mailcfg_errlocked.php" >> $CFGFILE
+   echo "error_readforward	 mailcfg_errforward.php" >> $CFGFILE
+   echo "error_forwardto	 mailcfg_errforwardto.php" >> $CFGFILE
+   echo "error_invalidforwardto	 mailcfg_errinvalidforwardto.php" >> $CFGFILE
+   echo "error_readkeepmsg	 mailcfg_errkeepmsg.php" >> $CFGFILE
+   echo "error_readautoreply	 mailcfg_errautoreply.php" >> $CFGFILE
+   echo "error_autoreplymsg      mailcfg_errautoreplymsg.php" >> $CFGFILE
+   echo "error_cookie		 mailcfg_errcookie.php" >> $CFGFILE
+   echo "error_cookietimeout	 mailcfg_errcookietimeout.php" >> $CFGFILE
+   echo "error_deldotforward	 mailcfg_errdeldotforward.php" >> $CFGFILE
+   echo "error_deldotprocmailrc  mailcfg_errdeldotprocmailrc.php" >> $CFGFILE
+   echo "error_openvacations	 mailcfg_erropenvacations.php" >> $CFGFILE
+   echo "msg_success		 mailcfg_msgupdated.php" >> $CFGFILE
+   echo "# sendmail              /usr/lib/sendmail" >> $CFGFILE
+   echo "# domain		 your_domain_name" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "</mailcfg>" >> $CFGFILE
+ 
+   fi
+   
+echo "Thank you for using cgipasswd!"
+echo "Goodbye....."

@@ -1,0 +1,478 @@
+<HTML>
+<head>
+<title>CGIpaf configuration</title>
+</head>
+<body bgcolor="#ffffff">
+<h1>CGIpaf 1.0rc1 Configuration</h1>
+<h1>Content</h1>
+<UL>
+<li><a href="#syntax">Syntax</a></li>
+</UL>
+<UL>
+<li><a href="#sections">Sections</a></li>
+</Ul>
+<UL>
+<li><a href="#directives">Directives</a></li>
+<UL>
+<li><a href="#document_root">document_root</a></li>
+<li><a href="#login_document">login_document</a></li>
+<li><a href="#error_loginname">error_loginname</a></li>
+<li><a href="#error_access">error_access</a></li>
+<li><a href="#error_invalid">error_invalid</a></li>
+<li><a href="#error_newpassword">error_newpassword</a></li>
+<li><a href="#error_tooshort">error_tooshort</a></li>
+<li><a href="#error_torlong">error_toolong</a></li>
+<li><a href="#error_locked">error_locked</a></li>
+<li><a href="#error_forwardto">error_forwardto</a></li>
+<li><a href="#error_invalidforwardto">error_invalidforwardto</a></li>
+<li><a href="#msg_success">msg_success</a></li>
+<li><a href="#msg_changed>msg_changed</a></li>
+<li><a href="#msgmsg_updated">msg_updated</a></li>
+<li><a href="#error_read">error_readname</a></li>
+<li><a href="#error_readforward">error_readforward</a></li>
+<li><a href="#error_readkeepmsg">error_readkeepmsg</a></li>
+<li><a href="#error_readautoreply">error_readautoreply</a></li>
+<li><a href="#error_autoreply_msg">error_autoreply_msg</a></li>
+<li><a href="#error_cookie">error_cookie</a></li>
+<li><a href="#error_cookietimeout">error_cookietimeout</a></li>
+<li><a href="#error_accessdb">error_accessdb</a></li>
+<li><a href="#min_uid">min_uid</a></li>
+<li><a href="#max_uid">max_uid</a></li>
+<li><a href="#min_length">min_length</a></li>
+<li><a href="#max_length">max_length</a></li>
+<li><a href="#accessdb">accessdb</a></li>
+<li><a href="#max_invalid">max_invalid</a></li>
+<li><a href="#invalid_timeout">invalid_timeout</a></li>
+<li><a href="#sendmail">sendmail</a></li>
+<li><a href="#domain">domain</a></li>
+<li><a href="#run_success">run_success</a></li>
+<li><a href="#run_locked">run_locked</a></li>
+<li><a href="#cookie_timeout">cookie_timeout</a></li>
+<li><a href="#mailcfg_document">mailcfg_document</a></li>
+<li><a href="#error_deldotforward">error_deldotforward</a></li>
+<li><a href="#error_deldotprocmailrc">error_deldotprocmailrc</a></li>
+<li><a href="#error_openvacations">error_openvacations</a></li>
+</UL>
+</UL>
+<UL>
+<li><a href="variables">Variables</a></li>
+</UL>
+<h1><a name="syntax">Syntax</a></h1>
+<p>    
+  The configuration file (cgipaf.conf) contains one directive per lines. 
+  The directive names are case insensitive, the values are case sensitive.
+  Everything after a hash ( # ) is ignored. Empty lines and whitespaces are 
+  also ignored.
+    
+  If a directive appears more than onces the last one is used. 
+    
+  Sections are grouped between &lt;section_name&gt; ...
+&lt/section_name&gt, the
+  section names are like the directive names case insensitive.
+</p> 
+<h1><a name="sections">Sections</a></h1>
+<p>
+  The configuration file has three sections "global", "passwd" and "mailcfg". 
+  The directives that don't belong to a section are global. Global directives 
+  apply to all sections unless they're overwritten in the sections.
+    
+  The "passwd" section is used by passwd.cgi, viewmailcfg.cgi and mailcfg.cgi 
+  use the "mailcfg" section.
+</p>    
+<h1><a name="directives">Directives</a></h1>
+<p>    
+ The following parameters control cgipaf features and configuration. If a 
+ option is not specified or invalid the default builtin messages are used.
+</p>
+<h2><a name="document_root">document_root</a></h2>
+<p><strong>Syntax:</strong> document_root <em>path</em><br>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<p>location of the custom html message files</p>
+</p>
+<h2><a name="login_document">login_document</a></h2>
+<p><strong>Syntax:</strong> login_document <em>filename</em> <b>OR</b>
+ login_document Redirect <em>location</em><br>
+<strong>Default:</strong> "error reading data please contact the
+webmaster\n"<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>  
+    if the program is executed without parameters this message is displayed
+</p>
+<h2><a name="error_loginname">error_loginname</a></h2>
+<strong>Syntax:</strong> error_loginname <em>filename</em> <b>OR</b>
+error_loginname  Redirect   <em>location</em><br>
+<strong>Default:</strong> "Can't read loginname\n"<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>       
+    The user forgot to type his loginname.
+</p>
+<h2><a name="error_access">error_access</a></h2>
+<strong>Syntax:</strong> error_access <em>filename</em> <b>OR</b>
+error_access  Redirect   <em>location</em><BR>
+<strong>Default:</strong>"Access denied...\n"<BR>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>    
+    The user try to logon as root or the user's uid isn't between 
+    <a href="#min_uid">min_uid</a> & <a href="#max_uid">max_uid</a>.
+</p>
+<h2><a name="error_invalid">error_invalid</a></h2>
+<strong>Syntax:</strong> error_invalid <em>filename</em> <b>OR</b>
+error_invalid Redirect  <em>location</em><BR>
+<strong>Default:</strong> "Invalid password or username.\n"<BR>
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+    The password is incorrect or the user doesn't exists
+</p>
+<h2><a name="error_newpassword">error_newpassword</a></h2>
+<strong>Syntax:</strong> error_newpasswd <em>filename</em> <b>OR</b>
+error_newpassord  Redirect  <em>location</em><br>
+<strong>Default:</strong> "Can't read new password\n"<BR>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>       
+    can't read new password
+</p>
+<h2><a name"error_match">error_match</a></h2>
+<strong>Syntax:</strong>   error_match  <em>filename</em> <b>OR</b>
+error_math    Redirect <em>location</em><BR>
+<strong>Default:</strong> "They don't match\n"<BR>
+<strong>Context:</strong>  &lt;passwd&gt;
+<p>    
+    The new passwords doesn't match
+</p>       
+<h2><a name="error_tooshort">error_tooshort</a></h2>
+<strong>Syntax:</strong>   error_tooshort   <em>filename</em> <b>OR</b>
+error_tooshort   Redirect <em>location</em><BR>
+<strong>Default:</strong>  "Password too short...\n"<BR>
+<strong>Context:</strong>  &lt;passwd&gt;
+<P>    
+    the password length is below <a href="#min_length">min_length</a>
+</p>       
+<h2><a name="error_torlong">error_toolong</a></h2>
+<strong>Syntax:</strong>   error_toolong    <em>filename</em> <b>OR</b>
+error_toolong  Redirect <em>location</em><br>
+<strong>Default:</strong>  "Password too long...\n"<BR>
+<strong>Context:</strong>  &lt;passwd&gt;<BR>
+<p>    
+    the password length is above <a href="#max_length">max_length</a>
+</p>
+<h2><a name="error_locked">error_locked</a></h2>
+<strong>Syntax:</strong> error_locked<em>filename</em> <b>OR</b>
+error_locked  Redirect <em>location</em><BR>
+<strong>Default:</strong> "Maximum number of tries exceeded...\n"<br>
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>    
+    The user has exceeded the <a href="#max_invalid">max_invalid</a>
+    tries
+</p>    
+<h2><a name="error_forwardto">error_forwardto</a></h2>
+<strong>Syntax:</strong> error_forwardto	<em>filename</em> <b>OR</b>
+error_forwardto	 Redirect <em>location</em><br>
+<strong>Default:</strong>"Forward to who???"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;
+<p>    
+    The user has enabled mail forwarding, but didn't supply a forward to mail
+    address
+</p>       
+<h2><a name="error_invalidforwardto">error_invalidforwardto</a></h2>
+<strong>Syntax:</strong>  error_invalidforwardto <em>filename</em>
+ <b>OR</b> error_invalidforwardto <em> Redirect location</em><br>
+<strong>Default:</strong> not set<br>	     
+<strong>Context:</strong> &lt;mailcfg&gt;<br>
+<p>
+    The forward to email address is invalid
+</p>    
+<h2><a name="msg_success">msg_success</a></h2>
+<strong>Syntax:</strong> msg_success <em>filename</em> <b>OR</b>
+msg_success Redirect <em>location</em><br>
+<strong>Default:</strong> not set<br>	     
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;<BR>
+<p>    
+    The password or mail configuration is updated successfully
+</p>     
+<h2><a name="msg_changed">msg_changed</a></h2>
+<strong>Syntax:</strong> msg_changed <em>filename</em> <b>OR</b>
+msg_changed  Redirect <em>location</em><br>
+<strong>Default:</strong> not set<br>	     
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>    
+    see <a href=#msg_success>msg_success</a>
+</p>
+<h2><a name="msgmsg_updated">msg_updated</a></h2>
+<strong>Syntax:</strong> msg_updated  <em>filename</em> <b>OR</b>
+msg_updated  Redirect <em>location</em><br>
+<strong>Default:</strong> not set<br>	     
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>    
+    see <a href=#msg_success>msg_success</a>
+</p>
+<h2><a name="error_read">error_readname</a></h2>
+<strong>Syntax:</strong> error_readname <em>filename</em> <b>OR</b>
+error_readname   Redirect   <em>location</em><br>
+<strong>Default:</strong> "[CGIpaf] Can't read loginname\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>       
+    mailcfg.cgi is unable to read to username, this probably an error in 
+    <a href="#mailcfg_document">mailcfg_document</a>.
+</p>
+<h2><a name="error_readforward">error_readforward</a></h2>
+<strong>Syntax:</strong> error_readforward  <em>filename</em> <b>OR</b>
+error_readforward   Redirect   <em>location</em><br>
+<strong>Default:</strong> "[CGIpaf] Can't read forward\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>       
+    mailcfg.cgi is unable to read forward, this probably an error in 
+    <a href="#mailcfg_document">mailcfg_document</a>.
+</p>
+<h2><a name="error_readkeepmsg">error_readkeepmsg</a></h2>
+<strong>Syntax:</strong> error_readkeepmsg  <em>filename</em> <b>OR</b>
+error_readkeepmsg   Redirect   <em>location</em><br>
+<strong>Default:</strong> "[CGIpaf] Can't read keepmsg\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>       
+    mailcfg.cgi is unable to read keep_msg, this probably an error in 
+    <a href="#mailcfg_document">mailcfg_document</a>.
+</p>     
+<h2><a name="error_readautoreply">error_readautoreply</a></h2>
+<strong>Syntax:</strong> error_readautoreply   <em>filename</em>
+<b>OR</b>error_readautoreply   Redirect   <em>location</em><br>
+<strong>Default:</strong> "[CGIpaf] Can't read autoreply\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>       
+    mailcfg.cgi is unable to read autoreply, this probably an error in 
+    <a href="mailcfg_document">mailcfg_document</a>.
+</p>
+<h2><a name=error_autoreply_msg>error_autoreply_msg</a></h2>
+<strong>Syntax:</strong> error_autoreplymsg   <em>filename</em> <b>OR</b>
+error_autoreplymsg   Redirect   <em>location</em><br>
+<strong>Default:</strong> "Can't read autoreply_msg...\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;<br>
+<p>       
+    The user has enabled autoreply, but didn't supply a autoreply message.
+</p>       
+<h2><a name="error_cookie">error_cookie</a></h2>
+<strong>Syntax:</strong> error_cookie  <em>filename</em> <b>OR</B>
+error_cookie   Redirect  <em>location</em><br>
+<strong>Default:</strong> "To update your mail configuration your browser need to
+support cookies...\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;<br>
+<p>       
+    mailcfg.cgi can't update the mail configuration without cookies.
+</p>       
+<h2><a name="error_cookietimeout">error_cookietimeout</a></h2>
+<strong>Syntax:</strong> error_cookietimeout  <em>filename</em>
+<b>OR</B> error_cookietimeout Redirect <em>location</em><br>
+<strong>Default:</strong> "Cookie timeout exceeded...\n"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>       
+    mailcfg.cgi can't update the mail configuration because the cookie is too 
+    old.
+</p>
+<h2><a name="error_accessdb">error_accessdb</a></h2>
+<strong>Syntax:</strong> error_accessdb  <em>filename</em> <b>OR</b>
+error_accessdb  Redirect    <em>location</em><br>
+<strong>Default:</strong> "[CGIpaf] configuration error, (view)mailcfg needs a
+accessdb.\n Please contact the webmaster"<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>
+    (view)mailcfg.cgi can't work without an 
+    <a href="#accessdb">accessdb</a>
+</p>
+<h2><a name="min_uid">min_uid</a></h2>
+<strong>Syntax:</strong> min_uid <em>uid</em><br>
+<strong>Default:</strong> 100<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<p>       
+     minimum user id, if a uid is bellow min_uid access will be denied. You 
+     can't set min_uid lower then 10.
+</p>     
+<h2><a name="max_uid">max_uid</a></h2>
+<strong>Syntax:</strong> max_uid <em>uid</em><br>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong> Global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>       
+     maximum user id, if the uid is higher than max_uid access will be denied. 
+     If max_uid isn't set there is no maximum.
+</p>       
+<h2><a name="min_length">min_length</a></h2>
+<strong>Syntax:</strong> min_length <em>length</em><BR>
+<strong>Default:</strong> 6<br>
+<strong>Context:</strong> &lt;passwd&gt;<br>
+<p>       
+     minimum password length
+</p>       
+<h2><a name="max_length">max_length</a></h2>
+<strong>Syntax:</strong> max_length <em>length</em><br>
+<strong>Default:</strong> 8<br>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>       
+     maximum password length
+</p>     
+<h2><a name="accessdb">accessdb</a></h2>
+<strong>Syntax:</strong> accessdb  <em>path</em><br>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>       
+     accessdb path, if not set no access database is used. If not set Users 
+     can try to change their password as many times they like.
+     (view)mailcfg.cgi don't work without an accessdb. 
+</p>
+<h2><a name="max_invalid">max_invalid</a></h2>
+<strong>Syntax:</strong> max_invalid  <em>tries</em><br>
+<strong>Default:</strong>  3<br>
+<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>       
+     maximum invalid tries, if not set the default value (3) will be used.
+</p>
+<h2><a name="invalid_timeout">invalid_timeout</a></h2>
+<strong>Syntax:</strong> invalid_timeout <em>seconds</em>
+<strong>Default:</strong>  600<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<Br>
+<p>       
+     time in seconds that a user will be locked out if the max_invalid tries 
+     has been exceeded.
+</p>       
+<h2><a name="sendmail">sendmail</a></h2>
+<strong>Syntax:</strong> sendmail  <em>path_to_sendmail</em><br>
+<strong>Default:</strong> "/usr/lib/sendmail"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>       
+     mailcfg.cgi uses the path_to_sendmail in ~/.procmailrc, if your mailer is 
+     on another location location than "/usr/lib/sendmail" you've to set the 
+     sendmail directive.
+</p>       
+<h2><a name="domain">domain</a></h2>
+<strong>Syntax:</strong> domain <em>domain_name</em><br>
+<strong>Default:</strong> nisdomain or domain name in
+/etc/resolv.conf<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;
+<p>       
+     if autoreply is enabled a "X-loop: user@domainname" is added to the 
+     replyed mail to avoid mail looping. With the domain directive you can set 
+     the domainname in the "X-loop" header. If domain is not set mailcfg.cgi 
+     will use hostname.nisadomainname, if your server isn't part of a NIS 
+     domain it'll use the domain in /etc/resolv.conf.
+</p>       
+<h2><a name="run_success">run_success</a></h2>
+<strong>Syntax:</strong> run_success   <em>path_to_script</em>
+<em>stdout</em><br>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>       
+     runs a script is a password / mail configuration is successfully
+     updated. Example:
+<pre><tt><code>
+     run_success "/usr/sbin/smbpasswd -U %{name}" "%{password}\n%{password} > /dev/null 2.&1"
+</code></tt></pre>    
+     Will update the SAMBA password file.
+</p> 
+<h2><a name="run_locked">run_locked</a></h2>
+<strong>Syntax:</strong>   run_locked    <em>path_to_script</em>
+<em>stdout</em>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong>  &lt;passwd&gt;,  &lt;mailcfg&gt;<br>
+<p>	
+     run a script is a user is locked.
+</p>        
+<h2><a name="cookie_timeout">cookie_timeout</a></h2>
+<strong>Syntax:</strong>   cookie_timeout    <em>seconds</em>
+<strong>Default:</strong> 300<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>	
+     cookie life time in seconds.
+</p>        
+<h2><a name="mailcfg_document">mailcfg_document</a></h2>
+<strong>Syntax:</strong>   mailcfg_document <em>filename</em>  <b>OR</b>
+mailcfg Redirect <em>Location</em><br>
+<strong>Default:</strong> builtin message<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>	
+     Path to the mail configuration document
+</p>        
+<h2><a name="error_deldotforward">error_deldotforward</a></h2>
+<strong>Syntax:</strong>   error_deldotforward <em>filename</em>  <b>OR</b>
+mailcfg Redirect <em>Location</em><br>
+<strong>Default:</strong> "Can't delete ~/.forward please contact the
+webmaster"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>	
+     Unable to delete .forward
+</p>        
+<h2><a name="error_deldotprocmailrc">error_deldotprocmailrc</a></h2>
+<strong>Syntax:</strong>   error_deldotprocmailrc <em>filename</em>  <b>OR</b>
+mailcfg Redirect <em>Location</em><br>
+<strong>Default:</strong> "Can't delete ~/.procmailrc please contact the
+webmaster"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>	
+     Unable to delete .forward
+</p>        
+<h2><a name="error_openvacations">error_openvacations</a></h2>
+<strong>Syntax:</strong>   error_openvacations <em>filename</em>  <b>OR</b>
+mailcfg Redirect <em>Location</em><br>
+<strong>Default:</strong> "Can't open ~/.vacations.txt please contact the
+webmaster"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>	
+     Unable to open ~/vacations.txt
+</p>        
+<H1><a name="variables">Variables</a></h1>
+<P>
+    For each document you can as use a plain html file with a few PHP
+    extensions (see bellow) or a redirect. Within a redirect you can use
+    the following variables: 
+</P>
+<table>
+<tr><td><b>Variable name</b></td><td><b>Description</b></td></tr>
+<tr><td> </td><td> <td></tr>
+<tr><td><b>name</b></td><td>loginname</td></tr>
+<tr><td><b>min_length</b></td><td>minimum password length</td><tr>
+<tr><td><b>max_length</b></td><td>maximum password length</td></tr>
+<tr><td><b>max_invalid</b></td><td>maximum invalid tries</td></tr>
+<tr><td><b>invalid_timeout</b></td><td>time in seconds that a user
+will be locked out if the max_invalid tries has been exceeded.</td></tr>
+<tr><td><b>invalid_wait</b></td><td>a locked user will have to wait
+invalid_wait seconds</td></tr>
+<tr><td><b>forward_to</b></td><td>the email where the mails will
+forward to</td></tr>
+<tr><td><b>forward</b></td><td>if mail forwarding is enabled $forward is set 
+to "yes". if mail forwarding is disabled $forward is "no"</td></tr>
+<tr><td><b>not_forward</b></td><td>not_forward is the reverse of forward, so 
+if $forward is "yes" $not_forward is "no"</td></tr>
+<tr><td><b>keep_msg</b></td><td>$keep_msg is set to "yes" if the use 
+want to keep his forwarded mails, set to "no" otherwise</td></tr>
+<tr><td><b>not_keep_msg</b></td><td>the reverse of $keep_msg</td></tr>
+<tr><td><b>autoreply</b></td><td>is "yes" if the use has enabled
+autoreply</td></tr>
+<tr><td><b>not_autoreply</b></td><td>reverse of $autoreply</td></tr>
+<tr><td><b>autoreply_msg</b></td><td>the autoreply message</td></tr>
+<tr><td><b>cookietimeout</b></td><td>cookie lifetime is
+seconds</td></tr>
+<tr><td><b>password</b></td><td>the user's new password, is only set at
+<a href="#run_success">run_success</a></td></tr>
+</table>
+<p> 
+example:
+<code><tt><pre>      
+       msg_success   redirect  /pwchanged.php?name="%{name}"
+</pre></tt></code>
+</p>
+<p>
+    Will redirect to /pwchanged.php?name="loginname" after a user has succeed
+    to change his password.
+</p>
+<p>
+    If you don't use a redirect you can use plain html files with two PHP 
+    extensions "include" and "echo". The same variables as by a redirect are 
+    available.
+</p>
+<code><tt><pre>
+      &lt;? echo $name; include "bottom.php" ?&gt;
+</pre></tt></code>
+<p>
+    Will print the user's name and include bottom.php. Please note that the
+    PHP implementation is very limited. include("bottom.php") won't work for
+    example.
+</p>
+</body>
+</html>

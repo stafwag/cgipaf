@@ -130,6 +130,8 @@ sub read_mailcfg () {
 	
 	close FH;
 
+	$ret{keepmsg} = 0 if (not $ret{forward});
+
 	#
 	# read vacations.txt
 	#

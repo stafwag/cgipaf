@@ -13,22 +13,19 @@ SUPPORTED SYSTEMS
     If you're using cgipaf on a system without pam support a lock file
     /var/lock/cgipaf.lock is used. The directory /var/lock have to exist
     on our system or you can modify pass.h to your own needs.
-    
-    Operating systems types and versions aren't automatically detected 
-    by configure - I know should upgrade autoconf -, so you've to use 
-    "--host=" parameter to compile CGIpaf for *BSD.
 
     FreeBSD and NetBSD are supported, OpenBSD is not (yet) supported. Although 
     FreeBSD has PAM support the PAM password changer doesn't seem to work on 
-    FreeBSD. Add "--host=freebsd" to configure to compile CGIpaf with FreeBSD 
-    support. or "--host=netbsd" to compile CGIpaf with NetBSD support.
-    This will compile CGIpaf without PAM support but with built-in BSD
-    support.
+    FreeBSD. Therefor CGIpaf is compiled without PAM support but with 
+    built-in BSD support by default. If you need PAM support on FreeBSD you
+    can add --enable-pam to configure.
 
     All Solaris versions before Solaris 9 are supported, there is a problem
     with PAM on Solaris 9 - I didn't had the the time to debug it - but
     you're still able to use CGIpaf without PAM support ( --disable-pam ).
 
+    Operating systems are automatically detected by configure. 
+    
     CGIpaf depends on the ndbm or compatible library. The GNU dbm library
     is also supported and is automatically detected by configure.
 
@@ -38,11 +35,8 @@ INSTALLATION
     type: 
 
           ./configure --bindir=/usr/local/apache/cgi-bin \ 
-                      --datadir=//etc/cgipaf/data \ 
+                      --datadir=/etc/cgipaf/data \ 
                       --sysconfdir=/etc/cgipaf
-    
-    add "--host=freebsd" to compile CGIpaf with freeBSD support.
-    add "--host=netbsd"  to compile CGIpaf with NetBSD support.
     
     Update the above command with your real cgi-bin and htdocs directory
 
@@ -59,7 +53,7 @@ INSTALLATION
     type: make install
     
     The installation script will install "passwd.cgi","viewmailcfg.cgi" and 
-    "mailcfg.cgi" in cgi-bin, copy "php/*.php" in the htdocs directory, and 
+    "mailcfg.cgi" in cgi-bin, copy "php/*.php" in the data directory, and 
     create a sample config file. 
     
     "passwd.cgi", "viewmailcfg.cgi", "mailcfg.cgi"  should have the following 
@@ -125,6 +119,8 @@ CONFIGURATION
     "run_before_mailcfg" to copy the user's procmail config to a backup file
     and "run_after_mailcfg" to restore it. See Configuration.html for more 
     information.
+
+    Examples with vacation support are available in the exmaples directory
     
 THAT'S ALL FOLKS
 

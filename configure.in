@@ -109,6 +109,8 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default) ],
 	if test "$enableval" = "yes"; then
 	   ENABLE_PAM="yes"
 	fi
+      else
+        ARG="NOPAM"
       fi ]
    ) 
 

@@ -5,9 +5,11 @@ fflush(0);
 /* reset parms */
 
 memset(forward,'\0',sizeof(forward)); 
+memset(not_forward,'\0',sizeof(not_forward)); 
 forward_to=txt_NULL;                  
 memset(keep_msg,'\0',sizeof(keep_msg));
-memset(autoreply,'\0',sizeof(autoreply));
+memset(not_keep_msg,'\0',sizeof(not_keep_msg));
+memset(not_autoreply,'\0',sizeof(not_autoreply));
 
 
 /* init options table */

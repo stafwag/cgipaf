@@ -417,6 +417,7 @@ main()
 
       		if ((forward_to=get_forward(pw))!=NULL) {
 	 		strcpy(forward,"yes");
+			strcpy(keep_msg,"no");
 	 		write_log(LOG_USER,7,"forwarding is enabled in current cfg, mail are forwarded to %s",forward_to);
       		}
       		else {
@@ -447,12 +448,18 @@ main()
 
    	if (strcmp(forward,"no")) 
 		strcpy(not_forward,"no");
+	else 
+		strcpy(not_forward,"yes");
 
    	if (strcmp(keep_msg,"no")) 
 		strcpy(not_keep_msg,"no");
+	else 
+		strcpy(not_keep_msg,"yes");
 
    	if (strcmp(autoreply,"no")) 
 		strcpy(not_autoreply,"no");
+ 	else
+		strcpy(not_autoreply,"yes");
 
    	write_log(LOG_USER,7,"got the mailconfiguration for user %s",name);
 

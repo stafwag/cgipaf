@@ -232,22 +232,26 @@ char * cut_between(char *txt,char *head, char *tail)
    return(real_cut_between(txt2,head,tail));
 }
 
-void strtolower(char *str) {
+int strtolower(char *str) {
    char *c;
+   if ( str == NULL ) return(-1);
    c=str;
    while (*c) {
       *c=tolower(*c);
       ++c;
    }
+   return 0;
 }
 
-void strtoupper(char *str) {
+int strtoupper(char *str) {
    char *c;
+   if ( str == NULL ) return(-1);
    c=str;
    while (*c) {
       *c=toupper(*c);
       ++c;
    }
+   return 0;
 }
 
 char * istrstr(char *haystack, char *needle) {

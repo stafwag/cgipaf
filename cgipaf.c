@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------- */
-/* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
-/* http://staf.patat.org                                Staf Wagemakers    */
-/* staf.wagemakers@advalvas.be                                             */
+/* cgipaf.c                                     (GPL) 2000,01,02 Belgium   */
+/* http://staf.patat.org                                 Staf Wagemakers   */
+/* staf@patat.org                                                          */
 /* ----------------------------------------------------------------------- */
 
 #include "cgipaf_defs.h"
@@ -181,6 +181,13 @@ main()
    else { sscanf(cp,"%d",&max_length); }
    write_log(LOG_USER,7,"min_length set to %d",max_length);
    snprintf(max_length_txt,80,"%d",max_length);
+
+   /*
+    * Get the words not allowed in newpassword
+    * Added by DJR
+    */
+    illegal_words=get_config_array(config_file,CFG_ILLEGALWORDS); /* will check for success of operation later */
+
    
    /* We dont want too much data */
    
@@ -299,6 +306,39 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_TOOLONG,err_toolong,options);
    }
 
+   /*
+    * Make sure password does not contain an illegal word
+    * Added by Daniel R.
+    */
+    ccp=illegal_words;
+
+    /* We have 2 copies of the password, I am going to make one lowercase for checking purposes */
+    if ((strtolower(newpass2) == -1))  {
+       write_log(LOG_USER,7,"strlolower(newpass2) failed");
+       print_txt_msg("Error making password lower case\n");
+    }
+    else {
+       if ((ccp!=NULL)&&(*ccp!=NULL)) {
+          while (*ccp != NULL) { /* end of list will be *ccp == NULL */
+	     if (**ccp != '\0' && (strtolower(*ccp) !=-1)) {
+		/* Empty word entry will be **ccp == \0 */
+		if (strstr(newpass2, *ccp)) {
+		   options[21][1] = *ccp; 
+                   write_log(LOG_USER,7,"new passwords contains an illegal word %s",options[21][1]);
+		   show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options);
+		}
+	     }
+	     ccp++;
+	  }
+       }
+
+       /* they can not use their login name for a password */
+       if (strcmp(newpass2, name) == 0) {
+       options[21][1] = name;
+       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options);
+       }
+    }
+
 #endif
 
    /*
@@ -317,7 +357,7 @@ main()
    
    if ((cp=get_config_item(config_file,CFG_MINUID))==NULL) brol=MINUID;
    else { sscanf(cp,"%d",&brol);
-          if (brol<MINUID) brol=MINUID;
+      if (brol<MINUID) brol=MINUID;
    }
    write_log(LOG_USER,7,"min_uid set to %d",brol);
    if (pw->p->pw_uid<brol) {
@@ -397,6 +437,7 @@ main()
 	 if (0 != crack_msg) {
 	    options[16][1]=(char *) xmalloc(strlen(crack_msg)+1);
 	    strcpy(options[16][1],crack_msg);
+	    options[21][1]=options[16][1];
 	    write_log(LOG_USER,7,"%s %s",err_cracklib,options[16][1]);
 	    if(show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options)==2) printf("%s\n",options[16][1]);
 	    if (config_file!=NULL) fclose(config_file);   

@@ -48,6 +48,7 @@ char err_mcfg_readname[]    = "[CGIpaf] Can't read loginname\n";
 char err_mcfg_configfile[]  = "[CGIpaf] configuration error, can't open";
 char txt_contact_webmaster[]= "Please contact the webmaster.\n";
 char err_mcfg_accessdb[]    = "[CGIpaf] configuration error, (view)mailcfg needs a accessdb.\n Please contact the webmaster";
+char err_badword[]          = "Password uses an illegal word...\n";
 char txt_cgipaf[]	    = "CGIpaf";	
 char warn_update_accessdb[] = "Warning failed to update";
 char warn_root[]            = "Someone try to login as root";

@@ -458,7 +458,8 @@ main()
      if((i=WEXITSTATUS(i)))
        write_log(LOG_USER,1,"run_success returns a non-null value",i);
 
-   /* if configured -> not configured
+   /* 
+    * if configured -> not configured
     * run run_after_mailcfg
     */
    

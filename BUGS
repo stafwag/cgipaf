@@ -1,3 +1,7 @@
+version 1.1.0rc1
+
+  + run_after_mailcfg was executed before the mail configuration
+
 version 1.0.0pre1
 
   + cgipaf didn't compile on systems where CRACKLIB_DICTPATH wasn't

@@ -4,7 +4,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.1.0pre2 Configuration</h1>
+<h1>CGIpaf 1.1.0RC2 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -41,6 +41,7 @@
 <li><a href="#error_cracklib">error_cracklib</a></li>
 <li><a href="#error_mailcfgscript">error_mailcfgscript</a></li>
 <li><a href="#error_pam">error_pam</a></li>
+<li><a href="#error_illegalword">error_illegalword</a></li>
 <li><a href="#min_uid">min_uid</a></li>
 <li><a href="#max_uid">max_uid</a></li>
 <li><a href="#min_length">min_length</a></li>
@@ -48,6 +49,7 @@
 <li><a href="#accessdb">accessdb</a></li>
 <li><a href="#cracklib">cracklib</a></li>
 <li><a href="#cracklib">cracklib_dictpath</a></li>
+<li><a href="#illegal_words">illegal_words</a></li>
 <li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
@@ -369,6 +371,14 @@ error_pam  Redirect    <em>location</em><br>
 <p>
     pam error
 </p>
+<h2><a name="error_illegalword">error_illegalword</a></h2>
+<strong>Syntax:</strong> error_illegalword <em>filename</em> <b>OR</b>
+error_illegalword  Redirect    <em>location</em><br>
+<strong>Default:</strong> bad password
+<strong>Context:</strong> &lt;passwd&gt;
+<p>
+    The new password contains an illegal word.
+</p>
 <h2><a name="min_uid">min_uid</a></h2>
 <strong>Syntax:</strong> min_uid <em>uid</em><br>
 <strong>Default:</strong> 100<br>
@@ -433,6 +443,13 @@ error_pam  Redirect    <em>location</em><br>
 <p>
    Set the cracklib_dictpath, the cracklib_dictpath should be set to the 
    dictionary filename without the extension ( .pwi ), not the directory path.
+</p>
+<h2><a name="illegal_words">illegal_words</a></h2>
+<strong>Syntax:</strong> illegal_words <em>word1 word2</em><br>
+<strong>Default:</strong> not set<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>
+   Specify a list of words that are illegal to use as a part of a new password
 </p>
 <h2><a name="set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></h2>
 <strong>Syntax:</strong> set_PAM_CHANGE_EXPIRED_AUTHTOK <em>on</em>|<em>off</em><br>
@@ -643,6 +660,7 @@ autoreply</td></tr>
 <tr><td><b>cookietimeout</b></td><td>cookie lifetime is
 seconds</td></tr>
 <tr><td><b>cracklib_error</b></td><td>cracklib error message</td></tr>
+<tr><td><b>bad_password</b></td><td>The new password contains a illegal word, is set to cracklib_error if there is cracklib error</td></tr>
 <tr><td><b>pam_error</b></td><td>pam error message</td></tr>
 <tr><td><b>password</b></td><td>the user's new password, is only set at
 <a href="#run_success">run_success</a></td></tr>

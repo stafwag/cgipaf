@@ -24,8 +24,10 @@ char   invalid_timeout_txt[80]="600";
 char   invalid_wait_txt[80]="0";
 char   *accessdb=NULL; 
 char   *cp;
+char   **ccp;
 char   *newpass1,*newpass2;
 char   txt_max_length[]="max_length";
+char   **illegal_words; 		/* Added by DJR */
 char   txt_min_length[]="min_length";
 char   max_length_txt[80]="8";
 char   min_length_txt[80]="6";
@@ -58,6 +60,7 @@ char   txt_domain[]="domain";
 char   mailcfg_exitcode_txt[80]="\0";
 char   txt_pamerrormsg[]="pam_error";
 char   *pam_servicename=txt_passwd;
+char   txt_badpassword[]="bad_password";
 int    max_length, min_length;
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   *options[][2]={
@@ -82,6 +85,7 @@ char   *options[][2]={
      txt_mailcfg_exitcode,txt_NULL,                    /* 18 */
      txt_homedir,txt_NULL,                             /* 19 */
      txt_domain,txt_NULL,                              /* 20 */
+     txt_badpassword,txt_NULL,			       /* 21 */
      NULL,NULL};
 
 #endif  /* _CGIPAF_VARS_H */

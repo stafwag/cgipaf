@@ -28,6 +28,7 @@
 #define  ERR_READNAME           "error_readname"
 #define  ERR_CRACKLIB           "error_cracklib"
 #define  ERR_PAMERROR           "error_pam"
+#define  ERR_BADWORD            "error_illegalword"
 #define  CFG_MINUID             "min_uid"
 #define  CFG_MAXUID             "max_uid"
 #define  CFG_MINLENGTH          "min_length"
@@ -42,6 +43,7 @@
 #define  CFG_PAM_CHANGE_EXPIRED_AUTHTOK	"set_PAM_CHANGE_EXPIRED_AUTHTOK"
 #define  CFG_CRACKLIB_DICTPATH	"cracklib_dictpath"
 #define  CFG_USE_STATEFILE      "use_statefile"
+#define  CFG_ILLEGALWORDS       "illegal_words"
 
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"

@@ -106,20 +106,33 @@ char * realget_forward(struct pw_info *pw,int mode)
    FILE *fp;
    char *c,buf[1000];
    char needle_forward[]=":0";
+   char needle_forward2[]=":0 E";
    char needle_kforward[]=":0 c";
+   char needle_kforward2[]=":0 c E";
+   char *needles_forward[]={needle_forward,needle_forward2,NULL};
+   char *needles_kforward[]={needle_kforward,needle_kforward2,NULL};
+   char **needles;
+   char **current_needle;
    char *needle;
    char *mailadres=xmalloc(1000);
    int i;
-   if(mode) needle=needle_kforward;
-   else  needle=needle_forward;
+   if(mode) needles=needles_kforward;
+   else  needles=needles_forward;
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"r"))) return(NULL);
    i=0;
    while (fgets(buf,1000,fp)) {
       buf[strlen(buf)-1]='\0';
-      if (!strcmp(buf,needle)) {
-	 i=1;
-	 break;
-      }
+
+      current_needle=needles;
+      for(needle=*current_needle;needle!=NULL;needle=*(++current_needle)) {
+
+      	if (!strcmp(buf,needle)) {
+	 	i=1;
+	 	break;
+      		}
+       	}
+      	if(i) break; 
+
    }
 
    if (!i) {fclose(fp); return(NULL);}
@@ -216,7 +229,7 @@ int write_forwardbody(FILE *fp,struct pw_info *pw,char *mailadres,char *domain)
    char *loopdomain=get_maildomain(domain);
    fprintf(fp,"* !^X-Loop: %s@%s\n",pw->p->pw_name,loopdomain);
    fprintf(fp,"| formail -A \"X-Loop: %s@%s\" | \\\n",pw->p->pw_name,loopdomain);
-   fprintf(fp,"$SENDMAIL -oi %s",mailadres);
+   fprintf(fp,"$SENDMAIL -oi %s\n",mailadres);
    return(0);
 }
 
@@ -229,6 +242,12 @@ int enable_forward(struct pw_info *pw,char *mailadres,char *domain)
    FILE *fp;
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"a"))) return(-1);
    fputs(":0\n",fp);
+   fputs("* ^FROM_DAEMON\n",fp);
+   fputs("{\n",fp);
+   fputs(":0 BH\n",fp);
+   write_forwardbody(fp,pw,mailadres,domain);
+   fputs("}\n",fp);
+   fputs(":0 E\n",fp);
    write_forwardbody(fp,pw,mailadres,domain);
    fclose(fp);
    return(1);
@@ -240,12 +259,18 @@ int enable_forward(struct pw_info *pw,char *mailadres,char *domain)
 
 int enable_kforward(struct pw_info *pw, char *mailadres,char *domain)
 {
-FILE *fp;
-if(!(fp=fopen(add2home(pw->p,PROCMAIL),"a"))) return(-1);
-fputs(":0 c\n",fp);
-write_forwardbody(fp,pw,mailadres,domain);
-fclose(fp);
-return(1);
+   FILE *fp;
+   if(!(fp=fopen(add2home(pw->p,PROCMAIL),"a"))) return(-1);
+   fputs(":0 c\n",fp);
+   fputs("* ^FROM_DAEMON\n",fp);
+   fputs("{\n",fp);
+   fputs(":0 BH c\n",fp);
+   write_forwardbody(fp,pw,mailadres,domain);
+   fputs("}\n",fp);
+   fputs(":0 c E\n",fp);
+   write_forwardbody(fp,pw,mailadres,domain);
+   fclose(fp);
+   return(1);
 }
 
 /*

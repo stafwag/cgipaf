@@ -2,6 +2,9 @@
  * mailconfig.h					 (c) 2001 Staf Wagemakers
  */
 
+#ifndef _CGIPAF_MAILCONFIG_H
+#define _CGIPAF_MAILCONFIG_H
+
 #include "pass.h"
 #include "searchdomain.h"
 #include "xmalloc.h"
@@ -17,3 +20,6 @@ int enable_forward(struct pw_info *pw,char *mailadres,char *domain);
 int enable_kforward(struct pw_info *pw, char *mailadres,char *domain);
 int tst_emailaddress(char *emailaddress);
 int write_procmailrchead(struct pw_info *pw, char *sendmail);
+int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply);
+
+#endif

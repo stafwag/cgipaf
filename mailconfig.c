@@ -256,23 +256,15 @@ int tst_emailaddress(char *emailaddress)
 int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply)
 {
    FILE *fp;
-   char buf[11];
    char *filename=add2home(p,CGIPAFSTATEFILE);
    if((fp=fopen(filename,"w"))==NULL) return (-1);
    if (keep)
      forward=1;
-   fputs("# CGIPAF state file",fp);
-   fputs("# Please don't edit!!!!!!!",fp);
-   snprintf(buf,10,"%d",forward);
-   save_config(fp,"forward",buf);
-   snprintf(buf,10,"%d",keep);
-   save_config(fp,"keep_msg",buf);
-   snprintf(buf,10,"%d",autoreply);
-   save_config(fp,"autoreply",buf);
+   fputs("# CGIPAF state file\n",fp);
+   fputs("# Please don't edit!!!!!!!\n",fp);
+   fprintf(fp,"forward\t\t%d\n",forward);
+   fprintf(fp,"keepmsg\t\t%d\n",keep);
+   fprintf(fp,"autoreply\t%d\n",autoreply);
    fclose(fp);
    return(0);
 }
-
-     
-     
-   

@@ -17,19 +17,19 @@
 char txt_yes[]="yes";
 char txt_no[]="no";
 
-void yes_no(char *test,char *name,char *not_name,int state) 
+void yes_no(char *test,char *name,char *not_name,int *state) 
 {
    if(test==NULL) return;
 
    if (!strcasecmp(test,txt_yes)) {
       strcpy(name,txt_yes);
       strcpy(not_name,txt_no);
-      state=0;
+      *state=1;
    }
    else {
       strcpy(name,txt_no);
       strcpy(not_name,txt_yes);
-      state=1;
+      *state=0;
    }
 }
 
@@ -157,7 +157,7 @@ main()
    /* set forward and not_forward */
    
    c=get_postitem(data,FORWARD);
-   yes_no(c,forward,not_forward,forward_state);
+   yes_no(c,forward,not_forward,&forward_state);
    if(c!=NULL) free(c);
 
    /* set forward_to */
@@ -180,13 +180,13 @@ main()
    /* set keep_msg */
    
    c=get_postitem(data,KEEP_MSG);
-   yes_no(c,keep_msg,not_keep_msg,keep_state);
+   yes_no(c,keep_msg,not_keep_msg,&keep_state);
    if(c!=NULL) free(c);
    
    /* set autoreply */
    
    c=get_postitem(data,AUTOREPLY);
-   yes_no(c,autoreply,not_autoreply,autoreply_state);
+   yes_no(c,autoreply,not_autoreply,&autoreply_state);
    if(c!=NULL) free(c);
 
    /* set autoreply_msg */
@@ -382,11 +382,12 @@ main()
       }
    }
    
-
-   save_mailcfg_status(pw,forward_state,keep_state,autoreply_state);
-   
    show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
    write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
+   if(save_mailcfg_status(pw->p,forward_state,keep_state,autoreply_state)==-1) {
+      write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
+   }
+   
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
    if(i==-1)
      write_log(LOG_USER,1,"Can't executed run_succes %s",strerror(errno));

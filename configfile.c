@@ -290,11 +290,30 @@ return(value);
 char *get_sg_item(FILE *fp,char *section_name,char *var_name)
 {
 char *ret;
-char hallo[]="hallo";
 ret=get_section_config_item(fp,section_name,var_name);
 
 if(ret==NULL) ret=get_global_config_item(fp,var_name);
    
+return(ret);
+}
+
+char *get_sg_config(FILE *fp,char *section_name,char *var_name)
+{
+char *ret;
+ret=get_section_config(fp,section_name,var_name);
+
+if(ret==NULL) ret=get_global_config(fp,var_name);
+
+return(ret);
+}
+
+char **get_sg_config_array(FILE *fp,char *section_name,char *var_name)
+{
+char **ret;
+ret=get_section_config_array(fp,section_name,var_name);
+
+if(ret==NULL) ret=get_global_config_array(fp,var_name);
+
 return(ret);
 }
 

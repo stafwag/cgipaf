@@ -14,7 +14,7 @@ NEED_COMPAT_H="COMPAT"
 
 PRESET_CFLAGS="$CFLAGS"
 
-LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o"
+LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o acl.o"
 
 dnl Checks for programs.
 AC_PROG_CC

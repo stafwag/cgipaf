@@ -94,8 +94,11 @@ salt.o:	salt.c salt.h
 write_log.o: write_log.c write_log.h 
 	$(CC) $(CFLAGS) -c write_log.c
 
+acl.o: acl.c acl.h 
+	$(CC) $(CFLAGS) -c acl.c
+
 clean:
-	rm -f *.cgi *.o 
+	rm -f *.cgi *.o changepass
 
 distclean: dist-clean
 dist-clean: clean

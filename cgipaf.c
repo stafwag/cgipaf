@@ -85,7 +85,7 @@ main()
 #ifdef CGIPAF_PASSWD
 #ifdef HAVE_LIBCRACK
    
-   /* enable cracklib is cracklib is set to "on" */
+   /* enable cracklib if cracklib is set to "on" */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB))!=NULL) {
       if (!strcasecmp(cp,"off")) {
@@ -102,7 +102,7 @@ main()
 #endif  /* CGIPAF_PASSWD */
    
    /* Should we use an accessdb, if yes get max_invalid & invalid_timeout */
-  
+
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_ACCESSDB))!=NULL) {
       accessdb=cp;
       write_log(LOG_USER,7,"accessdb set to %s",accessdb);
@@ -352,6 +352,61 @@ main()
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
+
+   /* 
+    * access control lists handeling 
+    */
+
+   /* get UserAclOrder */
+
+   if ((i=get_useraclorder(config_file,CFGSECTION))==-1) {
+      write_log(LOG_USER,7,"get_useraclorder() failed, check configuration file");
+      print_txt_msg(err_cfg);
+      printf("%s",err_useraclorder);
+      exit(0);
+   }
+   else {
+      write_log(LOG_USER,7,"get_useraclorder() returns %d",i);
+   }
+
+   /* get DenyAllUsers */
+   i=get_denyallusers(config_file,CFGSECTION);
+   write_log(LOG_USER,7,"denyalluser set to %d",i);
+
+   /* Get DenyAll */
+   i=get_denyall(config_file,CFGSECTION);
+   write_log(LOG_USER,7,"denyall set to %d",i);
+
+   /* Test User ACL */
+
+   if(!user_acl(config_file,CFGSECTION,pw)) {
+      write_log(LOG_AUTHPRIV,6,"user_acl(): user access denied");
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+   }
+
+
+   /* get GroupAclOrder */
+
+   if ((i=get_groupaclorder(config_file,CFGSECTION))==-1) {
+      write_log(LOG_USER,7,"get_groupaclorder() failed, check configuration file");
+      print_txt_msg(err_cfg);
+      printf("%s",err_groupaclorder);
+      exit(0);
+   }
+   else {
+      write_log(LOG_USER,7,"get_groupaclorder() returns %d",i);
+   }
+   
+   /* get DenyAllGroups */
+   i=get_denyallgroups(config_file,CFGSECTION);
+   write_log(LOG_USER,7,"denyallgroups set to %d",i);
+
+   /* Test Group ACL */
+
+   if(!group_acl(config_file,CFGSECTION,pw)) {
+      write_log(LOG_AUTHPRIV,6,"group_acl(): group access denied");
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+   }
    
    /* get the min uid, and compare it with the real uid if uid<min_uid die */
    

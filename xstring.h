@@ -22,3 +22,4 @@ char *istrstr(char *haystack, char *needle);
 void rmchar(char *str,char rmc);
 void rmpos (char *c,unsigned i);
 void stripslahes (char *c);
+int is_var_yes(char *var);

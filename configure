@@ -543,7 +543,7 @@ NEED_COMPAT_H="COMPAT"
 
 PRESET_CFLAGS="$CFLAGS"
 
-LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o"
+LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o acl.o"
 
 # Extract the first word of "gcc", so it can be a program name with args.
 set dummy gcc; ac_word=$2

@@ -326,3 +326,21 @@ for(;*c!='\0';c++) {
 }
 
 }
+
+/*
+ * returns 1 is var is "yes"|"on"|"1"
+ * returns 0 is var is "no"|"off"|"0"
+ * returns -1 is undefined
+ */
+int is_var_yes(char *var)
+{
+    char *yes[]={"on","yes","1",NULL};
+    char *no[]={"no","off","0",NULL};
+    char **ccp;
+    if(var==NULL) return(-1);
+    for(ccp=yes;*ccp!=NULL;ccp++) 
+       if(!strcasecmp(var,*ccp)) return(1);
+    for(ccp=no;*ccp!=NULL;ccp++) 
+       if(!strcasecmp(var,*ccp)) return(0);
+    return(-1);
+}

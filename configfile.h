@@ -27,6 +27,8 @@ char ** get_global_config_array(FILE *fp,char *var_name);
 char * save_config(FILE *fp,char *var_name,char *value);
 char * add_parms (char *txt , char *parms[][2]);
 
-char *get_sg_item(FILE *fp,char *section_name,char *var_name);
+char * get_sg_item(FILE *fp,char *section_name,char *var_name);
+char * get_sg_config(FILE *fp,char *section_name,char *var_name);
+char ** get_sg_config_array(FILE *fp,char *section_name,char *var_name);
 
 #endif /* _STAF_CONFIGFILE_H */

@@ -1,17 +1,25 @@
-/* --------------------------------------------------------------------------
- * xstring.c                                       (GPL) 2001 Staf Wagemakers
- *                                                      http://staf.patat.org
- *                                                             staf@patat.org
- * 
- * Tried of writing these things over and over again
- * ----------------------------------------------------------------------- */
-
+/*
+ *
+ * xstring.c  	- Tired of writing these things over and over again -
+ *
+ *
+ * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
 
 #include "xstring.h"
-/* ----------------------------------------------------------------------
+/*
+ *
  * replaces the first ch in c with a '\0', if ch == '\0' 
  * the first space is replaced                                  
- * ---------------------------------------------------------------------- */
+ *
+ */
 void cut_after_char (char *c,char ch)
 {
 do {
@@ -30,6 +38,12 @@ do {
    ++c;
    } while (*c);
 }
+
+/*
+ *
+ * replaces the first quote ('\"') with a '\0'
+ *
+ */
 void cut_after_quote (char *c) 
 {
 char *cp;
@@ -50,9 +64,11 @@ do {
 } while(*c);
 }
 
-/* ------------------------------------------- */
-/* get the size of a item                      */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item
+/*
+ */
 int get_quoted_item_size (char *c)
 {
 char *cc=c;
@@ -68,32 +84,42 @@ return(c-cc);
 }
    
    
-/* ---------------------------------------------------------------------- 
+/*
+ *
  * removes everything after a space           
- * ---------------------------------------------------------------------- */
+ *
+ */
 void cut_space (char *c)
 {
 cut_after_char(c,'\0');
 }
-/* ---------------------------------------------------------------------
+
+/*
+ *
  * removes everything after a #                
- * --------------------------------------------------------------------- */
+ *
+ */
 void cut_rem (char *c)
 {
 cut_after_char(c,'#');
 }
-/* --------------------------------------------------------------------
+
+/*
+ *
  * move to the next item                       
- * -------------------------------------------------------------------- */
+ *
+ */
 char * mv_2_next (char *c)
 {
 do if (isspace(*c)) ++c; else break; while (*c);
 return c;
 }
 
-/* ------------------------------------------- */
-/* get the size of a item ch=IFS               */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item ch=IFS
+ *
+ */
 int get_char_item_size (char *c,char ch)
 {
 char *cc=c;
@@ -102,9 +128,11 @@ do if ((*c!=ch)&&(*c!='\0')) ++c; else break; while (*c);
 return(c-cc);
 }
 
-/* ------------------------------------------- */
-/* get the size of a item                      */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item
+ *
+ */
 int get_item_size (char *c)
 {
 char *cc=c;
@@ -114,9 +142,11 @@ return(c-cc);
 }
 
 
-/* ------------------------------------------- */
-/* frees an array of strings		       */
-/* ------------------------------------------- */
+/*
+ *
+ * frees an array of strings
+ *
+ */
 void free_null_array (char **cc)
 {
 char ** cc2;
@@ -125,9 +155,11 @@ while (*cc2) { free(*cc2);cc2++; }
 free(cc);
 }
 
-/* ----------------------------------------------------------------------- */
-/* replaces a needle with a new string head & tail are added to needle     */
-/* ----------------------------------------------------------------------- */
+/*
+ * 
+ * replaces a needle with a new string head & tail are added to needle 
+/*
+ */
 char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *head,char *tail)
 {
    char *c,*s,*ret;
@@ -153,18 +185,22 @@ char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *hea
   return(ret);
 }
 
-/* ------------------------------------------------------------------------
+/*
+ * 
  * replace needle with a new string
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * replace_needle(char *txt, char *needle, char *replace)
 {
    return(replace_headtail_needle(txt,needle,replace,"",""));
 }
 
-/* ------------------------------------------------------------------------
+/*
+ *
  * replaces an array of head-tail needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail)
 {
    int i=0,first=1;
@@ -185,19 +221,23 @@ char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail
    return(ret);
 }
 
-/* ------------------------------------------------------------------------
+/*
+ *
  * replaces an array of needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * replace_needles(char *txt, char ***needles)
 {
    return(replace_headtail_needles(txt,needles,"",""));
 }
 
-/* ------------------------------------------------------------------------
- * delete all animals with head and tail.
+/*
+ *
+ * kill all animals with head and tail.
  * !!!! txt be will freed !!!!!
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * real_cut_between(char *txt,char *head, char *tail) {
    char *ret,*s,*c;
    ret=(char *) xmalloc(sizeof(char));
@@ -222,9 +262,11 @@ char * real_cut_between(char *txt,char *head, char *tail) {
    return(real_cut_between(ret,head,tail));
 }
 
-/* ------------------------------------------------------------------------
+/*
+ *
  * delete all animals with head and tail.
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * cut_between(char *txt,char *head, char *tail) 
 {
    char *txt2;
@@ -233,6 +275,11 @@ char * cut_between(char *txt,char *head, char *tail)
    return(real_cut_between(txt2,head,tail));
 }
 
+/*
+ *
+ * str to lowercase
+ *
+ */
 int strtolower(char *str) {
    char *c;
    if ( str == NULL ) return(-1);
@@ -244,6 +291,11 @@ int strtolower(char *str) {
    return 0;
 }
 
+/*
+ *
+ * str to UPPERCASE
+ *
+ */
 int strtoupper(char *str) {
    char *c;
    if ( str == NULL ) return(-1);
@@ -255,6 +307,11 @@ int strtoupper(char *str) {
    return 0;
 }
 
+/*
+ *
+ * ignore case strstr
+ *
+ */
 char * istrstr(char *haystack, char *needle) {
    char *ihaystack, *ineedle;
    char *c,*r=NULL;
@@ -287,14 +344,16 @@ char *c,*cc;
    str[strlen(str)]='\0';
 }
 
-/* ----------------------------------------- */
-/* Verwijderen v/e karakter in een string    */
-/* char     *c -> string                     */
-/* unsigned i  -> positie in string          */
-/*                                           */
-/* P.S. Deze funktie schuift de kar's ook    */
-/* naar rechts!                              */
-/* ----------------------------------------- */
+/*
+ *
+ * Verwijderen v/e karakter in een string
+ * char     *c -> string
+ * unsigned i  -> positie in string
+ *
+ * P.S. Deze funktie schuift de kar's ook
+ * naar rechts!
+ * 
+ */
 void rmpos (char *c,unsigned i)
 {
    unsigned x;

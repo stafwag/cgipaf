@@ -1,8 +1,24 @@
 /*
- * run_cmd.c					 (c) 2001 Staf Wagemakers
+ *
+ * run_cmd.c
+ *
+ *
+ * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
+
+/*
+ *
  * returns  value  -1: error
  *                 -2: command not defined in cfg file
  *                 stat_val
+ *
  */
 #include "run_cmd.h"
 int run_cmd(FILE *config_file,char *section,char *directive,char ***vars)

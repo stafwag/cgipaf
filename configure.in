@@ -111,9 +111,7 @@ fi
 
 dnl freebsd has crypt() defined in unstd.h
 
-echo $host_os | grep -i "freebsd" > /dev/null 2>&1
-
-if test "$?" = "0"; then
+if test "$FREEBSDHOST" != "1"; then
 
 AC_CHECK_HEADERS(crypt.h,[ HAVE_CRYPT_H=1 ],AC_MSG_WARN(crypt.h not found))
 
@@ -139,15 +137,11 @@ dnl   fi
 
 dnl freebsd has built-in md5 support
  
-     echo $host_os | grep -i "freebsd" > /dev/null 2>&1
-     
-     if test "$?" != "0"; then
+     if test "$FREEBSDHOST" != "1"; then
         OBJS="$OBJS md5.o md5crypt.o"
      fi
 
-     echo $host_os | grep -i "bsd" > /dev/null 2>&1
-
-     if test "$?" = "1"; then
+     if test "$BSDHOST" = "1"; then
         OBJS="$OBJS fgetpwnam.o";
      else
         AC_MSG_WARN("BSD host detected vmail password are disabled")

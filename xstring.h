@@ -29,3 +29,5 @@ int number_of_strings (char **array);
 int copy_string_array_pointers (char **dest, char **src);
 char *** add_2_string_pair (char ***str_array,char *str1, char *str2);
 int number_of_string_pairs (char *** str_pair);
+char * get_string_pair_item(char *** str_pair,char *item);
+int update_string_pair_item(char ***str_pair,char *item, char *value, int free_mode);

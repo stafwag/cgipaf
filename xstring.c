@@ -14,6 +14,7 @@
  */
 
 #include "xstring.h"
+
 /*
  *
  * replaces the first ch in c with a '\0', if ch == '\0' 
@@ -71,7 +72,7 @@ do {
 /*
  *
  * get the size of a item
-/*
+ *
  */
 int get_quoted_item_size (char *c)
 {
@@ -162,7 +163,7 @@ free(cc);
 /*
  * 
  * replaces a needle with a new string head & tail are added to needle 
-/*
+ *
  */
 char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *head,char *tail)
 {
@@ -336,6 +337,12 @@ char * istrstr(char *haystack, char *needle) {
    free(ineedle);
    return(r);
 }
+
+/*
+ *
+ * removes all rmc chars from string
+ *
+ */
 void rmchar(char *str,char rmc) {
 char *c,*cc;
 
@@ -364,6 +371,11 @@ void rmpos (char *c,unsigned i)
    c[strlen(c)]='\0';
 }
 
+/*
+ *
+ * converts \char s to their \
+ *
+ */
 void stripslahes (char *c) 
 {
 for(;*c!='\0';c++) {
@@ -391,9 +403,11 @@ for(;*c!='\0';c++) {
 }
 
 /*
+ *
  * returns 1 is var is "yes"|"on"|"1"
  * returns 0 is var is "no"|"off"|"0"
  * returns -1 is undefined
+ *
  */
 int is_var_yes(char *var)
 {
@@ -408,6 +422,11 @@ int is_var_yes(char *var)
     return(-1);
 }
 
+/*
+ *
+ * frees a NULL terminated string array
+ *
+ */
 void free_string_array (char **array) {
 	char **ccp;
 	if(array==NULL) return;
@@ -426,6 +445,11 @@ void free_string_array (char **array) {
 	xfree(array);
 }
 
+/*
+ *
+ * number of string in a NULL terminated string array
+ *
+ */
 int number_of_strings (char **array) {
 	char **ccp;
 	int ret=0;
@@ -434,6 +458,10 @@ int number_of_strings (char **array) {
 	return(ret);
 }
 
+/*
+ *
+ * clones a string array
+ */
 int copy_string_array_pointers (char **dest, char **src) {
 	char **ccp;
 	char **ccp2;
@@ -450,6 +478,11 @@ int copy_string_array_pointers (char **dest, char **src) {
 	return(0);
 }
 
+/*
+ *
+ * add item to a string pair
+ *
+ */
 char *** add_2_string_pair (char ***str_array,char *str1, char *str2) {
 
 	int n;
@@ -457,12 +490,6 @@ char *** add_2_string_pair (char ***str_array,char *str1, char *str2) {
 
 	if(str_array!=NULL) {
 
-		/*
-		n=number_of_string_pairs(str_array);
-		ret=(char ***) xrealloc(str_array,(n+2)*sizeof(char **));
-		ret[n+1]=xcalloc(2,sizeof(char *));
-		*/
-		
 		n=number_of_string_pairs(str_array);
 
 		ret=(char ***) xrealloc(str_array,(n+2)*sizeof(char **));
@@ -491,14 +518,66 @@ char *** add_2_string_pair (char ***str_array,char *str1, char *str2) {
 
 }
 
+/*
+ *
+ * get the number of string pair array
+ *
+ */
 int number_of_string_pairs (char ***str_pair) {
 
 	char ***pt;
 	int ret=0;
 
+	if(str_pair==NULL) return(0);
+	
 	for(pt=str_pair;pt[0][0]!=NULL;pt++) ret++;
 
 	return(ret);
 
 }
+
+char * get_string_pair_item(char ***str_pair,char *item) {
+	char ***pt;
+	char *ret=NULL;
+
+	if(str_pair==NULL) return(NULL);
+
+	for(pt=str_pair;pt[0][0]!=NULL;pt++) {
+
+		if(!strcmp(pt[0][0],item)) {
+			ret=pt[0][1];
+			break;
+		}
+
+	}
+
+	return(ret);
+
+}
+
+int update_string_pair_item(char ***str_pair,char *item, char *value, int free_mode) {
+
+	char ***pt;
+	int ret=0;
+
+	if(str_pair==NULL) return(-1);
+	
+	for(pt=str_pair;pt[0][0]!=NULL;pt++) {
+
+		if(!strcmp(pt[0][0],item)) {
+			ret=1;
+
+			if(free_mode) xfree(pt[0][1]);
+
+			pt[0][1]=value;
+			break;
+		}
+
+	}
+
+	return(ret);
+
+
+}
+
 

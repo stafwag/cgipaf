@@ -1,6 +1,7 @@
 /*
  * run_cmd.c					 (c) 2001 Staf Wagemakers
  * returns  value  -1: error
+ *                 -2: command not defined in cfg file
  *                 stat_val
  */
 #include "run_cmd.h"
@@ -8,7 +9,7 @@ int run_cmd(FILE *config_file,char *section,char *directive,char *vars[][2])
 {
    char **cc,*cmd_name=NULL,*c=NULL;
    FILE *cmd=NULL;
-   int  ret=-1;
+   int  ret=-2;
    fflush(stdout);
    if(section==NULL) cc=get_global_config_array(config_file,directive);
    else cc=get_section_config_array(config_file,section,directive);

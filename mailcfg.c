@@ -335,10 +335,13 @@ main()
    
    if(!oldstate&&newstate) {
       i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
-      if(i==-1)
-	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
-      if((i=WEXITSTATUS(i)))
-	write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
+      if(i<0) {
+	 if(i==-1)
+	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      }
+      else
+	if((i=WEXITSTATUS(i)))
+	  write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
    }
    
    /* if configured -> not configured
@@ -347,8 +350,10 @@ main()
    
    if(oldstate&&!newstate) {
       i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
-      if(i==-1)
-	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      if(i<0) {
+	 if(i==-1)
+	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      }
       else
 	if((i=WEXITSTATUS(i)))
 	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
@@ -357,8 +362,8 @@ main()
    if((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
       free(cp);
       i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options);
-      if(i==-1)
-	write_log(LOG_USER,1,"run_mailcfg failed, run_cmd() returns -1");
+      if(i<0)
+	write_log(LOG_USER,1,"run_mailcfg failed, run_cmd() returns %d",i);
       else
 	if((i=WEXITSTATUS(i)))
 	  write_log(LOG_USER,1,"run_mailcfg returns a non-null value %d",i);
@@ -456,7 +461,7 @@ main()
    
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
    if(i==-1)
-     write_log(LOG_USER,1,"Can't executed run_succes %s",strerror(errno));
+     write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
    else
      if((i=WEXITSTATUS(i)))
        write_log(LOG_USER,1,"run_succes returns a non-null value",i);

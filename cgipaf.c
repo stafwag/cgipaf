@@ -340,8 +340,10 @@ main()
 	 snprintf(invalid_wait_txt,80,"%d",brol);
 	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options);
 	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
-	 if(i==-1) 
-	   write_log(LOG_USER,1,"Can't execute run_locked %s run_cmd() failed",strerror(errno));
+	 if(i<0) {
+	    if(i==-1) 
+	      write_log(LOG_USER,1,"Can't execute run_locked %s run_cmd() failed",strerror(errno));
+	 }
 	 else
 	   if((i=WEXITSTATUS(i)))
 	     write_log(LOG_USER,1,"run_locked returns a non-null exit code %d",i);
@@ -412,8 +414,10 @@ main()
       options[15][1]=newpass1;
       i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
       options[15][1]=txt_NULL;
-      if(i==-1) 
-	write_log(LOG_AUTHPRIV,1,"Can't execute run_success %s run_cmd() failed",strerror(errno));
+      if(i<0) {
+	 if(i==-1) 
+	   write_log(LOG_AUTHPRIV,1,"Can't execute run_success %s run_cmd() failed",strerror(errno));
+      }
       else
 	if((i=WEXITSTATUS(i)))
 	  write_log(LOG_AUTHPRIV,1,"run_success returns a non-null exit code %d",i); 

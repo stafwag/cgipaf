@@ -99,6 +99,8 @@ extern char const * FascistCheck(char const password[], char const dictpath[]);
 #include <stdlib.h>
 #include <errno.h>
 #include <syslog.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #ifndef LOG_AUTHPRIV
 #define LOG_AUTHPRIV LOG_AUTH

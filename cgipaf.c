@@ -296,7 +296,10 @@ if (accessdb) {
       show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options);
       i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
       if(i==-1) 
-	write_log(LOG_USER,1,"Can't execute run_locked %s",strerror(errno));
+	write_log(LOG_USER,1,"Can't execute run_locked %s run_cmd() failed",strerror(errno));
+      else
+	if((i=WEXITSTATUS(i)))
+	  write_log(LOG_USER,1,"run_locked returns a non-null exit code %d",i);
       if(config_file!=NULL) fclose(config_file);
       write_log(LOG_AUTHPRIV,5,"User %s is locked",name);
       exit(0);
@@ -355,7 +358,10 @@ if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
    options[15][1]=txt_NULL;
    if(i==-1) 
-      write_log(LOG_AUTHPRIV,1,"Can't execute run_success %s",strerror(errno)); 
+      write_log(LOG_AUTHPRIV,1,"Can't execute run_success %s run_cmd() failed",strerror(errno));
+   else
+     if((i=WEXITSTATUS(i)))
+       write_log(LOG_AUTHPRIV,1,"run_success returns a non-null exit code %d",i); 
    if (accessdb) {
       if (save_access_status(accessdb,name,0,invalid_timeout,NULL)==-1) {
 	 printf("%s %s",warn_update_accessdb,accessdb);

@@ -334,6 +334,8 @@ main()
       i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
       if(i==-1)
 	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      if((i=WEXITSTATUS(i)))
+	write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
    }
    
    /* if configured -> not configured
@@ -344,6 +346,9 @@ main()
       i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
       if(i==-1)
 	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      else
+	if((i=WEXITSTATUS(i)))
+	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
    }
 
    /* deletes the user's .forward */
@@ -432,5 +437,8 @@ main()
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
    if(i==-1)
      write_log(LOG_USER,1,"Can't executed run_succes %s",strerror(errno));
+   else
+     if((i=WEXITSTATUS(i)))
+       write_log(LOG_USER,1,"run_succes returns a non-null value",i);
    if(config_file!=NULL) fclose(config_file);
 }

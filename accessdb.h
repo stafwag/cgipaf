@@ -23,6 +23,11 @@
 #include <db1/ndbm.h>
 #endif
 
+#ifdef HAVE_DB_H_DB_DBM_HSEARCH
+#define DB_DBM_HSEARCH 1
+#include <db.h>
+#endif
+
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #else

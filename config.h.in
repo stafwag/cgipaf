@@ -12,6 +12,7 @@
 #undef MD5_CRYPT
 #undef HOST
 #undef FREEBSDHOST
+#undef HAVE_DB_H_DB_DBM_HSEARCH
 
 /* Define if you have the closelog function.  */
 #undef HAVE_CLOSELOG
@@ -162,9 +163,6 @@
 
 /* Define if you have the gdbm library (-lgdbm).  */
 #undef HAVE_LIBGDBM
-
-/* Define if you have the gdbm_compat library (-lgdbm_compat).  */
-#undef HAVE_LIBGDBM_COMPAT
 
 /* Define if you have the ndbm library (-lndbm).  */
 #undef HAVE_LIBNDBM

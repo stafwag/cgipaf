@@ -144,10 +144,12 @@ if test "$NDBM_LIB" = "no"; then
  
   if test "$GDBM_LIB" = "no"; then
   
-    AC_CHECK_LIB(gdbm_compat,dbm_open,[ ],[ GDBM_COMPAT_LIB="no" ])
-    AC_CHECK_LIB(gdbm_compat,dbm_fetch,[ ],[ GDBM_COMPAT_LIB="no" ])
-    AC_CHECK_LIB(gdbm_compat,dbm_store,[ ],[ GDBM_COMPAT_LIB="no" ])
-    AC_CHECK_LIB(gdbm_compat,dbm_close,,[ GDBM_COMPAT_LIB="no" ])
+#    AC_CHECK_LIB(gdbm_compat,dbm_open,[ ],[ GDBM_COMPAT_LIB="no" ])
+#    AC_CHECK_LIB(gdbm_compat,dbm_fetch,[ ],[ GDBM_COMPAT_LIB="no" ])
+#    AC_CHECK_LIB(gdbm_compat,dbm_store,[ ],[ GDBM_COMPAT_LIB="no" ])
+#    AC_CHECK_LIB(gdbm_compat,dbm_close,,[ GDBM_COMPAT_LIB="no" ])
+    
+    GDBM_COMPAT_LIB="no";
   
     if test "$GDBM_COMPAT_LIB" = "no"; then
 
@@ -158,10 +160,32 @@ if test "$NDBM_LIB" = "no"; then
    
       if test "$DB1_LIB" = "no";then
   
-        AC_CHECK_LIB(db,dbm_open,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
-        AC_CHECK_LIB(db,dbm_fetch,[ ],AC_MSG_ERROR(no valid ndbm library found))
-        AC_CHECK_LIB(db,dbm_store,,AC_MSG_ERROR(no valid ndbm library found)) 
-        AC_CHECK_LIB(db,dbm_close,,AC_MSG_ERROR(no valid ndbm library found)) 
+        AC_CHECK_LIB(db,dbm_open,[ ],DB_LIB="no") 
+        AC_CHECK_LIB(db,dbm_fetch,[ ],DB_LIB="no")
+        AC_CHECK_LIB(db,dbm_store,[ ],DB_LIB="no") 
+        AC_CHECK_LIB(db,dbm_close,,DB_LIB="no") 
+
+	if test "$DB_LIB" = "no";then
+
+	   old_libs=$LIBS
+	   LIBS="$LIBS -ldb"
+
+	   AC_MSG_CHECKING("for dbm_open in -ldb with DB_DBM_HSEARCH 1")
+
+	   AC_TRY_LINK([#define DB_DBM_HSEARCH 1
+	                #include <db.h>],
+	                [dbm_open(0,0,0);],
+	                [DB_COMPAT_LIB="yes"])
+
+	   if test "$DB_COMPAT_LIB" != "yes"; then
+	      AC_MSG_RESULT("no")
+	      AC_MSG_ERROR(no valid ndbm library found)
+	   fi
+
+	   AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1")
+	   AC_MSG_RESULT("yes")
+
+	 fi
    
       fi
     fi
@@ -176,6 +200,8 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(ndbm.h,,[ HAVE_NDBM_H="no" ]) 
 
 HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
+
+if test "$DB_COMPAT_LIB" != "yes"; then
 
 if test "$HAVE_NDBM_H" = "no"; then
     AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
@@ -192,6 +218,8 @@ if test "$HAVE_NDBM_H" = "no"; then
             AC_MSG_ERROR(no valid ndbm header file found))
          fi
       fi
+fi
+
 fi
 
 AC_CHECK_HEADERS(sys/time.h,,\

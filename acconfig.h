@@ -1,3 +1,4 @@
 #undef MD5_CRYPT
 #undef HOST
 #undef FREEBSDHOST
+#undef HAVE_DB_H_DB_DBM_HSEARCH

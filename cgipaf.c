@@ -291,9 +291,13 @@ if (save_access_status(accessdb,name,0,invalid_timeout,cookie)==-1) {
     write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
 }
 write_log(LOG_USER,7,"set uid to %d",pw->p->pw_uid);
-setuid(pw->p->pw_uid);
+if (setgid(pw->p->pw_gid)==-1) {
+   write_log(LOG_USER,7,"setgid() failed");
+};
 write_log(LOG_USER,7,"set gid to %d",pw->p->pw_gid);
-setgid(pw->p->pw_gid);
+if (setuid(pw->p->pw_uid)==-1) {
+   write_log(LOG_USER,7,"setuid() failed");
+}
 write_log(LOG_USER,7,"set umask to 0177");
 umask(0177);
 forward_to[0]='\0';

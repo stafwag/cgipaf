@@ -1,3 +1,8 @@
+version 1.0rc3
+  
+  + mailcfg.cgi crashed if the syslog directive wasn't set
+  + setgid() failed because it was performed after setuid()
+
 version 1.0rc2
 
   accessdb bug, the database wasn' always closed  ( thanks to Andreas Liebe 

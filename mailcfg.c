@@ -51,7 +51,7 @@ memset(autoreply,'\0',sizeof(autoreply));
 
 if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
    doc_root=get_sg_item(config_file,CFGSECTION,DOC_ROOT);
-   if((cp=get_sg_item(config_file,CFGSECTION,CFG_SYSLOG))==NULL) {
+   if((cp=get_sg_item(config_file,CFGSECTION,CFG_SYSLOG))!=NULL) {
      if (!strcasecmp(cp,"off")) enable_log(0);
      free(cp);
    }
@@ -203,10 +203,18 @@ else {
    }
 }
 
-write_log(LOG_USER,7,"set uid to %d",pw->p->pw_uid);
-setuid(pw->p->pw_uid);
 write_log(LOG_USER,7,"set gid to %d",pw->p->pw_gid);
-setgid(pw->p->pw_gid);
+
+if (setgid(pw->p->pw_gid)==-1) {
+   write_log(LOG_USER,7,"setgid() failed");
+}
+
+write_log(LOG_USER,7,"set uid to %d",pw->p->pw_uid);
+
+if (setuid(pw->p->pw_uid)==-1) {
+   write_log(LOG_USER,7,"setuid failed");
+}
+
 write_log(LOG_USER,7,"set umask to 0177");
 umask(0177);
 

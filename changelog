@@ -1,3 +1,7 @@
+* version 1.0rc4pre1 ( 22 oct 2001 )
+  + fixed: mailcfg.cgi crashed if the syslog directive wasn't set
+  + fixed: setgid() failed because it was performed after setuid()
+
 * version 1.0.rc3 ( 18 oct 2001)
   + improved PAM detection
   + loglevel + debug messages

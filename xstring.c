@@ -210,7 +210,6 @@ char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail
    strcpy(txt2,txt);
    while (needles[i][0]!=NULL) {
       if(ret!=NULL) free(ret);
-      fprintf(stderr,"DEBUG: current needle: %s\n",needles[i][0]);
       ret=replace_headtail_needle(txt2,needles[i][0],needles[i][1],head,tail);
       if(ret==NULL) break;
       txt2=(char *) xrealloc(txt2,strlen(ret)+1);

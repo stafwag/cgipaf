@@ -5,16 +5,16 @@ AC_INIT(cgipaf.c)
 AC_CONFIG_HEADER(config.h)
 AC_SUBST(ARG)
 AC_SUBST(NEED_COMPAT_H)
-AC_SUBST(LIBOBJS)
+dnl AC_SUBST(AC_LIBOBJ)
 
 AC_SUBST(host)
-AC_DEFINE_UNQUOTED(HOST,"$host")
+AC_DEFINE_UNQUOTED(HOST,"$host",system host)
 
 NEED_COMPAT_H="COMPAT"
 
 PRESET_CFLAGS="$CFLAGS"
 
-LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o acl.o"
+AC_LIBOBJ(xstring ccgi configfile showmsg ephp accessdb createcookie searchdomain xmalloc out_of_memory run_cmd write_log acl)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -38,14 +38,14 @@ function (default)])
 dnl freebsd support
 
 if test "$host" = "freebsd"; then
-    AC_DEFINE(BSDHOST)
-    AC_DEFINE(FREEBSDHOST)
+    AC_DEFINE(BSDHOST,1,BSD system)
+    AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
     ARG="NOPAM"
 fi
 
 if test "$host" = "netbsd"; then
-    AC_DEFINE(BSDHOST)
-    AC_DEFINE(NETBSDHOST)
+    AC_DEFINE(BSDHOST,1,BSD system)
+    AC_DEFINE(NETBSDHOST,1,NetBSD system)
     ARG="NOPAM"
 fi
 
@@ -102,34 +102,32 @@ dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
 dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
 dnl   fi
-   LIBOBJS="$LIBOBJS pass.o salt.o"
+   AC_LIBOBJ(pass salt)
    
    if test "$enable_md5crypt" != "no"; then
 
 dnl freebsd has built-in md5 support
  
-   if test "$host" != "freebsd"; then
-      LIBOBJS="$LIBOBJS md5.o md5crypt.o"
-   fi
+     if test "$host" != "freebsd"; then
+        AC_LIBOBJ(md5 md5crypt)
+     fi
 
-   echo $host | grep -i "bsd" > /dev/null 2>&1
+     echo $host | grep -i "bsd" > /dev/null 2>&1
 
-   if test "$?" = "1"; then
-      LIBOBJS="$LIBOBJS fgetpwnam.o";
-   else
-      AC_MSG_WARN "BSD host detected vmail password are disabled"
-   fi
+     if test "$?" = "1"; then
+        AC_LIBOBJ(fgetpwnam);
+     else
+        AC_MSG_WARN("BSD host detected vmail password are disabled")
+     fi
 
-      AC_DEFINE(MD5_CRYPT)
+      AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
    fi
 
  else
-   AC_CHECK_LIB(pam,pam_authenticate,[ ], \ 
-     AC_MSG_ERROR(no valid pam library found))
-   AC_CHECK_LIB(pam,pam_chauthtok,[ ], \
-     AC_MSG_ERROR(no valid pam library found))
+   AC_CHECK_LIB(pam,pam_authenticate,,AC_MSG_ERROR(no valid pam library found))
+   AC_CHECK_LIB(pam,pam_chauthtok,,AC_MSG_ERROR(no valid pam library found))
    AC_CHECK_LIB(pam,pam_end,,AC_MSG_ERROR(no valid pam library found))
-   LIBOBJS="$LIBOBJS passpam.o"
+   AC_LIBOBJ(passpam)
 fi
 
 if test "$with_libcrack" != "no"; then
@@ -141,45 +139,64 @@ fi
 
 AC_CHECK_FUNCS(dbm_open dbm_fetch dbm_store dbm_close,,NEED_NDBMLIB="yes")
 
-if test "$NEED_NDBMLIB" = "yes"; then
+if test "$NEED_NDBMLIB" = "yes"; then                                      dnl NEED_NDBM
 
-AC_CHECK_LIB(ndbm,dbm_open,[ ],[ NDBM_LIB="no" ])
+   AC_CHECK_LIB(ndbm,dbm_open,,[ NDBM_LIB="no" ])
 
-if test "$NDBM_LIB" != "no"; then
-  AC_CHECK_LIB(ndbm,dbm_fetch,[ ],[ NDBM_LIB="no" ])
-  AC_CHECK_LIB(ndbm,dbm_store,[ ],[ NDBM_LIB="no" ])
-  AC_CHECK_LIB(ndbm,dbm_close,,[ NDBM_LIB="no" ])
-fi
+   if test "$NDBM_LIB" != "no"; then                                       dnl NDBM_LIB
+      AC_CHECK_LIB(ndbm,dbm_fetch,,[ NDBM_LIB="no" ])
+      AC_CHECK_LIB(ndbm,dbm_store,,[ NDBM_LIB="no" ])
+      AC_CHECK_LIB(ndbm,dbm_close,,[ NDBM_LIB="no" ])
+   fi                                                                      dnl NDBM_LIB
 
-if test "$NDBM_LIB" = "no"; then
+   if test "$NDBM_LIB" = "no"; then                                        dnl NDBM_LIB
   
-  AC_CHECK_LIB(gdbm,dbm_open,[ ],[ GDBM_LIB="no" ])
-  AC_CHECK_LIB(gdbm,dbm_fetch,[ ],[ GDBM_LIB="no" ])
-  AC_CHECK_LIB(gdbm,dbm_store,[ ],[ GDBM_LIB="no" ])
-  AC_CHECK_LIB(gdbm,dbm_close,,[ GDBM_LIB="no" ])
+      AC_CHECK_LIB(gdbm,dbm_open,,[ GDBM_LIB="no" ])
+      AC_CHECK_LIB(gdbm,dbm_fetch,,[ GDBM_LIB="no" ])
+      AC_CHECK_LIB(gdbm,dbm_store,,[ GDBM_LIB="no" ])
+      AC_CHECK_LIB(gdbm,dbm_close,,[ GDBM_LIB="no" ])
   
-  if test "$GDBM_LIB" = "no"; then
+      if test "$GDBM_LIB" = "no"; then                                     dnl GDBM_LIB
 
-     AC_CHECK_LIB(db1,dbm_open,[ ],[ DB1_LIB="no" ])
-     AC_CHECK_LIB(db1,dbm_fetch,[ ],[ DB1_LIB="no" ])
-     AC_CHECK_LIB(db1,dbm_store,[ ],[ DB1LIB="no" ])
-     AC_CHECK_LIB(db1,dbm_close,,[ DB1_LIB="no" ])
-   
-   if test "$DB1_LIB" = "no";then
+         AC_CHECK_LIB(db1,dbm_open,,[ DB1_LIB="no" ])
+         AC_CHECK_LIB(db1,dbm_fetch,,[ DB1_LIB="no" ])
+         AC_CHECK_LIB(db1,dbm_store,,[ DB1LIB="no" ])
+         AC_CHECK_LIB(db1,dbm_close,,[ DB1_LIB="no" ])
+
+         if test "$DB1_LIB" = "no";then                                    dnl DB1_LIB
   
-     AC_CHECK_LIB(db,dbm_open,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_fetch,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_store,,AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_close,,AC_MSG_ERROR(no valid ndbm library found)) 
-   
-   fi
-  
-  fi
+            AC_CHECK_LIB(db,dbm_open,,DB_LIB="no") 
+            AC_CHECK_LIB(db,dbm_fetch,,DB_LIB="no")
+            AC_CHECK_LIB(db,dbm_store,,DB_LIB="no") 
+            AC_CHECK_LIB(db,dbm_close,,DB_LIB="no") 
 
-fi
+	    if test "$DB_LIB" = "no";then                                  dnl DB_LIB
 
-fi
+	       old_libs=$LIBS
+	       LIBS="$LIBS -ldb"
 
+	       AC_MSG_CHECKING("for dbm_open in -ldb with DB_DBM_HSEARCH 1")
+
+	       AC_TRY_LINK([#define DB_DBM_HSEARCH 1
+	                #include <db.h>],
+	                [dbm_open(0,0,0);],
+	                [DB_COMPAT_LIB="yes"])
+
+	       if test "$DB_COMPAT_LIB" != "yes"; then			   dnl DB_COMPAT_LIB
+
+	          AC_MSG_RESULT("no")
+	          AC_MSG_ERROR(no valid ndbm library found)
+
+	       fi							   dnl DB_COMPAT_LIB
+
+	       AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)
+	       AC_MSG_RESULT("yes")
+
+	    fi                                                             dnl DB_LIB
+         fi								   dnl DB1_LIB
+      fi								   dnl GDBM_LIB
+   fi                                                                      dnl NDBM_LIB
+fi									   dnl NEED_NDBM
 dnl Checks for header files.
 
 AC_HEADER_STDC
@@ -189,24 +206,24 @@ AC_CHECK_HEADERS(ndbm.h,,[ HAVE_NDBM_H="no" ])
 HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
 
 if test "$HAVE_NDBM_H" = "no"; then
-    AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
-      if test "$HAVE_GDBM_NDBM_H" = "no"; then
+   AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
+  if test "$HAVE_GDBM_NDBM_H" = "no"; then
          unset $HAVE_GDBM_NDBM_H
          AC_MSG_CHECKING(for gdm/ndbm.h...)
-         AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h, \
-	 [ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \
-	   AC_SUBST(HAVE_GDBMDIR_NDBM_H); AC_MSG_RESULT("yes")  ], \
-	 [ HAVE_GDBMDIR_NDBM_H="no"; AC_MSG_RESULT("no") ])
-         if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
-            HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
-	    AC_CHECK_HEADERS(db1/ndbm.h,, \
-            AC_MSG_ERROR(no valid ndbm header file found))
-         fi
-      fi
+         AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h,[ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \ AC_SUBST(HAVE_GDBMDIR_NDBM_H) \ AC_MSG_RESULT("yes")  ], [ HAVE_GDBMDIR_NDBM_H="no" \ AC_MSG_RESULT("no") ])
+  if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
+           HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
+	    AC_CHECK_HEADERS(db1/ndbm.h,,AC_MSG_ERROR(no valid ndbm header file found))
+  fi
+  fi
 fi
 
-AC_CHECK_HEADERS(sys/time.h,,\
-    AC_CHECK_HEADERS(time.h,,AC_MSG_ERROR(time.h not found)))
+
+AC_CHECK_HEADERS(sys/time.h)
+AC_HEADER_TIME
+
+dnl AC_CHECK_HEADERS(sys/time.h,,AC_CHECK_HEADERS(time.h,,AC_MSG_ERROR(time.h not found)))
+
 AC_CHECK_HEADERS(unistd.h,,AC_MSG_ERROR(unistd.h not found))
 AC_CHECK_HEADERS(stdlib.h,,AC_MSG_ERROR(stdlib.h not found))
 AC_CHECK_HEADERS(stdio.h,,AC_MSG_ERROR(stdio.h not found))
@@ -220,43 +237,57 @@ AC_CHECK_HEADERS(stdarg.h,,AC_MSG_ERROR(stdarg.h not found))
 AC_CHECK_HEADERS(syslog.h,,AC_MSG_ERROR(syslog.h not found))
 
 if test "$ARG" != "WITHPAM"; then
-  AC_CHECK_HEADERS(shadow.h,,)
-  ARG="NOPAM"
+ 
+    AC_CHECK_HEADERS(shadow.h,,)
+    ARG="NOPAM"
+ 
 else
-  AC_CHECK_HEADERS(security/pam_appl.h,,AC_MSG_ERROR(pam_appl.h not found))
+ 
+    AC_CHECK_HEADERS(security/pam_appl.h,,AC_MSG_ERROR(pam_appl.h not found))
+ 
 fi
 
 if test -z "$PRESET_CFLAGS"; then
-    CFLAGS=`echo "$CFLAGS" | sed -e 's/-g//'`
+
+   CFLAGS=`echo "$CFLAGS" | sed -e 's/-g//'`
+
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
+
 AC_C_CONST
 AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
+
 AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 
 AC_CHECK_FUNCS(getdomainname,,NO_GETDOMAINNAME=yes)
 
 if test "$NO_GETDOMAINNAME" = "yes"; then
+
    AC_CHECK_HEADERS(sys/systeminfo.h)
    AC_CHECK_FUNCS(sysinfo)
    NEED_COMPAT_H="yes"
+
 fi
 
 AC_CHECK_FUNCS(gethostname,,NO_GETHOSTNAME=yes)
 
 if test "$NO_GETHOSTNAME" = "yes"; then
-   AC_CHECK_HEADERS(sys/systeminfo.h)
-   AC_CHECK_FUNCS(sysinfo,,AC_MSG_ERROR(your system dont support gethostname\n and i'm unable to emulate it))
-   NEED_COMPAT_H="yes"
+
+    AC_CHECK_HEADERS(sys/systeminfo.h)
+    AC_CHECK_FUNCS(sysinfo,,AC_MSG_ERROR(your system dont support gethostname\n and i'm unable to emulate it))
+    NEED_COMPAT_H="yes"
+
 fi
 
 if test "$NEED_COMPAT_H" = "yes"; then
-   LIBOBJS="$LIBOBJS compat.o"
-   NEED_COMPAT_H="NEED_COMPAT_H"
+
+    AC_LIBOBJ(compat)
+    NEED_COMPAT_H="NEED_COMPAT_H"
+
 fi
 
 AC_OUTPUT(Makefile install.sh createconfig.sh)

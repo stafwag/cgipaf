@@ -1,6 +1,6 @@
   /* 
-    * access control lists handeling 
-    */
+   * access control lists handeling 
+   */
 
    /* get AclOrder */
 
@@ -12,7 +12,7 @@
 
    /* Test ACL */
 
-   if(!acl(config_file,CFGSECTION,pw)) {
-      write_log(LOG_AUTHPRIV,6,"acl(): user access denied");
+   if(!acl(config_file,CFGSECTION,pw,usermaildomain)) {
+      write_log(LOG_AUTHPRIV,6,"acl(): access denied");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    }

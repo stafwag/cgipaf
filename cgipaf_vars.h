@@ -7,7 +7,7 @@ int    invalid_timeout=600;
 int    enable_cracklib=0;
 struct pw_info *pw;
 WEBDATA *data;
-char   *name,*pass;
+char   *name,*pass,*usermaildomain=NULL;
 char   *cracklib_dictpath=NULL;
 FILE   *config_file;
 char   *doc_root;
@@ -62,6 +62,7 @@ char   txt_pamerrormsg[]="pam_error";
 char   *pam_servicename=txt_passwd;
 char   txt_badpassword[]="bad_password";
 int    max_length, min_length;
+char   txt_usermaildomain[]="user_maildomain";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   *options[][2]={
      txt_name,txt_NULL,                                /* 0 */
@@ -86,6 +87,7 @@ char   *options[][2]={
      txt_homedir,txt_NULL,                             /* 19 */
      txt_domain,txt_NULL,                              /* 20 */
      txt_badpassword,txt_NULL,			       /* 21 */
+     txt_usermaildomain,txt_NULL,		       /* 22 */
      NULL,NULL};
 
 #endif  /* _CGIPAF_VARS_H */

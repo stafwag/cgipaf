@@ -2,6 +2,11 @@
 #define  _CGIPAF_DEFS_H
 
 #include "config.h"
+
+#ifndef  _WITHPAM
+#include "fgetpwnam.h"
+#endif
+
 #define  LOGIN                  "name"
 #define  ROOT                   "root"
 #define  PASSWORD               "passwd"
@@ -44,6 +49,9 @@
 #define  CFG_CRACKLIB_DICTPATH	"cracklib_dictpath"
 #define  CFG_USE_STATEFILE      "use_statefile"
 #define  CFG_ILLEGALWORDS       "illegal_words"
+#define  CFG_PASSWD_LOCATION	"passwd_location"
+#define  CFG_SHADOW_LOCATION    "shadow_location"
+#define  CFG_VMAIL_SUPPORT	"vmail_support"
 
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"

@@ -230,7 +230,8 @@ main()
    
    if (name!=NULL) {
       write_log(LOG_USER,7,"name set to %s",name);
-      options[0][1]=name;
+      options[0][1]=xmalloc(strlen(name)+1);
+      strcpy(options[0][1],name);
    }
 
    /* We dont like too short loginnames */
@@ -340,6 +341,9 @@ main()
 
 #endif
 
+
+    #include "cgipaf_pwlocation.c"
+
    /*
     * test pass, and create accessdb
     */
@@ -351,6 +355,7 @@ main()
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
+   write_log(LOG_USER,7,"pw->p->pwuid = %d",pw->p->pw_uid);
 
 #ifdef _WITHPAM
 #ifdef CGIPAF_PASSWD
@@ -369,7 +374,7 @@ main()
    
    /* include access control lists */
    
-   #include "cgipaf_acl.c"
+   #include "cgipaf_acl.c" 
    
    /* get the min uid, and compare it with the real uid if uid<min_uid die */
    
@@ -399,7 +404,7 @@ main()
    /* lock the user if he has too many invalid logins */
    
    if (accessdb) {
-      if ((brol=get_access_status(accessdb,name,max_invalid,invalid_timeout))>0) {
+      if ((brol=get_access_status(accessdb,options[0][1],max_invalid,invalid_timeout))>0) {
 	 snprintf(invalid_wait_txt,80,"%d",brol);
 	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options);
 	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
@@ -411,7 +416,7 @@ main()
 	   if((i=WEXITSTATUS(i)))
 	     write_log(LOG_USER,1,"run_locked returns a non-null exit code %d",i);
 	 if(config_file!=NULL) fclose(config_file);
-	 write_log(LOG_AUTHPRIV,5,"User %s is locked",name);
+	 write_log(LOG_AUTHPRIV,5,"User %s is locked",options[0][1]);
 	 exit(0);
       }
    }
@@ -427,7 +432,7 @@ main()
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
       options[19][1]=pw->p->pw_dir;
       if (accessdb) {
-	 if (save_access_status(accessdb,name,1,invalid_timeout,cookie)==-1) {
+	 if (save_access_status(accessdb,options[0][1],1,invalid_timeout,cookie)==-1) {
 	    printf("%s %s",warn_update_accessdb,accessdb);
 	    write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
 	 }
@@ -486,7 +491,7 @@ main()
 	if((i=WEXITSTATUS(i)))
 	  write_log(LOG_AUTHPRIV,1,"run_success returns a non-null exit code %d",i); 
       if (accessdb) {
-	 if (save_access_status(accessdb,name,0,invalid_timeout,NULL)==-1) {
+	 if (save_access_status(accessdb,options[0][1],0,invalid_timeout,NULL)==-1) {
 	    printf("%s %s",warn_update_accessdb,accessdb);
 	    write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
 	 }
@@ -536,7 +541,7 @@ main()
    
    /* store the cookie and cookie timeout into the accessdb */
    
-   if (save_access_status(accessdb,name,0,invalid_timeout,cookie)==-1) {
+   if (save_access_status(accessdb,options[0][1],0,invalid_timeout,cookie)==-1) {
       printf_txt_msg("Warning: failed to update %s", accessdb);
       write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
    }
@@ -599,8 +604,8 @@ main()
       printf("<FORM ACTION=\"/cgi-bin/mailcfg.cgi\" METHOD=POST>\n");
       printf("<TABLE WIDTH=100%>\n");
       printf("<TR>\n");
-      printf("<TD>Login name: %s</TD>\n",name);
-      printf("<TD ALIGN=\"LEFT\"><INPUT NAME=name VALUE=\"%s\" TYPE=HIDDEN SIZE=10 MAXLENGTH=15></TD>\n",name);
+      printf("<TD>Login name: %s</TD>\n",options[0][1]);
+      printf("<TD ALIGN=\"LEFT\"><INPUT NAME=name VALUE=\"%s\" TYPE=HIDDEN SIZE=10 MAXLENGTH=15></TD>\n",options[0][1]);
       printf("</TR>\n");
       printf("</TABLE>\n");
       printf("<HR>\n");

@@ -11,7 +11,9 @@
 #define  CFG_ALLOWUSERS 	"AllowUsers"
 #define  CFG_DENYUSERS  	"DenyUsers"
 #define  CFG_ALLOWGRPS  	"AllowGroups"
+#define  CFG_ALLOWUSERMAILDOMAIN  	"AllowUserMaildomains"
 #define  CFG_DENYGRPS   	"DenyGroups"
+#define  CFG_DENYUSERMAILDOMAIN   	"DenyUserMaildomains"
 #define  ALLOW          	"allow"
 #define  DENY           	"deny"
 
@@ -76,6 +78,25 @@ int check_grpacl(struct pw_info *p,char **groups) {
 }
 
 /*
+ * Is *p is in the *users list?
+ *
+ * returns  1 : p is in the list
+ *          0 : if p is not in the list
+*/
+int check_maildomainacl(char *maildomain,char **maildomains) {
+    char **domain;
+    if(maildomains==NULL) return(0);
+
+    for (domain=maildomains; *domain!=NULL;domain++) {
+        if(!strcmp(*domain,"*"))  return(1);
+        if(!strcmp(*domain,maildomain)) return(1);
+    }
+
+    return(0);
+
+}
+
+/*
  * real aclorder function
  *
  * set *var to 0 -> ok
@@ -130,9 +151,10 @@ int get_aclorder(FILE *config_file,char *section_name) {
  * returns 0  -> deny
  *         1  -> allowed
  */
-int acl (FILE *config_file,char *section_name, struct pw_info *p) {
-    char **grpdeny,**grpallow;
-    char **usrdeny,**usrallow;
+int acl (FILE *config_file,char *section_name, struct pw_info *p,char *usermaildomain) {
+    char **grpdeny=NULL,**grpallow=NULL;
+    char **usrdeny=NULL,**usrallow=NULL;
+    char **usermaildomain_deny=NULL,**usermaildomain_allow=NULL;
     int ret=0; 
     
     usrdeny=get_sg_config_array(config_file,section_name,CFG_DENYUSERS);
@@ -140,6 +162,13 @@ int acl (FILE *config_file,char *section_name, struct pw_info *p) {
     
     grpdeny=get_sg_config_array(config_file,section_name,CFG_DENYGRPS);
     grpallow=get_sg_config_array(config_file,section_name,CFG_ALLOWGRPS);
+   
+    if(usermaildomain!=NULL) {
+
+      usermaildomain_deny=get_sg_config_array(config_file,section_name,CFG_DENYUSERMAILDOMAIN);
+      usermaildomain_allow=get_sg_config_array(config_file,section_name,CFG_ALLOWUSERMAILDOMAIN);
+
+    }
  
     if(aclorder!=-1) {
     
@@ -147,22 +176,32 @@ int acl (FILE *config_file,char *section_name, struct pw_info *p) {
         ret=0;
         if(check_useracl(p,usrallow)) ret=1;
         if(check_grpacl(p,grpallow)) ret=1;
+        if(usermaildomain!=NULL)
+	  if(check_maildomainacl(usermaildomain,usermaildomain_allow)) ret=1;
         if(check_useracl(p,usrdeny)) ret=0;
         if(check_grpacl(p,grpdeny)) ret=0;
+        if(usermaildomain!=NULL)
+	  if(check_maildomainacl(usermaildomain,usermaildomain_deny)) ret=0;
       }
       else {
         ret=1;
         if(check_useracl(p,usrdeny)) ret=0;
         if(check_grpacl(p,grpdeny)) ret=0;
+        if(usermaildomain!=NULL)
+	  if(check_maildomainacl(usermaildomain,usermaildomain_deny)) ret=0;
         if(check_useracl(p,usrallow)) ret=1;
         if(check_grpacl(p,grpallow)) ret=1;
+        if(usermaildomain!=NULL)
+	  if(check_maildomainacl(usermaildomain,usermaildomain_allow)) ret=1;
       }
     
     }
     xfree(grpallow);
     xfree(usrallow);
+    xfree(usermaildomain_allow);
     xfree(grpdeny);
     xfree(usrdeny);
+    xfree(usermaildomain_deny);
 
     return(ret);
 }

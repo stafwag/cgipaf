@@ -95,7 +95,7 @@ dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
 dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
 dnl   fi
-   LIBOBJS="$LIBOBJS pass.o salt.o"
+   LIBOBJS="$LIBOBJS pass.o salt.o fgetpwnam.o"
    if test "$enable_md5crypt" != "no"; then
 
 dnl freebsd has built-in md5 support

@@ -20,6 +20,44 @@
 #endif
 #include "salt.h"
 
+static char *passwd_location=NULL;
+static char *shadow_location=NULL;
+
+/*
+ * Set the password file location 
+ * NULL = return current location
+ */
+char * set_passwd_location ( char * passwd_file ) {
+	if(passwd_file!=NULL) passwd_location=passwd_file;
+	return(passwd_location);
+}
+
+/*
+ * Set to passwd_location to NULL
+ * ( use system passwd )
+ */
+void reset_passwd_location () {
+	passwd_location=NULL;
+}
+
+/*
+ * Set the shadow file location
+ * NULL = return the current location
+ */
+char * set_shadow_location ( char * shadow_file ) {
+	if(shadow_file!=NULL) shadow_location=shadow_file;
+	return(shadow_location);
+}
+
+/*
+ * Set to shadow_location to NULL
+ * ( use system shadow file )
+ */
+char * reset_shadow_location() {
+	shadow_location=NULL;
+}
+
+
 #ifndef HAVE_SHADOW_H
 /*
  * no lckpwdf so create our own
@@ -58,14 +96,32 @@ return(lock);
 struct pw_info * get_pw(char *name)
 {
 struct pw_info *pw;
+FILE *pw_file=NULL,*sh_file=NULL;
 pw=(struct pw_info *) xmalloc(sizeof(struct pw_info));
 pw->p=NULL;
 pw->sp=NULL;
-if(!(pw->p=getpwnam(name))) return(NULL);   /* User doesn't exist... */
-if (!strcmp(pw->p->pw_passwd,"x")) {
+
+if(passwd_location==NULL) {
+  	if(!(pw->p=getpwnam(name))) return(NULL);   /* User doesn't exist... */
+}
+else {
+	if((pw_file=fopen(passwd_location,"r"))==NULL) return(NULL);
+	if(!(pw->p=fgetpwnam(pw_file,name))) return(NULL);
+}
+
+
+  if (!strcmp(pw->p->pw_passwd,"x")) {
 
 #ifdef HAVE_SHADOW_H
-   if(!(pw->sp=getspnam(name))) return(NULL);
+     if(set_shadow_location(NULL)==NULL) {
+       if(!(pw->sp=getspnam(name))) return(NULL);
+     }
+     else {
+	     if((sh_file=fopen(shadow_location,"r"))==NULL) return(NULL);
+	     if(!(pw->sp=fgetspnam(sh_file,name))) return(NULL);
+     }
+
+
 #else
    /*
     * shadow.h is unavailable, unable to copy useful shadow info in pw
@@ -73,6 +129,8 @@ if (!strcmp(pw->p->pw_passwd,"x")) {
    pw->sp=NULL;
 #endif
    }
+if(pw_file!=NULL) fclose(pw_file);
+if(sh_file!=NULL) fclose(sh_file);
 return(pw);
 }
 
@@ -339,8 +397,14 @@ if (c!=NULL) {
  * set passwdfile to the real password file
  */
 
-if (pw->sp) passwdfile=SHADOWFILE;
-  else passwdfile=PASSWDFILE;
+if (pw->sp) { 
+	if((passwdfile=shadow_location)==NULL)
+		passwdfile=SHADOWFILE;
+   }
+   else {
+	   if((passwdfile=passwd_location)==NULL) 
+		   passwdfile=PASSWDFILE;
+   }
 
 /*
  * try to update the user's password

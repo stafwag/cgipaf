@@ -118,10 +118,10 @@ main()
    /* set the mailerdomain */ 
    
    domain=get_section_config_item(config_file,CFGSECTION,CFGDOMAIN);
-   if(domain!=NULL) 
-     write_log(LOG_USER,7,"domain set to %s",domain);
-   else write_log(LOG_USER,7,"domain not set");
-   domain=options[20][1]=get_maildomain(domain);
+     if(domain!=NULL) 
+       write_log(LOG_USER,7,"domain set to %s",domain);
+     else write_log(LOG_USER,7,"domain not set");
+       domain=options[20][1]=get_maildomain(domain);
 
    /* set cookie timeout */
    
@@ -154,7 +154,9 @@ main()
    name=NULL;
    if ((cp=get_postitem(data,LOGIN))!=NULL) {
       name=textarea2asc(cp);
-      free(cp);
+      options[0][1]=xmalloc(strlen(name)+1);
+      strcpy(options[0][1],name);
+      xfree(cp);
    }
    
    /* set forward and not_forward */
@@ -174,10 +176,10 @@ main()
 	 write_log(LOG_USER,0,"out of memory");
 	 exit(0);
       }
-      free(c);
+      xfree(c);
       forward_to=xmalloc(strlen(c2)+1);
       strcpy(forward_to,c2);
-      free(c2);
+      xfree(c2);
    }
 
    /* set keep_msg */
@@ -197,12 +199,11 @@ main()
    c=get_postitem(data,AUTOREPLY_MSG);
    if(c!=NULL) {
       autoreply_msg=textarea2asc(c);
-      free(c);
+      xfree(c);
    }
    
    /* copy the data in the options array */
    
-   options[0][1]=name;
    options[6][1]=forward_to;
    options[13][1]=autoreply_msg;
    
@@ -269,12 +270,20 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLYMSG,err_autoreplymsg,options);
    }
 
+
+#include "cgipaf_pwlocation.c"
+
+   if (usermaildomain!=NULL) {
+      domain=options[20][1]=usermaildomain;
+   }
+
    /* get the user info, if the user doesn't exsist show error and exit */
    
    if (!(pw=get_pw(name))) {
       write_log(LOG_AUTHPRIV,1,"try to use mailcfg.cgi as %s which doesn't exist");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
+
    
    options[19][1]=pw->p->pw_dir;
    
@@ -300,8 +309,8 @@ main()
 	 
 	 /* i dont like old cookies */
 	 
-	 if (!cmp_access_cookie(accessdb,name,cookie,cookie_timeout)) {
-	    write_log(LOG_AUTHPRIV,6,"cookie timeout for user %s",name);
+	 if (!cmp_access_cookie(accessdb,options[0][1],cookie,cookie_timeout)) {
+	    write_log(LOG_AUTHPRIV,6,"cookie timeout for user %s",options[0][1]);
 	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIETIMEOUT,err_cookietimeout,options);
 	 }
       }

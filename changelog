@@ -1,3 +1,8 @@
+* version 1.2.4		( 28 Nov 2003 )
+  + BUGFIX: previous version didn't work with sleepycat 4.x
+  + BUGFIX: mailcfg.vacation updated to support BSD vacation
+  + code cleanup
+
 * version 1.2.3	        ( 9 Oct 2003 )
   + new forward method to avoid mail looping (merged from 1.3.0pre4)
   + configure.in support for gdbm 1.8.1+ and newer sleepycat db added

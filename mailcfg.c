@@ -1,7 +1,15 @@
-/* ------------------------------------------------------------------ */
-/* mail control web interface                                         */
-/* author : staf wagemakers                         (c) 1999,2001-02  */
-/* ------------------------------------------------------------------ */
+/*
+ * mailcfg.c
+ *
+ * Copyright (C) 1999,2001,2002,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
 
 #define  FORWARD               "forward"
 #define  FORWARD_TO            "forward_to"

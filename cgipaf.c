@@ -1,8 +1,16 @@
-/* ----------------------------------------------------------------------- */
-/* cgipaf.c                                     (GPL) 2000,01,02 Belgium   */
-/* http://staf.patat.org                                 Staf Wagemakers   */
-/* staf@patat.org                                                          */
-/* ----------------------------------------------------------------------- */
+/*
+ * cgipaf.c
+ *
+ * Copyright (C) 2000-2003 Staf Wagemakers                Belgie/Belgium 
+ *	                   http://staf.patat.org          staf@patat.org                       
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
 
 #include "cgipaf_defs.h"
 

@@ -1,3 +1,7 @@
+/*
+ * out_of_memory.c                                 (c) 2001 Staf Wagemakers
+ */
+
 #include "out_of_memory.h"
 void out_of_memory(void) 
 {

@@ -1,3 +1,11 @@
+* version 1.0.rc3 ( 18 oct 2001)
+  + improved PAM detection
+  + loglevel + debug messages
+  + fixed: accessdb bug, the database wasn't always closed  ( thanks to 
+    Andreas Liebe for his patch )
+  + it is possible to use the mailcfg.cgi for user with with non-interactive 
+    shell such as /bin/false ( thanks to Andreas Liebe for his patch )
+
 * version 1.0rc2 ( 18 Sep 2001 )
   + fixed: configure doesn't work on non-PAM systems
   + syslog messages

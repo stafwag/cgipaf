@@ -1,3 +1,6 @@
+/*
+ * write_log.c					     (c) 2001 Staf Wagemakers
+ */
 #include "write_log.h"
 int enable_log(int s)
 {
@@ -5,11 +8,19 @@ static int log=1;
 if (s!=-1) log=s;
 return log;
 }
+unsigned set_loglevel(int l)
+{
+static unsigned level=6;
+if (l!=-1) level=l;
+if (level>7) level=7;
+return level;
+}
 
 void write_log(int facility, int priority, char *fmt, ...)
 {
   va_list ap;
   int d;
+  unsigned level;
   char txt_unknown[] ="unknown";
   char buf[128];
   char prefix[32];
@@ -17,33 +28,35 @@ void write_log(int facility, int priority, char *fmt, ...)
   char syslog_msg[256];
   char *clientip;
   char c, *p, *s;
+  int  loglevels[]={LOG_EMERG,LOG_ALERT,LOG_CRIT,LOG_ERR,LOG_WARNING,LOG_NOTICE,LOG_INFO,LOG_DEBUG};
   if(!enable_log(-1)) return;
+  if(priority>set_loglevel(-1)) return;
   memset(syslog_msg,'\0',sizeof(syslog_msg));
   openlog("CGIpaf",LOG_PID|LOG_CONS,facility);
   switch (priority)
      {
-      case LOG_DEBUG:
+      case 7:
 	strcpy(prefix,"DEBUG: ");
 	break;
-      case LOG_INFO:
+      case 6:
 	strcpy(prefix,"INFO: ");
 	break;
-      case LOG_NOTICE:
+      case 5:
 	strcpy(prefix,"NOTICE: ");
 	break;
-      case LOG_WARNING:
+      case 4:
 	strcpy(prefix,"WARNING: ");
 	break;
-      case LOG_ERR:
+      case 3:
 	strcpy(prefix,"ERROR: ");
 	break;
-      case LOG_CRIT:
+      case 2:
 	strcpy(prefix,"CRITICAL: ");
 	break;
-      case LOG_ALERT:
+      case 1:
 	strcpy(prefix,"ALERT: ");
 	break;
-      case LOG_EMERG:
+      case 0:
 	strcpy(prefix,"EMERG: ");
 	break;
       default:

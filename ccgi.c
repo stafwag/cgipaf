@@ -70,10 +70,10 @@ for (i=0;i<wp->n;i++) {
 if(!b) return(NULL);
 return(wp->value[i]);
 }
+
 /*
  * only exits for compatible with previous versions of ccgi
  */
-
 char * get_postitem(WEBDATA *wp,char *name)
 {
    return(get_webdata_item(wp,name));
@@ -110,6 +110,7 @@ if(wp==NULL) return NULL;
 free(c);
 return wp;
 }
+
 /* -------------------------------------------------------------------
  * displays a html file
  * 
@@ -117,50 +118,52 @@ return wp;
  * ------------------------------------------------------------------- */
 int print_htmlfile (char * filename)
 {
-	FILE *fp;
-	char buffer[500];
-	if((fp=fopen(filename,"r"))==NULL) return(-1);
+    FILE *fp;
+    char buffer[500];
+    if((fp=fopen(filename,"r"))==NULL) return(-1);
 
-	printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n\n");
 
-	while (fgets(buffer,500,fp)) {
-		  printf("%s",buffer);
-		    }
-        fflush(stdout);
-	return(0);
+    while (fgets(buffer,500,fp)) {
+       printf("%s",buffer);
+    }
+    fflush(stdout);
+    return(0);
 }
+
 /* ---------------------------------------------------------------------
  * redirects to a url
  * --------------------------------------------------------------------- */
 void html_redirect(char *location)
 {
-	  printf("Status: 302\r\n");
-	    printf("Location: %s",location);
-          fflush(stdout);
+   printf("Status: 302\r\n");
+   printf("Location: %s",location);
+   fflush(stdout);
 }
+
 /* ---------------------------------------------------------------------
  * prints a string as plain text
  * --------------------------------------------------------------------- */
 void print_txt_msg(char *msg)
 {
-	   printf("Content-type: text/plain\n\n");
-	      if (msg!=NULL) {
-		            puts(msg);
-			       }
-	         return;
-           fflush(stdout);
+   printf("Content-type: text/plain\n\n");
+   if (msg!=NULL) {
+       puts(msg);
+       }
+   return;
+   fflush(stdout);
 }
 /* ----------------------------------------------------------------------
  * prints a string a html
  * ---------------------------------------------------------------------- */
 void print_html_msg(char *msg)
 {
-	   printf("Content-type: text/html\n\n");
-	      if (msg!=NULL) {
-		            puts(msg);
-			       }
-	         return;
+   printf("Content-type: text/html\n\n");
+   if (msg!=NULL) {
+      puts(msg);
+      }
    fflush(stdout);
+   return;
 }
 void set_cookie(char *name, char *cookie,char *extra)
 {
@@ -174,13 +177,13 @@ if (extra==NULL) {
 }
 WEBDATA *get_cookies()
 {
-WEBDATA *wp;
-char *c;
-c=getenv("HTTP_COOKIE");
-if (c==NULL) return NULL;   /* There are no cookies */
-wp=str2webdata('=',';',c);
-if (wp==NULL) return NULL;
-return wp;
+   WEBDATA *wp;
+   char *c;
+   c=getenv("HTTP_COOKIE");
+   if (c==NULL) return NULL;   /* There are no cookies */
+   wp=str2webdata('=',';',c);
+   if (wp==NULL) return NULL;
+   return wp;
 }
 /*
  * convert a textarea to ascii

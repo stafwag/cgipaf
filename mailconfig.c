@@ -103,6 +103,7 @@ if (domain!=NULL) loopdomain=domain;
   }
 if(!(fp=fopen(add2home(pw->p,PROCMAIL),"w"))) return(0);
 fputs("SENDMAIL=",fp);fputs(sendmail,fp);fputs("\n",fp);
+fputs("SHELL=/bin/sh\n",fp);
 fputs(":0 h c\n",fp);
 fputs("* !^FROM_DAEMON\n",fp);
 fprintf(fp,"* !^X-Loop: %s@%s\n",pw->p->pw_name,loopdomain);

@@ -1,5 +1,5 @@
 /*
- * xmalloc.o					(c) 2001  Staf Wagemakers
+ * xmalloc.c					(c) 2001  Staf Wagemakers
  */
 #include <malloc.h>
 #include <stdio.h>

@@ -3,7 +3,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff">
-<h1>CGIpaf 1.0rc2 Configuration</h1>
+<h1>CGIpaf 1.0rc3 Configuration</h1>
 <h1>Content</h1>
 <UL>
 <li><a href="#syntax">Syntax</a></li>
@@ -15,6 +15,7 @@
 <li><a href="#directives">Directives</a></li>
 <UL>
 <li><a href="#syslog">syslog</a></li>
+<li><a href="#loglevel">loglevel</a></li>
 <li><a href="#document_root">document_root</a></li>
 <li><a href="#login_document">login_document</a></li>
 <li><a href="#error_loginname">error_loginname</a></li>
@@ -27,7 +28,7 @@
 <li><a href="#error_forwardto">error_forwardto</a></li>
 <li><a href="#error_invalidforwardto">error_invalidforwardto</a></li>
 <li><a href="#msg_success">msg_success</a></li>
-<li><a href="#msg_changed>msg_changed</a></li>
+<li><a href="#msg_changed">msg_changed</a></li>
 <li><a href="#msgmsg_updated">msg_updated</a></li>
 <li><a href="#error_read">error_readname</a></li>
 <li><a href="#error_readforward">error_readforward</a></li>
@@ -75,7 +76,7 @@
 <p>
   The configuration file has three sections "global", "passwd" and "mailcfg". 
   The directives that don't belong to a section are global. Global directives 
-  apply to all sections unless they're overwritten in the sections.
+  apply to all sections unless they're overwritten in the sections.<BR>
     
   The "passwd" section is used by passwd.cgi, viewmailcfg.cgi and mailcfg.cgi 
   use the "mailcfg" section.
@@ -90,6 +91,27 @@
 <strong>Default:</strong> on<br>
 <strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
 <p>enable syslog messages</p>
+<p>all the authentication events are logged with LOG_AUTHPRIV facility, other events are logged with the LOG_USER facility</p>
+</p>
+<h2><a name="loglevel">loglevel</a></h2>
+<p><strong>Syntax:</strong> loglevel <em>number</em><br>
+<strong>Default:</strong> 6<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<p>set the syslog level, messages of a higher significance will be reported as well.<BR>
+e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) are also reported.
+<p>
+<table>
+<tr><td><b>0</b></td><td>LOG_EMERG</td><td> system is unusable</td></tr>
+<tr><td><b>1</b></td><td>LOG_ALERT</td><td> action must be taken immediately</td></tr>
+<tr><td><b>2</b></td><td>LOG_CRIT</td><td> critical conditions</td></tr>
+<tr><td><b>3</b></td><td>LOG_ERR</td><td> error conditions</td></tr>
+<tr><td><b>4</b></td><td>LOG_WARNING</td><td> warning conditions</td></tr>
+<tr><td><b>5</b></td><td>LOG_NOTICE</td><td> normal, but significant, condition</td></tr>
+<tr><td><b>6</b></td><td>LOG_INFO</td><td> informational message</td></tr>
+<tr><td><b>7</b></td><td>LOG_DEBUG</td><td> debug-level message</td></tr>
+</table>
+</p>
+</p>
 </p>
 <h2><a name="document_root">document_root</a></h2>
 <p><strong>Syntax:</strong> document_root <em>path</em><br>
@@ -219,7 +241,7 @@ error_readname   Redirect   <em>location</em><br>
 <strong>Default:</strong> "[CGIpaf] Can't read loginname\n"<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>       
-    mailcfg.cgi is unable to read to username, this probably an error in 
+    mailcfg.cgi is unable to read to username, this is probably an error in 
     <a href="#mailcfg_document">mailcfg_document</a>.
 </p>
 <h2><a name="error_readforward">error_readforward</a></h2>
@@ -228,7 +250,7 @@ error_readforward   Redirect   <em>location</em><br>
 <strong>Default:</strong> "[CGIpaf] Can't read forward\n"<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>       
-    mailcfg.cgi is unable to read forward, this probably an error in 
+    mailcfg.cgi is unable to read forward, this is probably an error in 
     <a href="#mailcfg_document">mailcfg_document</a>.
 </p>
 <h2><a name="error_readkeepmsg">error_readkeepmsg</a></h2>
@@ -237,7 +259,7 @@ error_readkeepmsg   Redirect   <em>location</em><br>
 <strong>Default:</strong> "[CGIpaf] Can't read keepmsg\n"<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>       
-    mailcfg.cgi is unable to read keep_msg, this probably an error in 
+    mailcfg.cgi is unable to read keep_msg, this is probably an error in 
     <a href="#mailcfg_document">mailcfg_document</a>.
 </p>     
 <h2><a name="error_readautoreply">error_readautoreply</a></h2>
@@ -246,7 +268,7 @@ error_readkeepmsg   Redirect   <em>location</em><br>
 <strong>Default:</strong> "[CGIpaf] Can't read autoreply\n"<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>       
-    mailcfg.cgi is unable to read autoreply, this probably an error in 
+    mailcfg.cgi is unable to read autoreply, this is probably an error in 
     <a href="mailcfg_document">mailcfg_document</a>.
 </p>
 <h2><a name=error_autoreply_msg>error_autoreply_msg</a></h2>

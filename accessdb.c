@@ -19,7 +19,7 @@ int get_access_status (char *accessdb, char *loginname, int max_invalid, int del
    key.dptr=(void *)loginname;
    key.dsize=strlen(loginname);
    data=dbm_fetch(db,key);
-   if(!data.dptr) return(0);
+   if(!data.dptr) { dbm_close(db); return(0); }
    memcpy(&access,data.dptr,data.dsize);
    dbm_close(db);
    if (access.status==0) return 0;

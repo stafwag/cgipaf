@@ -8,7 +8,7 @@
 /* ---------------------------------------------- */
 /* retruns a random seed with valid ascii char's  */
 /*                                                */
-/* s should be random integer                     */
+/* s should be a random integer                   */
 /* ---------------------------------------------- */
 int gen_random(int s)
 {
@@ -177,7 +177,5 @@ if (!strcmp(passwdfile,SHADOWFILE)) {
       if((i=update_pwfile(OSHADOWFILE,pw->p->pw_name,encrypt_pass))<0) return(i);
       }
    }
-   
-
 return(0);
 }

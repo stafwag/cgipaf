@@ -81,6 +81,7 @@ fi
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "syslog			 on" >> $CFGFILE
+   echo "loglevel		 6" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# accessdb configuration" >> $CFGFILE

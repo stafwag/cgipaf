@@ -1,3 +1,10 @@
+/*
+ * emulate functions that aren't available on some Unices
+ * 
+ * (c) 2001 Belgium
+ * staf wagemakers
+ * stafwag@f2s.com
+ */
 #include "config.h"
 #include <stdlib.h>
 #ifdef HAVE_SYS_SYSTEMINFO_H

@@ -1,3 +1,8 @@
+version 1.0rc2
+
+  accessdb bug, the database wasn' always closed  ( thanks to Andreas Liebe 
+  for his patch )
+
 version 1.0rc1
 
   Configure doesn't work on non PAM systems

@@ -90,6 +90,7 @@ char * mv_2_next (char *c)
 do if (isspace(*c)) ++c; else break; while (*c);
 return c;
 }
+
 /* ------------------------------------------- */
 /* get the size of a item ch=IFS               */
 /* ------------------------------------------- */
@@ -123,6 +124,7 @@ cc2=cc;
 while (*cc2) { free(*cc2);cc2++; }
 free(cc);
 }
+
 /* ----------------------------------------------------------------------- */
 /* replaces a needle with a new string head & tail are added to needle     */
 /* ----------------------------------------------------------------------- */
@@ -150,6 +152,7 @@ char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *hea
    }
   return(ret);
 }
+
 /* ------------------------------------------------------------------------
  * replace needle with a new string
  * ------------------------------------------------------------------------ */
@@ -157,11 +160,11 @@ char * replace_needle(char *txt, char *needle, char *replace)
 {
    return(replace_headtail_needle(txt,needle,replace,"",""));
 }
+
 /* ------------------------------------------------------------------------
  * replaces an array of head-tail needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
  * ------------------------------------------------------------------------ */
-
 char * replace_headtail_needles(char *txt, char *needles[][2],char *head,char *tail)
 {
    int i=0,first=1;
@@ -180,15 +183,16 @@ char * replace_headtail_needles(char *txt, char *needles[][2],char *head,char *t
    free(txt2);
    return(ret);
 }
+
 /* ------------------------------------------------------------------------
  * replaces an array of needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
  * ------------------------------------------------------------------------ */
-
 char * replace_needles(char *txt, char *needles[][2])
 {
    return(replace_headtail_needles(txt,needles,"",""));
 }
+
 /* ------------------------------------------------------------------------
  * delete all animals with head and tail.
  * !!!! txt be will freed !!!!!
@@ -220,7 +224,6 @@ char * real_cut_between(char *txt,char *head, char *tail) {
 /* ------------------------------------------------------------------------
  * delete all animals with head and tail.
  * ------------------------------------------------------------------------ */
-
 char * cut_between(char *txt,char *head, char *tail) 
 {
    char *txt2;
@@ -278,6 +281,7 @@ char *c,*cc;
    }
    str[strlen(str)]='\0';
 }
+
 /* ----------------------------------------- */
 /* Verwijderen v/e karakter in een string    */
 /* char     *c -> string                     */

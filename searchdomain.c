@@ -1,4 +1,3 @@
-
 /*
  * searchdomain.c				(c) 2001   Staf Wagemakers
  */

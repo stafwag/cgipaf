@@ -17,13 +17,27 @@ AC_PROG_MAKE_SET
 AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
    [ if test "$enableval" != "no"; then
         ARG="WITHPAM"
+	ENABLE_PAM="yes"
       fi ],
    [ ARG="WITHPAM" ]) 
 
 dnl Checks for libraries.
 
 if test "$ARG" = "WITHPAM"; then
+   AC_MSG_CHECKING(checking for PAM support...)
+   ls -l /etc/pam* > /dev/null
+   if test "$?" = "0"; then
+      ENABLE_PAM="yes"
+      AC_MSG_RESULT("yes");
+      else
+         AC_MSG_RESULT("no");
+   fi
    AC_CHECK_LIB(pam,pam_start,ARG="WITHPAM",ARG="")
+   if test "$ENABLE_PAM"="yes"; then
+      if test "$ARG" != "WITHPAM"; then
+      AC_MSG_ERROR("PAM support enabled but pam_start function not found install the pam development package and rerun configure")
+      fi
+   fi
 fi
 
 if test "$ARG" != "WITHPAM"; then

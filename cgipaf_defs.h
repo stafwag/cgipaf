@@ -30,6 +30,7 @@
 #define  CFG_INVALIDTIMEOUT     "invalid_timeout"
 #define  CFG_COOKIETIMEOUT      "cookie_timeout"
 #define  CFG_SYSLOG		"syslog"
+#define  CFG_LOGLEVEL		"loglevel"
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
 #define  MINLENGTH 		6

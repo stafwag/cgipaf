@@ -1,3 +1,6 @@
+/*
+ * searchdomain.h                                 (c) 2001 Staf Wagemakers
+ */
 #ifdef NEED_COMPAT_H
 #include "compat.h"
 #endif

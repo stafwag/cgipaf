@@ -1,0 +1,80 @@
+#!/usr/bin/perl
+#
+# sample mail configuration script with vacation support
+#
+
+use warnings;
+use strict;
+
+#
+# get the mail cfg from stdin
+#
+
+my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO,@MSG)=<>;
+chomp ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
+
+#
+# set the .forward and .vacation.msg path
+#
+
+my   $DOTFORWARD="$HOMEDIR/.forward";
+my   $DOTVACATIONMSG="$HOMEDIR/.vacation.msg";
+
+#
+# delete the user's .forward if forward and autoreply is disabled
+#
+
+if(("$FORWARD" ne "yes") and ("$AUTOREPLY" ne "yes")) {
+  unlink("$DOTFORWARD") or die "Unable to delete $DOTFORWARD";
+  exit 0;
+  }
+
+#
+# create a new .forward
+#
+
+open(FH,">$DOTFORWARD") or die "Unable to create $DOTFORWARD";
+
+#
+# if forwarding is enabled, copy the forward addresses to .forward
+#
+
+if("$FORWARD" eq "yes") {
+   print FH "$FORWARDTO";
+   if("$KEEPMSG" eq "yes") {
+      print FH ",\\$NAME";
+   }
+}
+
+#
+# autoreply configuration
+#
+
+if("$AUTOREPLY" eq "yes" ) {
+   if("$FORWARD" eq "yes" ) {
+      print FH ',';           # if forwarding enable add ',' 
+   }
+   else {
+      print FH "\\$NAME,";    # no forwarding, send the msg to the user.
+   }
+    
+   #
+   # add vacation to .forward
+   #
+    
+   print FH "\"|/usr/bin/vacation -m vacations.txt $NAME\"";
+   
+   #
+   # create the user's .vacation.msg
+   #
+    
+   open(FH_MSG,">$DOTVACATIONMSG") or die "Unable to create $DOTVACATIONMSG";
+   print FH_MSG "From: $NAME\@$DOMAIN\n";
+   print FH_MSG "Subject: I am on vacation\n";
+   print FH_MSG "Delivered-By-The-Graces-Of: The Vacation program\n";
+   print FH_MSG "Precedence: bulk\n\n";
+   print FH_MSG @MSG;
+   close FH_MSG;
+}
+close FH;
+exit 0;

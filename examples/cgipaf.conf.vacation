@@ -1,0 +1,116 @@
+#
+# sample cgipaf config file
+#
+
+#
+# set the pam service name, if not set passwd is used
+#
+
+# pam_service		 cgipaf
+
+#
+# enable syslog messages
+#
+
+syslog			 on
+loglevel		 6
+
+#
+# accessdb configuration
+
+accessdb                /etc/cgipaf/accessdb
+max_invalid             10
+invalid_timeout         60
+
+#
+# set the minimum uid & maximum uid, if min_uid isn't set the
+# default (10) is used. if max_uid isn't set there is no
+# maximum
+#
+
+min_uid                 101
+
+#
+# passwd.cgi configuration
+#
+
+<passwd>
+
+# syntax:      document      document_name
+#              document      redirect          location
+#
+
+document_root           /etc/cgipaf/data
+login_document          cgipasswd.php
+error_loginname         cgipasswd_errlogin.php
+error_access            cgipasswd_erraccess.php
+error_invalid           cgipasswd_errinvalid.php
+error_newpassword       cgipasswd_errnewpass.php
+error_match             cgipasswd_errmatch.php
+error_unchanged         cgipasswd_errunchanged.php
+error_tooshort          cgipasswd_errshort.php
+error_locked            cgipasswd_errlocked.php
+# run_locked            /usr/local/bin/notify_script %{name}
+error_toolong           cgipasswd_errlong.php
+error_cracklib          cgipasswd_errbadpassword.php
+error_pam               cgipasswd_errpam.php
+msg_success             cgipasswd_msgchanged.php
+run_success             "/usr/bin/smb_passwd -s -U %{name} > /dev/null" 	"%{password}\n%{password}\n"
+
+#
+# set the minimum & maximum password length
+#
+
+min_length              5
+max_length              16
+
+#
+# enable cracklib support
+#
+
+# cracklib on
+# cracklib_dictpath    /var/cache/cracklib/cracklib_dict
+
+#
+# set PAM_CHANGE_EXPIRED_AUTHTOK flag
+#
+
+set_PAM_CHANGE_EXPIRED_AUTHTOK  on
+
+</passwd>
+
+#
+# mailcfg configuration
+#
+
+<mailcfg>
+
+cookie_timeout          300
+document_root           /etc/cgipaf/data
+login_document          viewmailcfg.php
+mailcfg_document        mailcfg.php
+error_readname		 mailcfg_errreadname
+error_accessdb		 mailcfg_erraccessdb.php
+error_loginname         mailcfg_errloginname.php
+error_access		 mailcfg_erraccess.php
+error_invalid           mailcfg_errinvalid.php
+error_locked            mailcfg_errlocked.php
+error_readforward	 mailcfg_errforward.php
+error_forwardto	 mailcfg_errforwardto.php
+error_invalidforwardto	 mailcfg_errinvalidforwardto.php
+error_readkeepmsg	 mailcfg_errkeepmsg.php
+error_readautoreply	 mailcfg_errautoreply.php
+error_autoreplymsg      mailcfg_errautoreplymsg.php
+error_cookie		 mailcfg_errcookie.php
+error_cookietimeout	 mailcfg_errcookietimeout.php
+error_deldotforward	 mailcfg_errdeldotforward.php
+error_deldotprocmailrc  mailcfg_errdeldotprocmailrc.php
+error_openvacations	 mailcfg_erropenvacations.php
+msg_success		 mailcfg_msgupdated.php
+# sendmail              /usr/lib/sendmail
+# domain		 your_domain_name
+run_mailcfg		"/etc/cgipaf/scripts/mailcfg.pl" "%{name}\n%{domain}\n%{homedir}\n%{forward}\n%{keep_msg}\n%{autoreply}\n%{forward_to}\n%{autoreply_msg}\n"
+# run_before_mailcfg	"cp ~/.procmailrc ~/.procmailrc.backup"
+# run_after_mailcfg	"cp ~/.procmailrc.backup ~/.procmailrc"
+use_statefile		yes
+</mailcfg>

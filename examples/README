@@ -1,0 +1,2 @@
+cgipaf with vacation support example.
+copy mailcfg.pl to /etc/cgipaf/scripts and modify it for your own needs

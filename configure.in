@@ -224,10 +224,23 @@ if test "$NEED_NDBMLIB" = "yes"; then                                      dnl N
 	                      [DB_COMPAT_LIB="yes"])
 
 	          if test "$DB_COMPAT_LIB" != "yes"; then		   dnl DB_COMPAT_LIB
-
+	          
 	             AC_MSG_RESULT(no)
-	             AC_MSG_ERROR(no valid ndbm library found)
+		     LIBS="$LIBS -lpthread"
+	          
+		     AC_MSG_CHECKING("for dbm_open in -ldb -lphtread with DB_DBM_HSEARCH 1")
 
+	             AC_TRY_LINK([#define DB_DBM_HSEARCH 1
+	                          #include <db.h>],
+	                         [dbm_open(0,0,0);],
+	                         [DB_COMPAT_LIB="yes"])
+
+	             if test "$DB_COMPAT_LIB" != "yes"; then		   dnl DB_COMPAT_LIB
+
+	                AC_MSG_RESULT(no)
+	                AC_MSG_ERROR(no valid ndbm library found)
+
+	             fi							   dnl DB_COMPAT_LIB
 	          fi							   dnl DB_COMPAT_LIB
 
 	          AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)

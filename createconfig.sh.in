@@ -47,11 +47,11 @@ WWW="${datadir}"
    echo >> $CFGFILE
    echo "# ACL example" >> $CFGFILE
    echo >> $CFGFILE
-   echo "# AclOrder              Allow,Deny" >> $CFGFILE
-   echo "# AllowUsers            user1 user2 user3" >>$CFGFILE
-   echo "# AllowGroups           group1 group2 group3" >>$CFGFILE
+   echo "# AclOrder              Deny,Allow" >> $CFGFILE
    echo "# DenyUsers             *" >> $CFGFILE
    echo "# DenyGroups            *" >> $CFGFILE
+   echo "# AllowUsers            user1 user2 user3" >>$CFGFILE
+   echo "# AllowGroups           group1 group2 group3" >>$CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# accessdb configuration" >> $CFGFILE

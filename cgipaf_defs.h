@@ -145,5 +145,6 @@ extern char const * FascistCheck(char const password[], char const dictpath[]);
 #include "showmsg.h"
 #include "write_log.h"
 #include "acl.h"
+#include "cgipaf_func.h"
 
 #endif /* _CGIPAF_DEFS_H */

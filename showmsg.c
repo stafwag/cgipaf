@@ -29,7 +29,7 @@ int show_alt_msg(char *alt_msg)
  *                2  = alt_msg displayed
  *                3  = no msg displayed, can't load file and alt_msg is NULL
  */
-int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char *parms[][2])
+int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms)
 {
 char *cp,*fullname,**cc;
 struct stat statbuf;
@@ -129,14 +129,14 @@ else {
 /*
  * call show_msg and exit, close config_file if open
  */
-void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msgfile, char *alt_msg,char *parms[][2])
+void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msgfile, char *alt_msg,char ***parms)
 {
      show_msg(config_file,root,virtual_name,msgfile,alt_msg,parms);
      if (config_file!=NULL) fclose(config_file);
      exit(0);
 }
 
-int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char *parms[][2])
+int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms)
 {
    char **cc;
    int i;
@@ -153,7 +153,7 @@ int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, c
    return(i);
 }
 
-void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char *parms[][2])
+void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms)
 {
      show_msgs(config_file,root,section_name,msgfiles,alt_msg,parms);
      if (config_file!=NULL) fclose(config_file);

@@ -49,7 +49,7 @@ AC_SUBST(OBJS)
 
 PRESET_CFLAGS="$CFLAGS"
 
-OBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o acl.o write_log.o"
+OBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o acl.o write_log.o cgipaf_func.o"
 
 dnl Checks for programs.
 AC_PROG_CC

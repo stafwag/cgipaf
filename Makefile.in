@@ -101,6 +101,9 @@ acl.o: acl.c acl.h
 fgetpwnam.o: fgetpwnam.c fgetpwnam.h
 	$(CC) $(CFLAGS) -c fgetpwnam.c
 
+cgipaf_func.o: cgipaf_func.c cgipaf_func.h xstring.o ccgi.o
+	$(CC) $(CFLAGS) -c cgipaf_func.c
+
 clean:
 	rm -f *.cgi *.o changepass
 

@@ -9,15 +9,14 @@
 main()
 {
 #include "cgipaf_vars.h"
+#include "cgipaf_init.c"
 
-   unsetenv("IFS");
    if (setuid(0)==-1) {
       write_log(LOG_USER,7,"setuid(0) failed");
       print_txt_msg(err_setuidzero);
       exit(0);
    }
    
-   set_memerr(out_of_memory);
 
    /*
     * set doc_root & accessdb
@@ -209,6 +208,7 @@ main()
    /* Get the post variables */
    
    data=read_post();
+   options=add_post_2_string_pair(data,options);
    
    /* No Post? -> Ask the user to login */
    

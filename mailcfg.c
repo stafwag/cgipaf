@@ -47,11 +47,9 @@ main()
    FILE   *fp;
    WEBDATA *cookies;
 #include "cgipaf_vars.h"
+#include "cgipaf_init.c"
    fflush(0);
-   unsetenv("IFS");
    
-   set_memerr(out_of_memory);      /* set out of memory handler */
-
    /* reset parms */
    memset(forward,'\0',sizeof(forward)); 
    forward_to=txt_NULL;                  

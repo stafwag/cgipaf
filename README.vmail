@@ -1,0 +1,25 @@
+CGIpaf 1.3.0pre1 has support for Linuxconf virtual email domains.
+
+I didn't had the time to update the docs...
+
+To compile CGIpaf with vmail support you've to disable pam-support
+
+  $ ./configure --disable-pam  \
+  		--bindir=/var/www/cgi-bin \
+		--sysconfdir=/etc/cgipaf \
+		--datadir=/etc/cgipaf
+  $ make
+  # make install
+
+To enable vmail support add the next lines to cgipaf.conf
+
+	vmail_support		yes
+	passwd_location		/etc/vmail/passwd.%{user_maildomain}
+	shadow_location		/etc/vmail/shadow.%{user_maildomain}
+
+It is recommended to use an Access Control List that only allow access
+to UserMaildmains that are hosted on your server.
+
+	AclOrder 		Deny,Allow
+	DenyUserMaildomains	*
+	AllowUserMaildomains	mydomain1.com mydomain2.com

@@ -53,6 +53,7 @@ int  set_pam_chauth_flag (int flag);
 #define PASS_SUCCESS PAM_SUCCESS
 #endif
 #ifndef _WITHPAM
+#include "fgetpwnam.h"
 #define PASS_SUCCESS 0
 #endif
 

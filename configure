@@ -1084,7 +1084,7 @@ else
 fi
 
 
-   LIBOBJS="$LIBOBJS pass.o salt.o"
+   LIBOBJS="$LIBOBJS pass.o salt.o fgetpwnam.o"
    if test "$enable_md5crypt" != "no"; then
 
  

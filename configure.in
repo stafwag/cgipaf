@@ -159,10 +159,13 @@ dnl freebsd has built-in md5 support
    fi
 
  else
-   AC_CHECK_LIB(pam,pam_authenticate,,AC_MSG_ERROR(no valid pam library found))
-   AC_CHECK_LIB(pam,pam_chauthtok,,AC_MSG_ERROR(no valid pam library found))
-   AC_CHECK_LIB(pam,pam_end,,AC_MSG_ERROR(no valid pam library found))
-   OBJS="$OBJS passpam.o"
+	AC_CHECK_LIB(pam,pam_authenticate,PAMLIB_ERROR="no",PAMLIB_ERROR="yes")
+   	AC_CHECK_LIB(pam,pam_chauthtok,PAMLIB_ERROR="no",PAMLIB_ERROR="yes")
+	AC_CHECK_LIB(pam,pam_end,,PAMLIB_ERROR="yes")
+	if test "$PAMLIB_ERROR" = "yes"; then
+   		AC_MSG_ERROR(no valid pam library found)
+   	fi
+   	OBJS="$OBJS passpam.o"
 fi
 
 if test "$with_libcrack" != "no"; then
@@ -176,62 +179,69 @@ AC_CHECK_FUNCS(dbm_open dbm_fetch dbm_store dbm_close,,NEED_NDBMLIB="yes")
 
 if test "$NEED_NDBMLIB" = "yes"; then                                      dnl NEED_NDBM
 
-   AC_CHECK_LIB(ndbm,dbm_open,,[ NDBM_LIB="no" ])
-
-   if test "$NDBM_LIB" != "no"; then                                       dnl NDBM_LIB
-      AC_CHECK_LIB(ndbm,dbm_fetch,,[ NDBM_LIB="no" ])
-      AC_CHECK_LIB(ndbm,dbm_store,,[ NDBM_LIB="no" ])
-      AC_CHECK_LIB(ndbm,dbm_close,,[ NDBM_LIB="no" ])
-   fi                                                                      dnl NDBM_LIB
+   AC_CHECK_LIB(ndbm,dbm_open,NDBM_LIB="yes",NDBM_LIB="no")
+   AC_CHECK_LIB(ndbm,dbm_fetch,NDBM_LIB="yes",NDBM_LIB="no")
+   AC_CHECK_LIB(ndbm,dbm_store,NDBM_LIB="yes",NDBM_LIB="no")
+   AC_CHECK_LIB(ndbm,dbm_close,,NDBM_LIB="no")
 
    if test "$NDBM_LIB" = "no"; then                                        dnl NDBM_LIB
   
-      AC_CHECK_LIB(gdbm,dbm_open,,[ GDBM_LIB="no" ])
-      AC_CHECK_LIB(gdbm,dbm_fetch,,[ GDBM_LIB="no" ])
-      AC_CHECK_LIB(gdbm,dbm_store,,[ GDBM_LIB="no" ])
-      AC_CHECK_LIB(gdbm,dbm_close,,[ GDBM_LIB="no" ])
-  
+      AC_CHECK_LIB(gdbm,dbm_open,GDBM_LIB="yes",GDBM_LIB="no")
+      AC_CHECK_LIB(gdbm,dbm_fetch,GDBM_LIB="yes",GDBM_LIB="no")
+      AC_CHECK_LIB(gdbm,dbm_store,GDBM_LIB="yes",GDBM_LIB="no")
+      AC_CHECK_LIB(gdbm,dbm_close,,GDBM_LIB="no")
+      
       if test "$GDBM_LIB" = "no"; then                                     dnl GDBM_LIB
 
-         AC_CHECK_LIB(db1,dbm_open,,[ DB1_LIB="no" ])
-         AC_CHECK_LIB(db1,dbm_fetch,,[ DB1_LIB="no" ])
-         AC_CHECK_LIB(db1,dbm_store,,[ DB1LIB="no" ])
-         AC_CHECK_LIB(db1,dbm_close,,[ DB1_LIB="no" ])
+    	 AC_CHECK_LIB(gdbm_compat,dbm_open,GDBM_COMPAY="yes",GDBM_COMPAT_LIB="no")
+     	 AC_CHECK_LIB(gdbm_compat,dbm_fetch,GDBM_COMPAY="yes",GDBM_COMPAT_LIB="no")
+     	 AC_CHECK_LIB(gdbm_compat,dbm_store,GDBM_COMPAY="yes",GDBM_COMPAT_LIB="no")
+     	 AC_CHECK_LIB(gdbm_compat,dbm_close,,GDBM_COMPAT_LIB="no")
 
-         if test "$DB1_LIB" = "no";then                                    dnl DB1_LIB
+    	 if test "$GDBM_COMPAT_LIB" = "no"; then 			   dnl GDBM_COMPAT_LIB
   
-            AC_CHECK_LIB(db,dbm_open,,DB_LIB="no") 
-            AC_CHECK_LIB(db,dbm_fetch,,DB_LIB="no")
-            AC_CHECK_LIB(db,dbm_store,,DB_LIB="no") 
-            AC_CHECK_LIB(db,dbm_close,,DB_LIB="no") 
 
-	    if test "$DB_LIB" = "no";then                                  dnl DB_LIB
+            AC_CHECK_LIB(db1,dbm_open,DB1_LIB="yes",DB1_LIB="no")
+            AC_CHECK_LIB(db1,dbm_fetch,DB1_LIB="yes",DB1_LIB="no")
+            AC_CHECK_LIB(db1,dbm_store,DB1_LIB="yes",DB1LIB="no")
+            AC_CHECK_LIB(db1,dbm_close,,DB1_LIB="no")
 
-	       old_libs=$LIBS
-	       LIBS="$LIBS -ldb"
+            if test "$DB1_LIB" = "no";then                                 dnl DB1_LIB
+  
+               AC_CHECK_LIB(db,dbm_open,DB_LIB="yes",DB_LIB="no") 
+               AC_CHECK_LIB(db,dbm_fetch,DB_LIB="yes",DB_LIB="no")
+               AC_CHECK_LIB(db,dbm_store,DB_LIB="yes",DB_LIB="no") 
+               AC_CHECK_LIB(db,dbm_close,,DB_LIB="no") 
 
-	       AC_MSG_CHECKING("for dbm_open in -ldb with DB_DBM_HSEARCH 1")
+	       if test "$DB_LIB" = "no";then                               dnl DB_LIB
 
-	       AC_TRY_LINK([#define DB_DBM_HSEARCH 1
-	                #include <db.h>],
-	                [dbm_open(0,0,0);],
-	                [DB_COMPAT_LIB="yes"])
+	          old_libs=$LIBS
+	          LIBS="$LIBS -ldb"
 
-	       if test "$DB_COMPAT_LIB" != "yes"; then			   dnl DB_COMPAT_LIB
+	          AC_MSG_CHECKING("for dbm_open in -ldb with DB_DBM_HSEARCH 1")
 
-	          AC_MSG_RESULT("no")
-	          AC_MSG_ERROR(no valid ndbm library found)
+	          AC_TRY_LINK([#define DB_DBM_HSEARCH 1
+	                       #include <db.h>],
+	                      [dbm_open(0,0,0);],
+	                      [DB_COMPAT_LIB="yes"])
 
-	       fi							   dnl DB_COMPAT_LIB
+	          if test "$DB_COMPAT_LIB" != "yes"; then		   dnl DB_COMPAT_LIB
 
-	       AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)
-	       AC_MSG_RESULT("yes")
+	             AC_MSG_RESULT("no")
+	             AC_MSG_ERROR(no valid ndbm library found)
 
-	    fi                                                             dnl DB_LIB
-         fi								   dnl DB1_LIB
+	          fi							   dnl DB_COMPAT_LIB
+
+	          AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)
+	          AC_MSG_RESULT("yes")
+
+	       fi                                                          dnl DB_LIB
+            fi								   dnl DB1_LIB
+	 fi								   dnl GDBM_COMPAT_LIB
       fi								   dnl GDBM_LIB
    fi                                                                      dnl NDBM_LIB
 fi									   dnl NEED_NDBM
+
 dnl Checks for header files.
 
 AC_HEADER_STDC

@@ -8,12 +8,12 @@ exec_prefix="${prefix}"
 exec_suffix="@exec_suffix@"
 cgi_suffix="@cgi_suffix@"
 top_srcdir="."
-bindir="/usr/lib/cgi-bin/"
+bindir="${exec_prefix}/bin"
 libexecdir="${exec_prefix}/libexec"
-sysconfdir="/etc/cgipaf"
+sysconfdir="${prefix}/etc"
 localstatedir="${prefix}/var"
 srcdir="."
-datadir="/etc/cgipaf"
+datadir="${prefix}/share"
 
 
 if [ ! -x ./passwd.cgi ]; then

@@ -1,7 +1,7 @@
 /*
- * accessdb.h					  (c) 2001 Staf Wagemakers
+ * accessdb.h					  (c) 2001,2003 Staf Wagemakers
  */
-#include "config.h"
+#include "config.h" 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,14 +24,20 @@
 #endif
 
 #ifdef HAVE_DB_H_DB_DBM_HSEARCH
+
 #define DB_DBM_HSEARCH 1
 #include <db.h>
 #endif
 
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
 #else
-#include <time.h>
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
 #endif
 
 #include <fcntl.h>

@@ -314,7 +314,7 @@ main()
       else{
 	 
 	 /* i dont like old cookies */
-	 
+
 	 if (!cmp_access_cookie(accessdb,options[0][1],cookie,cookie_timeout)) {
 	    write_log(LOG_AUTHPRIV,6,"cookie timeout for user %s",options[0][1]);
 	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIETIMEOUT,err_cookietimeout,options);

@@ -3211,8 +3211,7 @@ _ACEOF
    fi
 
  else
-
-echo "$as_me:$LINENO: checking for pam_authenticate in -lpam" >&5
+	echo "$as_me:$LINENO: checking for pam_authenticate in -lpam" >&5
 echo $ECHO_N "checking for pam_authenticate in -lpam... $ECHO_C" >&6
 if test "${ac_cv_lib_pam_pam_authenticate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -3267,20 +3266,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_pam_pam_authenticate" >&5
 echo "${ECHO_T}$ac_cv_lib_pam_pam_authenticate" >&6
 if test $ac_cv_lib_pam_pam_authenticate = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPAM 1
-_ACEOF
-
-  LIBS="-lpam $LIBS"
-
+  PAMLIB_ERROR="no"
 else
-  { { echo "$as_me:$LINENO: error: no valid pam library found" >&5
-echo "$as_me: error: no valid pam library found" >&2;}
-   { (exit 1); exit 1; }; }
+  PAMLIB_ERROR="yes"
 fi
 
-
-echo "$as_me:$LINENO: checking for pam_chauthtok in -lpam" >&5
+   	echo "$as_me:$LINENO: checking for pam_chauthtok in -lpam" >&5
 echo $ECHO_N "checking for pam_chauthtok in -lpam... $ECHO_C" >&6
 if test "${ac_cv_lib_pam_pam_chauthtok+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -3335,16 +3326,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_pam_pam_chauthtok" >&5
 echo "${ECHO_T}$ac_cv_lib_pam_pam_chauthtok" >&6
 if test $ac_cv_lib_pam_pam_chauthtok = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPAM 1
-_ACEOF
-
-  LIBS="-lpam $LIBS"
-
+  PAMLIB_ERROR="no"
 else
-  { { echo "$as_me:$LINENO: error: no valid pam library found" >&5
-echo "$as_me: error: no valid pam library found" >&2;}
-   { (exit 1); exit 1; }; }
+  PAMLIB_ERROR="yes"
 fi
 
 
@@ -3410,12 +3394,15 @@ _ACEOF
   LIBS="-lpam $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: no valid pam library found" >&5
-echo "$as_me: error: no valid pam library found" >&2;}
-   { (exit 1); exit 1; }; }
+  PAMLIB_ERROR="yes"
 fi
 
-   OBJS="$OBJS passpam.o"
+	if test "$PAMLIB_ERROR" = "yes"; then
+   		{ { echo "$as_me:$LINENO: error: no valid pam library found" >&5
+echo "$as_me: error: no valid pam library found" >&2;}
+   { (exit 1); exit 1; }; }
+   	fi
+   	OBJS="$OBJS passpam.o"
 fi
 
 if test "$with_libcrack" != "no"; then
@@ -3720,8 +3707,7 @@ done
 
 
 if test "$NEED_NDBMLIB" = "yes"; then
-
-echo "$as_me:$LINENO: checking for dbm_open in -lndbm" >&5
+   echo "$as_me:$LINENO: checking for dbm_open in -lndbm" >&5
 echo $ECHO_N "checking for dbm_open in -lndbm... $ECHO_C" >&6
 if test "${ac_cv_lib_ndbm_dbm_open+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -3776,19 +3762,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_ndbm_dbm_open" >&5
 echo "${ECHO_T}$ac_cv_lib_ndbm_dbm_open" >&6
 if test $ac_cv_lib_ndbm_dbm_open = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBNDBM 1
-_ACEOF
-
-  LIBS="-lndbm $LIBS"
-
+  NDBM_LIB="yes"
 else
-   NDBM_LIB="no"
+  NDBM_LIB="no"
 fi
 
-
-   if test "$NDBM_LIB" != "no"; then
-echo "$as_me:$LINENO: checking for dbm_fetch in -lndbm" >&5
+   echo "$as_me:$LINENO: checking for dbm_fetch in -lndbm" >&5
 echo $ECHO_N "checking for dbm_fetch in -lndbm... $ECHO_C" >&6
 if test "${ac_cv_lib_ndbm_dbm_fetch+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -3843,18 +3822,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_ndbm_dbm_fetch" >&5
 echo "${ECHO_T}$ac_cv_lib_ndbm_dbm_fetch" >&6
 if test $ac_cv_lib_ndbm_dbm_fetch = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBNDBM 1
-_ACEOF
-
-  LIBS="-lndbm $LIBS"
-
+  NDBM_LIB="yes"
 else
-   NDBM_LIB="no"
+  NDBM_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_store in -lndbm" >&5
+   echo "$as_me:$LINENO: checking for dbm_store in -lndbm" >&5
 echo $ECHO_N "checking for dbm_store in -lndbm... $ECHO_C" >&6
 if test "${ac_cv_lib_ndbm_dbm_store+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -3909,14 +3882,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_ndbm_dbm_store" >&5
 echo "${ECHO_T}$ac_cv_lib_ndbm_dbm_store" >&6
 if test $ac_cv_lib_ndbm_dbm_store = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBNDBM 1
-_ACEOF
-
-  LIBS="-lndbm $LIBS"
-
+  NDBM_LIB="yes"
 else
-   NDBM_LIB="no"
+  NDBM_LIB="no"
 fi
 
 
@@ -3982,13 +3950,12 @@ _ACEOF
   LIBS="-lndbm $LIBS"
 
 else
-   NDBM_LIB="no"
+  NDBM_LIB="no"
 fi
 
-   fi
-   if test "$NDBM_LIB" = "no"; then
 
-echo "$as_me:$LINENO: checking for dbm_open in -lgdbm" >&5
+   if test "$NDBM_LIB" = "no"; then
+      echo "$as_me:$LINENO: checking for dbm_open in -lgdbm" >&5
 echo $ECHO_N "checking for dbm_open in -lgdbm... $ECHO_C" >&6
 if test "${ac_cv_lib_gdbm_dbm_open+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4043,18 +4010,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_dbm_open" >&5
 echo "${ECHO_T}$ac_cv_lib_gdbm_dbm_open" >&6
 if test $ac_cv_lib_gdbm_dbm_open = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGDBM 1
-_ACEOF
-
-  LIBS="-lgdbm $LIBS"
-
+  GDBM_LIB="yes"
 else
-   GDBM_LIB="no"
+  GDBM_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_fetch in -lgdbm" >&5
+      echo "$as_me:$LINENO: checking for dbm_fetch in -lgdbm" >&5
 echo $ECHO_N "checking for dbm_fetch in -lgdbm... $ECHO_C" >&6
 if test "${ac_cv_lib_gdbm_dbm_fetch+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4109,18 +4070,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_dbm_fetch" >&5
 echo "${ECHO_T}$ac_cv_lib_gdbm_dbm_fetch" >&6
 if test $ac_cv_lib_gdbm_dbm_fetch = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGDBM 1
-_ACEOF
-
-  LIBS="-lgdbm $LIBS"
-
+  GDBM_LIB="yes"
 else
-   GDBM_LIB="no"
+  GDBM_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_store in -lgdbm" >&5
+      echo "$as_me:$LINENO: checking for dbm_store in -lgdbm" >&5
 echo $ECHO_N "checking for dbm_store in -lgdbm... $ECHO_C" >&6
 if test "${ac_cv_lib_gdbm_dbm_store+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4175,14 +4130,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_dbm_store" >&5
 echo "${ECHO_T}$ac_cv_lib_gdbm_dbm_store" >&6
 if test $ac_cv_lib_gdbm_dbm_store = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGDBM 1
-_ACEOF
-
-  LIBS="-lgdbm $LIBS"
-
+  GDBM_LIB="yes"
 else
-   GDBM_LIB="no"
+  GDBM_LIB="no"
 fi
 
 
@@ -4248,13 +4198,261 @@ _ACEOF
   LIBS="-lgdbm $LIBS"
 
 else
-   GDBM_LIB="no"
+  GDBM_LIB="no"
 fi
 
 
       if test "$GDBM_LIB" = "no"; then
+    	 echo "$as_me:$LINENO: checking for dbm_open in -lgdbm_compat" >&5
+echo $ECHO_N "checking for dbm_open in -lgdbm_compat... $ECHO_C" >&6
+if test "${ac_cv_lib_gdbm_compat_dbm_open+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgdbm_compat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 
-echo "$as_me:$LINENO: checking for dbm_open in -ldb1" >&5
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dbm_open ();
+int
+main ()
+{
+dbm_open ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gdbm_compat_dbm_open=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gdbm_compat_dbm_open=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_compat_dbm_open" >&5
+echo "${ECHO_T}$ac_cv_lib_gdbm_compat_dbm_open" >&6
+if test $ac_cv_lib_gdbm_compat_dbm_open = yes; then
+  GDBM_COMPAY="yes"
+else
+  GDBM_COMPAT_LIB="no"
+fi
+
+     	 echo "$as_me:$LINENO: checking for dbm_fetch in -lgdbm_compat" >&5
+echo $ECHO_N "checking for dbm_fetch in -lgdbm_compat... $ECHO_C" >&6
+if test "${ac_cv_lib_gdbm_compat_dbm_fetch+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgdbm_compat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dbm_fetch ();
+int
+main ()
+{
+dbm_fetch ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gdbm_compat_dbm_fetch=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gdbm_compat_dbm_fetch=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_compat_dbm_fetch" >&5
+echo "${ECHO_T}$ac_cv_lib_gdbm_compat_dbm_fetch" >&6
+if test $ac_cv_lib_gdbm_compat_dbm_fetch = yes; then
+  GDBM_COMPAY="yes"
+else
+  GDBM_COMPAT_LIB="no"
+fi
+
+     	 echo "$as_me:$LINENO: checking for dbm_store in -lgdbm_compat" >&5
+echo $ECHO_N "checking for dbm_store in -lgdbm_compat... $ECHO_C" >&6
+if test "${ac_cv_lib_gdbm_compat_dbm_store+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgdbm_compat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dbm_store ();
+int
+main ()
+{
+dbm_store ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gdbm_compat_dbm_store=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gdbm_compat_dbm_store=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_compat_dbm_store" >&5
+echo "${ECHO_T}$ac_cv_lib_gdbm_compat_dbm_store" >&6
+if test $ac_cv_lib_gdbm_compat_dbm_store = yes; then
+  GDBM_COMPAY="yes"
+else
+  GDBM_COMPAT_LIB="no"
+fi
+
+
+echo "$as_me:$LINENO: checking for dbm_close in -lgdbm_compat" >&5
+echo $ECHO_N "checking for dbm_close in -lgdbm_compat... $ECHO_C" >&6
+if test "${ac_cv_lib_gdbm_compat_dbm_close+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgdbm_compat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dbm_close ();
+int
+main ()
+{
+dbm_close ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gdbm_compat_dbm_close=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gdbm_compat_dbm_close=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gdbm_compat_dbm_close" >&5
+echo "${ECHO_T}$ac_cv_lib_gdbm_compat_dbm_close" >&6
+if test $ac_cv_lib_gdbm_compat_dbm_close = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGDBM_COMPAT 1
+_ACEOF
+
+  LIBS="-lgdbm_compat $LIBS"
+
+else
+  GDBM_COMPAT_LIB="no"
+fi
+
+
+    	 if test "$GDBM_COMPAT_LIB" = "no"; then
+
+            echo "$as_me:$LINENO: checking for dbm_open in -ldb1" >&5
 echo $ECHO_N "checking for dbm_open in -ldb1... $ECHO_C" >&6
 if test "${ac_cv_lib_db1_dbm_open+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4309,18 +4507,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db1_dbm_open" >&5
 echo "${ECHO_T}$ac_cv_lib_db1_dbm_open" >&6
 if test $ac_cv_lib_db1_dbm_open = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB1 1
-_ACEOF
-
-  LIBS="-ldb1 $LIBS"
-
+  DB1_LIB="yes"
 else
-   DB1_LIB="no"
+  DB1_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_fetch in -ldb1" >&5
+            echo "$as_me:$LINENO: checking for dbm_fetch in -ldb1" >&5
 echo $ECHO_N "checking for dbm_fetch in -ldb1... $ECHO_C" >&6
 if test "${ac_cv_lib_db1_dbm_fetch+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4375,18 +4567,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db1_dbm_fetch" >&5
 echo "${ECHO_T}$ac_cv_lib_db1_dbm_fetch" >&6
 if test $ac_cv_lib_db1_dbm_fetch = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB1 1
-_ACEOF
-
-  LIBS="-ldb1 $LIBS"
-
+  DB1_LIB="yes"
 else
-   DB1_LIB="no"
+  DB1_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_store in -ldb1" >&5
+            echo "$as_me:$LINENO: checking for dbm_store in -ldb1" >&5
 echo $ECHO_N "checking for dbm_store in -ldb1... $ECHO_C" >&6
 if test "${ac_cv_lib_db1_dbm_store+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4441,14 +4627,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db1_dbm_store" >&5
 echo "${ECHO_T}$ac_cv_lib_db1_dbm_store" >&6
 if test $ac_cv_lib_db1_dbm_store = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB1 1
-_ACEOF
-
-  LIBS="-ldb1 $LIBS"
-
+  DB1_LIB="yes"
 else
-   DB1LIB="no"
+  DB1LIB="no"
 fi
 
 
@@ -4514,13 +4695,12 @@ _ACEOF
   LIBS="-ldb1 $LIBS"
 
 else
-   DB1_LIB="no"
+  DB1_LIB="no"
 fi
 
 
-         if test "$DB1_LIB" = "no";then
-
-echo "$as_me:$LINENO: checking for dbm_open in -ldb" >&5
+            if test "$DB1_LIB" = "no";then
+               echo "$as_me:$LINENO: checking for dbm_open in -ldb" >&5
 echo $ECHO_N "checking for dbm_open in -ldb... $ECHO_C" >&6
 if test "${ac_cv_lib_db_dbm_open+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4575,18 +4755,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db_dbm_open" >&5
 echo "${ECHO_T}$ac_cv_lib_db_dbm_open" >&6
 if test $ac_cv_lib_db_dbm_open = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB 1
-_ACEOF
-
-  LIBS="-ldb $LIBS"
-
+  DB_LIB="yes"
 else
   DB_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_fetch in -ldb" >&5
+               echo "$as_me:$LINENO: checking for dbm_fetch in -ldb" >&5
 echo $ECHO_N "checking for dbm_fetch in -ldb... $ECHO_C" >&6
 if test "${ac_cv_lib_db_dbm_fetch+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4641,18 +4815,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db_dbm_fetch" >&5
 echo "${ECHO_T}$ac_cv_lib_db_dbm_fetch" >&6
 if test $ac_cv_lib_db_dbm_fetch = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB 1
-_ACEOF
-
-  LIBS="-ldb $LIBS"
-
+  DB_LIB="yes"
 else
   DB_LIB="no"
 fi
 
-
-echo "$as_me:$LINENO: checking for dbm_store in -ldb" >&5
+               echo "$as_me:$LINENO: checking for dbm_store in -ldb" >&5
 echo $ECHO_N "checking for dbm_store in -ldb... $ECHO_C" >&6
 if test "${ac_cv_lib_db_dbm_store+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4707,12 +4875,7 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_db_dbm_store" >&5
 echo "${ECHO_T}$ac_cv_lib_db_dbm_store" >&6
 if test $ac_cv_lib_db_dbm_store = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDB 1
-_ACEOF
-
-  LIBS="-ldb $LIBS"
-
+  DB_LIB="yes"
 else
   DB_LIB="no"
 fi
@@ -4784,14 +4947,14 @@ else
 fi
 
 
-	    if test "$DB_LIB" = "no";then
-	       old_libs=$LIBS
-	       LIBS="$LIBS -ldb"
+	       if test "$DB_LIB" = "no";then
+	          old_libs=$LIBS
+	          LIBS="$LIBS -ldb"
 
-	       echo "$as_me:$LINENO: checking \"for dbm_open in -ldb with DB_DBM_HSEARCH 1\"" >&5
+	          echo "$as_me:$LINENO: checking \"for dbm_open in -ldb with DB_DBM_HSEARCH 1\"" >&5
 echo $ECHO_N "checking \"for dbm_open in -ldb with DB_DBM_HSEARCH 1\"... $ECHO_C" >&6
 
-	       cat >conftest.$ac_ext <<_ACEOF
+	          cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -4799,7 +4962,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define DB_DBM_HSEARCH 1
-	                #include <db.h>
+	                       #include <db.h>
 int
 main ()
 {
@@ -4828,23 +4991,24 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	       if test "$DB_COMPAT_LIB" != "yes"; then
-	          echo "$as_me:$LINENO: result: \"no\"" >&5
+	          if test "$DB_COMPAT_LIB" != "yes"; then
+	             echo "$as_me:$LINENO: result: \"no\"" >&5
 echo "${ECHO_T}\"no\"" >&6
-	          { { echo "$as_me:$LINENO: error: no valid ndbm library found" >&5
+	             { { echo "$as_me:$LINENO: error: no valid ndbm library found" >&5
 echo "$as_me: error: no valid ndbm library found" >&2;}
    { (exit 1); exit 1; }; }
 
-	       fi
+	          fi
 
 cat >>confdefs.h <<_ACEOF
 #define HAVE_DB_H_DB_DBM_HSEARCH "1"
 _ACEOF
 
-	       echo "$as_me:$LINENO: result: \"yes\"" >&5
+	          echo "$as_me:$LINENO: result: \"yes\"" >&5
 echo "${ECHO_T}\"yes\"" >&6
 
-	    fi                                                                      fi								         fi								      fi                                                                      fi
+	       fi                                                                      fi								   	 fi								         fi								      fi                                                                      fi
+
 echo "$as_me:$LINENO: checking for ANSI C header files" >&5
 echo $ECHO_N "checking for ANSI C header files... $ECHO_C" >&6
 if test "${ac_cv_header_stdc+set}" = set; then

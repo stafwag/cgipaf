@@ -1,6 +1,16 @@
 /*
- * accessdb.c                                       (c) 2001 Staf Wagemakers
+ * accessdb.c
+ *
+ * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
  */
+
 #include "accessdb.h"
 /*
  * returns the status of a user
@@ -19,7 +29,10 @@ int get_access_status (char *accessdb, char *loginname, int max_invalid, int del
    key.dptr=(void *)loginname;
    key.dsize=strlen(loginname);
    data=dbm_fetch(db,key);
+
    if(!data.dptr) { dbm_close(db); return(0); }
+   if(sizeof(access)!=data.dsize) { dbm_close(db);return(-1); }
+
    memcpy(&access,data.dptr,data.dsize);
    dbm_close(db);
    if (access.status==0) return 0;
@@ -48,10 +61,13 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    key.dptr=(void *)loginname;
    key.dsize=strlen(loginname);
    data=dbm_fetch(db,key);
-   dbm_close(db);
-   if(!data.dptr) return(0);
+   if(!data.dptr) { dbm_close(db); return(0); }
+
+   if(sizeof(access)!=data.dsize) { dbm_close(db); return(-1); }
+
    memcpy(&access,data.dptr,data.dsize);
-   if(strcmp(access.cookie,cookie)) {
+   dbm_close(db);
+   if(strcmp(access.cookie,cookie)) { 
       return(0);
    }
    time(&t);
@@ -87,6 +103,9 @@ int save_access_status (char *accessdb, char *loginname, int status, int delay,c
          data=dbm_fetch(db,key);
          if (data.dptr) 
 	   {
+
+            if(sizeof(access)!=data.dsize) { dbm_close(db); return(-1); }
+
             memcpy(&access,data.dptr,data.dsize);
 	    if (access.status && (t-access.ti>delay))
 	      {

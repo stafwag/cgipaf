@@ -90,6 +90,9 @@
 /* Define to 1 if you have the `gdbm' library (-lgdbm). */
 #undef HAVE_LIBGDBM
 
+/* Define to 1 if you have the `gdbm_compat' library (-lgdbm_compat). */
+#undef HAVE_LIBGDBM_COMPAT
+
 /* Define to 1 if you have the `ndbm' library (-lndbm). */
 #undef HAVE_LIBNDBM
 

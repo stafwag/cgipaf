@@ -267,7 +267,7 @@ sub save_mailcfg ($) {
    	        open(FH_MSG,">$DOTVACATIONMSG") or print_error("Unable to create $DOTVACATIONMSG");
 
    	        print FH_MSG "From: $cgipaf_name\@$cgipaf_domain\n";
-   	        print FH_MSG "Subject: I am on vacation\n";
+   	        print FH_MSG "Subject: $$mail_settings{'subject'}\n";
    	        print FH_MSG "Delivered-By-The-Graces-Of: The Vacation program\n";
    	        print FH_MSG "Precedence: bulk\n\n";
    	        print FH_MSG "$$mail_settings{'vacationstxt'}";

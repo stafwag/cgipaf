@@ -1,4 +1,4 @@
-int    brol;
+int    i,brol;
 int    max_invalid=3;
 int    invalid_timeout=600;
 struct pw_info *pw;

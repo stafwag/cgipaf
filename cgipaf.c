@@ -11,14 +11,18 @@ main()
 unsetenv("IFS");
 setuid(0);
 set_memerr(out_of_memory);
-   
 /*
  * set doc_root & accessdb
  */
 
 /* Where are my documents??? */
-if ((config_file=fopen(CONFIGFILE,"r"))!=NULL)
+if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
    doc_root=get_sg_item(config_file,CFGSECTION,DOC_ROOT);
+   if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SYSLOG))!=NULL) {
+      if (!strcasecmp(cp,"off")) enable_log(0);
+      free(cp);
+   }
+}
 
 
 if (doc_root!=NULL) chdir(doc_root);
@@ -43,9 +47,11 @@ if ((cp=get_sg_item(config_file,CFGSECTION,CFG_ACCESSDB))!=NULL) {
      print_txt_msg(err_mcfg_configfile);
      puts(CONFIGFILE);
      puts(txt_contact_webmaster);
+     write_log(LOG_USER,LOG_ERR,"%s %s",err_mcfg_configfile,CONFIGFILE);
      exit(0);
    }
    if(accessdb==NULL) {
+     write_log(LOG_USER,LOG_ERR,"%s",err_mcfg_accessdb);
      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESSDB,err_mcfg_accessdb,options);
      exit(0);
    }
@@ -76,6 +82,7 @@ if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAXLENGTH))==NULL) ma
    sscanf(cp,"%d",&brol);
    if (brol>100) {
       print_html_msg(txt_too_much);
+      write_log(LOG_USER,LOG_ERR,"%s",txt_too_much);
       exit(1);
       }
    }
@@ -114,6 +121,7 @@ if (strlen(name)<1) {
 /* root = god, god should know how to change his password */
    
 if (!strcmp(name,ROOT)) {
+   write_log(LOG_AUTHPRIV,LOG_NOTICE,warn_root);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
    }
 
@@ -158,6 +166,7 @@ if (strlen(newpass2)>max_length) {
 /* fetch the user data, if the user dont exist... dont tell them */
    
 if (!(pw=get_pw(name))) {
+   write_log(LOG_AUTHPRIV,LOG_INFO,"Invalid password for user %s",name);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
    
@@ -168,6 +177,7 @@ if ((cp=get_config_item(config_file,CFG_MINUID))==NULL) brol=MINUID;
           if (brol<MINUID) brol=MINUID;
    }
 if (pw->p->pw_uid<brol) {
+   write_log(LOG_AUTHPRIV,LOG_NOTICE," %s %d %s",warn_uid,pw->p->pw_uid,warn_below_minuid);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
    }
 
@@ -178,6 +188,7 @@ if((cp=get_config_item(config_file,CFG_MAXUID))!=NULL) {
    sscanf(cp,"%d",&brol);
    if (brol>maxuid) maxuid=brol;
    if (pw->p->pw_uid>maxuid) {
+      write_log(LOG_AUTHPRIV,LOG_NOTICE,"%s %d %s",warn_uid,pw->p->pw_uid,warn_above_maxuid);
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
    }
 }
@@ -185,32 +196,42 @@ if (accessdb) {
    if ((brol=get_access_status(accessdb,name,max_invalid,invalid_timeout))>0) {
       snprintf(invalid_wait_txt,80,"%d",brol);
       show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options);
-      run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
+      i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
+      if(i==-1) 
+	write_log(LOG_USER,LOG_ALERT,"Can't execute run_locked %s",strerror(errno));
       if(config_file!=NULL) fclose(config_file);
+      write_log(LOG_AUTHPRIV,LOG_NOTICE,"User %s is locked",name);
       exit(0);
    }
 }
 if (ckpw(pw,pass)==-1) {
    show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+   write_log(LOG_AUTHPRIV,LOG_INFO,"Invalid password for user %s",name);
    if (accessdb) {
       if (save_access_status(accessdb,name,1,invalid_timeout,cookie)) {
 	 printf("%s %s",warn_update_accessdb,accessdb);
+	 write_log(LOG_AUTHPRIV,LOG_ALERT,"%s %s",warn_update_accessdb,accessdb);
       }
    }
+
    if (config_file!=NULL) fclose(config_file);   
    exit(0);
    }
 
 #ifdef CGIPAF_PASSWD
 if ((brol=chpw(pw,newpass1))==0) {
-      show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options);
-      fflush(stdout);
-      options[15][1]=newpass1;
-      run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
-      options[15][1]=txt_NULL;
+   show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options);
+   fflush(stdout);
+   write_log(LOG_AUTHPRIV,LOG_INFO,"Password for %s was changed",name);
+   options[15][1]=newpass1;
+   i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+   options[15][1]=txt_NULL;
+   if(i==-1) 
+      write_log(LOG_AUTHPRIV,LOG_ALERT,"Can't execute run_success %s",strerror(errno)); 
    if (accessdb) {
       if (save_access_status(accessdb,name,0,invalid_timeout,NULL)) {
 	 printf("%s %s",warn_update_accessdb,accessdb);
+	 write_log(LOG_AUTHPRIV,LOG_ALERT,"%s %s",warn_update_accessdb,accessdb);
       }
    }
 }
@@ -219,17 +240,20 @@ else {
            printf("<BR>Can't update password<BR><BR>%s",err_chpw[abs(brol)-1]);
            if (errno) printf(", %s<BR>",strerror(errno));
 	   printf("</I></B></H1></CENTER>");
+	   write_log(LOG_AUTHPRIV,LOG_ALERT,"Can't update password %s",err_chpw[abs(brol)-1]);
 	   }
 #endif
 #ifdef CGIPAF_VIEWMAILCFG
 cookie=create_cookie();
 if(cookie==NULL) {
   print_txt_msg("Can't create cookie");
+  write_log(LOG_AUTHPRIV,LOG_ALERT,"create_cookie() failed");
   exit(0);
 }
 set_cookie("cgipaf",cookie,"path=/");
 if (save_access_status(accessdb,name,0,invalid_timeout,cookie)) {
     print_txt_msg("Warning: failed to update");puts(accessdb);
+    write_log(LOG_AUTHPRIV,LOG_ALERT,"%s %s",warn_update_accessdb,accessdb);
 }
 setuid(pw->p->pw_uid);
 setgid(pw->p->pw_gid);
@@ -312,6 +336,7 @@ printf("</TD></TR></TABLE>\n");
 printf("</CENTER>\n");
 printf("</FORM>");
 printf("</BODY>");   
+write_log(LOG_AUTHPRIV,LOG_INFO,"User %s has login successfully");
    
 }
 #endif

@@ -69,14 +69,17 @@ compat.o: compat.c compat.h
 searchdomain.o: searchdomain.c searchdomain.h xstring.o configfile.o
 	$(CC) $(CFLAGS) -c searchdomain.c
 
-xmalloc.o:  xmalloc.c xmalloc.h
+xmalloc.o:  xmalloc.c xmalloc.h out_of_memory.o
 	$(CC) $(CFLAGS) -c xmalloc.c
 
-out_of_memory.o:  out_of_memory.c out_of_memory.h
+out_of_memory.o:  out_of_memory.c out_of_memory.h write_log.o
 	$(CC) $(CFLAGS) -c out_of_memory.c
 
 run_cmd.o: run_cmd.c run_cmd.h configfile.o
 	$(CC) $(CFLAGS) -c run_cmd.c
+
+write_log.o: write_log.c write_log.h 
+	$(CC) $(CFLAGS) -c write_log.c
 
 clean:
 	rm -f *.cgi *.o 

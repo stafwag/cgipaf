@@ -29,6 +29,7 @@
 #define  CFG_MAXINVALID         "max_invalid"
 #define  CFG_INVALIDTIMEOUT     "invalid_timeout"
 #define  CFG_COOKIETIMEOUT      "cookie_timeout"
+#define  CFG_SYSLOG		"syslog"
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
 #define  MINLENGTH 		6
@@ -63,6 +64,10 @@
 #include <crypt.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <syslog.h>
+#ifndef LOG_AUTHPRIV
+#define LOG_AUTHPRIV LOG_AUTH
+#endif
 #include "pass.h"
 #include "ccgi.h"
 #include "configfile.h"
@@ -76,4 +81,5 @@
 #endif
 #include "mailconfig.h"
 #include "showmsg.h"
+#include "write_log.h"
 

@@ -9,7 +9,7 @@ NEED_COMPAT_H="COMPAT"
 
 PRESET_CFLAGS="$CFLAGS"
 
-LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o"
+LIBOBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o write_log.o"
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -29,7 +29,7 @@ fi
 if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
    AC_MSG_WARN(you are compiling passwd.cgi viewmailcfg.cgi mailcfg.cgi)
-   AC_MSG_WARN(without pam support, systems without pam support are only)
+   AC_MSG_WARN(without pam support. systems without pam support are only)
    AC_MSG_WARN(supported if your system use the standard password file)
    AC_MSG_WARN(location /etc/passwd /etc/shadow and uses the crypt)
    AC_MSG_WARN(function to encrypt the passwords)
@@ -109,13 +109,16 @@ AC_CHECK_HEADERS(string.h,,AC_MSG_ERROR(string.h not found))
 AC_CHECK_HEADERS(fcntl.h,,AC_MSG_ERROR(fcntl.h not found))
 AC_CHECK_HEADERS(malloc.h,,AC_MSG_ERROR(malloc.h not found))
 AC_CHECK_HEADERS(errno.h,,AC_MSG_ERROR(errno.h not found))
-AC_CHECK_HEADERS(security/pam_appl.h,,AC_MSG_ERROR(pam_appl.h not found))
 AC_CHECK_HEADERS(sys/stat.h,,AC_MSG_ERROR(sys/stat.h not found))
 AC_CHECK_HEADERS(pwd.h,,AC_MSG_ERROR(pwd.h not found))
+AC_CHECK_HEADERS(stdarg.h,,AC_MSG_ERROR(stdarg.h not found))
+AC_CHECK_HEADERS(syslog.h,,AC_MSG_ERROR(syslog.h not found))
 
 if test "$ARG" != "WITHPAM"; then
   AC_CHECK_HEADERS(shadow.h,,AC_MSG_ERROR(shadow.h not found))
   ARG="NOPAM"
+else
+  AC_CHECK_HEADERS(security/pam_appl.h,,AC_MSG_ERROR(pam_appl.h not found))
 fi
 
 if test -z "$PRESET_CFLAGS"; then
@@ -127,7 +130,7 @@ AC_C_CONST
 AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr)
+AC_CHECK_FUNCS(free realloc malloc strdup strerror strstr va_start va_end vsnprintf strncat strncpy openlog syslog closelog)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 
 AC_CHECK_FUNCS(getdomainname,,NO_GETDOMAINNAME=yes)

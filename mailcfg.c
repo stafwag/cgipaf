@@ -36,7 +36,6 @@ char   *domain=NULL;
 char   txt_sendmail[]="/usr/lib/sendmail";
 FILE   *fp;
 WEBDATA *cookies;
-int i;
 #include "cgipaf_vars.h"
 unsetenv("IFS");
    
@@ -50,16 +49,23 @@ memset(autoreply,'\0',sizeof(autoreply));
 
 /* Where are my documents??? */
 
-if ((config_file=fopen(CONFIGFILE,"r"))!=NULL)
+if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
    doc_root=get_sg_item(config_file,CFGSECTION,DOC_ROOT);
+   if((cp=get_sg_item(config_file,CFGSECTION,CFG_SYSLOG))==NULL) {
+     if (!strcasecmp(cp,"off")) enable_log(0);
+     free(cp);
+   }
+}
 else {
    print_txt_msg(err_mcfg_configfile);
    puts(CONFIGFILE);
    puts(txt_contact_webmaster);
+   write_log(LOG_USER,LOG_ERR,"%s %s",err_mcfg_configfile,CONFIGFILE);
    exit(0);
    }
    
 if ((accessdb=get_sg_item(config_file,CFGSECTION,CFG_ACCESSDB))==NULL) {
+   write_log(LOG_USER,LOG_ERR,"%s",err_mcfg_accessdb);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESSDB,err_mcfg_accessdb,options);
 }
 
@@ -90,6 +96,7 @@ if(c!=NULL) {
    c2=textarea2asc(c);
    if(c2==NULL) {
       print_txt_msg("out of memory");
+      write_log(LOG_USER,LOG_EMERG,"out of memory");
       exit(0);
    }
    free(c);
@@ -110,18 +117,22 @@ if(c!=NULL) {
 options[0][1]=name;
 options[13][1]=autoreply_msg;
 if (name==NULL) {
+   write_log(LOG_AUTHPRIV,LOG_ERR,err_mcfg_readname);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_READNAME,err_mcfg_readname,options);
    }
 
 if (strlen(name)<1) {
+   write_log(LOG_AUTHPRIV,LOG_ERR,err_mcfg_readname);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_READNAME,err_mcfg_readname,options);
    }
 
 if (!strcmp(name,ROOT)) {
+   write_log(LOG_AUTHPRIV,LOG_NOTICE,warn_root);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
    }
 
 if (strlen(forward)<1) {
+   write_log(LOG_USER,LOG_NOTICE,err_forward);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARD,err_forward,options);
    }
 
@@ -135,11 +146,13 @@ if (!strcasecmp(forward,"yes")) {
    } 
 
 if (strlen(keep_msg)<1) {
+   write_log(LOG_USER,LOG_NOTICE,err_keep_msg);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_KEEP_MSG,err_keep_msg,options);
    }
 }
 
 if (strlen(autoreply)<1) {
+   write_log(LOG_USER,LOG_NOTICE,err_autoreply);
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLY,err_autoreply,options);
    }
 
@@ -148,12 +161,14 @@ if ((strlen(autoreply_msg)<1)&&!strcasecmp(autoreply,txt_yes)) {
       }
 
 if (!(pw=get_pw(name))) {
+   write_log(LOG_AUTHPRIV,LOG_ALERT,"try to use mailcfg.cgi as %s which doesn't exist");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
 
 cookies=get_cookies();
 
 if(cookies==NULL) {
+   write_log(LOG_AUTHPRIV,LOG_ALERT,"create_cookie() failed");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIE,err_cookie,options);
 }
 else {
@@ -162,6 +177,7 @@ else {
    }
    else{
       if (!cmp_access_cookie(accessdb,name,cookie,cookie_timeout)) {
+	 write_log(LOG_AUTHPRIV,LOG_INFO,"cookie timeout for user %s",name);
          show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIETIMEOUT,err_cookietimeout,options);
       }
    }
@@ -176,6 +192,7 @@ if (c!=NULL) {
    if (unlink(c)==-1) {
       if (!(errno==ENOENT)) {
 	 free(c);
+	 write_log(LOG_USER,LOG_ALERT,err_delforward);
          show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_DELFORWARD,err_delforward,options);
       } 
    }
@@ -187,6 +204,7 @@ if (c!=NULL) {
    if (unlink(c)==-1) {
       if (!(errno==ENOENT)) {
 	 free(c);
+	 write_log(LOG_USER,LOG_ALERT,err_delprocmail);
          show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_DELPROCMAIL,err_delprocmail,options);
       } 
    }
@@ -194,6 +212,7 @@ if (c!=NULL) {
 }
 
 if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
+     write_log(LOG_USER,LOG_ALERT,err_openvacations);	
      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,options);
      }
 fputs(autoreply_msg,fp);
@@ -207,6 +226,9 @@ if (!strcmp(forward,"yes")) {
    }
 
 show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
-run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+write_log(LOG_AUTHPRIV,LOG_INFO,"User %s has updated his mail configuration successfully",name);
+i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+if(i==-1)
+  write_log(LOG_USER,LOG_ALERT,"Can't executed run_succes %s",strerror(errno));
 if(config_file!=NULL) fclose(config_file);
 }

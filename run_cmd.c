@@ -16,7 +16,7 @@ int run_cmd(FILE *config_file,char *section,char *directive,char *vars[][2])
    cmd=popen(cmd_name,"w");
    if(cmd==NULL) 
      {
-	printf("warning: can't execute %s %s",*cc,strerror(errno));
+	fprintf(stderr,"warning: can't execute %s %s",*cc,strerror(errno));
 	return(-1);
      }
    else 

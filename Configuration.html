@@ -3,7 +3,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff">
-<h1>CGIpaf 1.0rc1 Configuration</h1>
+<h1>CGIpaf 1.0rc2 Configuration</h1>
 <h1>Content</h1>
 <UL>
 <li><a href="#syntax">Syntax</a></li>
@@ -14,6 +14,7 @@
 <UL>
 <li><a href="#directives">Directives</a></li>
 <UL>
+<li><a href="#syslog">syslog</a></li>
 <li><a href="#document_root">document_root</a></li>
 <li><a href="#login_document">login_document</a></li>
 <li><a href="#error_loginname">error_loginname</a></li>
@@ -55,7 +56,7 @@
 </UL>
 </UL>
 <UL>
-<li><a href="variables">Variables</a></li>
+<li><a href="#variables">Variables</a></li>
 </UL>
 <h1><a name="syntax">Syntax</a></h1>
 <p>    
@@ -83,6 +84,12 @@
 <p>    
  The following parameters control cgipaf features and configuration. If a 
  option is not specified or invalid the default builtin messages are used.
+</p>
+<h2><a name="syslog">syslog</a></h2>
+<p><strong>Syntax:</strong> syslog <em>on|off</em><br>
+<strong>Default:</strong> on<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<p>enable syslog messages</p>
 </p>
 <h2><a name="document_root">document_root</a></h2>
 <p><strong>Syntax:</strong> document_root <em>path</em><br>

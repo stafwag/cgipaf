@@ -1,2 +1,6 @@
+* version 1.0rc2 ( 18 Sep 2001 )
+  + fixed: configure doesn't work on non-PAM systems
+  + syslog messages
+
 * version 1.0rc1 ( 18 Aug 2001 )
   + initial release

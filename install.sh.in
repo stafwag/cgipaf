@@ -77,6 +77,12 @@ fi
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
+   echo "# enable syslog messages" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "syslog			 on" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
    echo "# accessdb configuration" >> $CFGFILE
    echo >> $CFGFILE
    echo "accessdb                /etc/cgipaf/accessdb" >> $CFGFILE
@@ -156,6 +162,7 @@ fi
    echo "# domain		 your_domain_name" >> $CFGFILE
    echo >> $CFGFILE
    echo "</mailcfg>" >> $CFGFILE
+   chmod 644 $CFGFILE
  
    fi
    

@@ -295,15 +295,18 @@ main()
 
    if (mailcfg_check) {
 
-      /* get the previos mailcfg state out the user's .cgipaf_state file */
-
+      /* get the previous mailcfg state out the user's .cgipaf_state file */
+      
       if ((oldstate=get_mailcfg_status(pw))==-1) 
-         write_log,(LOG_USER,7,
+         write_log(LOG_USER,7,
 		 "failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
    
       /* calculate the new state */
    
       newstate=forward_state+2*keep_state+4*autoreply_state; 
+         
+         write_log(LOG_USER,7,"newstate = %d",newstate);
+         write_log(LOG_USER,7,"oldstate = %d",newstate);
    
       if (oldstate==-1) oldstate=0;  /* if .cgipaf_state doesnt exists asume state 0 */
    
@@ -344,6 +347,7 @@ main()
    if ((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
 
       xfree(cp);
+      write_log(LOG_USER,7,"starting run_mailcfg");
       i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options,set_script_filename);
       if(i<0)
 	write_log(LOG_USER,1,"run_mailcfg failed, run_cmd() returns %d",i);

@@ -6,7 +6,7 @@
 
   <body>
     
-    <h1>CGIpaf 1.2.0RC1 FAQ</h1>
+    <h1>CGIpaf 1.2.1 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -67,8 +67,7 @@
 <p>
     All programs use PAM for user authentication, systems without PAM
     are only supported if they use the standard password file location
-    (/etc/passwd /etc/shadow) and the standard crypt function to encrypt
-    the passwords.
+    (/etc/passwd /etc/shadow) and standard crypt or md5 passwords. 
     If a password is changed it is possible to run a script to update
     SAMBA passwords, NIS configuration, etc.
 </p>
@@ -87,8 +86,8 @@
     and compares it with the cookie send by the users browser.
     Users with too many invalid logins can be locked. The minimum and maximum 
     uid can be set in the configuration file, so you can specify a range of uid's 
-    that are allowed to use cgipaf. CGIpaf has <b>a</b>ccess <b>c</b>rontol <b>l</b>ists 
-    support this allow you to allow deny or allow access to groups or users.
+    that are allowed to use cgipaf. CGIpaf has <b>a</b>ccess <b>c</b>ontrol <b>l</b>ists 
+    support this allow you to deny or allow access to groups or users.
 </p>
 <p>
     You can specify html files with a few PHP extensions for the login screen
@@ -114,8 +113,8 @@ I've to move my homepage about every year :-( Apparently it get more and more
 difficult to find a stable free webspace..
 </p>
 <p>
-I finally got a stable place for my homepage ( http://staf.patat.org ).<br>
-<strong>thanks</strong> to "de pirre" for hosting my site.
+I finally got a stable place for my homepage ( <a href="http://staf.patat.org">http://staf.patat.org</a> ).<br>
+<strong>thanks</strong> to <a href="http://www.patat.org/~kbr/">"de pirre"</a> for hosting my site.
 <p>
 The current locations are:
 </p>
@@ -123,12 +122,18 @@ The current locations are:
 <ul>
 <li><a href="http://staf.patat.org">http://staf.patat.org/cgipaf/</a> (Europe / Belgium)<br>&nbsp;</li>
 <li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/</a> (North America / Canada)
-<p>Has a problem when you try to download the debian package with apt-get, because they add an ad to the Package file. Please use the main site <a href="http://staf.patat.org/debian/">http://staf.patat.org</a> to download the debian package with apt-get.</p></li>
+<p>
+Has a problem when you try to download the debian package with apt-get, because they add an ad to the 
+Package file. Please use the main site <a href="http://staf.patat.org/debian/">http://staf.patat.org/debian/</a>
+to download the debian package with apt-get.
+</p>
+</li>
 <li><a href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)</li>
 </ul>
 
 <p>
-The last one is hosted by my current employer, we're moving to a new location. Due the current economical situation I'm not sure my employer will continue to provide free webspace.
+The last one is hosted by my current employer, we're moving to a new location. 
+Due the current economical situation I'm not sure my employer will continue to provide free webspace.
 </p>
 
 <p>
@@ -165,15 +170,17 @@ for the correct location.
 <h2><a name="ss1.5">1.5 </a> Support</h2>
 
 <p>
-Please post your questions / install problems to mailinglist. I usually read my private email at the evening after my work but I follow the mailinglist during the workday, so you'll get the answer faster in the mailinglist. Your problem can be useful to the other CGIpaf users...
+Please post your questions / install problems to the mailinglist. I usually read my private email at the 
+evening after my work but I follow the mailinglist during the workday, so you'll get the answer faster
+in the mailinglist. Your problem can be useful to the other CGIpaf users...
 </p>
 
 <h2><a name="ss1.6">1.6 </a> License</h2>
 
 <p>
 CGIpaf is Free software published under the GNU Gernal Public License.
-see <a
-href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a> for more information.
+see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>
+for more information.
 </p>
 
 <hr />
@@ -185,12 +192,13 @@ href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html
 <li><b>GNU/Linux</b>
 <p>
 CGIpaf should compile and run on most GNU/Linux distributions. Slackware is
-only supported if you compile CGIpaf without PAM support since Slackware doesn't support PAM. Both passwd types (standard, md5) are supported on a non-PAM system. Blowfish and others aren't supported.
+only supported if you compile CGIpaf without PAM support since Slackware doesn't support PAM. 
+Both passwd types (standard crypt, md5) are supported on a non-PAM system. Blowfish and others aren't supported.
 </p>
 </li>
 <li><b>SUN Solaris</b>
 <p>
-CGIpaf works on Solaris ( only tested with solaris 7 &amp;  8 )
+CGIpaf works on Solaris ( only tested on solaris 8 )
 </p>
 </li>
 <li><b>FreeBSD</b>
@@ -213,7 +221,8 @@ are only supported if they use the standard password file location /etc/passwd
 </ul>
 <h2><a name="ss2.2">2.2</a> Which libraries are required?</h2>
 <p>
-CGIpaf uses only standard libraries that are installed on most common Un*x installations, you need the development packages ( headers files etc ) to compile CGIpaf.
+CGIpaf uses only standard libraries that are installed on most common Un*x installations, you need the 
+development packages ( headers files etc ) to compile CGIpaf.
 </p>
 <p>
 List of required libraries:
@@ -233,10 +242,9 @@ If you need full PHP support you've to use a redirect.
 <ol>
  <li><b>I get a "configure: error: no valid ndbm library found" error message</b>
  <p>
- CGIpaf depends on ndbm or compatible library, you need the development files to
- compile it. If ndbm and the development files aren't installed on your
-system install them, look for a gdbm or ndbm package<br>If ndbm isn't installed on standard location on your system ( e.g.
-/opt ) try to create symbolic links:
+ CGIpaf depends on ndbm or compatible library, you need the development files to compile it. If ndbm and 
+ the development files aren't installed on your system install them, look for a gdbm or ndbm package<br>
+ If ndbm isn't installed on standard location on your system ( e.g.  /opt ) try to create symbolic links:
 <p>
 <pre><tt><kbd>
    ln -s /opt/lib/libndbm.so /usr/lib/libndbm.so
@@ -261,8 +269,10 @@ support through PAM (see below).
 <p>
 On a non-PAM system set "cracklib" to "on" and "cracklib_dictpath" you your
 cracklib dict path.<br>
-The cracklib_dictpath is the path to the dictionary filename without the extension ( .pwi ), not the directory path.<br>
-The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/cracklib_dict, on RedHat 6.2 you'll have to use /usr/lib/cracklib_dict.
+The cracklib_dictpath is the path to the dictionary filename without the extension ( .pwi ), not the 
+directory path.<br>
+The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/cracklib_dict, on RedHat 6.2 
+you'll have to use /usr/lib/cracklib_dict.
 </p>
 </li>
 </ol>
@@ -300,16 +310,18 @@ your webserver error log. Try to disable cracklib if this resolves the problem
 see "How do I enable cracklib password testing".
 </p>
 <p>
-Another reason is possible BUG or misconfiguration in cgipaf, the error_log of your webserver and the syslog messages ( set loglovel to 7 ) should give more information.
+Another reason is possible BUG or misconfiguration in cgipaf, the error_log of your webserver and the 
+syslog messages ( set loglovel to 7 ) should give more information.
 </p>
 <h2><a name="ss3.5">3.5</a> How do I get debug output?</h2>
 <p>
-Set the loglevel to 7 in cgipaf, this will send debug messages to your system's syslog
+Set the loglevel to 7 in cgipaf.conf, this will send debug messages to your system's syslog
 </p>
 <h2><a name="ss3.6">3.6</a> Which authentication methods are supported</h2>
 <p>
-CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). BSD uses different passwd locations. On a FreeBSD system /etc/passwd_master is updated and copied to pwdb by the
-pw_mkdb command.<br>
+CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). 
+BSD uses different passwd locations. On a FreeBSD system /etc/passwd_master is updated and copied 
+to pwdb by the pw_mkdb command.<br>
 Open|NetBSD aren't (yet) supported... 
 </p>
 <h2><a name="ss3.7">3.7</a> CGIpaf is unable to authenticate?</h2>
@@ -339,7 +351,9 @@ On a non pam system you've to set the cracklib directive to "on" and cracklib_di
 </p>
 <h2><a name="ss3.9">3.9</a> My .procmailrc is wipe out!</h2>
 <p>
-CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding is disabled by the run_before_mailcfg and run_after_mailcfg directives.<br>
+CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. 
+It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding is disabled 
+by the run_before_mailcfg and run_after_mailcfg directives.<br>
 Another alternative is to use .forward/vacation instead of procmail see examples/ for more information.
 </p>
 <h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
@@ -372,7 +386,8 @@ e.g.:
        msg_success   redirect  http://your_webserver/pwchanged.php?name="%{name}"
 </tt></code></pre>
 <p>
-Will redirect to http://your_webserver/pwchanged.php?name="loginname" after a user has succeed to update his password.
+Will redirect to http://your_webserver/pwchanged.php?name="loginname" after a user has succeed to update 
+his password.
 </p>
 <h2><a name="ss3.14">3.14</a> Can I use vacation/.forward instead of procmail?</h2>
 <p>
@@ -396,7 +411,8 @@ CGIpaf started as GNU/Linux project I needed to create site that allowed users t
 mailconfiguration. I have added solaris support because we it at my work and I was tired to 
 explain users how they've to update their Un*x password.
 </p>
-<p>I've added slackware 8.0 and FreeBSD support because some users requested a port to these
+<p>
+I've added slackware 8.0 and FreeBSD support because some users requested a port to these
 platforms. I hoped that I could reuse the FreeBSD code for the Open|Net BSD port, but the odds 
 were against me. The FreeBSD port doesn't works without trouble on the other BSD versions.
 </p>
@@ -408,10 +424,10 @@ The Open|Net BSD port is still in the pipeline, the NetBSD port seems to be the 
 I'll probably start with this one.
 </p>
 <hr>
-    <address><a href="mailto:staf.wagemakers@advalvas.be">staf wagemakers</a></address>
+    <address><a href="mailto:staf@patat.org">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Nov 26 11:37:26 CET 2002
+Last modified: Mon Jan 20 09:16:52 CET 2003
 <!-- hhmts end -->
   </body>
 </html>

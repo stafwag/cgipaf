@@ -38,6 +38,7 @@ main()
       strcpy(options[0][1],name);
    }
 
+
    /* We dont like too short loginnames */
    
    if (strlen(name)<1) {
@@ -381,8 +382,6 @@ main()
 
    if((cp=get_sg_item(config_file,CFGSECTION,RUN_VIEWMAILCFG))!=NULL) {
 
-/*	   setenv("SCRIPT_FILENAME",cp,1); */
-
       	xfree(cp);
       	i=run_cmd(config_file,CFGSECTION,RUN_VIEWMAILCFG,options,set_script_filename);
 
@@ -421,6 +420,8 @@ main()
 	 		write_log(LOG_USER,7,"forwarding is enabled in current cfg, mail are forwarded to %s",forward_to);
       		}
       		else {
+			strcpy(forward,"no");
+			strcpy(keep_msg,"no");
 	 		forward_to=txt_NULL;
 	 		write_log(LOG_USER,7,"mailforwarding is not enabeled");
       		}
@@ -434,7 +435,8 @@ main()
       		write_log(LOG_USER,7,"autoreply is enabled in the current cfg");
    
 	}
-   	else { 
+   	else {
+		strcpy(autoreply,"no");
 		write_log(LOG_USER,7,"autoreply is not enabled");
 	}
 

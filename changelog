@@ -1,3 +1,14 @@
+* version 1.3.0cvs20031220
+  + autoconf has been upgrade to 2.55: the build host is autodetected
+  + new variables:
+        _POST[] array : An associative array of variables with the original
+	                HTTP POST
+        post_string   : A string with the original HTTP POST
+	message       : A string with the default message
+  + new directives to enable more advanced mail configuration scripts:
+    run_viewmailcfg, mailcfg_check. a sample script is included.
+  + "set_script_filename" and "unset_script_filename" directives
+
 * version 1.3.0pre4    ( 30 May 2003 )
   + new forward method to avoid mail looping
 

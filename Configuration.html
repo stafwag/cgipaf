@@ -476,12 +476,12 @@ error_pam  Redirect    <em>location</em><br>
      This file contains the user's current mail configuration state. This file is used by
      <a href="#run_before_mailcfg">run_before_mailcfg</a> and <a href="#run_after_mailcfg">run_after_mailcfg</a>.
      <br>
-     By default viewmailcfg.cgi doesn't use this file ( mainly for comptibily reasons ),
+     By default viewmailcfg.cgi doesn't use this file ( mainly for compatibility reasons ),
      but reads the user's .procmailrc to determine the user mail configuration.
      If you set "use_statefile" to "yes" viewmailcfg.cgi will read the state file instead
      of the user's .procmailrc to get the user's current mail configuration.
      <br>
-     If your user's uses their own .procmailrc to distribute their mailinglists into seperated
+     If your user's uses their own .procmailrc to distribute their mailinglists into separated
      mailboxes you must set "use_statefile" to "yes". The user's original .procmailrc
      could confuse CGIpaf.
 </p>
@@ -531,7 +531,7 @@ error_pam  Redirect    <em>location</em><br>
      execute the "run_after_mailcfg" script if the mail configuration state 
      goes from active ( mail forwarding or autoreply enabled ) to nonactive.
 <br>
-     This script can be used to restore the user's .procmailrc to his orginal
+     This script can be used to restore the user's .procmailrc to his original
      state
 </p>        
 <h2><a name="cookie_timeout">cookie_timeout</a></h2>

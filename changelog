@@ -1,3 +1,7 @@
+* version 1.0.0pre1.1    ( 28 Mar 2002 )
+  + new password unchanhed directive
+  + updates to pass.c to support more non-GNU/Linux Unices
+
 * version 1.0.0pre1.0    ( 19 Mar 2002 )
   + new cracklib_dictpath directive
   + FIXED cgipaf did't compile on systems where CRACKLIB_DICTPATH wasn't 

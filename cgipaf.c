@@ -1,8 +1,9 @@
 /* ----------------------------------------------------------------------- */
 /* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
 /* http://stafwag.home7.dk3.com                         Staf Wagemakers    */
-/* stafwag@yahoo.com                                                       */
+/* staf.wagemakers@advalvas.be                                             */
 /* ----------------------------------------------------------------------- */
+
 #include "cgipaf_defs.h"
 
 main()
@@ -210,6 +211,13 @@ if (strcmp(newpass1,newpass2)) {
    write_log(LOG_USER,7,"new passwords don't match");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_MATCH,err_match,options);
    }
+
+/* nothing to do... */
+if (strcmp(newpass1,pass)==0) {
+   write_log(LOG_USER,7,"passwords unchanged");
+   show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UNCHANGED,err_unchanged,options);
+   }
+
 /* we dont like too short passwords */
 if (strlen(newpass1)<min_length) {
    write_log(LOG_USER,7,"new password too short");

@@ -121,6 +121,7 @@ fi
    echo "error_invalid           cgipasswd_errinvalid.php" >> $CFGFILE
    echo "error_newpassword       cgipasswd_errnewpass.php" >> $CFGFILE
    echo "error_match             cgipasswd_errmatch.php" >> $CFGFILE
+   echo "error_unchanged         cgipasswd_errunchanged.php" >> $CFGFILE
    echo "error_tooshort          cgipasswd_errshort.php" >> $CFGFILE
    echo "error_locked            cgipasswd_errlocked.php" >> $CFGFILE
    echo "# run_locked            /usr/local/bin/notify_script %{name}" >> $CFGFILE

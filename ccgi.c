@@ -74,7 +74,7 @@ return(wp->value[i]);
 }
 
 /*
- * only exits for compatible with previous versions of ccgi
+ * only exists for compatible with previous versions of ccgi
  */
 char * get_postitem(WEBDATA *wp,char *name)
 {

@@ -1,7 +1,7 @@
 /*
  * passpam.c
  * (GPL) 2000 - 02 Belgium                   http://stafwag.home7.dk3.com
- * Staf Wagemakers					stafwag@yahoo.com
+ * Staf Wagemakers			      staf.wagemakers@advalvas.be
  */
 
 #include "pass.h"

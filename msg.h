@@ -4,6 +4,7 @@ char err_access[]    = "Access denied...\n";
 char err_invalid[]   = "Invalid password or username.\n";
 char err_newpass[]   = "Can't read new password\n";
 char err_match[]     = "They don't match\n";
+char err_unchanged[] = "Password unchanged\n";
 char err_tooshort[]  = "Password too short...\n";
 char err_toolong[]   = "Password too long...\n";
 char err_locked[]    =  "Maximum number of tries exceeded...\n";

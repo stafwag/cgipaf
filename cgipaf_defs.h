@@ -45,6 +45,7 @@
 #define  MINUID 		10
 #define  ERR_NEWPASS 		"error_newpassword"
 #define  ERR_MATCH   		"error_match"
+#define  ERR_UNCHANGED  	"error_unchanged"
 #define  ERR_TOOSHORT 		"error_tooshort"
 #define  ERR_TOOLONG  		"error_toolong"
 #define  ERR_LOCKED   		"error_locked"

@@ -1,8 +1,8 @@
 <?
 include "cgipasswd_top.php"
 ?>
-<P>
-<H1><B><font color="#FF0000"><I>Access denied...</I></font></B></H1>
+<p>
+<h1><b><font color="#FF0000"><i>Access denied...</i></font></b></h1>
 <?
 include "cgipasswd_login.php"
 ?>

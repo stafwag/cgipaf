@@ -21,11 +21,25 @@
  * replace var with value
  *
  */
-char *replace_var(char *str,char *var,char *value)
+char *replace_var(char *str,char *real_name,char *real_value)
 {
+char txt_null[]="\0";
+char *var=real_name;
+char *value=real_value;
 char *ss,*s,*c,*varname=NULL,*ret=NULL;
 int  found;
-ret=(char *)xmalloc(sizeof(char));
+
+if(var==NULL) var=txt_null;
+if(value==NULL) value=txt_null; 
+
+puts("name=");
+puts(var);
+puts("----------------");
+puts("value=");
+puts(value);
+puts("================\n\n");
+
+ret=(char *)xmalloc(sizeof(char *));
 varname=(char *)xmalloc(strlen(var)+strlen("$")+1);
 strcpy(varname,"$");
 strcat(varname,var);

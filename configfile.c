@@ -25,10 +25,9 @@ char *only_global(char *line,char **current_section,int *global)
 {
 char *c,*s=line,*globals,*found,*end_section;
 int first=1;
-globals=(char *)xmalloc(strlen(line)+1);
+globals=(char *)calloc(strlen(line)+1,sizeof(char *));
 end_section=(char *)xmalloc(1);
 strcpy(globals,line);
-memset(globals,'\0',sizeof(globals));
 while(1) {
    if (*global) {
       if((found=strstr(s,"<"))==NULL) {
@@ -39,7 +38,7 @@ while(1) {
       *global=0;
       strncat(globals,s,(found-s));
       *current_section=(char *)xrealloc(*current_section,(c-found)+1);
-      memset(*current_section,'\0',sizeof(current_section));
+      memset(*current_section,'\0',(c-found)+1);
       strncat(*current_section,found+1,c-found-1);
       
       s=c;

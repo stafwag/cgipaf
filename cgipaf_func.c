@@ -21,12 +21,12 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 	char txt_post1[]="_POST[";
 	char txt_post2[]="]";
+	char txt_post_string[]="post";
+	char *c;
 
 	int i;
-	char buffer[256];
 
 	if(data==NULL) {
-		fprintf(stderr,"data is NULL\n");
 		return ret;
 	}
 
@@ -35,23 +35,61 @@ char *** add_post_2_string_pair ( WEBDATA *data, char *** ret ) {
 
 		if (data->name[i]) {
 
-			char *c;
+			c=xmalloc(strlen(txt_post1)+strlen(data->name[i])+strlen(txt_post2)+1);
 
-			snprintf(buffer,255,"%s%s%s",txt_post1,data->name[i],txt_post2);
-
-			c=xmalloc(strlen(buffer)+1);
-
-			strcpy(c,buffer);
+			strcpy(c,txt_post1);
+			strcat(c,data->name[i]);
+			strcat(c,txt_post2);
 
 			ret=add_2_string_pair(ret,c,data->value[i]);
-
 
 		}
 
 
 	}
 
+	/* c=webdata_2_post_string(data);
+
+	ret=add_2_string_pair(ret,txt_post_string,c);
+
+	*/
+
 	return(ret);
+
+}
+
+char * webdata_2_post_string(WEBDATA *data) {
+
+	int i,n;
+	int bufferlen=200;
+	char *strbuf=xmalloc(bufferlen);
+
+	strbuf[0]='\0';
+
+	if(data==NULL) return(0);
+
+	for (i=0;i<data->n;i++) {
+		int prev_size=bufferlen;
+		if (data->name[i]) {
+			n=strlen(strbuf)+strlen(data->name[i])+strlen("=")+strlen(data->value[i])+strlen("&")+1;
+
+			while (n>bufferlen) {
+				bufferlen*=2;
+			}
+
+			if(prev_size!=bufferlen) strbuf=xrealloc(strbuf,bufferlen);
+
+			strcat(strbuf,data->name[i]);
+			strcat(strbuf,"=");
+			strcat(strbuf,data->value[i]);
+			strcat(strbuf,"&");
+		}
+	}
+
+	if(strbuf[strlen(strbuf)-1]=='&') strbuf[strlen(strbuf)-1]='\0';
+	strbuf=xrealloc(strbuf,strlen(strbuf)+1);
+
+	return(strbuf);
 
 }
 

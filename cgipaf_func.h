@@ -4,5 +4,5 @@
 #include "ccgi.h"
 
 char *** add_post_2_string_pair ( WEBDATA *data, char *** ret );
-
+char *   webdata_2_post_string  ( WEBDATA *data );
 #endif

@@ -1,3 +1,7 @@
+* version 1.1.0pre2      ( 26 Jun 2002 )
+  + new run_mailcfg directive added to support other mail configuration than 
+    procmail a sample script with vacation support is included.
+
 * version 1.1.0pre1      ( 18 Jun 2002 )
   + new run_before_mailcfg and run_after_mailcfg directive
   + new use_statefile directive

@@ -39,6 +39,7 @@
 <li><a href="#error_cookietimeout">error_cookietimeout</a></li>
 <li><a href="#error_accessdb">error_accessdb</a></li>
 <li><a href="#error_cracklib">error_cracklib</a></li>
+<li><a href="#error_mailcfgscript">error_mailcfgscript</a></li>
 <li><a href="#error_pam">error_pam</a></li>
 <li><a href="#min_uid">min_uid</a></li>
 <li><a href="#max_uid">max_uid</a></li>
@@ -352,6 +353,14 @@ error_cracklib  Redirect    <em>location</em><br>
 <p>
     cracklib error
 </p>
+<h2><a name="error_mailcfgscript">error_mailcfgscript</a></h2>
+<strong>Syntax:</strong> error_mailcfgscript  <em>filename</em> <b>OR</b>
+error_mailcfgscript  Redirect    <em>location</em><br>
+<strong>Default:</strong> "run_mailcfg returns a non-null value, %{mailcfg_exitcode}<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>
+    <a href="#run_mailcfg">run_mailcfg</a> failed. 
+</p>
 <h2><a name="error_pam">error_pam</a></h2>
 <strong>Syntax:</strong> error_pam  <em>filename</em> <b>OR</b>
 error_pam  Redirect    <em>location</em><br>
@@ -640,7 +649,7 @@ seconds</td></tr>
 <tr><td><b>mailcfg_exitcode</b></td><td>exitcode of the <a href="#run_mailcfg">
 run_mailcfg script</td></tr>
 <tr><td><b>homedir</b></td><td>the user's home directory</td></tr>
-<tr><td><b>domain</b></td><td>the <href="#domain">domain</a>name, only set by mailcfg.cgi</td></tr>
+<tr><td><b>domain</b></td><td>the <a href="#domain">domain</a>name, only set by mailcfg.cgi</td></tr>
 </table>
 <h1><a name="redirect">Redirect</a></h1>
 <p> 

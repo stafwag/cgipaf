@@ -35,6 +35,7 @@ options=add_2_string_pair(options,txt_homedir,txt_NULL);                       	
 options=add_2_string_pair(options,txt_domain,txt_NULL);                        	/* 20 */
 options=add_2_string_pair(options,txt_badpassword,txt_NULL);		       	/* 21 */
 options=add_2_string_pair(options,txt_usermaildomain,txt_NULL);	       		/* 22 */
+options=add_2_string_pair(options,txt_errormessage,txt_NULL);	       		/* 23 */
 
 /*
  * test setuid(0)
@@ -170,7 +171,7 @@ if (setuid(0)==-1) {
    
    if(accessdb==NULL) {
      write_log(LOG_USER,3,"%s",err_mcfg_accessdb);
-     show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESSDB,err_mcfg_accessdb,options);
+     show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESSDB,err_mcfg_accessdb,options,txt_errormessage);
      exit(0);
    }
 
@@ -281,7 +282,7 @@ if (setuid(0)==-1) {
    
    if (!data) {
       write_log(LOG_USER,7,"no POST data, show login_document");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options,txt_errormessage);
    }
 
    /* add post variabeles to the options table */

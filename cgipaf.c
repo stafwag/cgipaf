@@ -25,7 +25,7 @@ main()
    
    if (!(cp=get_postitem(data,LOGIN))) {
       write_log(LOG_USER,7,"name not set, show err_login");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options,txt_errormessage);
    }
    name=textarea2asc(cp);
    /* xfree(cp); */			/* keep the orginal post array */
@@ -42,21 +42,21 @@ main()
    
    if (strlen(name)<1) {
       write_log(LOG_USER,7,"%s is invalid strlen(name)=0",name);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_LOGIN,err_loginname,options,txt_errormessage);
    }
 
    /* root = god, god should know how to change his password */
    
    if (!strcmp(name,ROOT)) {
       write_log(LOG_AUTHPRIV,5,warn_root);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_errormessage);
    }
 
    /* no password = no login */
 
    if (!(cp=get_postitem(data,PASSWORD))) {
       write_log(LOG_USER,7,"user forgot to type his password");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_errormessage);
    }
 
    pass=textarea2asc(cp);
@@ -69,13 +69,13 @@ main()
 
    if (!(cp=get_postitem(data,NEWPASS1))) {
       write_log(LOG_USER,7,"newpass1 not set");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options,txt_errormessage);
    }
    newpass1=textarea2asc(cp);
    /* free(cp); */			/* keep the orginal postarray */
    if (!(cp=get_postitem(data,NEWPASS2))) {
       write_log(LOG_USER,7,"newpass2 not set");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NEWPASS,err_newpass,options,txt_errormessage);
    }
    newpass2=textarea2asc(cp);
    /* free(cp); */			/* keep the orginal postarray */
@@ -84,21 +84,21 @@ main()
    
    if (strcmp(newpass1,newpass2)) {
       write_log(LOG_USER,7,"new passwords don't match");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_MATCH,err_match,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_MATCH,err_match,options,txt_errormessage);
    }
 
    /* nothing to do... */
    
    if (strcmp(newpass1,pass)==0) {
       write_log(LOG_USER,7,"password unchanged");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UNCHANGED,err_unchanged,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UNCHANGED,err_unchanged,options,txt_errormessage);
    }
 
    /* we dont like too short passwords */
    
    if (strlen(newpass1)<min_length) {
       write_log(LOG_USER,7,"new password too short");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_TOOSHORT,err_tooshort,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_TOOSHORT,err_tooshort,options,txt_errormessage);
    }
 
    /* 
@@ -108,7 +108,7 @@ main()
    
    if (strlen(newpass2)>max_length) {
       write_log(LOG_USER,7,"new password too long");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_TOOLONG,err_toolong,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_TOOLONG,err_toolong,options,txt_errormessage);
    }
 
    /*
@@ -130,7 +130,7 @@ main()
 		if (strstr(newpass2, *ccp)) {
 		   options[21][1] = *ccp; 
                    write_log(LOG_USER,7,"new passwords contains an illegal word %s",options[21][1]);
-		   show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options);
+		   show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options,txt_errormessage);
 		}
 	     }
 	     ccp++;
@@ -140,7 +140,7 @@ main()
        /* they can not use their login name for a password */
        if (strcmp(newpass2, name) == 0) {
        options[21][1] = name;
-       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options);
+       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_BADWORD,err_badword,options,txt_errormessage);
        }
     }
 
@@ -158,7 +158,7 @@ main()
    if (!(pw=get_pw(name))) {
       write_log(LOG_USER,7,"get_pw(%s) failed, user %s doesn't exists",name,name);
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_errormessage);
    };
    write_log(LOG_USER,7,"pw->p->pwuid = %d",pw->p->pw_uid);
 
@@ -190,7 +190,7 @@ main()
    write_log(LOG_USER,7,"min_uid set to %d",brol);
    if (pw->p->pw_uid<brol) {
       write_log(LOG_AUTHPRIV,5," %s %d %s",warn_uid,pw->p->pw_uid,warn_below_minuid);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_errormessage);
    }
 
    /* get the max uid, and compare it with the real uid uid>max_uid die */
@@ -202,7 +202,7 @@ main()
       write_log(LOG_USER,7,"max_uid set to %d",maxuid);
       if (pw->p->pw_uid>maxuid) {
 	 write_log(LOG_AUTHPRIV,5,"%s %d %s",warn_uid,pw->p->pw_uid,warn_above_maxuid);
-	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
+	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_errormessage);
       }
    }
    
@@ -211,7 +211,7 @@ main()
    if (accessdb) {
       if ((brol=get_access_status(accessdb,options[0][1],max_invalid,invalid_timeout))>0) {
 	 snprintf(invalid_wait_txt,80,"%d",brol);
-	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options);
+	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options,txt_errormessage);
 	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
 	 if(i<0) {
 	    if(i==-1) 
@@ -233,7 +233,7 @@ main()
 #ifdef _WITHPAM
       write_log(LOG_USER,7,"ckpw() failed, pam error = %s",pam_strerror(pw->pamh,i));
 #endif
-      show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
+      show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_errormessage);
       write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
       options[19][1]=pw->p->pw_dir;
       if (accessdb) {
@@ -268,7 +268,7 @@ main()
 	    strcpy(options[16][1],crack_msg);
 	    options[21][1]=options[16][1];
 	    write_log(LOG_USER,7,"%s %s",err_cracklib,options[16][1]);
-	    if(show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options)==2) printf("%s\n",options[16][1]);
+	    if(show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options,txt_errormessage)==2) printf("%s\n",options[16][1]);
 	    if (config_file!=NULL) fclose(config_file);   
 	    exit(0);
 	 }
@@ -283,7 +283,7 @@ main()
    /* finally one use how can remmber his password? */
    
    if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
-      show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options);
+      show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options,txt_errormessage);
       fflush(stdout);
       write_log(LOG_AUTHPRIV,6,"Password for %s was changed",name);
       options[15][1]=newpass1;
@@ -319,7 +319,7 @@ main()
 #ifdef _WITHPAM
       if(last_pam_msg()!=NULL) {
 	 options[17][1]=last_pam_msg();
-	 if(show_msg(config_file,doc_root,CFGSECTION,ERR_PAMERROR,NULL,options)<3) {
+	 if(show_msg(config_file,doc_root,CFGSECTION,ERR_PAMERROR,NULL,options,txt_errormessage)<3) {
 	    write_log(LOG_AUTHPRIV,1,"pam err %s",options[17][1]);
 	    if (config_file!=NULL) fclose(config_file);   
 	    exit(0);
@@ -408,7 +408,7 @@ main()
    if (strcmp(autoreply,"no")) strcpy(not_autoreply,"no");
    write_log(LOG_USER,7,"got the mailconfiguration for user %s",name);
 
-   if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options)==3) {
+   if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options,txt_errormessage)==3) {
       write_log(LOG_USER,7,"couldn't load mailcfg_document using default");
       print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
       printf("<HTML>\n");

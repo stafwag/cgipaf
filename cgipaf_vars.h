@@ -63,6 +63,7 @@ char   *pam_servicename=txt_passwd;
 char   txt_badpassword[]="bad_password";
 int    max_length, min_length;
 char   txt_usermaildomain[]="user_maildomain";
+char   txt_errormessage[]="error_message";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
 int    max_postlength=150;

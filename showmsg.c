@@ -23,16 +23,25 @@ int show_alt_msg(char *alt_msg)
  * alt_msg           = alt msg if the cfg var doesnt esists
  *                     if NULL no msg is displayed
  * options           = ePHP / redirect variabels
+ * update_item	     = set item value to alt_msg ( NULL = no update )
  * 
  * return         0  = file displayed
  *                1  = redirect
  *                2  = alt_msg displayed
  *                3  = no msg displayed, can't load file and alt_msg is NULL
  */
-int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms)
+int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms, char *update_item)
 {
 char *cp,*fullname,**cc;
 struct stat statbuf;
+
+if (update_item!=NULL) {
+
+	update_string_pair_item(parms,update_item,alt_msg,0);
+
+}
+
+	
 
 /*
  * get directive array
@@ -129,20 +138,20 @@ else {
 /*
  * call show_msg and exit, close config_file if open
  */
-void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msgfile, char *alt_msg,char ***parms)
+void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msgfile, char *alt_msg,char ***parms, char *update_item)
 {
-     show_msg(config_file,root,virtual_name,msgfile,alt_msg,parms);
+     show_msg(config_file,root,virtual_name,msgfile,alt_msg,parms,update_item);
      if (config_file!=NULL) fclose(config_file);
      exit(0);
 }
 
-int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms)
+int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms,char *update_item)
 {
    char **cc;
    int i;
    if(msgfiles==NULL) return(-1);
    for(cc=msgfiles;*cc!=NULL;++cc) {
-      i=show_msg(config_file,root,section_name,*cc,NULL,parms);
+      i=show_msg(config_file,root,section_name,*cc,NULL,parms,update_item);
       fflush(stdout);
       if(i!=3) break;
    }
@@ -153,9 +162,9 @@ int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, c
    return(i);
 }
 
-void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms)
+void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms, char *update_item)
 {
-     show_msgs(config_file,root,section_name,msgfiles,alt_msg,parms);
+     show_msgs(config_file,root,section_name,msgfiles,alt_msg,parms,update_item);
      if (config_file!=NULL) fclose(config_file);
      exit(0);
 }

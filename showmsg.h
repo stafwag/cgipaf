@@ -10,8 +10,9 @@
 #include "ccgi.h"
 #include "write_log.h"
 #include "ephp.h"
+#include "xstring.h"
 
-int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms);
-void show_msg_and_exit(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms);
-int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms);
-void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms);
+int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms, char *update_item);
+void show_msg_and_exit(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms, char *update_item);
+int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms, char *update_item);
+void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms, char *update_item);

@@ -99,7 +99,7 @@ WWW="${datadir}"
    echo "# cracklib_dictpath    /var/cache/cracklib/cracklib_dict" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
-   echo "# illegal words ( words that are not allowed in a new password" " >> $CFGFILE
+   echo "# illegal words ( words that are not allowed in a new password" >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# illegal_words         foo bar" >> $CFGFILE 
    echo >> $CFGFILE

@@ -28,13 +28,13 @@ main()
    if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
       doc_root=get_sg_item(config_file,CFGSECTION,DOC_ROOT);
       if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SYSLOG))!=NULL) {
-	 if (!strcasecmp(cp,"off")) enable_log(0);
-	 free(cp);
+	 if (is_var_yes(cp)==0) enable_log(0);
+	 xfree(cp);
       }
       if ((cp=get_config_item(config_file,CFG_LOGLEVEL))!=NULL) { 
 	 sscanf(cp,"%d",&brol);
 	 set_loglevel(brol);
-	 free(cp);
+	 xfree(cp);
 	 write_log(LOG_USER,7,"Set loglevel to %d",set_loglevel(-1));
       }
    }
@@ -68,7 +68,7 @@ main()
    /* set the pam_chauth_flag */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_PAM_CHANGE_EXPIRED_AUTHTOK))!=NULL) {
-      if (!strcasecmp(cp,"off")) {
+      if (is_var_yes(cp)!=1) {
 	 write_log(LOG_USER,7,"set PAM_CHANGE_EXPIRED_AUTHOK to off");
 	 set_pam_chauth_flag(0);
       }
@@ -88,7 +88,7 @@ main()
    /* enable cracklib if cracklib is set to "on" */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB))!=NULL) {
-      if (!strcasecmp(cp,"off")) {
+      if (is_var_yes(cp)==0) {
 	 enable_cracklib=0;
          write_log(LOG_USER,7,"cracklib disabled");
       }
@@ -149,7 +149,7 @@ main()
    /* use a statefile or not */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_USE_STATEFILE))!=NULL) {
-      if(!strcasecmp(cp,"yes")||strcmp(cp,"1"))
+      if(is_var_yes(cp)!=0);
 	use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
       free(cp);
@@ -537,8 +537,11 @@ main()
    /* store the cookie and cookie timeout into the accessdb */
    
    if (save_access_status(accessdb,name,0,invalid_timeout,cookie)==-1) {
-      printf_txt_msg("Warning: failed to update %s", accessdb);
+      printf_txt_msg("Fatal Error: failed to update %s", accessdb);
       write_log(LOG_AUTHPRIV,1,"%s %s",warn_update_accessdb,accessdb);
+      if (config_file != NULL) fclose(config_file);
+      exit(0);
+
    }
    
    /* Gods become human */

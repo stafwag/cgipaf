@@ -191,6 +191,13 @@ int enable_reply(struct pw_info *pw,char *domain)
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"a"))) return(-1);
    fputs(":0 h c\n",fp);
    fputs("* !^FROM_DAEMON\n",fp);
+   fputs("* !^FROM_MAILER\n",fp);
+   fputs("* !^MAILER\n",fp);
+   fputs("* !^UUCP\n",fp);
+   fputs("* !^X-Mailing-List\n",fp);
+   fputs("* !^Precedence: bulk\n",fp);
+   fputs("* !^Precedence: list\n",fp);
+   fputs("* !^Precedence: junk\n",fp);
    fprintf(fp,"* !^X-Loop: %s@%s\n",pw->p->pw_name,loopdomain);
    fputs("| (formail -r -A\"Precedence: junk\" \\\n",fp);
    fprintf(fp,"-A\"X-Loop: %s@%s\" ; \\\n",pw->p->pw_name,loopdomain);
@@ -248,10 +255,15 @@ return(1);
 int tst_emailaddress(char *emailaddress)
 {
    char *cp,*address=NULL;
+   char invalid_chars[]={',','|','\0'};
    int i,ret=0;
    address=mv_2_next(emailaddress);
    cut_space(address);
-   cp=strchr(address,'@');
+   for(cp=invalid_chars;*cp!='\0';cp++) {
+      if(strchr(address,*cp)!=NULL) return(0);
+   }
+   if((cp=strchr(address,'@'))==NULL) return(0);
+   if(strchr((cp+1),'@')!=NULL) return(0);
    if (cp!=NULL) {
       if (cp!=address) {
          ++cp;

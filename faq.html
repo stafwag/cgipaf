@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf 1.2.0RC1 FAQ</title>
+    <title>CGIpaf 1.2.1 FAQ</title>
   </head>
 
   <body>
@@ -60,8 +60,8 @@
     cgipaf is a combination of three cgi programs:
 </p>
 <ul>
-<li><b>passwd.cgi</b>: allow users to update their password</li>
-<li><b>viewmailcfg.cgi</b>: allow users to view their current mail configuration.</li>
+<li><b>passwd.cgi</b>: allows users to update their password</li>
+<li><b>viewmailcfg.cgi</b>: allows users to view their current mail configuration.</li>
 <li><b>mailcfg.cgi</b>: update the mail configuration</li>
 </ul>
 <p>
@@ -78,16 +78,17 @@
     enabled the autoreply message is stored in ~/vacations.txt. When a user
     enables mail forwarding the user can choose to keep the messages.
     If you want to use another auto responder like vacation you can define
-    an external script to update the user's mail configuration. See examples
-    for an example config.
+    an external script to update the user's mail configuration. A perl script with
+    vacation support is included see examples/ for an example config.
 </p>
 <p>
-    For user authentication viewmailcfg.cgi creates a cookie, this cookie
+    For the user authentication viewmailcfg.cgi creates a cookie, this cookie
     is stored in the accessdb. mailcfg.cgi reads the cookie out the accessdb
     and compares it with the cookie send by the users browser.
     Users with too many invalid logins can be locked. The minimum and maximum 
     uid can be set in the configuration file, so you can specify a range of uid's 
-    that are allowed to use cgipaf.
+    that are allowed to use cgipaf. CGIpaf has <b>a</b>ccess <b>c</b>rontol <b>l</b>ists 
+    support this allow you to allow deny or allow access to groups or users.
 </p>
 <p>
     You can specify html files with a few PHP extensions for the login screen
@@ -98,9 +99,10 @@
 <h2><a name="ss1.2">1.2 </a>How secure is CGIpaf</h2>
 
 <p>
-The CGIpaf cgi's are suid root programs, this means they runs as root. Viewmailcfg.cgi and
-mailcfg.cgi runs a the user when the authentication is completed. All suid programs are
-a security risk, I try to keep them so secure as possible...<br>
+The CGIpaf cgi's are suid root programs, this means they run as root. Viewmailcfg.cgi and
+mailcfg.cgi runs as the user when the authentication is completed. All suid programs are
+a security risk, I try to keep them so secure as possible...</p>
+<p>
 If you use CGIpaf on the internet you must use CGIpaf over https otherwise the users passwords
 are send unencrypted over the internet.
 </p>
@@ -121,14 +123,12 @@ The current locations are:
 <ul>
 <li><a href="http://staf.patat.org">http://staf.patat.org/cgipaf/</a> (Europe / Belgium)<br>&nbsp;</li>
 <li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/</a> (North America / Canada)
-<p>Has a problem when you try to download the debian package with apt-get, because they add an ad to the Package file. Please use the main site http://staf.patat.org to download the debian package with apt-get.</p></li>
-<li><a
-href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)</li>
+<p>Has a problem when you try to download the debian package with apt-get, because they add an ad to the Package file. Please use the main site <a href="http://staf.patat.org/debian/">http://staf.patat.org</a> to download the debian package with apt-get.</p></li>
+<li><a href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)</li>
 </ul>
 
 <p>
-The last one is hosted by my current employer, we're moving to a new location
-and I'm not sure my employer will continue to provide free webspace.
+The last one is hosted by my current employer, we're moving to a new location. Due the current economical situation I'm not sure my employer will continue to provide free webspace.
 </p>
 
 <p>
@@ -165,14 +165,13 @@ for the correct location.
 <h2><a name="ss1.5">1.5 </a> Support</h2>
 
 <p>
-Please post your questions / install problems to mailinglist. I usually read my private email at the evening after my work but I follow the mailinglist during the workday, so you'll get the answer faster in the mailinglist.<br>
-Your problem can be useful to the other CGIpaf users...
+Please post your questions / install problems to mailinglist. I usually read my private email at the evening after my work but I follow the mailinglist during the workday, so you'll get the answer faster in the mailinglist. Your problem can be useful to the other CGIpaf users...
 </p>
 
 <h2><a name="ss1.6">1.6 </a> License</h2>
 
 <p>
-CGIpaf is Free software published under the GNU Gernal Public License.<br>
+CGIpaf is Free software published under the GNU Gernal Public License.
 see <a
 href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a> for more information.
 </p>
@@ -186,7 +185,7 @@ href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html
 <li><b>GNU/Linux</b>
 <p>
 CGIpaf should compile and run on most GNU/Linux distributions. Slackware is
-only supported if you compile CGIpaf without PAM support since Slackware doesn't support PAM. Both passwd types (standard, md5) are supported on a non-PAM system.
+only supported if you compile CGIpaf without PAM support since Slackware doesn't support PAM. Both passwd types (standard, md5) are supported on a non-PAM system. Blowfish and others aren't supported.
 </p>
 </li>
 <li><b>SUN Solaris</b>
@@ -235,7 +234,7 @@ If you need full PHP support you've to use a redirect.
  <li><b>I get a "configure: error: no valid ndbm library found" error message</b>
  <p>
  CGIpaf depends on ndbm or compatible library, you need the development files to
- compile it. If ndbm ( and the development file ) isn't installed on your
+ compile it. If ndbm and the development files aren't installed on your
 system install them, look for a gdbm or ndbm package<br>If ndbm isn't installed on standard location on your system ( e.g.
 /opt ) try to create symbolic links:
 <p>
@@ -285,7 +284,7 @@ Yes, passwd.cgi doesn't support SAMBA passwords directly but you can use a
 <h2><a name="ss3.3">3.3</a> Is NIS supported?</h2>
 <p>
 CGIpaf doesn't support NIS directly, but it's possible to update the
-NIS password on the master NIS server and run pwupdate (8) trough run_success
+NIS password on the master NIS server and run pwupdate (8) through run_success
 <pre><tt><code>
     run_success     "/usr/lib/yp/pwupdate  > /dev/null 2>&1"
 </code></tt></pre>
@@ -345,7 +344,8 @@ Another alternative is to use .forward/vacation instead of procmail see examples
 </p>
 <h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
 <p>
-The user's .forward is deleted after a mail configuration update.
+The user's .forward is deleted after a mail configuration update. If you don't like this you can disable the
+internal mail configuration and use your own run_mailcfg script. See examples/ for perl example with vacation support.
 </p>
 <h2><a name="ss3.11">3.11</a> I get a "file not found" error message in the webserver error_log</h2>
 <p>
@@ -369,10 +369,10 @@ CGIpaf doesn't have full PHP support it only emulates two PHP function (echo and
 If you need full PHP support or what to use another web scripting language you've to use a Redirect.<br>
 e.g.:
 <pre><code><tt>
-       msg_success   redirect  /pwchanged.php?name="%{name}"
+       msg_success   redirect  http://your_webserver/pwchanged.php?name="%{name}"
 </tt></code></pre>
 <p>
-Will redirect to /pwchanged.php?name="loginname" after a user has succeed to update his password.
+Will redirect to http://your_webserver/pwchanged.php?name="loginname" after a user has succeed to update his password.
 </p>
 <h2><a name="ss3.14">3.14</a> Can I use vacation/.forward instead of procmail?</h2>
 <p>

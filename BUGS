@@ -1,6 +1,6 @@
 version 1.2.0rc1 - 1.2.1
   
-  + smbpasswd support doesn't work
+  + smbpasswd is broken
 
 version 1.1.0rc1
 

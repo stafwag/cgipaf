@@ -52,30 +52,33 @@ char   txt_no[]="no";
 char   txt_password[]="password";
 char   txt_passwd[]="passwd";
 char   txt_crackliberror[]="cracklib_error";
+char   txt_mailcfg_exitcode[]="mailcfg_exitcode";
+char   mailcfg_exitcode_txt[80]="\0";
 char   txt_pamerrormsg[]="pam_error";
 char   *pam_servicename=txt_passwd;
 int    max_length, min_length;
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   *options[][2]={
-       txt_name,txt_NULL,                                /* 0 */
-       txt_max_length,max_length_txt,                    /* 1 */
-       txt_min_length,min_length_txt,                    /* 2 */
-       txt_max_invalid,max_invalid_txt,                  /* 3 */
-       txt_invalid_timeout,max_invalid_txt,              /* 4 */
-       txt_invalid_wait,invalid_wait_txt,                /* 5 */
-       txt_forward_to,txt_NULL,                          /* 6 */
-       txt_forward,forward,                              /* 7 */
-       txt_not_forward,not_forward,                      /* 8 */
-       txt_keep_msg,keep_msg,                            /* 9 */
-       txt_not_keep_msg,not_keep_msg,                    /* 10 */
-       txt_autoreply,autoreply,                          /* 11 */
-       txt_not_autoreply,not_autoreply,                  /* 12 */
-       txt_autoreply_msg,txt_NULL,                       /* 13 */
-       txt_cookietimeout,cookie_timeout_txt,             /* 14 */
-       txt_password,txt_NULL,                            /* 15 */
-       txt_crackliberror,txt_NULL,			 /* 16 */
-       txt_pamerrormsg,txt_NULL,			 /* 17 */
-       NULL,NULL};
+     txt_name,txt_NULL,                                /* 0 */
+     txt_max_length,max_length_txt,                    /* 1 */
+     txt_min_length,min_length_txt,                    /* 2 */
+     txt_max_invalid,max_invalid_txt,                  /* 3 */
+     txt_invalid_timeout,max_invalid_txt,              /* 4 */
+     txt_invalid_wait,invalid_wait_txt,                /* 5 */
+     txt_forward_to,txt_NULL,                          /* 6 */
+     txt_forward,forward,                              /* 7 */
+     txt_not_forward,not_forward,                      /* 8 */
+     txt_keep_msg,keep_msg,                            /* 9 */
+     txt_not_keep_msg,not_keep_msg,                    /* 10 */
+     txt_autoreply,autoreply,                          /* 11 */
+     txt_not_autoreply,not_autoreply,                  /* 12 */
+     txt_autoreply_msg,txt_NULL,                       /* 13 */
+     txt_cookietimeout,cookie_timeout_txt,             /* 14 */
+     txt_password,txt_NULL,                            /* 15 */
+     txt_crackliberror,txt_NULL,		       /* 16 */
+     txt_pamerrormsg,txt_NULL,			       /* 17 */
+     txt_mailcfg_exitcode,txt_NULL,                    /* 18 */
+     NULL,NULL};
 
 #endif  /* _CGIPAF_VARS_H */
 	 

@@ -124,7 +124,16 @@ snprintf(cookie_timeout_txt,80,"%d",cookie_timeout);
       if(!strcasecmp(cp,"yes")||strcmp(cp,"1"))
 	use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
+      free(cp);
    }
+   
+   if ((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
+      use_mailcfg_statefile(1);
+      write_log(LOG_USER,7,"run_mailcfg enabled, enable use_state_file");
+      free(cp);
+   }
+   
+	
 
 #endif
 #ifdef CGIPAF_PASSWD

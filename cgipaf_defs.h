@@ -54,6 +54,7 @@
 #define  ERR_TOOSHORT 		"error_tooshort"
 #define  ERR_TOOLONG  		"error_toolong"
 #define  ERR_LOCKED   		"error_locked"
+#define  ERR_MAILCFGSCRIPT      "error_mailcfgscript"
 #define  CFG_MINUID   		"min_uid"
 #define  CFG_MAXUID   		"max_uid"
 #define  CFG_MINLENGTH 		"min_length"
@@ -63,6 +64,7 @@
 #define  RUN_LOCKED             "run_locked"
 #define  RUN_BEFORE_MAILCFG     "run_before_mailcfg"
 #define  RUN_AFTER_MAILCFG      "run_after_mailcfg"
+#define  RUN_MAILCFG            "run_mailcfg"
 #define  CFG_PAM_SERVICE        "pam_service"
 #define  CGIPAFSTATEFILE        ".cgipaf_state"
 

@@ -173,7 +173,7 @@ if (setuid(0)==-1) {
 
 #ifdef LOGIN_ACTION
 
-	login_actionfull=xmalloc(strlen(cgi_path)+strlen(NEXT_ACTION)+1);
+	login_actionfull=xmalloc(strlen(cgi_path)+strlen(LOGIN_ACTION)+1);
 	strcpy(login_actionfull,cgi_path);
 	strcat(login_actionfull,LOGIN_ACTION);
 	update_string_pair_item(options,txt_nextactionfull,login_actionfull,0);

@@ -143,7 +143,7 @@ int ephp_parse(char *phpstr,char *values[][2])
 /* -------------------------------------------------------------------
  * displays a php file
  *
- * returns -1 no error
+ * returns -1 on error
  * ------------------------------------------------------------------- */
 int print_phpfile (char * filename,char *values[][2])
 {

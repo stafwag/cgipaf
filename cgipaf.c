@@ -34,10 +34,15 @@ if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
 }
 
 if (config_file!=NULL) write_log(LOG_USER,7,"configfile %s opened",CONFIGFILE);
-   else write_log(LOG_USER,7,"can't open configfile %s",CONFIGFILE);
+   else {
+      write_log(LOG_USER,1,"can't open configfile %s, %s",CONFIGFILE,strerror(errno));
+      set_loglevel(7);
+      write_log(LOG_USER,7,"failed to open configfile, switch to debug mode");
+   }
+   
 if (doc_root!=NULL) {
    write_log(LOG_USER,7,"doc_root set to %s",doc_root);
-   if (chdir(doc_root)==-1) write_log(LOG_USER,7,"chdir(%s) failed, %s",doc_root,strerror(errno));
+   if (chdir(doc_root)==-1) write_log(LOG_USER,3,"chdir(%s) failed, %s",doc_root,strerror(errno));
 }
 #ifdef _WITHPAM
 if ((pam_servicename=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL) {
@@ -48,7 +53,13 @@ if ((pam_servicename=get_sg_item(config_file,CFGSECTION,CFG_PAM_SERVICE))!=NULL)
 #ifdef CGIPAF_PASSWD
 
 if ((cp=get_sg_item(config_file,CFGSECTION,CFG_PAM_CHANGE_EXPIRED_AUTHTOK))!=NULL) {
-   if (!strcasecmp(cp,"off")) set_pam_chauth_flag(0);
+   if (!strcasecmp(cp,"off")) {
+      write_log(LOG_USER,7,"set PAM_CHANGE_EXPIRED_AUTHOK to off");
+      set_pam_chauth_flag(0);
+   }
+   else {   
+      write_log(LOG_USER,7,"set PAM_CHANGE_EXPIRED_AUTHOK to on");
+   }
    free(cp);
 }
 
@@ -214,7 +225,7 @@ if (strcmp(newpass1,newpass2)) {
 
 /* nothing to do... */
 if (strcmp(newpass1,pass)==0) {
-   write_log(LOG_USER,7,"passwords unchanged");
+   write_log(LOG_USER,7,"password unchanged");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UNCHANGED,err_unchanged,options);
    }
 

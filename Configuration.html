@@ -4,7 +4,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.0rc5 Configuration</h1>
+<h1>CGIpaf 1.0.0 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -20,6 +20,8 @@
 <li><a href="#error_access">error_access</a></li>
 <li><a href="#error_invalid">error_invalid</a></li>
 <li><a href="#error_newpassword">error_newpassword</a></li>
+<li><a href="#error_match">error_match</a></li>
+<li><a href="#error_unchanged">error_unchanged</a></li>
 <li><a href="#error_tooshort">error_tooshort</a></li>
 <li><a href="#error_torlong">error_toolong</a></li>
 <li><a href="#error_locked">error_locked</a></li>
@@ -44,6 +46,7 @@
 <li><a href="#max_length">max_length</a></li>
 <li><a href="#accessdb">accessdb</a></li>
 <li><a href="#cracklib">cracklib</a></li>
+<li><a href="#cracklib">cracklib_dictpath</a></li>
 <li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
@@ -185,12 +188,20 @@ error_newpassord  Redirect  <em>location</em><br>
 </p>
 <h2><a name="error_match">error_match</a></h2>
 <strong>Syntax:</strong>   error_match  <em>filename</em> <b>OR</b>
-error_math    Redirect <em>location</em><BR>
+error_match    Redirect <em>location</em><BR>
 <strong>Default:</strong> "They don't match\n"<BR>
 <strong>Context:</strong>  &lt;passwd&gt;
 <p>    
     The new passwords doesn't match
 </p>       
+<h2><a name="error_unchanged">error_unchanged</a></h2>
+<strong>Syntax:</strong>   error_unchanged  <em>filename</em> <b>OR</b>
+error_unchanged    Redirect <em>location</em><BR>
+<strong>Default:</strong> "Password Unchanged\n"<BR>
+<strong>Context:</strong>  &lt;passwd&gt;
+<p>
+    Password Unchanged
+</p>
 <h2><a name="error_tooshort">error_tooshort</a></h2>
 <strong>Syntax:</strong>   error_tooshort   <em>filename</em> <b>OR</b>
 error_tooshort   Redirect <em>location</em><BR>
@@ -385,18 +396,29 @@ error_pam  Redirect    <em>location</em><br>
      (view)mailcfg.cgi don't work without an accessdb. 
 </p>
 <h2><a name="cracklib">cracklib</a></h2>
-<strong>Syntax:</strong> cracklib  <em>on|off</em><br>
+<strong>Syntax:</strong> cracklib <em>on|off</em><br>
 <strong>Default:</strong> off<br>
-<strong>Context:</strong> &lt;passwd&gt;, &lt;
+<strong>Context:</strong> &lt;passwd&gt;
 <p>       
      enable cracklib test, the new password is tested with cracklib.
      if the password is invalid <a href="#error_cracklib">error_cracklib</a>
      is displayed.
 </p>
 <p>
+     you have to set the <a href="#cracklib_dictpath">cracklib_dictpath</a> 
+     directive to your cracklib dictpath otherwise cracklib is disabled.
+</p>
+<p>
   if cracklib is enabled in your PAM configuration and 
   <a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>
   is "on", you should set cracklib to off.
+</p>
+<h2><a name="cracklib_dictpath">cracklib_dictpath</a></h2>
+<strong>Syntax:</strong> cracklib_dictpath  <em>/path/to/cracklib_dict</em><br>
+<strong>Default:</strong> off<br>
+<strong>Context:</strong> &lt;passwd&gt;
+<p>
+   Set the cracklib_dictpath
 </p>
 <h2><a name="set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></h2>
 <strong>Syntax:</strong> set_PAM_CHANGE_EXPIRED_AUTHTOK <em>on</em>|<em>off</em><br>

@@ -1,5 +1,9 @@
+* version 1.0.0pre1.2    ( 3 Apr 2002 )
+  + more logging in debug mode
+  + documentation update
+
 * version 1.0.0pre1.1    ( 28 Mar 2002 )
-  + new password unchanhed directive
+  + new password unchanged directive
   + updates to pass.c to support more non-GNU/Linux Unices
 
 * version 1.0.0pre1.0    ( 19 Mar 2002 )

@@ -1,6 +1,6 @@
 version 1.0.0pre1
 
-  + cgipaf did't compile on systems where CRACKLIB_DICTPATH wasn't
+  + cgipaf didn't compile on systems where CRACKLIB_DICTPATH wasn't
     defined
 
 version 1.0rc5pre1
@@ -29,7 +29,7 @@ version 1.0rc3
 
 version 1.0rc2
 
-  + accessdb bug, the database wasn' always closed  ( thanks to Andreas Liebe 
+  + accessdb bug, the database wasn't always closed  ( thanks to Andreas Liebe 
     for his patch )
 
 version 1.0rc1

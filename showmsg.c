@@ -33,35 +33,87 @@ int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char
 {
 char *cp,*fullname,**cc;
 struct stat statbuf;
+
+/*
+ * get directive array
+ */
 if (section_name==NULL)
    cc=get_global_config_array(config_file,msgfile);
 else cc=get_section_config_array(config_file,section_name,msgfile);
-if ((config_file==NULL)||(cc==NULL)) return(show_alt_msg(alt_msg));
-if (*cc==NULL) return(show_alt_msg(alt_msg));
 
+/*
+ * error handling, if we can't get the directive data show alt_msg
+ */
+if (config_file==NULL) {
+   write_log(LOG_USER,7,"showmsg.c: config_file is NULL, display alt_msg");
+   return(show_alt_msg(alt_msg));
+}
+if (cc==NULL) {
+   write_log(LOG_USER,7,"showmsg.c: directive array is NULL (directive not found???), display alt_msg");
+   return(show_alt_msg(alt_msg));
+}
+if (*cc==NULL) {
+   write_log(LOG_USER,7,"showmsg.c: directive array is empty, display alt_msg");
+   return(show_alt_msg(alt_msg));
+}
+
+/*
+ * redirect, if the first item of the directive is "redirect" 
+ * send redirect header
+ */
 if ((!strcasecmp(cc[0],"redirect"))&&(cc[1]!=NULL)&&(strlen(cc[1]))) {
    char *location;
    location=add_parms(cc[1],parms);
-   if(location==NULL) return(show_alt_msg(alt_msg));
-   else html_redirect(location);
+   if(location==NULL) {
+      write_log(LOG_USER,7,"showmsg.c: location is NULL can't redirect, display alt_msg");
+      return(show_alt_msg(alt_msg));
+   }
+   else {
+      write_log(LOG_USER,7,"showmsg.c: redirect to %s",location);
+      html_redirect(location);
+   }
    return(1);
 }
-   
-if (root==NULL) return(show_alt_msg(alt_msg));
-   
-fullname=(char *) malloc(strlen(root)+strlen(*cc)+1+strlen("/"));
 
+/*
+ * if root == NULL, display alt_msg
+ */
+if (root==NULL) {
+     write_log(LOG_USER,7,"showmsg.c: root is NULL, display alt_msg");
+     return(show_alt_msg(alt_msg));
+}
+
+/*
+ * create full document name
+ */
+fullname=(char *) malloc(strlen(root)+strlen(*cc)+1+strlen("/"));
    
-if (fullname==NULL) return(show_alt_msg(alt_msg));
+if (fullname==NULL) {
+   write_log(LOG_USER,7,"showmsg.c: fullname is NULL (malloc error???), display alt_msg");
+   return(show_alt_msg(alt_msg));
+}
 else {
    fullname[0]='\0';
    if(root!=NULL) strcpy(fullname,root);
    strcat(fullname,"/");
    strcat(fullname,*cc);
-   if(stat(fullname,&statbuf)==-1) return(show_alt_msg(alt_msg));
+   write_log(LOG_USER,7,"showmsg.c: fullname set to %s",fullname);
+ 
+   /*
+    * Is the document a valid file???
+    */
+   if(stat(fullname,&statbuf)==-1) {
+     write_log(LOG_USER,7,"showmsg.c: stat() error %s, display alt_msg",strerror(errno));
+     return(show_alt_msg(alt_msg));
+   }
+ 
+ /*
+  * Display the document
+  */
    printf("Content-type: text/html\n\n");
    
    if(print_phpfile(fullname,parms)==-1) {
+      write_log(LOG_USER,7,"showmsg.c: print_phpfile() failed, display alt_msg");
       if(alt_msg!=NULL) {
 	 puts(alt_msg);
 	 return(2);
@@ -74,6 +126,9 @@ else {
    return(0);
 }
 
+/*
+ * call show_msg and exit, close config_file if open
+ */
 void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msgfile, char *alt_msg,char *parms[][2])
 {
      show_msg(config_file,root,virtual_name,msgfile,alt_msg,parms);
@@ -97,6 +152,7 @@ int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, c
    }
    return(i);
 }
+
 void show_msgs_and_exit(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char *parms[][2])
 {
      show_msgs(config_file,root,section_name,msgfiles,alt_msg,parms);

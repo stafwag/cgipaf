@@ -1,3 +1,7 @@
+version 1.3.0pre1
+
+  + didn't compile on FreeBSD
+
 version 1.1.0rc1
 
   + run_after_mailcfg was executed before the mail configuration

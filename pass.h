@@ -37,7 +37,7 @@
 #define OSHADOWFILE "/etc/oshadow"
 #define TMPFILE "/etc/tmp_passwd"
 
-#ifndef FREEBSDHOST
+#ifndef BSDHOST
 #define TMPLOCK "/var/lock/cgipaf"
 #else
 #define TMPLOCK "/var/spool/lock/cgipaf"

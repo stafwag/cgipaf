@@ -1,6 +1,7 @@
-CGIpaf 1.3.0pre1 has support for Linuxconf virtual email domains.
+CGIpaf 1.3.0 has support for Linuxconf virtual email domains.
 
-I didn't had the time to update the docs...
+vmail passwords are only supported on system with fgetpwent(3) function and is 
+therefor not supported on *BSD systems.
 
 To compile CGIpaf with vmail support you've to disable pam-support
 

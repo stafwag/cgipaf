@@ -16,6 +16,18 @@ syslog			 on
 loglevel		 6
 
 #
+# Enable Access Control lists
+#
+
+# ACL example
+
+# AclOrder              Deny,Allow
+# DenyUsers             *
+# DenyGroups            *
+# AllowUsers            user1 user2 user3
+# AllowGroups           group1 group2 group3
+
+#
 # accessdb configuration
 
 accessdb                /etc/cgipaf/accessdb
@@ -40,7 +52,7 @@ min_uid                 101
 #              document      redirect          location
 #
 
-document_root           /etc/cgipaf/data
+document_root           /etc/cgipaf
 login_document          cgipasswd.php
 error_loginname         cgipasswd_errlogin.php
 error_access            cgipasswd_erraccess.php
@@ -53,9 +65,10 @@ error_locked            cgipasswd_errlocked.php
 # run_locked            /usr/local/bin/notify_script %{name}
 error_toolong           cgipasswd_errlong.php
 error_cracklib          cgipasswd_errbadpassword.php
+error_illegalword       cgipasswd_errbadpassword.php
 error_pam               cgipasswd_errpam.php
 msg_success             cgipasswd_msgchanged.php
-run_success             "/usr/bin/smb_passwd -s -U %{name} > /dev/null" 	"%{password}\n%{password}\n"
+# run_success             "/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1" 	"%{password}\n%{password}\n"
 
 #
 # set the minimum & maximum password length
@@ -72,10 +85,9 @@ max_length              16
 # cracklib_dictpath    /var/cache/cracklib/cracklib_dict
 
 #
-# set PAM_CHANGE_EXPIRED_AUTHTOK flag
+# illegal words ( words that are not allowed in a new password
 #
-
-set_PAM_CHANGE_EXPIRED_AUTHTOK  on
+# illegal_words         foo bar
 
 </passwd>
 
@@ -86,7 +98,7 @@ set_PAM_CHANGE_EXPIRED_AUTHTOK  on
 <mailcfg>
 
 cookie_timeout          300
-document_root           /etc/cgipaf/data
+document_root           /etc/cgipaf
 login_document          viewmailcfg.php
 mailcfg_document        mailcfg.php
 error_readname		 mailcfg_errreadname
@@ -109,8 +121,12 @@ error_openvacations	 mailcfg_erropenvacations.php
 msg_success		 mailcfg_msgupdated.php
 # sendmail              /usr/lib/sendmail
 # domain		 your_domain_name
-run_mailcfg		"/etc/cgipaf/scripts/mailcfg.pl" "%{name}\n%{domain}\n%{homedir}\n%{forward}\n%{keep_msg}\n%{autoreply}\n%{forward_to}\n%{autoreply_msg}\n"
-# run_before_mailcfg	"cp ~/.procmailrc ~/.procmailrc.backup"
-# run_after_mailcfg	"cp ~/.procmailrc.backup ~/.procmailrc"
-use_statefile		yes
+
+# create a backup of the user's .procmailrc and restore it
+# when mail forwarding and autoreply is disabled
+
+# run_before_mailcfg      "cp %{homedir}/.procmailrc %{homedir}/.procmailrc_backup"
+# run_after_mailcfg       "cp %{homedir}/.procmailrc_backup %{homedir}/.procmailrc"
+run_mailcfg             "/etc/cgipaf/scripts/mailcfg.pl" "%{name}\n%{domain}\n%{homedir}\n%{forward}\n%{keep_msg}\n%{autoreply}\n%{forward_to}\n"
+
 </mailcfg>

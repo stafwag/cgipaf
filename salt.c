@@ -5,6 +5,18 @@
  */
 
 #include "salt.h"
+
+#ifdef FREEBSDHOST
+static unsigned char itoa64[] =         /* 0 ... 63 => ascii - 64 */
+        "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+to64(char *s, long v, int n)
+{
+  while (--n >= 0) {
+        *s++ = itoa64[v&0x3f];
+        v >>= 6;
+        }
+}
+#endif
 /*
  * retruns a random char with valid ascii char's
  *
@@ -36,7 +48,12 @@ static char md5salt[32];
 
 if (!randinit) {
      randinit = 1;
+#ifndef FREEBSDHOST
      srandom(getpid());
+#else
+     srandomdev();
+#endif
+     
 }
 
 gettimeofday(&tv,0);
@@ -66,3 +83,4 @@ stdsalt[1]=gen_random(time(0)+getpid());
 stdsalt[2]='\0';
 return(stdsalt);
 }
+

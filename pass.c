@@ -5,10 +5,48 @@
  * Staf Wagemakers                            staf.wagemakers@advalvas.be 
 */
 #include "pass.h"
+
+/*
+ * if FREEBSDHOST is not defined assume /etc/passwd
+ */
+#ifndef FREEBSDHOST
+#define PASSWDFILE	"/etc/passwd"
+#else
+#define PASSWDFILE	_PATH_MASTERPASSWD
+#endif
+
 #ifdef MD5_CRYPT
 #include "md5crypt.h"
 #endif
 #include "salt.h"
+
+#ifndef HAVE_SHADOW_H
+/*
+ * no lckpwdf so create our own
+ */
+int lckpwdf () 
+{
+struct stat st;
+int lock;
+int i=0;
+char *passwdfile=PASSWDFILE;
+for(;;) {
+    if((lock = open(passwdfile,O_RDONLY,0))<0) return(-2);
+    if(fcntl(lock,F_SETFD,1)==-1) return(-2);
+    while (flock(lock,LOCK_EX|LOCK_NB)) {
+          ++i;
+          if(i>30) return(-2);
+          sleep(1);
+    };
+    if(fstat(lock,&st) < 0) return(-2);
+    if(st.st_nlink !=0 ) break;
+    close(lock);
+    lock=-2;
+}
+return(lock);   
+} 
+#endif
+
 /*
  * reads the passwd info out /etc/passwd and
  * /etc/shadow
@@ -25,6 +63,7 @@ pw->p=NULL;
 pw->sp=NULL;
 if(!(pw->p=getpwnam(name))) return(NULL);   /* User doesn't exist... */
 if (!strcmp(pw->p->pw_passwd,"x")) {
+
 #ifdef HAVE_SHADOW_H
    if(!(pw->sp=getspnam(name))) return(NULL);
 #else
@@ -36,6 +75,7 @@ if (!strcmp(pw->p->pw_passwd,"x")) {
    }
 return(pw);
 }
+
 /*
  * returns 0 if p is a std password
  *         1 if p is a md5 password
@@ -44,6 +84,7 @@ int is_md5password(char *p) {
    if (strncmp(p,"$1$",3) == 0) return(1);
    return(0);
 }
+
 /*
  * returns a pointer to the password field
  */
@@ -55,6 +96,7 @@ char * get_pwfield (struct pw_info *pw)
 #endif
      return(NULL);
 };
+
 /*
  * returns password crypt type
  *         0 = std crypt
@@ -66,6 +108,7 @@ char *pass=get_pwfield(pw);
 if (pass==NULL) return(-1);
 return (is_md5password(pass));
 }
+
 /*
  * test a passwd
  * *p = passwd info
@@ -89,6 +132,7 @@ else {
 if (strcmp(p,crypt(pass,c))) return(-1);   /* wrong password */
 return(PASS_SUCCESS);
 }
+
 /*
  * update the password file
  * *pwfilename = passwd filename
@@ -108,8 +152,9 @@ return(PASS_SUCCESS);
  *         -11 = rename failed
  *	   -12 = user not found
  *         -13 = reserved (unsupported crypt type)
+ * 	   -14 = pw_mkdb failed ( freebsd only )
  */
-int update_pwfile(char *pwfilename,char *name,char *encrypt_pass)
+int update_pwfile(char *pwfilename,struct pw_info *pw,char *encrypt_pass)
 {
 FILE *pwfile;
 FILE *tmpfile;
@@ -119,6 +164,7 @@ char buffer[BUFFERLEN];
 char buffer2[BUFFERLEN];
 char *cp;
 struct stat st;
+char *name=pw->p->pw_name;
 
 umask(0377);
 
@@ -131,11 +177,12 @@ if (fchmod(fd,256)==-1) return(-6);              /* can't chmod tmpfile */
  * password file parser
  */
    
-while (fgets(buffer,100,pwfile)) { 
+while (fgets(buffer,BUFFERLEN-1,pwfile)) { 
    if(!(strrchr(buffer,'\n'))) {errno=E2BIG;return(-7);} /* buffer overflow */
-   if(!uf) {
+   if(!uf) {                     
+   if(!(*buffer=='#' || *buffer=='\n')) {     /* if buffer is no comment or empty */
    cp=(char *)strchr(buffer,':');  /* cp point to the end of the current username */
-   if(cp==NULL) return (-12);      /* ":" not found, doesn't look like a password file... */
+   if(cp==NULL) return (-2);      /* ":" not found, doesn't look like a password file... */
    strncpy(buffer2,buffer,cp-buffer);
    buffer2[cp-buffer]='\0';        /* buffer2 = current username */
    if (strcmp(name,buffer2)==0) {
@@ -158,6 +205,7 @@ while (fgets(buffer,100,pwfile)) {
       strcat(buffer,cp);
    }
    }
+   }
    /*
     * copy the buffer to the temp file
     */
@@ -175,16 +223,38 @@ chown(TMPFILE,st.st_uid,st.st_gid);
 
 if (uf) {
    /* user found, rename tmpfile to pwfile */
+#ifndef FREEBSDHOST
    if (rename(TMPFILE,pwfilename)==-1) return(-11); 
+#else
+
+/*
+ * freebsd password changer
+ * use pw_mkdb (8) to update the passwd db, TMPFILE is the input file
+ */
+   int pstat;
+   pid_t pid;
+   char *mppath = _PATH_PWD;
+   
+   if(!( pid=fork() )) {
+      if (!name)
+         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,TMPFILE,NULL);
+      else
+         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,TMPFILE,NULL);
    }
-   else { 
-      /* user not found, nothing to do */
-      errno=0; 
-      return(-12);
-   }
+   pid = waitpid(pid,&pstat,0);
+
+   if (!(pid=-1 || !WIFEXITED(pstat) || WEXITSTATUS(pstat) != 0)) return(-14);
+#endif
+}
+else { 
+   /* user not found, nothing to do */
+   errno=0; 
+   return(-12);
+}
 errno=0;
 return(PASS_SUCCESS);
 }
+
 /*
  * update the user's password
  * 
@@ -197,9 +267,10 @@ int chpw(struct pw_info *pw,char *pass)
 {
 FILE *pwfile;
 FILE *tmpfile;
-int fd,fd_tmplock,lock,count,i;
+int i;
+int fd,fd_tmplock,lock,count;
 char *c;
-char passwdfile[50];
+char *passwdfile;
 char *encrypt_pass;
 struct stat st;
 
@@ -245,8 +316,16 @@ switch(get_crypttype(pw))
                      encrypt_pass=crypt(pass,c);
 		     break;
 #ifdef MD5_CRYPT
-        case 1:	     c=md5_seed();           /* md5 password            */
+        case 1:
+         	     c=md5_seed();           /* md5 password            */
+#ifndef FREEBSDHOST
 		     encrypt_pass=libshadow_md5_crypt(pass,c); 
+#else
+		     encrypt_pass=xmalloc(_PASSWORD_LEN+1);
+		     encrypt_pass[0]='\0';
+		     (void)crypt_set_format("md5");
+		     encrypt_pass=crypt(pass,c);
+#endif
 		     break;
 #endif
         default:     c=NULL;                 /* unsupported crypt type! */
@@ -255,22 +334,26 @@ switch(get_crypttype(pw))
 
 if (c!=NULL) {
 
+
 /*
  * set passwdfile to the real password file
  */
 
-if (pw->sp) strcpy(passwdfile,SHADOWFILE);
-  else strcpy(passwdfile,"/etc/passwd");
+if (pw->sp) passwdfile=SHADOWFILE;
+  else passwdfile=PASSWDFILE;
 
 /*
  * try to update the user's password
  */
-i=update_pwfile(passwdfile,pw->p->pw_name,encrypt_pass);
+i=update_pwfile(passwdfile,pw,encrypt_pass);
 
 }
 
 unlink(TMPLOCK);
+
+#ifndef FREEBSDHOST
 ulckpwdf();
+#endif
 
 if (i<0) return(i);   /* can't update password */
 
@@ -278,11 +361,15 @@ if (i<0) return(i);   /* can't update password */
  * Solaris compatibility
  */
 
+#ifndef FREEBSDHOST
+
 if (!strcmp(passwdfile,SHADOWFILE)) {
    if(lstat(OSHADOWFILE,&st)!=-1) {
-      if((i=update_pwfile(OSHADOWFILE,pw->p->pw_name,encrypt_pass))<0) return(i);
+      if((i=update_pwfile(OSHADOWFILE,pw,encrypt_pass))<0) return(i);
       }
    }
+#endif
 
 return(PASS_SUCCESS);
 }
+

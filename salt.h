@@ -8,7 +8,9 @@
 #else
 #include <time.h>
 #endif
+#ifndef FREEBSDHOST
 #include "md5crypt.h"
+#endif
 char * md5_seed(void);
 char * std_seed(void);
 #endif

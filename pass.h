@@ -37,8 +37,13 @@
 #define OSHADOWFILE "/etc/oshadow"
 #define TMPFILE "/etc/tmp_passwd"
 
+#ifndef FREEBSDHOST
 #define TMPLOCK "/var/lock/cgipaf"
-#define BUFFERLEN 200
+#else
+#define TMPLOCK "/var/spool/lock/cgipaf"
+#endif
+
+#define BUFFERLEN 256
 
 #ifdef _WITHPAM
 #include <security/pam_appl.h>

@@ -1,4 +1,7 @@
-* version 1.0.1pre1      ( 29 Apr 2002 )
+* version 1.0.1rc1pre2   ( 17 May 2002 ) 
+  + FreeBSD support
+
+* version 1.0.1rc1pre1   ( 29 Apr 2002 )
   + md5 password support on non-pam systems ( Slackware )
 
 * version 1.0.0          ( 23 Apr 2002 )

@@ -10,6 +10,8 @@
 #undef STDC_HEADERS
 
 #undef MD5_CRYPT
+#undef HOST
+#undef FREEBSDHOST
 
 /* Define if you have the closelog function.  */
 #undef HAVE_CLOSELOG

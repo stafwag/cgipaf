@@ -4,6 +4,7 @@
 #include "md5crypt.h"
 int main (int argc, char **argv) {
 char *name, *pass, * new_password, *encrypt_password;
+int i;
 struct pw_info *pw;
 	if (argc!=4) {
 		fprintf(stderr,"usage: %s name password newpassword\n",argv[0]);
@@ -13,7 +14,7 @@ name=argv[1];
 pass=argv[2];
 new_password=argv[3];
 
-printf("name: %s , pass: %s new_password : &s\n",name,pass,new_password);
+printf("name: %s , pass: %s new_password : %s\n",name,pass,new_password);
 
 pw=get_pw(name);
 
@@ -26,8 +27,8 @@ if ((ckpw(pw,pass))!=PASS_SUCCESS) {
 	exit(1);
 }
 printf("Auth OK\n");
-encrypt_password=libshadow_md5_crypt(new_password,md5_seed());
+/* encrypt_password=libshadow_md5_crypt(new_password,md5_seed()); */
 printf ("md5 password: %s\n",encrypt_password);
-chpw(pw,new_password);
-
+i=chpw(pw,new_password);
+printf ("chpw() returns %d\n",i);
 }

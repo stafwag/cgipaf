@@ -366,7 +366,7 @@ else {
      }
    }
      i=brol;
-     brol=-14;
+     brol=-15;
 #endif
            print_html_msg("<CENTER><H1><B><I>");
            printf("<BR>Can't update password<BR>%s",err_chpw[abs(brol)-1]);

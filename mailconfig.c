@@ -10,6 +10,14 @@
 #define  STATEKEEPMSG    "keepmsg"
 #define  STATEAUTOREPLY  "autoreply"
 
+static int use_statefile=0;
+
+int use_mailcfg_statefile(int setflag) 
+{
+   if (setflag != -1 ) use_statefile=setflag;
+   return use_statefile;
+}
+
 /* 
  * return $HOME/dir
  */
@@ -47,6 +55,7 @@ int get_reply(struct pw_info *pw)
    char buf[100];
    char *c;
    int  ret=0;
+   if(use_statefile) return(get_mailcfg_reply(pw));
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"r"))) return(ret);
    do {
       c=fgets(buf,100,fp);
@@ -139,6 +148,7 @@ char * realget_forward(struct pw_info *pw,int mode)
 
 char * get_forward(struct pw_info *pw)
 {
+   if (use_statefile) return(get_mailcfg_forward(pw));
    return(realget_forward(pw,0));
 }
 
@@ -148,7 +158,8 @@ char * get_forward(struct pw_info *pw)
 
 char * get_kforward(struct pw_info *pw)
 {
-return(realget_forward(pw,1));
+   if (use_statefile) return(get_mailcfg_kforward(pw));
+   return(realget_forward(pw,1));
 }
 
 /*
@@ -281,7 +292,7 @@ int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,in
  * bit 3 autoreply status                                                   *
 */
 
-int get_mailcfg_status(struct passwd *p)
+int get_mailcfg_status(struct pw_info *pw)
 {
    FILE *fp;
    int  forward=0;
@@ -289,7 +300,7 @@ int get_mailcfg_status(struct passwd *p)
    int  autoreply=0;
    int  ret=0;
    char *buf;
-   char *filename=add2home(p,CGIPAFSTATEFILE);
+   char *filename=add2home(pw->p,CGIPAFSTATEFILE);
    if((fp=fopen(filename,"r"))==NULL) return(-1);
    buf=get_config(fp,STATEFORWARD);
    if(!strcmp(buf,"1")) forward=1;
@@ -303,4 +314,56 @@ int get_mailcfg_status(struct passwd *p)
    ret=forward+keepmsg*2+autoreply*4;
    fclose(fp);
    return(ret);
+}
+/*
+ * reads the autoreply status in the cgipaf_state file
+ */
+int get_mailcfg_reply(struct pw_info *pw) 
+{
+   FILE *fp;
+   char *buf;
+   char *filename=add2home(pw->p,CGIPAFSTATEFILE);
+   if((fp=fopen(filename,"r"))==NULL) return(0);  /* can't open statefile, assume not yet configured */
+   buf=get_config(fp,STATEAUTOREPLY);
+   fclose(fp);
+   if(!strcmp(buf,"1")) return 1;
+   return(0);
+}
+
+char * real_get_mailcfg_forward(struct pw_info *pw,int mode) 
+{
+   FILE *fp;
+   char *buf;
+   char *filename=add2home(pw->p,CGIPAFSTATEFILE);
+   int  forward=0;
+   int  keep=0;
+   if((fp=fopen(filename,"r"))==NULL) return(0);  /* can't open statefile, assume not yet configured */
+   buf=get_config(fp,STATEFORWARD);
+   if(!strcmp(buf,"1")) forward=1;
+   free(buf);
+   buf=get_config(fp,STATEKEEPMSG);
+   if(!strcmp(buf,"1")) keep=1;
+   free(buf);
+   buf=NULL;
+   switch (mode) 
+     {
+      case 0:
+	if(forward&&!keep) 
+	  buf=get_config(fp,STATEFORWARDTO);
+	break;
+      default:
+	if(forward||keep)
+	  buf=get_config(fp,STATEFORWARDTO);
+	break;
+     }
+   return(buf);
+}
+char * get_mailcfg_forward(struct pw_info *pw) 
+{ 
+   return(real_get_mailcfg_forward(pw,0));
+}
+
+char * get_mailcfg_kforward(struct pw_info *pw) 
+{ 
+   return(real_get_mailcfg_forward(pw,1));
 }

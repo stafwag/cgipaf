@@ -46,9 +46,8 @@ main()
    char   txt_sendmail[]="/usr/lib/sendmail";
    FILE   *fp;
    WEBDATA *cookies;
-
 #include "cgipaf_vars.h"
-
+   fflush(0);
    unsetenv("IFS");
    
    set_memerr(out_of_memory);      /* set out of memory handler */
@@ -317,8 +316,8 @@ main()
    umask(0177);
 
    /* get the previos mailcfg state out the user's .cgipaf_state file */
-   
-   if((oldstate=get_mailcfg_status(pw->p))==-1) 
+
+   if((oldstate=get_mailcfg_status(pw))==-1) 
      write_log,(LOG_USER,7,"failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
    
    /* calculate the new state */
@@ -376,7 +375,7 @@ main()
    }
    
    /* copy the user's messages to $HOME/vacations.txt */
-   
+
    if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
       write_log(LOG_USER,1,err_openvacations);	
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,options);
@@ -392,7 +391,7 @@ main()
 	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options);
       }
    }
-   
+
    if (!strcmp(autoreply,"yes")) {
       if(enable_reply(pw,domain)==-1) {
 	 write_log(LOG_USER,1,"%s enable_reply() failed",err_updateprocmailrc);

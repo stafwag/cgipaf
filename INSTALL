@@ -38,7 +38,7 @@ INSTALLATION
                       --datadir=/etc/cgipaf/data \ 
                       --sysconfdir=/etc/cgipaf
     
-    Update the above command with your real cgi-bin and htdocs directory
+    Update the above command with your real cgi-bin directory.
 
     This will create Makefile, install.sh and config.h
     
@@ -50,7 +50,8 @@ INSTALLATION
     
     To compile the sources.
 
-    type: make install
+    type: 
+	  make install
     
     The installation script will install "passwd.cgi","viewmailcfg.cgi" and 
     "mailcfg.cgi" in cgi-bin, copy "php/*.php" in the data directory, and 

@@ -441,6 +441,7 @@ main()
       if (config_file!=NULL) fclose(config_file);   
       exit(0);
    }
+   options[19][1]=pw->p->pw_dir;
 
 #ifdef CGIPAF_PASSWD
 

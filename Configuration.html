@@ -4,7 +4,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.0.0 Configuration</h1>
+<h1>CGIpaf 1.0.1 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -52,8 +52,11 @@
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
 <li><a href="#domain">domain</a></li>
+<li><a href="#use_statefile">use_statefile</a></li>
 <li><a href="#run_success">run_success</a></li>
 <li><a href="#run_locked">run_locked</a></li>
+<li><a href="#run_before_mailcfg">run_before_mailcfg</a></li>
+<li><a href="#run_after_mailcfg">run_after_mailcfg</a></li>
 <li><a href="#cookie_timeout">cookie_timeout</a></li>
 <li><a href="#mailcfg_document">mailcfg_document</a></li>
 <li><a href="#error_deldotforward">error_deldotforward</a></li>
@@ -464,10 +467,29 @@ error_pam  Redirect    <em>location</em><br>
      will use hostname.nisadomainname, if your server isn't part of a NIS 
      domain it'll use the domain in /etc/resolv.conf.
 </p>       
+<h2><a name="use_statefile">use_statefile</a></h2>
+<strong>Syntax:</strong> use_statefile <em>yes|no</em>
+<strong>Default</strong> no<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>
+     CGIpaf creates a state file ( $HOME/.cgipaf_state ) in the user's home directory.
+     This file contains the user's current mail configuration state. This file is used by
+     <a href="#run_before_mailcfg">run_before_mailcfg</a> and <a href="#run_after_mailcfg">run_after_mailcfg</a>.
+     <br>
+     By default viewmailcfg.cgi doesn't use this file ( mainly for comptibily reasons ),
+     but reads the user's .procmailrc to determine the user mail configuration.
+     If you set "use_statefile" to "yes" viewmailcfg.cgi will read the state file instead
+     of the user's .procmailrc to get the user's current mail configuration.
+     <br>
+     If your user's uses their own .procmailrc to distribute their mailinglists into seperated
+     mailboxes you must set "use_statefile" to "yes". The user's original .procmailrc
+     could confuse CGIpaf.
+</p>
 <h2><a name="run_success">run_success</a></h2>
 <strong>Syntax:</strong> run_success   <em>path_to_script</em>
 <em>stdout</em><br>
 <strong>Default:</strong> not set<br>
+<strong>Run as:</strong>   root<br>
 <strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
 <p>       
      runs a script is a password / mail configuration is successfully
@@ -483,9 +505,34 @@ error_pam  Redirect    <em>location</em><br>
 <strong>Syntax:</strong>   run_locked    <em>path_to_script</em>
 <em>stdout</em>
 <strong>Default:</strong> not set<br>
+<strong>Run as:</strong>   root<br \>
 <strong>Context:</strong>  &lt;passwd&gt;,  &lt;mailcfg&gt;<br>
 <p>	
      run a script is a user is locked.
+</p>
+<h2><a name="run_before_mailcfg">run_before_mailcfg</a></h2>
+<strong>Syntax:</strong>   run_before_mailcfg  <em>script</em>
+<strong>Default:</strong>   not set<br>
+<strong>Run as:</strong>     <em>mail user</em><br \>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>
+     run a script before the mail configuration. mailcfg.cgi will 
+     execute the "run_before_mailcfg" script if the mail configuration state 
+     goes from not active ( no mail forwarding and no autoreply ) to active.
+<br>
+     This can be used to copy the user's .procmailrc to a backup file. 
+<p>
+<h2><a name="run_after_mailcfg">run_after_mailcfg</a></h2>
+<strong>Syntax:</strong>   run_after_mailcfg   <em>script</em>
+<strong>Default:</strong>   not set<br>
+<strong>Context:</strong>   &lt;mailcfg&gt;<br>
+<p>
+     run a script after the mail configuration. mailcfg.cgi will
+     execute the "run_after_mailcfg" script if the mail configuration state 
+     goes from active ( mail forwarding or autoreply enabled ) to nonactive.
+<br>
+     This script can be used to restore the user's .procmailrc to his orginal
+     state
 </p>        
 <h2><a name="cookie_timeout">cookie_timeout</a></h2>
 <strong>Syntax:</strong>   cookie_timeout    <em>seconds</em>

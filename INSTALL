@@ -110,7 +110,16 @@ CONFIGURATION
     If "set_PAM_CHANGE_EXPIRED_AUTHTOK" is to "on" passwd.cgi support all 
     pam opties in the PAM configuration (cracklib, minimum/ maximum password 
     length etc.).
-
+    
+    CGIpaf deletes the user's .procmailrc! If your users use procmail to
+    distribute thier maillingslists into seperate mailboxes etc, it is possible
+    to copy the user's .procmailrc to a backup file and copy it back when
+    mailforwarding and autoreply is disabled. Set "use_statefile" to "yes" to
+    avoid that the orginal procmail config confuses CGIpaf and use 
+    "run_before_mailcfg" to copy the user's procmail config to a backup file
+    and "run_after_mailcfg" to restore it. See Configuration for more 
+    information.
+    
 THAT'S ALL FOLKS
 
     Point your browser to http://your_webserver/cgi-bin/passwd.cgi or 

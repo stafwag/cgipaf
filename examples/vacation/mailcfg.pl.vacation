@@ -62,7 +62,7 @@ if("$AUTOREPLY" eq "yes" ) {
    # add vacation to .forward
    #
     
-   print FH "\"|/usr/bin/vacation -m vacations.txt $NAME\"";
+   print FH "\"|/usr/bin/vacation $NAME\"";
    
    #
    # create the user's .vacation.msg

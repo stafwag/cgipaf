@@ -88,6 +88,7 @@ int    max_length, min_length;
 char   txt_usermaildomain[]="user_maildomain";
 char   txt_message[]="message";
 char   txt_admin[]="admin";
+char   txt_user[]="user";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
 int    max_postlength=150;

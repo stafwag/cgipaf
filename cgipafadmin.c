@@ -62,6 +62,8 @@ main()
 
    		user=cp;
 
+		options[26][1]=user;
+
 		#include "cgipaf_setname2postname.c"
 		#include "cgipaf_noroot.c"
 		#include "cgipaf_cookieauth.c"

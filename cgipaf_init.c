@@ -62,6 +62,8 @@ options=add_2_string_pair(options,txt_message,txt_NULL);	       				/* 23 */
 options=add_2_string_pair(options,txt_viewmailcfg_exitcode,viewmailcfg_exitcode_txt);          	/* 24 */
 options=add_2_string_pair(options,txt_admin,txt_NULL);          	
 	        /* 25 */
+options=add_2_string_pair(options,txt_user,txt_NULL);          	
+	        /* 26 */
 
 options=add_env_2_string_pair(options);
 

@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------- */
 /* cgipaf.c                                     (GPL) 2000,2001 Belgium    */
-/* http://stafwag.netfirms.com                          Staf Wagemakers    */
+/* http://staf.patat.org                                Staf Wagemakers    */
 /* staf.wagemakers@advalvas.be                                             */
 /* ----------------------------------------------------------------------- */
 

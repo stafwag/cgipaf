@@ -346,21 +346,6 @@ main()
 	  write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
    }
    
-   /* if configured -> not configured
-    * run run_after_mailcfg
-    */
-   
-   if(oldstate&&!newstate) {
-      i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
-      if(i<0) {
-	 if(i==-1)
-	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
-      }
-      else
-	if((i=WEXITSTATUS(i)))
-	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
-   }
-
    /* copy the user's message to $HOME/vacations.txt */
       
    if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
@@ -472,5 +457,21 @@ main()
    else
      if((i=WEXITSTATUS(i)))
        write_log(LOG_USER,1,"run_success returns a non-null value",i);
+
+   /* if configured -> not configured
+    * run run_after_mailcfg
+    */
+   
+   if(oldstate&&!newstate) {
+      i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
+      if(i<0) {
+	 if(i==-1)
+	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      }
+      else
+	if((i=WEXITSTATUS(i)))
+	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
+   }
+
    if(config_file!=NULL) fclose(config_file);
 }

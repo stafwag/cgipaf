@@ -278,6 +278,25 @@ WEBDATA *get_cookies()
 
 /*
  *
+ * read get
+ *
+ */
+
+WEBDATA *read_get(void)
+{
+   WEBDATA *wp;
+   char *c;
+   c=getenv("QUERY_STRING");
+   if (c==NULL) return NULL;    /* No get data */
+   wp=str2webdata('=','&',c);
+   if (wp==NULL) return NULL;
+   wp->string=c;		/* save QUERY_STRING */
+   return wp;
+}
+
+
+/*
+ *
  * convert a textarea to ascii
  *
  */

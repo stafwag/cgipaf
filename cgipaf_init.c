@@ -1,7 +1,7 @@
 /*
  * cgipaf_init.c
  *
- * Copyright (C) 2002,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,14 @@ options=add_2_string_pair(options,txt_message,txt_NULL);	       				/* 23 */
 options=add_2_string_pair(options,txt_viewmailcfg_exitcode,viewmailcfg_exitcode_txt);          	/* 24 */
 options=add_2_string_pair(options,txt_admin,txt_NULL);          	
 	        /* 25 */
+
+options=add_env_2_string_pair(options);
+
+get_data=read_get();
+
+/* if(get_data!=NULL) add_get_2_string_pair(get_data,options); */
+
+
 
 /*
  * test setuid(0)

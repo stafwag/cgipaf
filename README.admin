@@ -13,7 +13,7 @@ Add the next lines to your cgipaf.conf:
 <pwadmin>
 
 cookie_timeout          300
-document_root           /etc/cgipaf
+document_root           /etc/cgipaf/data
 login_document          pwadminlogin.php
 admin_users             admin1 admin2
 
@@ -22,7 +22,7 @@ admin_users             admin1 admin2
 <mailadmin>
 
 cookie_timeout          300
-document_root           /etc/cgipaf
+document_root           /etc/cgipaf/data
 login_document          mailadminlogin.php
 admin_users             admin1 admin2
 

@@ -1,7 +1,7 @@
 /*
  * cgipaf_func.h
  *
- * Copyright (C) 2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2003,04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,5 +25,6 @@
 #include "ccgi.h"
 
 char *** add_post_2_string_pair ( WEBDATA *data, char *** ret );
-char *   webdata_2_post_string  ( WEBDATA *data );
+char *** add_get_2_string_pair ( WEBDATA *data, char *** ret );
+char *** add_env_2_string_pair ( char *** ret );
 #endif

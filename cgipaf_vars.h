@@ -27,7 +27,7 @@ int    max_invalid=3;
 int    invalid_timeout=600;
 int    enable_cracklib=0;
 struct pw_info *pw;
-WEBDATA *data;
+WEBDATA *data,*get_data;
 char   *name=NULL,*pass=NULL,*usermaildomain=NULL;
 char   *cracklib_dictpath=NULL;
 FILE   *config_file;

@@ -41,6 +41,7 @@ char * get_postitem(WEBDATA *wp,char *name);
 char * get_webdata_item(WEBDATA *wp,char *name);
 char * get_cookie(WEBDATA *wp,char *name);
 WEBDATA *read_post(void);
+WEBDATA *read_get(void);
 int print_htmlfile (char * filename);
 void html_redirect(char *location);
 void print_txt_msg(char *msg);

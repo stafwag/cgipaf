@@ -6,11 +6,13 @@
 use warnings;
 use strict;
 
+my $VACATION='/usr/bin/vacation';
+
 #
 # get the mail cfg from stdin
 #
 
-my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO,@MSG)=<>;
+my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO)=<>;
 chomp ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
 
 #
@@ -21,12 +23,21 @@ my   $DOTFORWARD="$HOMEDIR/.forward";
 my   $DOTVACATIONMSG="$HOMEDIR/.vacation.msg";
 
 #
+# set the vacations.txt path
+#
+
+my   $VACATIONSDOTTXT="$HOMEDIR/vacations.txt";
+
+#
 # delete the user's .forward if forward and autoreply is disabled
 #
 
 if(("$FORWARD" ne "yes") and ("$AUTOREPLY" ne "yes")) {
-  unlink("$DOTFORWARD") or die "Unable to delete $DOTFORWARD";
-  exit 0;
+
+   if ( -r $DOTFORWARD ) {
+         unlink("$DOTFORWARD") or die "Unable to delete $DOTFORWARD";
+         exit 0;
+      }
   }
 
 #
@@ -51,6 +62,11 @@ if("$FORWARD" eq "yes") {
 #
 
 if("$AUTOREPLY" eq "yes" ) {
+
+   if ( (not -r "$HOMEDIR/.vacation.db") and ( not -r "$HOMEDIR/.vacation.pag") )   {
+     system ("$VACATION","-i") == 0 or warn("$VACATION -i failed");
+    }
+
    if("$FORWARD" eq "yes" ) {
       print FH ',';           # if forwarding enable add ',' 
    }
@@ -62,12 +78,19 @@ if("$AUTOREPLY" eq "yes" ) {
    # add vacation to .forward
    #
     
-   print FH "\"|/usr/bin/vacation $NAME\"";
+   print FH "\"|$VACATION $NAME\"";
    
    #
    # create the user's .vacation.msg
    #
-    
+
+   my @MSG=();
+   
+   if (open(FH_VACTXT,"$VACATIONSDOTTXT")) {
+   	@MSG = <FH_VACTXT>;
+	close FH_VACTXT;
+   }
+   
    open(FH_MSG,">$DOTVACATIONMSG") or die "Unable to create $DOTVACATIONMSG";
    print FH_MSG "From: $NAME\@$DOMAIN\n";
    print FH_MSG "Subject: I am on vacation\n";

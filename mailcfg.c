@@ -27,6 +27,14 @@ main()
 #include "cgipaf_vars.h"
 #include "cgipaf_init.c"
 
+
+#ifdef LOGIN_ACTION
+
+   update_string_pair_item(options,txt_nextactionfull,next_actionfull,0);
+
+#endif
+	
+
 #include "cgipaf_setname2postname.c"
 #include "cgipaf_getmailcfgpost.c"
 
@@ -37,4 +45,5 @@ main()
 #include "cgipaf_updatemailcfg.c"
 
    if(config_file!=NULL) fclose(config_file);
+   
 }

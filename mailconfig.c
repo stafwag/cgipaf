@@ -355,18 +355,37 @@ int get_mailcfg_status(struct pw_info *pw)
    int  ret=0;
    char *buf;
    char *filename=add2home(pw->p,CGIPAFSTATEFILE);
-   if((fp=fopen(filename,"r"))==NULL) return(-1);
+
+
+   if ((fp=fopen(filename,"r"))==NULL) {
+	   
+	   return(-1);
+
+   }
+   
+
    buf=get_config(fp,STATEFORWARD);
+   
+
    if(!strcmp(buf,"1")) forward=1;
-   free(buf);
+   xfree(buf);
+
    buf=get_config(fp,STATEKEEPMSG);
+
+
    if(!strcmp(buf,"1")) keepmsg=1;
-   free(buf);
+   
+   xfree(buf);
+
    buf=get_config(fp,STATEAUTOREPLY);
+
    if(!strcmp(buf,"1")) autoreply=1;
-   free(buf);
+
+   xfree(buf);
    ret=forward+keepmsg*2+autoreply*4;
+
    fclose(fp);
+
    return(ret);
 }
 /*

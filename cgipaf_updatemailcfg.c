@@ -68,8 +68,7 @@
       if (strlen(forward)<1) {
 
      	    write_log(LOG_USER,5,err_forward);
-      	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARD,err_forward,options,
-			      txt_message);
+      	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARD,err_forward,options,txt_message);
       }
 
       /* if mailforwarding is enabled evaluate forward_to and keep_msg */
@@ -150,12 +149,11 @@
 
 
    if (mailcfg_check) {
-
+	
       /* get the previous mailcfg state out the user's .cgipaf_state file */
       
       if ((oldstate=get_mailcfg_status(pw))==-1) 
-         write_log(LOG_USER,7,
-		 "failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
+         write_log(LOG_USER,7,"failed to read old status file .cgipaf_state: %s for user %s",strerror(errno),pw->p->pw_name);
    
       /* calculate the new state */
    
@@ -197,6 +195,7 @@
       fclose(fp);
 
    }
+
 
    /* use run_mailcfg instead of built-in? */
    

@@ -30,14 +30,14 @@ if (*c!=equals&&*c!=end&&*c!='\n'&&*c!='\0') {
       if (*c==equals) {
          if (tmp) {
             cp=mv_2_next(tmp);
-	    wp->name=(char **) xrealloc(wp->name,sizeof(char *)*wp->n+1);
+	    wp->name=(char **) xrealloc(wp->name,sizeof(char *)*(wp->n+1));
 	    wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1);
 	    strcpy(wp->name[wp->n],cp);
 	    }
 	 }
 	 else {
 	     if (strlen(tmp)) {
-	        wp->value=xrealloc(wp->value,sizeof(char *)*wp->n+1);
+	        wp->value=xrealloc(wp->value,sizeof(char *)*(wp->n+1));
 	        wp->value[wp->n]=xmalloc(strlen(tmp)+1);
 	        strcpy(wp->value[wp->n],tmp);
 	        ++wp->n;

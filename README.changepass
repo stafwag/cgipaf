@@ -9,7 +9,7 @@ DESCRIPTION
     doesn't have such a command like Solaris.
     
     Most GNU/Linux distributions have chpasswd (8), on FreeBSD your can use 
-    "pw usermod name -h 0" but many commercial Un*xen doesn't have tool like 
+    "pw usermod name -h 0" but many commercial Un*ces doesn't have tool like 
     this. 
 
     An alternative is to update the user's password in script with "usermod" 

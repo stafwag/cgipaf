@@ -4,8 +4,8 @@
     (cracklib, minimum/ maximum password length etc.) on all systems with PAM
     support.
 
-  + The set_PAM_CHANGE_EXPIRED_AUTHTOK is obsolete and will be removed in 
-    the next releases of CGIpaf
+  + The set_PAM_CHANGE_EXPIRED_AUTHTOK directive is obsolete and will be 
+    removed in the next releases of CGIpaf
 
 * version 1.2.0pre1     ( 24 Oct 2002 )
   + Access Control List added ( AclOrder, AllowUsers, AllowGroups, DenyUsers

@@ -31,8 +31,6 @@ char *** add_webdata_2_string_pair (WEBDATA *data, char *** ret,char *head,char 
 
 	for (i=0;i<data->n;i++) {
 
-		printf("i= %d\n",i);
-
 		if (data->name[i]) {
 
 			c=xmalloc(strlen(head)+strlen(data->name[i])+strlen(tail)+1);

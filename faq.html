@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf 1.0.1RC1 FAQ</title>
+    <title>CGIpaf 1.1.0pre2 FAQ</title>
   </head>
 
   <body>
     
-    <h1>CGIpaf 1.0.1RC1 FAQ</h1>
+    <h1>CGIpaf 1.1.0pre2 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -36,37 +36,69 @@
       <li>3.4 <a href="#ss3.4">I get an internal server error</a></li>
       <li>3.5 <a href="#ss3.5">How do I get debug output?</a></li>
       <li>3.6 <a href="#ss3.6">Which authentication methods are supported</a></li>
-      <li>3.7 <a href="#ss3.6">CGIpaf is unable to authenticate?</a></li>
-      <li>3.8 <a href="#ss3.7">How do I enabled cracklib password testing?</a></li>
-      <li>3.9 <a href="#ss3.8">PAM configuration</a></li>
-      <li>3.10 <a href="#ss3.9">My .procmailrc is wipe out!</a></li>
-      <li>3.11 <a href="#ss3.10">My .forward is deleted!</a></li>
-      <li>3.12 <a href="#ss3.11">I get a "file not found" error message</a></li>
-      <li>3.13 <a href="#ss3.12">Mail forwarding and autoreply doesn't work</a></li>
-      <li>3.14 <a href="#ss3.13">Can I create my own html pages?</a></li>
+      <li>3.7 <a href="#ss3.7">CGIpaf is unable to authenticate?</a></li>
+      <li>3.8 <a href="#ss3.8">How do I enabled cracklib password testing?</a></li>
+      <li>3.9 <a href="#ss3.9">My .procmailrc is wipe out!</a></li>
+      <li>3.10 <a href="#ss3.10">My .forward is deleted!</a></li>
+      <li>3.11 <a href="#ss3.11">I get a "file not found" error message</a></li>
+      <li>3.12 <a href="#ss3.12">Mail forwarding and autoreply doesn't work</a></li>
+      <li>3.13 <a href="#ss3.13">Can I create my own html pages?</a></li>
+      <li>3.14 <a href="#ss3.14">Can I use vacation/.forward instead of procmail?</a></li>
      </ul>
  
    <p>
    <h2>4 <a href="#s4">Future Plans</a></h2>
    <ul>
       <li>4.1 <a href="#ss4.1">Supported Platforms</a></li>
-      <li>4.2 <a href="#ss4.2">Vacation and others</a></li>
     </ul>
 <hr>
 <h1><a name="s1">1</a> Introduction</h1>
 <h2><a name="ss1.1">1.1</a> What is CGIpaf?</h2>
 
 <p>
-CGIpaf is a combination of three cgi-programs written in C, that allow users to update their
-system password and mail configuration ( autoreply, and mail forwarding ).<br>
-The mail configuration is done by procmail, if an user update his mail configuration CGIpaf
-creates a new .procmailrc. (The old one is deleted :-( )
+    cgipaf is a combination of three cgi programs:
+</p>
+<ul>
+<li><b>passwd.cgi</b>: allow users to update their password</li>
+<li><b>viewmailcfg.cgi</b>: allow users to view their current mail configuration.</li>
+<li><b>mailcfg.cgi</b>: update the mail configuration</li>
+</ul>
+<p>
+    All programs use PAM for user authentication, systems without PAM
+    are only supported if they use the standard password file location
+    (/etc/passwd /etc/shadow) and the standard crypt function to encrypt
+    the passwords.
+    If a password is changed it is possible to run a script to update
+    SAMBA passwords, NIS configuration, etc.
+</p>
+<p>
+    The mail configuration is done by procmail by default, mailcfg.cgi
+    creates a .procmailrc in the user's home directory. If autoreply is
+    enabled the autoreply message is stored in ~/vacations.txt. When a user
+    enables mail forwarding the user can choose to keep the messages.
+    If you want to use another auto responder like vacation you can define
+    an external script to update the user's mail configuration. See examples
+    for an example config.
+</p>
+<p>
+    For user authentication viewmailcfg.cgi creates a cookie, this cookie
+    is stored in the accessdb. mailcfg.cgi reads the cookie out the accessdb
+    and compares it with the cookie send by the users browser.
+    Users with too many invalid logins can be locked. The minimum and maximum 
+    uid can be set in the configuration file, so you can specify a range of uid's 
+    that are allowed to use cgipaf.
+</p>
+<p>
+    You can specify html files with a few PHP extensions for the login screen
+    and error messages. It's possible to use a redirect for the error messages, instead 
+    of plain html files.
 </p>
 
 <h2><a name="ss1.2">1.2 </a>How secure is CGIpaf</h2>
 
 <p>
-The CGIpaf cgi's are suid root programs, this means they runs as root. All suid programs are
+The CGIpaf cgi's are suid root programs, this means they runs as root. Viewmailcfg.cgi and
+mailcfg.cgi runs a the user when the authentication is completed. All suid programs are
 a security risk, I try to keep them so secure as possible...<br>
 If you use CGIpaf on the internet you must use CGIpaf over https otherwise the users passwords
 are send unencrypted over the internet.
@@ -234,7 +266,7 @@ The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/crack
 </ol>
 <hr>
 <h1><a name="s3">3</a> Common configuration problems</h1>
-<h2><a name="s3.1">3.1</a> CGIpaf is unable to update the password</h2>
+<h2><a name="ss3.1">3.1</a> CGIpaf is unable to update the password</h2>
 <p>
 If you're using a PAM system, try to set the "set_PAM_EXPIRED_AUTHTOK" to "off". On most
 GNU/Linux distributions this cause passwd.cgi to support all common pam
@@ -284,8 +316,9 @@ Set the loglevel to 7 in cgipaf, this will send debug messages to your system's 
 </p>
 <h2><a name="ss3.6">3.6</a> Which authentication methods are supported</h2>
 <p>
-CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). md5, blowfish 
-passwords aren't (yet) supported.
+CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). BSD uses different passwd locations. On a FreeBSD system /etc/passwd_master is updated and copied to pwdb by the
+pw_mkdb command.<br>
+Open|NetBSD aren't (yet) supported... 
 </p>
 <h2><a name="ss3.7">3.7</a> CGIpaf is unable to authenticate?</h2>
 <p>
@@ -309,7 +342,7 @@ On a non-pam system: CGIpaf supports only standard encrypted passwords, if your 
 md5 passwords ( FreeBSD, Slackware 8 ) CGIpaf is unable to authenticate the user. You'll
 have to wait till the next version of CGIpaf :-)
 </p>
-<h2><a name="ss3.7">3.8</a> How do I enabled cracklib password testing?</h2>
+<h2><a name="ss3.8">3.8</a> How do I enabled cracklib password testing?</h2>
 <p>
 On a pam system: set the set_PAM_EXPIRED_AUTHTOK_FLAG to on and enable cracklib support in
 your pam configuration. If the PAM_EXPRIRED_AUTHTOK_FLAG doesn't work on your system or behaves
@@ -321,7 +354,10 @@ cracklib dictpath.
 </p>
 <h2><a name="ss3.9">3.9</a> My .procmailrc is wipe out!</h2>
 <p>
-CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration.
+CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding
+is disabled by the run_before_mailcfg and run_after_mailcfg directives.<br>
+Another alternative is to use .forward/vacation instead of procmail see examples/ for more
+information.
 </p>
 <h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
 <p>
@@ -354,6 +390,11 @@ e.g.:
 <p>
 Will redirect to /pwchanged.php?name="loginname" after a user has succeed to update his password.
 </p>
+<h2><a name="ss3.14">3.14</a> Can I use vacation/.forward instead of procmail?</h2>
+<p>
+Yes! You can disable the internal .procmailrc updater of CGIpaf and define an external script
+to update the user's mail configuration. See examples/ for a vacation example.
+</p>
 <hr>
 <h1><a name="s4">4</a> Future plans</h1>
 <h2><a name="ss4.1">4.1</a> Supported Platforms</h2>
@@ -373,21 +414,11 @@ flexible ) the authentication works but the PAM password changer doesn't -weird-
 The Open|Net BSD port is still in the pipeline, the NetBSD port seems to be the easiest, so
 I'll probably start with this one.
 </p>
-<h2><a name="ss4.2">4.2</a> Vacation and others</h2>
-<p>
-Currently, CGIpaf destroys the user's .forward and .procmailrc. This isn't real problem when the
-users don't have access to these files but when they use it to distribute their mailinglists into
-separate mailboxes etc they lose their configuration.
-</p>
-<p>
-I'm not sure how I'll resolve this problem I'm thinking of a "run_before_mailcfg" and a "run_after_mailcfg" scripts. This should make it possible to backup the user's mailcfg and copy it back if the user disables mail forwarding and autoreply. Or to let the "run_before_mailcfg" script to create the .procmailrc from a template, this should also add .forward/vacation support to CGIpaf
-</p> 
- 
 <hr>
     <address><a href="mailto:staf.wagemakers@advalvas.be">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Jun  5 13:51:50 CEST 2002
+Last modified: Sun Jun 23 20:26:20 CEST 2002
 <!-- hhmts end -->
   </body>
 </html>

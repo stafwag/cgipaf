@@ -9,7 +9,7 @@ REQUIREMENTS
   
     + a Un*x server ( only tested with Debian gnu/Linux woody & potato and
       solaris 8 )
-    + a mailserver that uses procmail
+    + a mailserver
     + webserver
     + gcc, ndbm or gdbm
     
@@ -42,10 +42,14 @@ OVERVIEW
     If a password is changed it is possible to run a script to update
     SAMBA passwords, NIS configuration, etc.
 	 
-    The mail configuration is done by procmail, mailcfg.cgi creates a
-    .procmailrc in the user's home directory. If autoreply is enabled the 
-    autoreply message is stored in ~/vacations.txt. When a user enables
-    mail forwarding the user can choose to keep the messages.
+    The mail configuration is done by procmail by default, mailcfg.cgi 
+    creates a .procmailrc in the user's home directory. If autoreply is 
+    enabled the autoreply message is stored in ~/vacations.txt. When a user 
+    enables mail forwarding the user can choose to keep the messages.
+    
+    If you want to use another auto responder like vacation you can define
+    an external script to update the user's mail configuration. See examples
+    for an example config.
     
     For user authentication viewmailcfg.cgi creates a cookie, this cookie 
     is stored in the accessdb. mailcfg.cgi reads the cookie out the accessdb 

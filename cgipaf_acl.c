@@ -14,5 +14,5 @@
 
    if(!acl(config_file,CFGSECTION,pw,usermaildomain)) {
       write_log(LOG_AUTHPRIV,6,"acl(): access denied");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_errormessage);
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options,txt_message);
    }

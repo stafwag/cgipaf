@@ -25,6 +25,7 @@ char err_updateprocmailrc[] = "Can't update ~/.procmailrc, please contact the we
 char err_cookietimeout[] = "Cookie timeout exceeded...\n";
 char err_cracklib[]    =  "BAD PASSWORD:\n";
 char err_mailcfgscript[] = "run_mailcfg exits with a non-null value:";
+char err_viewmailcfgscript[] = "run_viewmailcfg exits with a non-null value:";
 char err_setuidzero[]  =  "script permission problem, please contact the webmaster\n";
 char err_cfg[]		= "Configuration error";
 char err_aclorder[]  = " AclOrder is invalid\n";

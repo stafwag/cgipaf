@@ -1,0 +1,30 @@
+NAME
+    changepass - update an user's password
+
+SYNOPSIS
+    changepass
+    
+DESCRIPTION
+    changepass is a chpasswd clone, it might be useful on platforms that 
+    doesn't have such a command like Solaris.
+    
+    Most GNU/Linux distributions have chpasswd (8), FreeBSD has a similar 
+    chpass command but many commercial Un*xen doesn't have tool like this. 
+    An alternative is to update the user's password in script with "usermod" 
+    but it's possible to see the encrypted password in the process list, 
+    which is not very secure.
+    
+USAGE
+    
+             echo "username:new_password" | changepass
+	     
+AUTHOR
+    Written by Staf Wagemakers <staf@patat.org>
+    
+COPYRIGHT
+    Copyright (c)2002 Staf Wagemakers.
+    
+    You are free to distribute this software under the terms of the 
+    GNU General Public License. The complete text of the GNU General Public
+    License can be found at http://www.gnu.org/licenses/gpl.html
+

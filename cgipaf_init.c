@@ -60,6 +60,8 @@ options=add_2_string_pair(options,txt_badpassword,txt_NULL);		       			/* 21 */
 options=add_2_string_pair(options,txt_usermaildomain,txt_NULL);	       				/* 22 */
 options=add_2_string_pair(options,txt_message,txt_NULL);	       				/* 23 */
 options=add_2_string_pair(options,txt_viewmailcfg_exitcode,viewmailcfg_exitcode_txt);          	/* 24 */
+options=add_2_string_pair(options,txt_admin,txt_NULL);          	
+	        /* 25 */
 
 /*
  * test setuid(0)
@@ -79,6 +81,8 @@ if (setuid(0)==-1) {
    
    if ((config_file=fopen(CONFIGFILE,"r"))!=NULL) {
       doc_root=get_sg_item(config_file,CFGSECTION,DOC_ROOT);
+   
+      write_log(LOG_USER,7,"DEBUG doc_root set to %s",doc_root);
 
       /* is logging enabled? */
 
@@ -94,6 +98,7 @@ if (setuid(0)==-1) {
 	 set_loglevel(brol);
 	 xfree(cp);
 	 write_log(LOG_USER,7,"Set loglevel to %d",set_loglevel(-1));
+         write_log(LOG_USER,7,"DEBUG doc_root set to %s",doc_root);
       }
 
       /* set_SCRIPT_FILENAME */
@@ -112,7 +117,7 @@ if (setuid(0)==-1) {
    }
 
 
-#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG)
+#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG) || defined(CGIPAF_PWADMIN)
   else {
       
       /* couldn't open the cfgfile, print errormessage and exit */
@@ -168,12 +173,12 @@ if (setuid(0)==-1) {
    
 #endif /* _WITH_PAM */
 
-#ifdef CGIPAF_PASSWD
+#if defined(CGIPAF_PASSWD) || defined(CGIPAF_PWADMIN)
 #ifdef HAVE_LIBCRACK
    
    /* enable cracklib if cracklib is set to "on" */
    
-   if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB))!=NULL) {
+   if ((cp=get_sg_item(config_file,UPDATESECTION,CFG_CRACKLIB))!=NULL) {
       if (is_var_yes(cp)==0) {
 	 enable_cracklib=0;
          write_log(LOG_USER,7,"cracklib disabled");
@@ -204,7 +209,7 @@ if (setuid(0)==-1) {
    snprintf(invalid_timeout_txt,80,"%d",invalid_timeout);
    snprintf(max_invalid_txt,80,"%d",max_invalid);     
 
-#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG)
+#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG) || defined(CGIPAF_PWADMIN)
 
    /* we need accessdb to store our cookies */
    
@@ -266,18 +271,18 @@ if (setuid(0)==-1) {
 
 #endif
 
-#ifdef CGIPAF_PASSWD
+#if defined(CGIPAF_PASSWD) || defined(CGIPAF_PWADMIN)
    /* 
     * Get the max and min password length and store them in  
     * min_length / max_length
     */
-   if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MINLENGTH))==NULL) 
+   if ((cp=get_section_config_item(config_file,UPDATESECTION,CFG_MINLENGTH))==NULL) 
      min_length=MINLENGTH;
    else { sscanf(cp,"%d",&min_length); }
    write_log(LOG_USER,7,"min_length set to %d",min_length);
    snprintf(min_length_txt,80,"%d",min_length);
 
-   if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAXLENGTH))==NULL) 
+   if ((cp=get_section_config_item(config_file,UPDATESECTION,CFG_MAXLENGTH))==NULL) 
      max_length=MAXLENGTH;
    else { sscanf(cp,"%d",&max_length); }
    write_log(LOG_USER,7,"min_length set to %d",max_length);
@@ -314,6 +319,7 @@ if (setuid(0)==-1) {
 
    /* read the POST data */
    
+   write_log(LOG_USER,7,"DEBUG doc_root set to %s",doc_root);
    write_log(LOG_USER,7,"Reading POST data...");
    data=read_post();
 

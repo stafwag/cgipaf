@@ -1,7 +1,7 @@
 /*
- * accessdb.c
+ * cgipaf_defs.h
  *
- * Copyright (C) 2000-03 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2000-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 
 #define  LOGIN                  "name"
 #define  ROOT                   "root"
+#define  USER			"user"
 #define  PASSWORD               "passwd"
 #define  MINUID                 10
 #define  LOGIN_DOCUMENT         "login_document"
@@ -55,6 +56,7 @@
 #define  ERR_CRACKLIB           "error_cracklib"
 #define  ERR_PAMERROR           "error_pam"
 #define  ERR_BADWORD            "error_illegalword"
+#define  ERR_NOSUCHUSER		"error_nosuchuser"
 #define  CFG_MINUID             "min_uid"
 #define  CFG_MAXUID             "max_uid"
 #define  CFG_MINLENGTH          "min_length"
@@ -76,6 +78,8 @@
 #define	 CFG_MAILCFG_CHECK	"mailcfg_check"
 #define	 CFG_SET_SCRIPT_FILENAME	"set_SCRIPT_FILENAME"
 #define	 CFG_UNSET_SCRIPT_FILENAME	"unset_SCRIPT_FILENAME"
+#define  CFG_ADMIN_PASSWD	"admin_passwd"
+#define  CFG_SELECT_USER	"select_user"
 
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
@@ -91,6 +95,7 @@
 #define  ERR_LOCKED   		"error_locked"
 #define  ERR_MAILCFGSCRIPT      "error_mailcfgscript"
 #define  ERR_VIEWMAILCFGSCRIPT  "error_viewmailcfgscript"
+#define  ERR_NOADMINS		"no_admins"
 #define  CFG_MINUID   		"min_uid"
 #define  CFG_MAXUID   		"max_uid"
 #define  CFG_MINLENGTH 		"min_length"
@@ -106,13 +111,35 @@
 #define  RUN_VIEWMAILCFG        "run_viewmailcfg"
 #define  CFG_PAM_SERVICE        "pam_service"
 #define  CGIPAFSTATEFILE        ".cgipaf_state"
+#define  CFG_ADMINUSERS	        "admin_users"
+
+#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_MAILADMIN)
+
+#define  FORWARD               "forward"
+#define  FORWARD_TO            "forward_to"
+#define  AUTOREPLY             "autoreply"
+#define  AUTOREPLY_MSG         "autoreply_msg"
+#define  PROCMAIL              ".procmailrc"
+#define  DOTFORWARD            ".forward"
+#define  KEEP_MSG              "keep_msg"
+#define  SENDMAIL              "sendmail"
+#define  CFGDOMAIN             "domain"
+
+#endif
 
 #ifdef   CGIPAF_PASSWD
 #define  CFGSECTION             "passwd"
+#define  UPDATESECTION		"passwd"
 #endif   /* CGIPAF_PASSWD */
+
+#ifdef   CGIPAF_PWADMIN
+#define  CFGSECTION             "pwadmin"
+#define  UPDATESECTION		"passwd"
+#endif   /* CGIPAF_PWADMIN */
 
 #ifdef   CGIPAF_VIEWMAILCFG
 #define  CFGSECTION             "mailcfg"
+#define  UPDATESECTION		"mailcfg"
 #include "mailconfig.h"
 #endif   /* CGIPAF_VIEWMAILCFG */
 
@@ -120,6 +147,12 @@
 #define  CFGSECTION             "mailcfg"
 #include "mailconfig.h"
 #endif   /* CGIPAF_MAILCFG */
+
+
+#ifdef   CGIPAF_MAILADMIN
+#define  CFGSECTION             "mailadmin"
+#define  UPDATESECTION		"mailcfg"
+#endif   /* CGIPAF_MAILADMIN */
 
 #include <pwd.h>
 #include <stdio.h>

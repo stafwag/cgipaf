@@ -1,7 +1,7 @@
 /*
  * msg.h
  *
- * Copyright (C) 1999,2000-03 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2000-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,11 +73,13 @@ char err_mcfg_configfile[]  = "[CGIpaf] configuration error, can't open";
 char txt_contact_webmaster[]= "Please contact the webmaster.\n";
 char err_mcfg_accessdb[]    = "[CGIpaf] configuration error, (view)mailcfg needs a accessdb.\n Please contact the webmaster";
 char err_badword[]          = "Password uses an illegal word...\n";
+char err_noadmins[]	    = "Configuration Error: no admin users defined.\n";
 char txt_cgipaf[]	    = "CGIpaf";	
 char warn_update_accessdb[] = "Warning failed to update";
 char warn_root[]            = "Someone try to login as root";
 char warn_uid[]             = "Someone try to login as UID ";
 char warn_below_minuid[]    = " which is below the min_uid";
 char warn_above_maxuid[]    = " which is above the max_uid";
+char err_nosuchuser[]	    = "No such user!";
 
 #endif /* _CGIPAF_MSG_H */

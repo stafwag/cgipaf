@@ -1,7 +1,7 @@
 /*
  * ccgi.h
  *
- * Copyright (C) 1999,2002,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2002-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,5 +50,6 @@ void printf_html_msg(char *fmt, ...);
 WEBDATA *get_cookies(void);
 void set_cookie(char *name, char *cookie, char *extra);
 char *textarea2asc(char *txt);
+void yes_no(char *test,char *name,char *not_name,int *state);
 
 #endif

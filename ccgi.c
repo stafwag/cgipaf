@@ -1,7 +1,7 @@
 /*
  * ccgi.c     		- cgi functions -
  *
- * Copyright (C) 1999,2001,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2001,2003-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -309,3 +309,26 @@ for(c=txt;*c;c++) {
 ret=xrealloc(ret,strlen(ret)+1);
 return(ret);
 }
+
+/*
+ * set state to 1 if test==yes
+ */
+void yes_no(char *test,char *name,char *not_name,int *state) 
+{
+	char txt_yes[]="yes";
+	char txt_no[]="no";
+
+   if(test==NULL) return;
+
+   if (!strcasecmp(test,txt_yes)) {
+      strcpy(name,txt_yes);
+      strcpy(not_name,txt_no);
+      *state=1;
+   }
+   else {
+      strcpy(name,txt_no);
+      strcpy(not_name,txt_yes);
+      *state=0;
+   }
+}
+

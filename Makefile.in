@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
-# (GPL) 2001 Belgium                            http://www.wagemakers.be
-# Staf Wagemakers	                              staf@wagemakers.be
+# (GPL) 2001,2004 Belgium                               http://staf.patat.org
+# Staf Wagemakers	                                  staf@patat.org
 # ----------------------------------------------------------------------
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@
@@ -15,16 +15,19 @@ sysconfdir      = @sysconfdir@
 localstatedir   = @localstatedir@
 srcdir          = @srcdir@
 HAVE_GDBMDIR_NDBM_H   = -D@HAVE_GDBMDIR_NDBM_H@
-inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h cgipaf_acl.c cgipaf_pwlocation.c cgipaf_init.c
+inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h cgipaf_acl.c cgipaf_auth.c cgipaf_checkpw.c cgipaf_createauthcookie.c cgipaf_getlogindata.c  cgipaf_pwlocation.c cgipaf_updatepw.c cgipaf_init.c
 CC=@CC@
 CFLAGS=@CFLAGS@
 
 CONFIGFILE=$(sysconfdir)/cgipaf.conf
 
-all: passwd.cgi viewmailcfg.cgi mailcfg.cgi changepass
+all: passwd.cgi viewmailcfg.cgi mailcfg.cgi pwadmin.cgi mailadmin.cgi changepass
 
 passwd.cgi: cgipaf.c ${OBJS} ${inc_files}
 	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c ${OBJS} @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
+
+pwadmin.cgi: cgipafadmin.c ${OBJS} ${inc_files}
+	$(CC) $(CFLAGS) -o pwadmin.cgi cgipafadmin.c ${OBJS} @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PWADMIN
 
 mailcfg.cgi: mailcfg.c ${OBJS} mailconfig.o ${inc_files}
 	$(CC) $(CFLAGS) -o mailcfg.cgi mailcfg.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
@@ -32,6 +35,9 @@ mailcfg.cgi: mailcfg.c ${OBJS} mailconfig.o ${inc_files}
 viewmailcfg.cgi: cgipaf.c ${OBJS} mailconfig.o ${inc_files}
 	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
 	
+mailadmin.cgi: cgipafadmin.c ${OBJS} ${inc_files}
+	$(CC) $(CFLAGS) -o mailadmin.cgi cgipafadmin.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILADMIN
+
 changepass: changepass.c ${OBJS} ${inc_files}
 	$(CC) $(CFLAGS) -o changepass changepass.c ${OBJS} @LIBS@ ${ARG} 
 

@@ -1,7 +1,7 @@
 /*
  * cgipaf_vars.h
  *
- * Copyright (C) 1999,2000-03 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2000-04 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ int    invalid_timeout=600;
 int    enable_cracklib=0;
 struct pw_info *pw;
 WEBDATA *data;
-char   *name,*pass,*usermaildomain=NULL;
+char   *name=NULL,*pass=NULL,*usermaildomain=NULL;
 char   *cracklib_dictpath=NULL;
 FILE   *config_file;
 char   *doc_root;
@@ -87,9 +87,31 @@ char   txt_badpassword[]="bad_password";
 int    max_length, min_length;
 char   txt_usermaildomain[]="user_maildomain";
 char   txt_message[]="message";
+char   txt_admin[]="admin";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
 int    max_postlength=150;
 int    set_script_filename=0;
+
+WEBDATA *cookies=NULL;
+
+#if defined(CGIPAF_MAILCFG) || defined(CGIPAF_MAILADMIN)
+
+   int    forward_state=0;
+   int    keep_state=0;
+   int    autoreply_state=0;
+   int    oldstate=0;
+   int    newstate=0;
+   int 	  mailcfg_check=1;
+   char   *c=NULL;
+   char   *sendmail=NULL;
+   char   *domain=NULL;
+   char   txt_sendmail[]="/usr/lib/sendmail";
+   FILE   *fp;
+
+#endif
+
+
+
 #endif  /* _CGIPAF_VARS_H */
 	 

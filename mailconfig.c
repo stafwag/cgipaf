@@ -272,8 +272,8 @@ int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,in
    FILE *fp;
    char *filename=add2home(p,CGIPAFSTATEFILE);
    if((fp=fopen(filename,"w"))==NULL) return (-1);
-   if (keep)
-     forward=1;
+   if (!forward)
+     keep=0;
    fputs("# CGIPAF state file\n",fp);
    fputs("# Please don't edit!!!!!!!\n",fp);
    fprintf(fp,"%s\t\t%d\n",STATEFORWARD,forward);
@@ -344,11 +344,13 @@ char * real_get_mailcfg_forward(struct pw_info *pw,int mode)
    if(!strcmp(buf,"1")) keep=1;
    free(buf);
    buf=NULL;
-   if(!mode)
-     if(forward&&!keep) buf=get_config(fp,STATEFORWARDTO);
-   else
+   if(!mode) {
+      if(forward&&!keep) buf=get_config(fp,STATEFORWARDTO);
+   }
+   else {
      if(forward&&keep)
        buf=get_config(fp,STATEFORWARDTO);
+   }
    return(buf);
 }
 char * get_mailcfg_forward(struct pw_info *pw) 

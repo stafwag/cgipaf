@@ -5,7 +5,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.3.0<br>
+<h1>CGIpaf 1.4.0CVS20040820<br>
 Configuration</h1>
 <h1>Content</h1>
 <ul>
@@ -113,7 +113,9 @@ Configuration</h1>
 </p> 
 <h1><a name="sections">Sections</a></h1>
 <p>
-  The configuration file has three sections "global", "passwd" and "mailcfg". 
+  The configuration file has the folowing sections "global", "passwd", "mailcfg",
+  "pwadmin", "mailadmin".<br>
+
   The directives that don't belong to a section are global. Global directives 
   apply to all sections unless they're overwritten in the sections.<BR>
     
@@ -128,14 +130,16 @@ Configuration</h1>
 <h2><a name="syslog">syslog</a></h2>
 <p><strong>Syntax:</strong> syslog <em>on|off</em><br>
 <strong>Default:</strong> on<br>
-<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 </p>
 <p>enable syslog messages</p>
 <p>all the authentication events are logged with LOG_AUTHPRIV facility, other events are logged with the LOG_USER facility</p>
 <h2><a name="loglevel">loglevel</a></h2>
 <p><strong>Syntax:</strong> loglevel <em>number</em><br>
 <strong>Default:</strong> 6<br>
-<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 </p>
 <p>set the syslog level, messages of a higher significance will be reported as well.<BR>
 e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) are also reported.
@@ -153,7 +157,8 @@ e.g. if loglevel is set to 1 (LOG_ALERT) messages with loglevel 0 (LOG_EMERG) ar
 <h2><a name="pam_service">pam_service</a></h2>
 <p><strong>Syntax:</strong> pam_service <em>pam service name</em><br>
 <strong>Default:</strong> passwd<br>
-<strong>Context:</strong> global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>
 Set the pam service name, if not set "passwd" is used. The passwd pam service
 ( /etc/pam.d/passwd ) usually doesn't have an entry for user authentication, 
@@ -172,7 +177,8 @@ therefor /etc/pam.d/other has to have a line auth set to pam_unix.so.
 <h2><a name="document_root">document_root</a></h2>
 <p><strong>Syntax:</strong> document_root <em>path</em><br>
 <strong>Default:</strong> not set<br>
-<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;<br>
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 </p>
 <p>location of the custom html message files</p>
 <h2><a name="login_document">login_document</a></h2>
@@ -180,7 +186,8 @@ therefor /etc/pam.d/other has to have a line auth set to pam_unix.so.
  login_document Redirect <em>location</em><br>
 <strong>Default:</strong> "error reading data please contact the
 webmaster\n"<br>
-<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>  
     if the program is executed without parameters this message is displayed
 </p>
@@ -188,7 +195,8 @@ webmaster\n"<br>
 <strong>Syntax:</strong> error_loginname <em>filename</em> <b>OR</b>
 error_loginname  Redirect   <em>location</em><br>
 <strong>Default:</strong> "Can't read loginname\n"<br>
-<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>       
     The user forgot to type his loginname.
 </p>
@@ -196,7 +204,8 @@ error_loginname  Redirect   <em>location</em><br>
 <strong>Syntax:</strong> error_access <em>filename</em> <b>OR</b>
 error_access  Redirect   <em>location</em><BR>
 <strong>Default:</strong>"Access denied...\n"<BR>
-<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>    
     The user try to logon as root or the user's uid isn't between 
     <a href="#min_uid">min_uid</a> & <a href="#max_uid">max_uid</a>.
@@ -205,7 +214,8 @@ error_access  Redirect   <em>location</em><BR>
 <strong>Syntax:</strong> error_invalid <em>filename</em> <b>OR</b>
 error_invalid Redirect  <em>location</em><BR>
 <strong>Default:</strong> "Invalid password or username.\n"<BR>
-<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>
     The password is incorrect or the user doesn't exists
 </p>
@@ -213,7 +223,7 @@ error_invalid Redirect  <em>location</em><BR>
 <strong>Syntax:</strong> error_newpasswd <em>filename</em> <b>OR</b>
 error_newpassord  Redirect  <em>location</em><br>
 <strong>Default:</strong> "Can't read new password\n"<BR>
-<strong>Context:</strong> &lt;passwd&gt;
+<strong>Context:</strong> &lt;passwd&gt;, &lt;pwadmin &gt;
 <p>       
     can't read new password
 </p>
@@ -221,7 +231,7 @@ error_newpassord  Redirect  <em>location</em><br>
 <strong>Syntax:</strong>   error_match  <em>filename</em> <b>OR</b>
 error_match    Redirect <em>location</em><BR>
 <strong>Default:</strong> "They don't match\n"<BR>
-<strong>Context:</strong>  &lt;passwd&gt;
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;pwadmin&gt; 
 <p>    
     The new passwords doesn't match
 </p>       
@@ -229,7 +239,7 @@ error_match    Redirect <em>location</em><BR>
 <strong>Syntax:</strong>   error_unchanged  <em>filename</em> <b>OR</b>
 error_unchanged    Redirect <em>location</em><BR>
 <strong>Default:</strong> "Password Unchanged\n"<BR>
-<strong>Context:</strong>  &lt;passwd&gt;
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;pwadmin&gt;
 <p>
     Password Unchanged
 </p>
@@ -237,7 +247,7 @@ error_unchanged    Redirect <em>location</em><BR>
 <strong>Syntax:</strong>   error_tooshort   <em>filename</em> <b>OR</b>
 error_tooshort   Redirect <em>location</em><BR>
 <strong>Default:</strong>  "Password too short...\n"<BR>
-<strong>Context:</strong>  &lt;passwd&gt;
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;pwadmin&gt;
 <p>    
     the password length is below <a href="#min_length">min_length</a>
 </p>       
@@ -245,7 +255,7 @@ error_tooshort   Redirect <em>location</em><BR>
 <strong>Syntax:</strong>   error_toolong    <em>filename</em> <b>OR</b>
 error_toolong  Redirect <em>location</em><br>
 <strong>Default:</strong>  "Password too long...\n"<BR>
-<strong>Context:</strong>  &lt;passwd&gt;<BR>
+<strong>Context:</strong>  &lt;passwd&gt;, &lt;pwadmin&gt;<BR>
 <p>    
     the password length is above <a href="#max_length">max_length</a>
 </p>
@@ -253,7 +263,8 @@ error_toolong  Redirect <em>location</em><br>
 <strong>Syntax:</strong> error_locked <em>filename</em> <b>OR</b>
 error_locked  Redirect <em>location</em><BR>
 <strong>Default:</strong> "Maximum number of tries exceeded...\n"<br>
-<strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
+<strong>Context:</strong>  global, &lt;passwd&gt;, &lt;mailcfg&gt;, 
+                           &lt;pwadmin&gt;, &lt;mailadmin&gt; <br>
 <p>    
     The user has exceeded the <a href="#max_invalid">max_invalid</a>
     tries
@@ -784,7 +795,8 @@ Specify a list of groups that are denied to use CGIpaf see <a href="#acl">acl</a
 <table>
 <tr><td><b>Variable name</b></td><td><b>Description</b></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td><b>name</b></td><td>loginname</td></tr>
+<tr><td><b>name</b></td><td>user name</td></tr>
+<tr><td><b>admin</b></td><td>admin name</td></tr>
 <tr><td><b>min_length</b></td><td>minimum password length</td></tr>
 <tr><td><b>max_length</b></td><td>maximum password length</td></tr>
 <tr><td><b>max_invalid</b></td><td>maximum invalid tries</td></tr>
@@ -821,6 +833,8 @@ run_viewmailcfg script</a></td></tr>
 <tr><td><b>message</b></td><td>A string with the default message</td></tr>
 <tr><td><b>post_string</b></td><td>A string with the original HTTP POST</td></tr>
 <tr><td><b>_POST[]</b></td><td>An associative array of variables with the original HTTP POST</td></tr>
+<tr><td><b>_GET[]</b></td><td>An associative array of variables with the original HTTP GET</td></tr>
+<tr><td><b>_ENV[]</b></td><td>An associative array of variables with the environment</td></tr>
 </table>
 <h1><a name="redirect">Redirect</a></h1>
 <p> 

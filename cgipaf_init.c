@@ -257,18 +257,18 @@ if (setuid(0)==-1) {
 
 #endif
 
-#ifdef CGIPAF_VIEWMAILCFG
+#if defined(CGIPAF_VIEWMAILCFG) ||  defined(CGIPAF_MAILADMIN)
 
    /* use a statefile or not */
    
-   if ((cp=get_sg_item(config_file,CFGSECTION,CFG_USE_STATEFILE))!=NULL) {
+   if ((cp=get_sg_item(config_file,UPDATESECTION,CFG_USE_STATEFILE))!=NULL) {
       if(is_var_yes(cp)!=0);
 	use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"use_state_file set to %d",use_mailcfg_statefile(-1));
       xfree(cp);
    }
    
-   if ((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
+   if ((cp=get_sg_item(config_file,UPDATESECTION,RUN_MAILCFG))!=NULL) {
       use_mailcfg_statefile(1);
       write_log(LOG_USER,7,"run_mailcfg enabled, enable use_state_file");
       xfree(cp);

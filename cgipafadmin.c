@@ -113,7 +113,7 @@ if(!is_admin) {
 
 if(user==NULL) {
 
-#include "cgipaf_createauthcookie.c"
+   #include "cgipaf_createauthcookie.c"
 
    /*
     * display the admin page
@@ -171,54 +171,55 @@ if(user==NULL) {
 #ifdef CGIPAF_MAILADMIN
 
 
-      if(pass!=NULL) {
+      if(pass!=NULL) { 
+	      
+	      if(show_msg(config_file,doc_root,CFGSECTION,CFG_SELECT_USER,NULL,options,txt_message)==3) { 
 
 
-	if(show_msg(config_file,doc_root,CFGSECTION,CFG_SELECT_USER,NULL,options,txt_message)==3) {
-
-      /*
-       * No admin page! use the default
-       */
-
-      
-      print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-      puts("<html>");
-      puts("<head>");
-      puts("<title>Mailcfg Admin</title>");
-      puts("</head");
-      puts("<body>");
-      printf("<h1>Welcome %s</h1>",options[25][1]);
-      puts("<form action=\"/cgi-bin/mailadmin.cgi\" method=\"POST\">");
-      printf("<input type=\"hidden\" name=\"admin\" value=\"%s\">",options[25][1]);
-      puts("<center>");
-      puts("<table>");
-      puts("<tr>");
-      puts("<td>User</td>");
-      puts("<td>:</td>");
-      puts("<td>");
-      puts("<input name=\"name\"");
-      puts("</td>");
-      puts("</tr>");
-      puts("</table>");
-      puts("<p>");
-      puts("<input type=\"reset\" value=\"Clear\">");
-      puts("<input type=\"submit\" value=\"Update Mail Configuratie\">");
-      puts("</center>");
-      puts("</form>");
-      puts("</body>");
-      puts("</html>");
-
-	}
+		      /*
+		       *  No admin page! use the default
+		       */ 
+		      
+		      
+		      print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		      puts("<html>");
+		      puts("<head>");
+		      puts("<title>Mailcfg Admin</title>");
+		      puts("</head");
+		      puts("<body>");
+		      printf("<h1>Welcome %s</h1>",options[25][1]);
+		      puts("<form action=\"/cgi-bin/mailadmin.cgi\" method=\"POST\">");
+		      printf("<input type=\"hidden\" name=\"admin\" value=\"%s\">",options[25][1]);
+		      puts("<center>");
+		      puts("<table>");
+		      puts("<tr>");
+		      puts("<td>User</td>");
+		      puts("<td>:</td>");
+		      puts("<td>");
+		      puts("<input name=\"name\"");
+		      puts("</td>");
+		      puts("</tr>");
+		      puts("</table>");
+		      puts("<p>");
+		      puts("<input type=\"reset\" value=\"Clear\">");
+		      puts("<input type=\"submit\" value=\"Update Mail Configuratie\">");
+		      puts("</center>");
+		      puts("</form>");
+		      puts("</body>");
+		      puts("</html>"); 
+	      
+	      }
 
       }
-      else {
-	
+      else { 
+	      
 	      pw=get_pw(options[0][1]);
 
 	      if(pw==NULL) {
 		      write_log(LOG_USER,7,"get_pw(%s) failed, invalid user?",options[0][1]);
 		      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_NOSUCHUSER,err_nosuchuser,options,txt_message);
-	}
+	      
+	      }
 
 	      #include "cgipaf_getmailcfgpost.c"
 	      #include "cgipaf_updatemailcfg.c"
@@ -240,9 +241,10 @@ else {
 	}
 
 #ifdef CGIPAF_PWADMIN
+
+	
 	pass=NULL;
 	
-
 	#ifdef _WITHPAM
    
    	set_pam_chauth_flag(0);
@@ -251,15 +253,18 @@ else {
 
 	write_log(LOG_USER,7,"starting cgipaf_checkpw...");
 
-
 	#include "cgipaf_checkpw.c"
+	
+        write_log(LOG_AUTHPRIV,6,"Admin: %s tries to update the password for %s",admin,options[0][1]);
 	write_log(LOG_USER,7,"starting cgipaf_updatepw...");
+
+
 	#include "cgipaf_updatepw.c"
 
 #endif
 #ifdef CGIPAF_MAILADMIN
 
-	write_log(LOG_USER,7,"Saving cookie (%s) with timeout %d for user %s",cookie,invalid_timeout,options[0][1]);
+	write_log(LOG_USER,7,"Saving cookie (%s) with timeout %d for user %s",cookie,cookie_timeout,options[0][1]);
 
 	if (save_access_status(accessdb,options[0][1],0,invalid_timeout,cookie)==-1) {
 

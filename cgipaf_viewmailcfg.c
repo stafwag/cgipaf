@@ -117,7 +117,7 @@
 
    	write_log(LOG_USER,7,"got the mailconfiguration for user %s",options[0][1]);
 
-   	if(show_msg(config_file,doc_root,CFGSECTION,CFG_MAILCFG,NULL,options,txt_message)==3) {
+   	if(show_msg(config_file,doc_root,UPDATESECTION,CFG_MAILCFG,NULL,options,txt_message)==3) {
 
       		write_log(LOG_USER,7,"couldn't load mailcfg_document using default");
       		print_html_msg("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");

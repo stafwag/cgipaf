@@ -71,7 +71,6 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    data=dbm_fetch(db,key);
    if(!data.dptr) { 
 
-	   fprintf(stderr,"DEBUG: data.dptr not valid\n");
 	   dbm_close(db); 
 	   return(0); 
    
@@ -88,7 +87,6 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    dbm_close(db);
    if(strcmp(access.cookie,cookie)) { 
 
-	   fprintf(stderr,"%s %s are not equal\n",access.cookie,cookie);
       	   return(0);
 
    }
@@ -96,7 +94,6 @@ int cmp_access_cookie(char *accessdb, char *loginname, char *cookie,time_t timeo
    time(&t);
    if(t-access.ti>timeout) {
 
-	   fprintf(stderr,"cookie time out\n");
       	   return(0);
 
    }

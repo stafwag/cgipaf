@@ -1117,7 +1117,7 @@ _ASBOX
       echo "$as_me: caught signal $ac_signal"
     echo "$as_me: exit $exit_status"
   } >&5
-  rm -f core *.core &&
+  rm -f core core.* *.core &&
   rm -rf conftest* confdefs* conf$$* $ac_clean_files &&
     exit $exit_status
      ' 0
@@ -1385,9 +1385,22 @@ test -n "$target_alias" &&
 echo "$as_me:$LINENO: checking Is your system compatible with CGIpaf?" >&5
 echo $ECHO_N "checking Is your system compatible with CGIpaf?... $ECHO_C" >&6;
 
+ARG="WITHPAM"
+
 case $host_os in
 
  freebsd*)
+
+cat >>confdefs.h <<\_ACEOF
+#define BSDHOST 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define FREEBSDHOST 1
+_ACEOF
+
+    		ARG="NOPAM"
  		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 		;;
@@ -1396,6 +1409,17 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}yes" >&6
 		;;
   netbsd*)
+
+cat >>confdefs.h <<\_ACEOF
+#define BSDHOST 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define NETBSDHOST 1
+_ACEOF
+
+    		ARG="NOPAM"
   		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   		;;
@@ -2211,7 +2235,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   for ac_declaration in \
-   '' \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -2225,8 +2250,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_declaration
 #include <stdlib.h>
+$ac_declaration
 int
 main ()
 {
@@ -2350,8 +2375,7 @@ if test "${enable_pam+set}" = set; then
 	   ENABLE_PAM="yes"
 	fi
       fi
-else
-   ARG="WITHPAM"
+
 fi;
 
 
@@ -2367,43 +2391,14 @@ if test "${enable_md5crypt+set}" = set; then
 fi;
 
 
-if test "$host_os" = "freebsd"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define BSDHOST 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define FREEBSDHOST 1
-_ACEOF
-
-    ARG="NOPAM"
-fi
-
-if test "$host_os" = "netbsd"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define BSDHOST 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define NETBSDHOST 1
-_ACEOF
-
-    ARG="NOPAM"
-fi
-
-
 if test "$ARG" = "WITHPAM"; then
    echo "$as_me:$LINENO: checking checking for PAM support..." >&5
 echo $ECHO_N "checking checking for PAM support...... $ECHO_C" >&6
    ls -l /etc/pam* > /dev/null 2>&1
    if test "$?" = "0"; then
       ENABLE_PAM="yes"
-      echo "$as_me:$LINENO: result: \"yes\"" >&5
-echo "${ECHO_T}\"yes\"" >&6;
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6;
       else
          echo "$as_me:$LINENO: result: \"no\"" >&5
 echo "${ECHO_T}\"no\"" >&6;
@@ -2491,6 +2486,9 @@ echo "$as_me: error: \"PAM support enabled but pam_start function not found inst
 fi
 
 
+echo $host_os | grep -i "freebsd" > /dev/null 2>&1
+
+if test "$?" = "0"; then
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -2888,7 +2886,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_header_stdc=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 fi
@@ -3111,6 +3109,7 @@ fi
 done
 
 
+fi
 
 if test "$ARG" != "WITHPAM"; then
    { echo "$as_me:$LINENO: WARNING: ***********************************************************" >&5
@@ -3201,7 +3200,9 @@ fi
    if test "$enable_md5crypt" != "no"; then
 
 
-     if test "$host_os" != "freebsd"; then
+     echo $host_os | grep -i "freebsd" > /dev/null 2>&1
+
+     if test "$?" != "0"; then
         OBJS="$OBJS md5.o md5crypt.o"
      fi
 
@@ -5009,8 +5010,8 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
 	          if test "$DB_COMPAT_LIB" != "yes"; then
-	             echo "$as_me:$LINENO: result: \"no\"" >&5
-echo "${ECHO_T}\"no\"" >&6
+	             echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 	             { { echo "$as_me:$LINENO: error: no valid ndbm library found" >&5
 echo "$as_me: error: no valid ndbm library found" >&2;}
    { (exit 1); exit 1; }; }
@@ -5021,8 +5022,8 @@ cat >>confdefs.h <<_ACEOF
 #define HAVE_DB_H_DB_DBM_HSEARCH "1"
 _ACEOF
 
-	          echo "$as_me:$LINENO: result: \"yes\"" >&5
-echo "${ECHO_T}\"yes\"" >&6
+	          echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
 	       fi                                                                      fi								   	 fi								         fi								      fi                                                                      fi
 
@@ -5172,7 +5173,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_header_stdc=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 fi
@@ -8744,7 +8745,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_chown_works=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f conftest.chown
 
@@ -9087,7 +9088,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_fork_works=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_fork_works" >&5
@@ -9242,7 +9243,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_vfork_works=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_vfork_works" >&5
@@ -9327,7 +9328,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_lstat_dereferences_slashed_symlink=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 else
   # If the `ln -s' command failed, then we probably don't even
@@ -9396,7 +9397,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_lstat_empty_string_bug=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_lstat_empty_string_bug" >&5
@@ -9455,7 +9456,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_stat_empty_string_bug=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_stat_empty_string_bug" >&5
@@ -9660,7 +9661,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_malloc_0_nonnull=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_malloc_0_nonnull" >&5
@@ -9877,7 +9878,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 ( exit $ac_status )
 ac_cv_func_realloc_0_nonnull=no
 fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_realloc_0_nonnull" >&5

@@ -11,6 +11,8 @@ AC_CANONICAL_SYSTEM
 
 AC_MSG_CHECKING(Is your system compatible with CGIpaf?);
 
+ARG="WITHPAM"
+
 case $host_os in
 
  freebsd*) 
@@ -69,8 +71,8 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
 	if test "$enableval" = "yes"; then
 	   ENABLE_PAM="yes"
 	fi
-      fi ],
-   [ ARG="WITHPAM" ]) 
+      fi ]
+   ) 
 
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
 AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       include MD5-compatible crypt
@@ -83,7 +85,7 @@ if test "$ARG" = "WITHPAM"; then
    ls -l /etc/pam* > /dev/null 2>&1
    if test "$?" = "0"; then
       ENABLE_PAM="yes"
-      AC_MSG_RESULT("yes");
+      AC_MSG_RESULT(yes);
       else
          AC_MSG_RESULT("no");
 	 dnl only disable pam if it isnt enabled with --enable-pam
@@ -109,11 +111,13 @@ fi
 
 dnl freebsd has crypt() defined in unstd.h
 
-dnl if test "$host" != "freebsd"; then
+echo $host_os | grep -i "freebsd" > /dev/null 2>&1
+
+if test "$?" = "0"; then
 
 AC_CHECK_HEADERS(crypt.h,[ HAVE_CRYPT_H=1 ],AC_MSG_WARN(crypt.h not found))
 
-dnl fi
+fi
 
 if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
@@ -135,7 +139,9 @@ dnl   fi
 
 dnl freebsd has built-in md5 support
  
-     if test "$host_os" != "freebsd"; then
+     echo $host_os | grep -i "freebsd" > /dev/null 2>&1
+     
+     if test "$?" != "0"; then
         OBJS="$OBJS md5.o md5crypt.o"
      fi
 
@@ -219,13 +225,13 @@ if test "$NEED_NDBMLIB" = "yes"; then                                      dnl N
 
 	          if test "$DB_COMPAT_LIB" != "yes"; then		   dnl DB_COMPAT_LIB
 
-	             AC_MSG_RESULT("no")
+	             AC_MSG_RESULT(no)
 	             AC_MSG_ERROR(no valid ndbm library found)
 
 	          fi							   dnl DB_COMPAT_LIB
 
 	          AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)
-	          AC_MSG_RESULT("yes")
+	          AC_MSG_RESULT(yes)
 
 	       fi                                                          dnl DB_LIB
             fi								   dnl DB1_LIB

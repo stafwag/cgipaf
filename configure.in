@@ -260,9 +260,12 @@ else
     if test "$HAVE_NDBM_H" = "no"; then
        AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
       if test "$HAVE_GDBM_NDBM_H" = "no"; then
-             unset $HAVE_GDBM_NDBM_H
-             AC_MSG_CHECKING(for gdm/ndbm.h...)
-             AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h,[ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \ AC_SUBST(HAVE_GDBMDIR_NDBM_H) \ AC_MSG_RESULT("yes")  ], [ HAVE_GDBMDIR_NDBM_H="no" \ AC_MSG_RESULT("no") ])
+          unset HAVE_GDBM_NDBM_H
+          AC_MSG_CHECKING(for gdbm/ndbm.h...)
+          AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h, \
+          [ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \
+            AC_SUBST(HAVE_GDBMDIR_NDBM_H); AC_MSG_RESULT(yes)  ], \
+          [ HAVE_GDBMDIR_NDBM_H="no"; AC_MSG_RESULT(no) ])
           if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
                HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
 	        AC_CHECK_HEADERS(db1/ndbm.h,,AC_MSG_ERROR(no valid ndbm header file found))

@@ -120,7 +120,7 @@ The current locations are:
 <ul>
 <li><a href="http://staf.patat.org">http://staf.patat.org/cgipaf/</a> (Europe / Belgium)<br>&nbsp;</li>
 <li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/</a> (North America / Canada)
-<p>Has a problem when you try to download the debian package with apt-get, because they add an ad to the Package file. Please use the main site http://staf.patat.org to download the debian with apt-get.</p></li>
+<p>Has a problem when you try to download the debian package with apt-get, because they add an ad to the Package file. Please use the main site http://staf.patat.org to download the debian package with apt-get.</p></li>
 <li><a
 href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)</li>
 </ul>
@@ -205,16 +205,15 @@ Unfortunately OpenBSD and NetBSD arn't supported (yet). I hope start a port some
 </li>
 <li><b>Other</b>
 <p>
-CGIpaf might work on other Un*ces with pam support. Systems without pam support are only 
-supported if they use the standard password file location /etc/passwd /etc/shadow and 
-standard crypt or md5 passwords.
+CGIpaf might work on other Un*ces with pam support. Systems without pam support 
+are only supported if they use the standard password file location /etc/passwd 
+/etc/shadow and standard crypt or md5 passwords.
 </p>
 </li>
 </ul>
 <h2><a name="ss2.2">2.2</a> Which libraries are required?</h2>
 <p>
-CGIpaf uses only standard libraries that are installed on most common Un*x installations,
-you need the development packages ( headers files etc ) to compile CGIpaf.
+CGIpaf uses only standard libraries that are installed on most common Un*x installations, you need the development packages ( headers files etc ) to compile CGIpaf.
 </p>
 <p>
 List of required libraries:
@@ -340,27 +339,18 @@ the file /etc/pam.d/cgipaf that looks like this
     account  required       pam_unix.so
     password required       pam_unix.so md5
 </tt></code></pre>
-Or better copy your system passwd configuration and add the lines for "auth" and "account".<p>
-On a non-pam system: CGIpaf supports only standard encrypted passwords, if your systems uses
-md5 passwords ( FreeBSD, Slackware 8 ) CGIpaf is unable to authenticate the user. You'll
-have to wait till the next version of CGIpaf :-)
-</p>
+Or better copy your system passwd configuration and add the lines for "auth" and "account".
 <h2><a name="ss3.8">3.8</a> How do I enabled cracklib password testing?</h2>
 <p>
-On a pam system: set the set_PAM_EXPIRED_AUTHTOK_FLAG to on and enable cracklib support in
-your pam configuration. If the PAM_EXPRIRED_AUTHTOK_FLAG doesn't work on your system or behaves
-differently disable it and set the cracklib to on in cgipaf.conf ( see below ).
+On a pam system: set the set_PAM_EXPIRED_AUTHTOK_FLAG to on and enable cracklib support in your pam configuration. If the PAM_EXPRIRED_AUTHTOK_FLAG doesn't work on your system or behaves differently disable it and set the cracklib to on in cgipaf.conf ( see below ).
 </p>
 <p>
-On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's
-cracklib dictpath.
+On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's cracklib dictpath.
 </p>
 <h2><a name="ss3.9">3.9</a> My .procmailrc is wipe out!</h2>
 <p>
-CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding
-is disabled by the run_before_mailcfg and run_after_mailcfg directives.<br>
-Another alternative is to use .forward/vacation instead of procmail see examples/ for more
-information.
+CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding is disabled by the run_before_mailcfg and run_after_mailcfg directives.<br>
+Another alternative is to use .forward/vacation instead of procmail see examples/ for more information.
 </p>
 <h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
 <p>

@@ -79,6 +79,7 @@ WWW="${datadir}"
    echo "# run_locked            /usr/local/bin/notify_script %{name}" >> $CFGFILE
    echo "error_toolong           cgipasswd_errlong.php" >> $CFGFILE
    echo "error_cracklib          cgipasswd_errbadpassword.php" >> $CFGFILE
+   echo "error_illegalword       cgipasswd_errbadpassword.php" >> $CFGFILE
    echo "error_pam               cgipasswd_errpam.php" >> $CFGFILE
    echo "msg_success             cgipasswd_msgchanged.php" >> $CFGFILE
    echo "# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\n\"" >> $CFGFILE
@@ -96,6 +97,11 @@ WWW="${datadir}"
    echo >> $CFGFILE
    echo "# cracklib on" >> $CFGFILE
    echo "# cracklib_dictpath    /var/cache/cracklib/cracklib_dict" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# illegal words ( words that are not allowed in a new password" " >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo "# illegal_words         foo bar" >> $CFGFILE 
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# set PAM_CHANGE_EXPIRED_AUTHTOK flag" >> $CFGFILE

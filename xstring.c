@@ -1,35 +1,53 @@
-/* --------------------------------------------------------------------------
- * xstring.c                                       (GPL) 2001 Staf Wagemakers
- *                                                      http://staf.patat.org
- *                                                             staf@patat.org
- * 
- * Tried of writing these things over and over again
- * ----------------------------------------------------------------------- */
-
+/*
+ *
+ * xstring.c  	- Tired of writing these things over and over again -
+ *
+ *
+ * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
 
 #include "xstring.h"
-/* ----------------------------------------------------------------------
+/*
+ *
  * replaces the first ch in c with a '\0', if ch == '\0' 
  * the first space is replaced                                  
- * ---------------------------------------------------------------------- */
+ *
+ */
 void cut_after_char (char *c,char ch)
 {
-do {
-   if (ch=='\0') {
-      if (isspace(*c)) { 
-         *c='\0';
-         break;
-	 }
-      }
-      else {
-         if (*c==ch) { 
-            *c='\0';
-	    break;
-	 }
-      }
-   ++c;
-   } while (*c);
+
+	if(c==NULL) return;
+	if(strlen(c)==0) return;
+
+	do {
+   		if (ch=='\0') {
+      			if (isspace(*c)) { 
+         			*c='\0';
+         			break;
+	 		}
+      	}
+      		else {
+         		if (*c==ch) { 
+            		*c='\0';
+	    		break;
+	 		}
+      		}
+   		++c;
+   	} while (*c);
 }
+
+/*
+ *
+ * replaces the first quote ('\"') with a '\0'
+ *
+ */
 void cut_after_quote (char *c) 
 {
 char *cp;
@@ -50,9 +68,11 @@ do {
 } while(*c);
 }
 
-/* ------------------------------------------- */
-/* get the size of a item                      */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item
+/*
+ */
 int get_quoted_item_size (char *c)
 {
 char *cc=c;
@@ -68,32 +88,42 @@ return(c-cc);
 }
    
    
-/* ---------------------------------------------------------------------- 
+/*
+ *
  * removes everything after a space           
- * ---------------------------------------------------------------------- */
+ *
+ */
 void cut_space (char *c)
 {
 cut_after_char(c,'\0');
 }
-/* ---------------------------------------------------------------------
+
+/*
+ *
  * removes everything after a #                
- * --------------------------------------------------------------------- */
+ *
+ */
 void cut_rem (char *c)
 {
 cut_after_char(c,'#');
 }
-/* --------------------------------------------------------------------
+
+/*
+ *
  * move to the next item                       
- * -------------------------------------------------------------------- */
+ *
+ */
 char * mv_2_next (char *c)
 {
 do if (isspace(*c)) ++c; else break; while (*c);
 return c;
 }
 
-/* ------------------------------------------- */
-/* get the size of a item ch=IFS               */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item ch=IFS
+ *
+ */
 int get_char_item_size (char *c,char ch)
 {
 char *cc=c;
@@ -102,9 +132,11 @@ do if ((*c!=ch)&&(*c!='\0')) ++c; else break; while (*c);
 return(c-cc);
 }
 
-/* ------------------------------------------- */
-/* get the size of a item                      */
-/* ------------------------------------------- */
+/*
+ *
+ * get the size of a item
+ *
+ */
 int get_item_size (char *c)
 {
 char *cc=c;
@@ -114,9 +146,11 @@ return(c-cc);
 }
 
 
-/* ------------------------------------------- */
-/* frees an array of strings		       */
-/* ------------------------------------------- */
+/*
+ *
+ * frees an array of strings
+ *
+ */
 void free_null_array (char **cc)
 {
 char ** cc2;
@@ -125,9 +159,11 @@ while (*cc2) { free(*cc2);cc2++; }
 free(cc);
 }
 
-/* ----------------------------------------------------------------------- */
-/* replaces a needle with a new string head & tail are added to needle     */
-/* ----------------------------------------------------------------------- */
+/*
+ * 
+ * replaces a needle with a new string head & tail are added to needle 
+/*
+ */
 char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *head,char *tail)
 {
    char *c,*s,*ret;
@@ -153,9 +189,11 @@ char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *hea
   return(ret);
 }
 
-/* ------------------------------------------------------------------------
+/*
+ * 
  * replace needle with a new string
- * ------------------------------------------------------------------------ */
+ *
+ */
 char * replace_needle(char *txt, char *needle, char *replace)
 {
    return(replace_headtail_needle(txt,needle,replace,"",""));
@@ -232,6 +270,11 @@ char * cut_between(char *txt,char *head, char *tail)
    return(real_cut_between(txt2,head,tail));
 }
 
+/*
+ *
+ * str to lowercase
+ *
+ */
 int strtolower(char *str) {
    char *c;
    if ( str == NULL ) return(-1);
@@ -243,6 +286,11 @@ int strtolower(char *str) {
    return 0;
 }
 
+/*
+ *
+ * str to UPPERCASE
+ *
+ */
 int strtoupper(char *str) {
    char *c;
    if ( str == NULL ) return(-1);
@@ -254,6 +302,11 @@ int strtoupper(char *str) {
    return 0;
 }
 
+/*
+ *
+ * ignore case strstr
+ *
+ */
 char * istrstr(char *haystack, char *needle) {
    char *ihaystack, *ineedle;
    char *c,*r=NULL;

@@ -1,22 +1,31 @@
 /*
- * configfile.c                            (GPL) 1999,2001 Belgie   Belgium
- *                                                         Staf Wagemakers
+ * configfile.c
+ *
+ * Copyright (C) 1999,2001,2003 Staf Wagemakers Belgie/Belgium 
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
  */
 #include "configfile.h"
-#define BUFFER_LEN 200
+#define BUFFER_LEN 256
+
 /*
+ *
  * converts line to a string with only the global part
  * current_section = hulp string
  * global = help int
+ *
  */
 char *only_global(char *line,char **current_section,int *global)
 {
 char *c,*s=line,*globals,*found,*end_section;
 int first=1;
-globals=(char *)xmalloc(strlen(line)+1);
+globals=(char *)calloc(strlen(line)+1,sizeof(char *));
 end_section=(char *)xmalloc(1);
-strcpy(globals,line);
-memset(globals,'\0',sizeof(globals));
 while(1) {
    if (*global) {
       if((found=strstr(s,"<"))==NULL) {
@@ -27,7 +36,7 @@ while(1) {
       *global=0;
       strncat(globals,s,(found-s));
       *current_section=(char *)xrealloc(*current_section,(c-found)+1);
-      memset(*current_section,'\0',sizeof(current_section));
+      memset(*current_section,'\0',(c-found)+1);
       strncat(*current_section,found+1,c-found-1);
       
       s=c;
@@ -49,6 +58,7 @@ return(globals);
 }
      
 /*
+ *
  * reads a variable out the configfile
  * fp           = stream
  * var_name     = variable name
@@ -58,93 +68,121 @@ return(globals);
  *                1 -> get only global variables
  * return       = value 
  *              = NULL bij een fout                
+ *
  */
 char * real_get_config(FILE *fp,char *section_name,char *var_name,int mode)
 {
-int l,ii=0;
-int sect=0,global=1;
-char *r=NULL,*c=NULL,*ss=NULL,s[BUFFER_LEN],*start_section=NULL;
-char *end_section=NULL,*current_section=NULL;
-if(var_name==NULL) return(NULL);
-if(fp==NULL) return NULL;
-fseek(fp,0,SEEK_SET);
-if (s==NULL) return(NULL);
-if (section_name!=NULL) {
-   start_section=(char *)xmalloc(strlen(section_name)+1+strlen("<")+strlen(">"));
-   end_section=(char *)xmalloc(strlen(section_name)+1+strlen("</")+strlen(">"));
-   strcpy(start_section,"<");
-   strcat(start_section,section_name);
-   strcat(start_section,">");
-   strcpy(end_section,"</");
-   strcat(end_section,section_name);
-   strcat(end_section,">");
-}
-else sect=1;
-while (fgets(s,BUFFER_LEN,fp)) {
-  if(!(strrchr(s,'\n'))) {errno=E2BIG;return(NULL);} /* line too long */
-  s[strlen(s)-1]='\0';
-  cut_rem (s);
-  if(mode==1) ss=only_global(s,&current_section,&global);
-    else ss=s;
-  if(ss==NULL) return (NULL);
-  if (section_name!=NULL) {
-     if (!sect) {
-        if((c=istrstr(ss,start_section))!=NULL) {
-          ss=c;sect=1;
-        }
-     }
- 
-   if (sect) {
-      if ((c=istrstr(ss,end_section))!=NULL) {
-         ss=c;sect=0;
-      }
-    }
-  }
-  if ((sect)&&(ss!=NULL)) {
-     c=mv_2_next(ss);
-     l=strlen(var_name);
-     if (get_item_size(c)==l) {
-        if (!strncasecmp(c,var_name,l)) {
-	   c+=l;
-	   c=mv_2_next(c);
-           if (r==NULL) r=(char *)xmalloc(strlen(c)+1);
-              else r=(char *) xrealloc(r,strlen(c)+1);
-              if(r==NULL) break; 
-              strcpy(r,c);
+
+	int l,ii=0;
+	int sect=0,global=1;
+	char *r=NULL,*c=NULL,*ss=NULL,s[BUFFER_LEN],*start_section=NULL;
+	char *end_section=NULL,*current_section=NULL;
+
+	if(var_name==NULL) 
+		return(NULL);
+
+	if(fp==NULL) 
+		return NULL;
+
+	fseek(fp,0,SEEK_SET);
+
+	if (s==NULL) 
+		return(NULL);
+
+	if (section_name!=NULL) {
+   		start_section=(char *)xmalloc(strlen(section_name)+1+strlen("<")+strlen(">"));
+   		end_section=(char *)xmalloc(strlen(section_name)+1+strlen("</")+strlen(">"));
+   		strcpy(start_section,"<");
+   		strcat(start_section,section_name);
+   		strcat(start_section,">");
+   		strcpy(end_section,"</");
+   		strcat(end_section,section_name);
+   		strcat(end_section,">");
 	}
-     }
-  }
+	else 
+		sect=1;
+
+	while (fgets(s,BUFFER_LEN,fp)) {
+
+  		if(!(strrchr(s,'\n'))) 
+			{errno=E2BIG;return(NULL);} /* line too long */
+  
+		s[strlen(s)-1]='\0';
+  		cut_rem(s);
+  		if(mode==1) { 
+			ss=only_global(s,&current_section,&global);
+		}
+    		else ss=s;
+  		if(ss==NULL) return (NULL);
+  		if (section_name!=NULL) {
+     			if (!sect) {
+        			if((c=istrstr(ss,start_section))!=NULL) {
+          			ss=c;sect=1;
+        			}
+     			}
+ 
+   			if (sect) {
+      				if ((c=istrstr(ss,end_section))!=NULL) {
+         			ss=c;sect=0;
+      				}
+    			}
+  		}
+  		if ((sect)&&(ss!=NULL)) {
+     			c=mv_2_next(ss);
+     			l=strlen(var_name);
+     			if (get_item_size(c)==l) {
+        			if (!strncasecmp(c,var_name,l)) {
+	   				c+=l;
+	   				c=mv_2_next(c);
+           				if (r==NULL) r=(char *)xmalloc(strlen(c)+1);
+              					else r=(char *) xrealloc(r,strlen(c)+1);
+              				if(r==NULL) break; 
+              				strcpy(r,c);
+				}
+     			}
+  		}
+	}
+
+	if((mode==1)&&(ss!=NULL)) 
+		xfree(ss); 
+	if(start_section!=NULL) 
+		xfree(start_section); 
+	if(end_section!=NULL)
+		xfree(end_section);
+	if(current_section!=NULL) 
+		xfree(current_section);
+	return(r);
 }
 
-if((mode==1)&&(ss!=NULL)) free(ss); 
-if(start_section!=NULL) free(start_section); 
-if(end_section!=NULL) free(end_section);
-if(current_section!=NULL) free(current_section);
-return(r);
-}
-
-/* 
+/*
+ *
  * get a section variable
+ *
  */
 char * get_section_config(FILE *fp,char *section_name,char *var_name)
 {
 return (real_get_config(fp,section_name,var_name,0));
 }
 /*
+ *
  * get a global variable
+ *
  */
 char* get_global_config(FILE *fp,char *var_name)
 {
 return(real_get_config(fp,NULL,var_name,1));
 }
 /*
+ *
  * get any variable
+ *
  */
 char * get_config(FILE *fp,char *var_name)
 {
 return(get_section_config(fp,NULL,var_name));
 }
 /*
+ *
  * fetch the first part of a variable
  * fp           = stream
  * section_name = section_name
@@ -154,6 +192,7 @@ return(get_section_config(fp,NULL,var_name));
  *                1 -> global mode
  * returns char * item 
  *         NULL = error
+ *
  */
 char * real_get_config_item(FILE *fp,char *section_name,char *var_name,int mode) 
 {
@@ -164,33 +203,50 @@ if(c!=NULL) {
       rmpos(c,0);
       cut_after_quote(c);
    }
-   else cut_space(c);
-xrealloc(c,strlen(c)+1); 
+   else {
+	   cut_space(c);
+   }
+   if(strlen(c)==0) {
+	   xfree(c);
+	   c=NULL;
+   }
+   else {
+   	xrealloc(c,strlen(c)+1); 
+   }
 }
 return(c);
 }
-/* 
+
+/*
+ *
  * get a section item
+ *
  */
 char * get_section_config_item(FILE *fp,char *section_name,char *var_name) 
 {
 return(real_get_config_item(fp,section_name,var_name,0));
 }
-/* 
+
+/*
+ *
  * get any item
+ *
  */
 char * get_config_item(FILE *fp,char *var_name) 
 {
 return(get_section_config_item(fp,NULL,var_name));
 }
 /*
+ *
  * get a global item
+ *
  */
 char * get_global_config_item(FILE *fp,char *var_name)
 {
 return(real_get_config_item(fp,NULL,var_name,1));
 }
 /*
+ *
  * fetch a variable out the cfg file, and
  * split into an array
  *
@@ -202,6 +258,7 @@ return(real_get_config_item(fp,NULL,var_name,1));
  *                1 -> global mode
  * returns char ** items array ends with a NULL
  *         NULL = error
+ *
  */
 char ** real_get_config_array(FILE *fp,char *section_name,char *var_name,int mode)
 {
@@ -211,7 +268,7 @@ c=real_get_config(fp,section_name,var_name,mode);
 if (c==NULL) return (NULL);
 c2=c;
 c2=mv_2_next(c2);
-cc=(char **) xmalloc(sizeof(char **)*n+2);
+cc=(char **) xmalloc(sizeof(char **)*(n+2));
 do {
    c2=mv_2_next(c2);
 if (c2[0]=='\"') {
@@ -234,31 +291,40 @@ cc[--n]=NULL;
 free(c);
 return(cc);
 }
-/* 
+
+/*
+ *
  * get a section config array
+ *
  */
 char ** get_section_config_array(FILE *fp,char *section_name,char *var_name)
 {
 return(real_get_config_array(fp,section_name,var_name,0));
 }
 /* 
+ *
  * get any config array
+ *
  */
 char ** get_config_array(FILE *fp,char *var_name)
 {
 return(get_section_config_array(fp,NULL,var_name));
 }
 /*
+ *
  * get a global config array
+ *
  */
 char ** get_global_config_array(FILE *fp,char *var_name)
 {
 return(real_get_config_array(fp,NULL,var_name,1));
 }
 /*
+ *
  * replaces %{variable_name} with a new string
  * 
  * parms[0][0] = variable name , parms[0][1] = value , ...
+ *
  */
 char * add_parms(char *txt,char *parms[][2]) {
 char *ret,*c,*txt2;
@@ -292,7 +358,9 @@ char *get_sg_item(FILE *fp,char *section_name,char *var_name)
 char *ret;
 ret=get_section_config_item(fp,section_name,var_name);
 
-if(ret==NULL) ret=get_global_config_item(fp,var_name);
+if(ret==NULL) {
+	ret=get_global_config_item(fp,var_name);
+}
    
 return(ret);
 }

@@ -21,7 +21,7 @@ if (tmp==NULL) {
    tmp[0]='\0';
 }
 
-if (*c!=equals&&*c!=end&&*c!='\n'&&*c!='\0') {
+if (*c!=equals && *c!=end && *c!='\n' && *c!='\0') {
    tmp=(char *)xrealloc(tmp,t+2);
    tmp[t]=*c; 
    tmp[++t]='\0';
@@ -31,7 +31,7 @@ if (*c!=equals&&*c!=end&&*c!='\n'&&*c!='\0') {
          if (tmp) {
             cp=mv_2_next(tmp);
 	    wp->name=(char **) xrealloc(wp->name,sizeof(char *)*(wp->n+1));
-	    wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1);
+	    wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1); 
 	    strcpy(wp->name[wp->n],cp);
 	    }
 	 }
@@ -51,13 +51,14 @@ if (*c!=equals&&*c!=end&&*c!='\n'&&*c!='\0') {
 return wp;
 }
 
-/* --------------------------------------------------- */
-/* reads a item in wp				       */
-/* name = itemname				       */
-/* returns :           string                          */
-/*                     0 = not found                   */
-/* --------------------------------------------------- */
-
+/*
+ *
+ * reads a item in wp
+ * name = itemname
+ * returns :  string 
+ *            0 = not found
+ *
+ */
 char *get_webdata_item (WEBDATA *wp,char *name)
 {
 int i,b=0;
@@ -74,7 +75,9 @@ return(wp->value[i]);
 }
 
 /*
+ *
  * only exists for compatible with previous versions of ccgi
+ *
  */
 char * get_postitem(WEBDATA *wp,char *name)
 {
@@ -86,13 +89,14 @@ char * get_cookie(WEBDATA *wp,char *name)
    return(get_webdata_item(wp,name));
 }
 
-/* --------------------------------------------------- */
-/* Reads data passed to a cgi - program  	       */
-/*						       */
-/* returns :           data                            */
-/*                     0 = error                       */
-/* --------------------------------------------------- */
-
+/*
+ *
+ * Reads data passed to a cgi - program 
+ *
+ * returns :           data
+ *                     0 = error
+ *
+ */
 WEBDATA *read_post(void)
 {
 WEBDATA *wp;
@@ -113,11 +117,13 @@ free(c);
 return wp;
 }
 
-/* -------------------------------------------------------------------
+/*
+ *
  * displays a html file
  * 
  * returns -1 no error
- * ------------------------------------------------------------------- */
+ *
+ */
 int print_htmlfile (char * filename)
 {
     FILE *fp;
@@ -133,9 +139,11 @@ int print_htmlfile (char * filename)
     return(0);
 }
 
-/* ---------------------------------------------------------------------
+/*
+ *
  * redirects to a url
- * --------------------------------------------------------------------- */
+ *
+ */
 void html_redirect(char *location)
 {
    printf("Status: 302\r\n");
@@ -143,9 +151,11 @@ void html_redirect(char *location)
    fflush(stdout);
 }
 
-/* ---------------------------------------------------------------------
+/*
+ *
  * prints a string as plain text
- * --------------------------------------------------------------------- */
+ *
+ */
 void print_txt_msg(char *msg)
 {
    printf("Content-type: text/plain\n\n");
@@ -155,9 +165,12 @@ void print_txt_msg(char *msg)
    fflush(stdout);
    return;
 }
-/* ---------------------------------------------------------------------
+
+/*
+ *
  * prints a formatted string as plain text
- * --------------------------------------------------------------------- */
+ *
+ */
 void printf_txt_msg(char *fmt, ...)
 {
    va_list ap;
@@ -170,9 +183,11 @@ void printf_txt_msg(char *fmt, ...)
    fflush(stdout);
    return;
 }
-/* ----------------------------------------------------------------------
+/*
+ *
  * prints a formatted html string
- * ---------------------------------------------------------------------- */
+ *
+ */
 void print_html_msg(char *msg)
 {
    printf("Content-type: text/html\n\n");
@@ -183,9 +198,11 @@ void print_html_msg(char *msg)
    return;
 }
 
-/* ----------------------------------------------------------------------
+/*
+ *
  *  prints a formatted html string
- *  ---------------------------------------------------------------------- */
+ *
+ */
 void printf_html_msg(char *fmt, ...)
 {
    va_list ap;
@@ -199,7 +216,11 @@ void printf_html_msg(char *fmt, ...)
    return;
 }
 
-
+/*
+ *
+ * sets a cookie
+ *
+ */
 void set_cookie(char *name, char *cookie,char *extra)
 {
 if (extra==NULL) {
@@ -210,6 +231,12 @@ if (extra==NULL) {
    }
    fflush(stdout);
 }
+
+/*
+ *
+ * get the cookies
+ *
+ */
 WEBDATA *get_cookies()
 {
    WEBDATA *wp;
@@ -221,7 +248,9 @@ WEBDATA *get_cookies()
    return wp;
 }
 /*
+ *
  * convert a textarea to ascii
+ *
  */
 char * textarea2asc(char *txt)
 {

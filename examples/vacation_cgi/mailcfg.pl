@@ -20,6 +20,12 @@ our $STATEFILENAME	=	'.cgipaf_state';
 our $VACATIONS_TXT	= 	'vacations.txt';
 
 #
+# vacation init parameter solaris uses '-I'
+#
+our $VACATION_INIT	=	'-i';
+
+
+#
 # html messages
 #
 
@@ -236,7 +242,7 @@ sub save_mailcfg ($) {
 	     if ($$mail_settings{'autoreply'} ) {
 
 	        if ( (not -r "$homedir/.vacation.db") and ( not -r "$homedir/.vacation.pag") )   {
-	   	   system ("$VACATION","-i") == 0 or print_error("$VACATION -i failed");
+	   	   system ("$VACATION","$VACATION_INIT") == 0 or print_error("$VACATION -i failed");
 	        }
 
    	        if ($$mail_settings{'forward'} ) {
@@ -516,7 +522,7 @@ sub display ($) {
 	print "\n<center>\n";
 	print p(
          	table(Tr({ -align => 'center'},
-                 	[ td( [ submit('submit','Submit'),reset('reset','Clear') ] ) ]
+                 	[ td( [ reset('Clear','Clear'),submit('submit','Submit')] ) ]
 			)
 		     )
 	       );
@@ -551,6 +557,7 @@ if ($cgipaf_name = $cgi->param('name')) {
 	$homedir=$pw_field[7];
 	$statefile="$homedir/$STATEFILENAME";
 	$vacationstxtfile="$homedir/$VACATIONS_TXT";
+	$ENV{HOME}=$homedir;
 
 }
 else {

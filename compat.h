@@ -6,6 +6,9 @@
 #ifndef HAVE_UNSETENV
 void unsetenv(char *env_name);
 #endif
+#ifndef HAVE_SETENV
+void unsetenv(char *env_name);
+#endif
 #ifndef HAVE_GETDOMAINNAME
 char *getdomainname(); 
 #endif

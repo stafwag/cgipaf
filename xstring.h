@@ -3,6 +3,7 @@
  */
 #include "xmalloc.h"
 #include <string.h>
+#include <stdlib.h>
 void cut_space (char *c);
 void cut_after_quote(char *c);
 void cut_after_char(char *c, char ch);
@@ -23,3 +24,6 @@ void rmchar(char *str,char rmc);
 void rmpos (char *c,unsigned i);
 void stripslahes (char *c);
 int is_var_yes(char *var);
+void free_string_array (char **array);
+int number_of_strings (char **array);
+int copy_string_array_pointers (char **dest, char **src);

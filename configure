@@ -308,7 +308,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ARG NEED_COMPAT_H build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LIBOBJS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP HAVE_GDBMDIR_NDBM_H LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ARG NEED_COMPAT_H build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OBJS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP HAVE_GDBMDIR_NDBM_H LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1268,6 +1268,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
           ac_config_headers="$ac_config_headers config.h"
 
 
@@ -1391,8 +1392,8 @@ case $host_os in
 echo "${ECHO_T}yes" >&6
 		;;
    linux*)
-   		echo "$as_me:$LINENO: result: yes linux is my favorite os" >&5
-echo "${ECHO_T}yes linux is my favorite os" >&6
+   		echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 		;;
   netbsd*)
   		echo "$as_me:$LINENO: result: yes" >&5
@@ -1436,9 +1437,11 @@ _ACEOF
 
 NEED_COMPAT_H="COMPAT"
 
+
+
 PRESET_CFLAGS="$CFLAGS"
 
-LIBOBJS="$LIBOBJS xstring ccgi configfile showmsg ephp accessdb createcookie searchdomain xmalloc out_of_memory run_cmd write_log acl.$ac_objext"
+OBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o acl.o write_log.o"
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3182,19 +3185,19 @@ echo "$as_me: error: no pam and no crypt library found i'm giving up" >&2;}
 fi
 
 
-   LIBOBJS="$LIBOBJS pass salt.$ac_objext"
+   OBJS="$OBJS pass.o salt.o"
 
    if test "$enable_md5crypt" != "no"; then
 
 
      if test "$host_os" != "freebsd"; then
-        LIBOBJS="$LIBOBJS md5 md5crypt.$ac_objext"
+        OBJS="$OBJS md5.o md5crypt.o"
      fi
 
      echo $host_os | grep -i "bsd" > /dev/null 2>&1
 
      if test "$?" = "1"; then
-        LIBOBJS="$LIBOBJS fgetpwnam.$ac_objext";
+        OBJS="$OBJS fgetpwnam.o";
      else
         { echo "$as_me:$LINENO: WARNING: \"BSD host detected vmail password are disabled\"" >&5
 echo "$as_me: WARNING: \"BSD host detected vmail password are disabled\"" >&2;}
@@ -3412,7 +3415,7 @@ echo "$as_me: error: no valid pam library found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-   LIBOBJS="$LIBOBJS passpam.$ac_objext"
+   OBJS="$OBJS passpam.o"
 fi
 
 if test "$with_libcrack" != "no"; then
@@ -5004,6 +5007,158 @@ fi
 
 
 
+HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
+
+if test "$DB_COMPAT_LIB" = "yes"; then
+
+
+for ac_header in db.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking $ac_header usability" >&5
+echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking $ac_header presence" >&5
+echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <$ac_header>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc in
+  yes:no )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+  no:yes )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
+echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: $ac_header: check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  eval "$as_ac_Header=$ac_header_preproc"
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+
+fi
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+   HAVE_DB_H="no"
+fi
+
+done
+
+
+else
+
+
 for ac_header in ndbm.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -5148,9 +5303,7 @@ fi
 done
 
 
-HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
-
-if test "$HAVE_NDBM_H" = "no"; then
+    if test "$HAVE_NDBM_H" = "no"; then
 
 for ac_header in gdbm-ndbm.h
 do
@@ -5295,11 +5448,11 @@ fi
 
 done
 
-  if test "$HAVE_GDBM_NDBM_H" = "no"; then
-         unset $HAVE_GDBM_NDBM_H
-         echo "$as_me:$LINENO: checking for gdm/ndbm.h..." >&5
+      if test "$HAVE_GDBM_NDBM_H" = "no"; then
+             unset $HAVE_GDBM_NDBM_H
+             echo "$as_me:$LINENO: checking for gdm/ndbm.h..." >&5
 echo $ECHO_N "checking for gdm/ndbm.h...... $ECHO_C" >&6
-         cat >conftest.$ac_ext <<_ACEOF
+             cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -5319,8 +5472,8 @@ echo "${ECHO_T}\"no\"" >&6
 fi
 rm -f conftest*
 
-  if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
-           HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
+          if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
+               HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
 
 for ac_header in db1/ndbm.h
 do
@@ -5467,8 +5620,10 @@ fi
 
 done
 
-  fi
-  fi
+          fi
+      fi
+    fi
+
 fi
 
 
@@ -10147,7 +10302,7 @@ fi
 
 if test "$NEED_COMPAT_H" = "yes"; then
 
-    LIBOBJS="$LIBOBJS compat.$ac_objext"
+    OBJS="$OBJS compat.o"
     NEED_COMPAT_H="NEED_COMPAT_H"
 
 fi
@@ -10778,7 +10933,7 @@ s,@target@,$target,;t t
 s,@target_cpu@,$target_cpu,;t t
 s,@target_vendor@,$target_vendor,;t t
 s,@target_os@,$target_os,;t t
-s,@LIBOBJS@,$LIBOBJS,;t t
+s,@OBJS@,$OBJS,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
@@ -10790,6 +10945,7 @@ s,@SET_MAKE@,$SET_MAKE,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@HAVE_GDBMDIR_NDBM_H@,$HAVE_GDBMDIR_NDBM_H,;t t
+s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
 

@@ -4,6 +4,7 @@
 # ----------------------------------------------------------------------
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@
+OBJS=@OBJS@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
@@ -22,17 +23,17 @@ CONFIGFILE=$(sysconfdir)/cgipaf.conf
 
 all: passwd.cgi viewmailcfg.cgi mailcfg.cgi changepass
 
-passwd.cgi: cgipaf.c @LIBOBJS@ ${inc_files}
-	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c @LIBOBJS@ @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
+passwd.cgi: cgipaf.c ${OBJS} ${inc_files}
+	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c ${OBJS} @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
 
-mailcfg.cgi: mailcfg.c @LIBOBJS@ mailconfig.o ${inc_files}
-	$(CC) $(CFLAGS) -o mailcfg.cgi mailcfg.c @LIBOBJS@ mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
+mailcfg.cgi: mailcfg.c ${OBJS} mailconfig.o ${inc_files}
+	$(CC) $(CFLAGS) -o mailcfg.cgi mailcfg.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
 
-viewmailcfg.cgi: cgipaf.c @LIBOBJS@ mailconfig.o ${inc_files}
-	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c @LIBOBJS@ mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
+viewmailcfg.cgi: cgipaf.c ${OBJS} mailconfig.o ${inc_files}
+	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
 	
-changepass: changepass.c @LIBOBJS@ ${inc_files}
-	$(CC) $(CFLAGS) -o changepass changepass.c @LIBOBJS@ @LIBS@ ${ARG} 
+changepass: changepass.c ${OBJS} ${inc_files}
+	$(CC) $(CFLAGS) -o changepass changepass.c ${OBJS} @LIBS@ ${ARG} 
 
 install: all
 	 su root -c "/bin/sh ./install.sh"

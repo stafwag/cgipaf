@@ -34,6 +34,18 @@ void *xrealloc (void *ptr, size_t size)
    }
  return (value);
 }
+
+void *xcalloc (size_t n, size_t size)
+{
+ register void *value=(void *) calloc(n,size);
+ void (*errfunction)();
+ if (value==NULL) {
+     errfunction=set_memerr(NULL);
+     errfunction();
+  }
+  return (value);
+}
+
 void xfree(void *ptr) 
 {
   if(ptr!=NULL) free(ptr);

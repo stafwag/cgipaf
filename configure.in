@@ -2,10 +2,10 @@ dnl ugly configure script dont use as an example
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(cgipaf.c)
+AC_PREREQ(2.53)
 AC_CONFIG_HEADER(config.h)
 AC_SUBST(ARG)
 AC_SUBST(NEED_COMPAT_H)
-dnl AC_SUBST(AC_LIBOBJ)
 
 AC_CANONICAL_SYSTEM
 
@@ -45,9 +45,11 @@ AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
 
 NEED_COMPAT_H="COMPAT"
 
+AC_SUBST(OBJS)
+
 PRESET_CFLAGS="$CFLAGS"
 
-AC_LIBOBJ(xstring ccgi configfile showmsg ephp accessdb createcookie searchdomain xmalloc out_of_memory run_cmd write_log acl)
+OBJS="xstring.o ccgi.o configfile.o showmsg.o ephp.o accessdb.o createcookie.o searchdomain.o xmalloc.o out_of_memory.o run_cmd.o acl.o write_log.o"
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -135,20 +137,20 @@ dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
 dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
 dnl   fi
-   AC_LIBOBJ(pass salt)
+   OBJS="$OBJS pass.o salt.o"
    
    if test "$enable_md5crypt" != "no"; then
 
 dnl freebsd has built-in md5 support
  
      if test "$host_os" != "freebsd"; then
-        AC_LIBOBJ(md5 md5crypt)
+        OBJS="$OBJS md5.o md5crypt.o"
      fi
 
      echo $host_os | grep -i "bsd" > /dev/null 2>&1
 
      if test "$?" = "1"; then
-        AC_LIBOBJ(fgetpwnam);
+        OBJS="$OBJS fgetpwnam.o";
      else
         AC_MSG_WARN("BSD host detected vmail password are disabled")
      fi
@@ -160,7 +162,7 @@ dnl freebsd has built-in md5 support
    AC_CHECK_LIB(pam,pam_authenticate,,AC_MSG_ERROR(no valid pam library found))
    AC_CHECK_LIB(pam,pam_chauthtok,,AC_MSG_ERROR(no valid pam library found))
    AC_CHECK_LIB(pam,pam_end,,AC_MSG_ERROR(no valid pam library found))
-   AC_LIBOBJ(passpam)
+   OBJS="$OBJS passpam.o"
 fi
 
 if test "$with_libcrack" != "no"; then
@@ -234,21 +236,30 @@ dnl Checks for header files.
 
 AC_HEADER_STDC
 
-AC_CHECK_HEADERS(ndbm.h,,[ HAVE_NDBM_H="no" ]) 
 
 HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
 
-if test "$HAVE_NDBM_H" = "no"; then
-   AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
-  if test "$HAVE_GDBM_NDBM_H" = "no"; then
-         unset $HAVE_GDBM_NDBM_H
-         AC_MSG_CHECKING(for gdm/ndbm.h...)
-         AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h,[ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \ AC_SUBST(HAVE_GDBMDIR_NDBM_H) \ AC_MSG_RESULT("yes")  ], [ HAVE_GDBMDIR_NDBM_H="no" \ AC_MSG_RESULT("no") ])
-  if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
-           HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
-	    AC_CHECK_HEADERS(db1/ndbm.h,,AC_MSG_ERROR(no valid ndbm header file found))
-  fi
-  fi
+if test "$DB_COMPAT_LIB" = "yes"; then
+
+   AC_CHECK_HEADERS(db.h,, [ HAVE_DB_H="no" ])
+
+else
+
+    AC_CHECK_HEADERS(ndbm.h,,[ HAVE_NDBM_H="no" ]) 
+
+    if test "$HAVE_NDBM_H" = "no"; then
+       AC_CHECK_HEADERS(gdbm-ndbm.h,,[ HAVE_GDBM_NDBM_H="no" ])
+      if test "$HAVE_GDBM_NDBM_H" = "no"; then
+             unset $HAVE_GDBM_NDBM_H
+             AC_MSG_CHECKING(for gdm/ndbm.h...)
+             AC_EGREP_HEADER(gdbm/ndbm.h,gdbm/ndbm.h,[ HAVE_GDBMDIR_NDBM_H="HAVE_GDBMDIR_NDBM_H" \ AC_SUBST(HAVE_GDBMDIR_NDBM_H) \ AC_MSG_RESULT("yes")  ], [ HAVE_GDBMDIR_NDBM_H="no" \ AC_MSG_RESULT("no") ])
+          if test "$HAVE_GDBMDIR_NDBM_H" = "no"; then
+               HAVE_GDBMDIR_NDBM_H="NO_GDBMDIR_NDBM_H"
+	        AC_CHECK_HEADERS(db1/ndbm.h,,AC_MSG_ERROR(no valid ndbm header file found))
+          fi
+      fi
+    fi
+
 fi
 
 
@@ -326,7 +337,7 @@ fi
 
 if test "$NEED_COMPAT_H" = "yes"; then
 
-    AC_LIBOBJ(compat)
+    OBJS="$OBJS compat.o"
     NEED_COMPAT_H="NEED_COMPAT_H"
 
 fi

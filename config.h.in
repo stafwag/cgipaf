@@ -33,6 +33,9 @@
 /* Define to 1 if you have the `dbm_store' function. */
 #undef HAVE_DBM_STORE
 
+/* Define to 1 if you have the <db.h> header file. */
+#undef HAVE_DB_H
+
 /* db4 with hsearch */
 #undef HAVE_DB_H_DB_DBM_HSEARCH
 

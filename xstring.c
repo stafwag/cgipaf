@@ -344,3 +344,47 @@ int is_var_yes(char *var)
        if(!strcasecmp(var,*ccp)) return(0);
     return(-1);
 }
+
+void free_string_array (char **array) {
+	char **ccp;
+	if(array==NULL) return;
+	ccp=array;
+	for(;;) {
+	     if(ccp!=NULL) {
+		if(*ccp!=NULL) {
+	        xfree(*ccp);
+	        ccp++;
+		continue;
+		}
+	     }
+	     break;
+	}
+
+	xfree(array);
+}
+
+int number_of_strings (char **array) {
+	char **ccp;
+	int ret=0;
+	if(array==NULL) return(-1);
+	for(ccp=array;*ccp!=NULL;ccp++) ++ret;
+	return(ret);
+}
+
+int copy_string_array_pointers (char **dest, char **src) {
+	char **ccp;
+	char **ccp2;
+	
+	if(dest==NULL) return(-1);
+	if(src==NULL)  return(-1);
+
+	ccp2=dest;
+	
+	for(ccp=src;*ccp!=NULL;ccp++) { 
+		*ccp2++=*ccp; 
+	}
+
+	return(0);
+}
+
+

@@ -52,6 +52,7 @@
 #define  CFG_PASSWD_LOCATION	"passwd_location"
 #define  CFG_SHADOW_LOCATION    "shadow_location"
 #define  CFG_VMAIL_SUPPORT	"vmail_support"
+#define	 CFG_MAILCFG_CHECK	"mailcfg_check"
 
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"

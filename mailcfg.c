@@ -40,6 +40,7 @@ main()
    int    autoreply_state=0;
    int    oldstate=0;
    int    newstate=0;
+   int 	  mailcfg_check=1;
    char   *c=NULL;
    char   *sendmail=NULL;
    char   *domain=NULL;
@@ -126,49 +127,110 @@ main()
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_message);
    }
 
-   /* if forward has no length show error and exit */
-   
-   if (strlen(forward)<1) {
-      write_log(LOG_USER,5,err_forward);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARD,err_forward,options,txt_message);
+   /* Is mailcfg check enabled? */
+
+   if((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))==NULL) {
+
+      /* if there is no run_mailcfg script, mailcfg_check is always enabled */
+
+      xfree(cp);
+      mailcfg_check=1;
+      write_log(LOG_USER,7,"no run_mailcfg script -> mailcfg check enabled");
+
    }
 
-   /* if mailforwarding is enabled evaluate forward_to and keep_msg */
+   else {
+
+	 /* get the mailcfg_check setting out the cfgfile */
    
-   if (!strcasecmp(forward,txt_yes)) {
-      write_log(LOG_USER,7,"User %s want to enable mailforwarding",name);
-      
-      /* forward_to has no length or is an invalid mailaddress, exit */
-      
-      if (strlen(forward_to)<1) {
-	 write_log(LOG_USER,7,"forward_to has zero length, display err_forwardto");
-	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARDTO,err_forwardto,options,txt_message);
+         if ((cp=get_section_config_item(config_file,CFGSECTION,CFG_MAILCFG_CHECK))!=NULL) {
+
+            if (is_var_yes(cp)==0) {
+
+	       mailcfg_check=0;
+               write_log(LOG_USER,7,"mailcfg check disabled");
+
+            }
+            else {
+	           mailcfg_check=1;
+	           write_log(LOG_USER,7,"mailcfg check enabled");
+            }
+
+         }
+         else {
+		 /* no mailcfg_check setting, mailcfg_check is enabled by default */
+		 mailcfg_check=1;
+	         write_log(LOG_USER,7,"mailcfg_check is not defined, using default (enabled)");
+
+
+	 }
+
+    }
+
+   
+   if(mailcfg_check) {
+
+
+      /* if forward has no length show error and exit */
+   
+      if (strlen(forward)<1) {
+
+     	    write_log(LOG_USER,5,err_forward);
+      	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARD,err_forward,options,
+			      txt_message);
       }
-      if (!tst_emailaddress(forward_to)) {
-	 write_log(LOG_USER,7,"forward_to has zero length, display err_forwardto");
-	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALIDFORWARDTO,err_invalidforwardto,options,txt_message);
-      } 
 
-      /* keep_msg has no length exit */
+      /* if mailforwarding is enabled evaluate forward_to and keep_msg */
+   
+      if (!strcasecmp(forward,txt_yes)) {
+
+     	 write_log(LOG_USER,7,"User %s want to enable mailforwarding",name);
       
-      if (strlen(keep_msg)<1) {
-	 write_log(LOG_USER,5,err_keep_msg);
-	 show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_KEEP_MSG,err_keep_msg,options,txt_message);
-      }
-   }
+      	 /* forward_to has no length or is an invalid mailaddress, exit */
+      
+      	 if (strlen(forward_to)<1) {
 
-   /* if autoreply has no length show error and exit */
+	    write_log(LOG_USER,7,"forward_to has zero length, display err_forwardto");
+	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_FORWARDTO,err_forwardto,options,
+			      txt_message);
+         }
+
+         if (!tst_emailaddress(forward_to)) {
+	 
+	    write_log(LOG_USER,7,"forward_to has zero length, display err_forwardto");
+	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALIDFORWARDTO,
+			      err_invalidforwardto,options,txt_message);
+         } 
+
+         /* if keep_msg has no length exit */
+      
+         if (strlen(keep_msg)<1) {
+
+	    write_log(LOG_USER,5,err_keep_msg);
+	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_KEEP_MSG,err_keep_msg,options,
+			      txt_message);
+         }
+     }
+
+     /* if autoreply has no length show error and exit */
    
-   if (strlen(autoreply)<1) {
-      write_log(LOG_USER,5,err_autoreply);
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLY,err_autoreply,options,txt_message);
-   }
+     if (strlen(autoreply)<1) {
+
+        write_log(LOG_USER,5,err_autoreply);
+        show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLY,err_autoreply,options,
+		  	  txt_message);
+     }
    
-   /* if autoreply is enabled check autoreply_msg */
+     /* if autoreply is enabled check autoreply_msg */
    
-   if ((strlen(autoreply_msg)<1)&&!strcasecmp(autoreply,txt_yes)) {
-      write_log(LOG_USER,7,"autoreply is enabled, and autoreply_msg has zero length, display err_autoreplymsg");
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLYMSG,err_autoreplymsg,options,txt_message);
+     if ((strlen(autoreply_msg)<1)&&!strcasecmp(autoreply,txt_yes)) {
+
+        write_log(LOG_USER,7,"autoreply is enabled, and autoreply_msg has zero length, display err_autoreplymsg");
+        show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_AUTOREPLYMSG,err_autoreplymsg,options,
+			  txt_message);
+
+     }
+
    }
 
 
@@ -230,44 +292,57 @@ main()
    write_log(LOG_USER,7,"set umask to 0177");
    umask(0177);
 
-   /* get the previos mailcfg state out the user's .cgipaf_state file */
 
-   if((oldstate=get_mailcfg_status(pw))==-1) 
-     write_log,(LOG_USER,7,"failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
+   if (mailcfg_check) {
+
+      /* get the previos mailcfg state out the user's .cgipaf_state file */
+
+      if ((oldstate=get_mailcfg_status(pw))==-1) 
+         write_log,(LOG_USER,7,
+		 "failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
    
-   /* calculate the new state */
+      /* calculate the new state */
    
-   newstate=forward_state+2*keep_state+4*autoreply_state; 
+      newstate=forward_state+2*keep_state+4*autoreply_state; 
    
-   if(oldstate==-1) oldstate=0;  /* if .cgipaf_state doesn; exists asume state 0 */
+      if (oldstate==-1) oldstate=0;  /* if .cgipaf_state doesnt exists asume state 0 */
    
-   /* if not configured  -> configured
-    * run run_before_mailcfg
-    */
+      /* if not configured  -> configured
+       * run run_before_mailcfg
+       */
    
-   if(!oldstate&&newstate) {
-      i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
-      if(i<0) {
-	 if(i==-1)
-	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+      if (!oldstate&&newstate) {
+
+         i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
+
+         if (i<0) {
+
+	    if (i==-1)
+	       write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+         }
+         else
+	      if ((i=WEXITSTATUS(i)))
+	         write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
       }
-      else
-	if((i=WEXITSTATUS(i)))
-	  write_log(LOG_USER,1,"run_before returns a non-null exitcode %d",i);
-   }
    
-   /* copy the user's message to $HOME/vacations.txt */
+      /* copy the user's message to $HOME/vacations.txt */
       
-   if(!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
-      write_log(LOG_USER,1,err_openvacations);	
-      show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,options,txt_message);
+      if (!(fp=fopen(add2home(pw->p,"vacations.txt"),"w"))) {
+
+         write_log(LOG_USER,1,err_openvacations);	
+         show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_OPENVACATIONS,err_openvacations,
+			   options,txt_message);
+
+      }
+      fputs(autoreply_msg,fp);
+      fclose(fp);
+
    }
-   fputs(autoreply_msg,fp);
-   fclose(fp);
 
    /* use run_mailcfg instead of built-in? */
    
-   if((cp=get_sg_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
+   if ((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
+
       xfree(cp);
       i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options);
       if(i<0)
@@ -345,36 +420,43 @@ main()
 	 }
       }
    }
-   
-   /* mail config update, inform the user */
-      
-   show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options,txt_message);
-   write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
-      
-   /* create the user's .cgipaf_state */
-      
-   if(save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),keep_state,autoreply_state)==-1) {
-      write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
-   }
-   
-   /* start run_success if defined */
-   
-   i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
-   if(i<0) {
-      if(i==-1)
-	write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
-   }
-   else
-     if((i=WEXITSTATUS(i)))
-       write_log(LOG_USER,1,"run_success returns a non-null value",i);
 
-   /* 
-    * if configured -> not configured
-    * run run_after_mailcfg
-    */
+   if (mailcfg_check) {
    
-   if(oldstate&&!newstate) {
-      i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
+      /* mail config update, inform the user */
+      
+      show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options,txt_message);
+      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
+      
+      /* create the user's .cgipaf_state */
+      
+      if (save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),
+			     keep_state,autoreply_state)==-1) {
+
+         write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
+   
+      }
+   
+      /* start run_success if defined */
+   
+      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+      if (i<0) {
+         if (i==-1)
+	    write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
+      }
+      else
+         if ((i=WEXITSTATUS(i)))
+            write_log(LOG_USER,1,"run_success returns a non-null value",i);
+
+      /* 
+       * if configured -> not configured
+       * run run_after_mailcfg
+       */
+   
+      if (oldstate&&!newstate) {
+
+	 i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
+
       if(i<0) {
 	 if(i==-1)
 	   write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
@@ -382,6 +464,8 @@ main()
       else
 	if((i=WEXITSTATUS(i)))
 	  write_log(LOG_USER,1,"run_after_mailcfg returns a non-null value %d",i);
+      }
+
    }
 
    if(config_file!=NULL) fclose(config_file);

@@ -66,6 +66,7 @@ Configuration</h1>
 <li><a href="#run_before_mailcfg">run_before_mailcfg</a></li>
 <li><a href="#run_after_mailcfg">run_after_mailcfg</a></li>
 <li><a href="#run_mailcfg">run_mailcfg</a></li>
+<li><a href="#mailcfg_check">mailcfg_check</a></li>
 <li><a href="#run_viewmailcfg">run_viewmailcfg</a></li>
 <li><a href="#cookie_timeout">cookie_timeout</a></li>
 <li><a href="#mailcfg_document">mailcfg_document</a></li>
@@ -569,6 +570,15 @@ error_illegalword  Redirect    <em>location</em><br>
      define a mail configuration script, if not set the built-in procmail
      configuration updater is used<br>
      if set, <a href="#use_statefile">use_statefile</a> is enabled.
+</p>
+<h2><a name="mailcfg_check">mailcfg_check</a></h2>
+<strong>Syntax:</strong> mailcfg_check   <em>on|off</em>
+<strong>Default:</strong> on<br>
+<strong>Context:</strong> &lt;mailcfg&gt;
+<p>
+     enables or disables mailcfg.cgi internal HTTP POST parameters checking<br>
+     you can only disable <a href="#mailcfg_check">mailcfg_check</a> if 
+     <a href="#run_mailcfg">run_mailcfg</a> is defined.
 </p>
 <h2><a name="run_viewmailcfg">run_viewmailcfg</a></h2>
 <strong>Syntax:</strong> run_viewmailcfg   <em>path_to_script</em>

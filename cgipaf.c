@@ -381,6 +381,8 @@ main()
 
    if((cp=get_sg_item(config_file,CFGSECTION,RUN_VIEWMAILCFG))!=NULL) {
 
+/*	   setenv("SCRIPT_FILENAME",cp,1); */
+
       	xfree(cp);
       	i=run_cmd(config_file,CFGSECTION,RUN_VIEWMAILCFG,options);
 

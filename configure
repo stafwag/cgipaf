@@ -1111,7 +1111,7 @@ fi
 
    echo $host | grep -i "bsd" > /dev/null 2>&1
 
-   if test "$?"; then
+   if test "$?" = "1"; then
       LIBOBJS="$LIBOBJS fgetpwnam.o";
    else
       echo "configure: warning: " 1>&2 "BSD host detected vmail password are disabled"

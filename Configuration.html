@@ -78,7 +78,7 @@
 <li><a href="#redirect">Redirect</a></li>
 <li><a href="#htmlfile">HTML files</a></li>
 <li><a href="#command">run_success and run_locked scripts</a></li>
-<li><a href="#acl">Access Control Lists</a>
+<li><a href="#acl">Access Control List</a>
   <ul><li><a href="#aclexamples">Examples</a></li></ul></li>
 </ul>
 <h1><a name="syntax">Syntax</a></h1>
@@ -639,28 +639,28 @@ Set the <a href="#acl">Acl</a> order.
 </p>
 <h2><a name="allowusers">AllowUsers</a></h2>
 <strong>Syntax:</strong>   AllowUsers  <em>user1 user2</em>  <b>OR</b> <em>*</em><br>
-<strong>Default:</strong>  see <a href="#acl">Access Control Lists</a><br>
+<strong>Default:</strong>  see <a href="#acl">Access Control List</a><br>
 <strong>Context:</strong>  Global,&lt;passwd&gt;,&lt;mailcfg&gt;
 <p>
-Specify a list of users that are allowed to use CGIpaf see <a href="#acl">Access Control Lists</a>
+Specify a list of users that are allowed to use CGIpaf see <a href="#acl">Access Control List</a>
 </p>
 <h2><a name="denyusers">DenyUsers</a></h2>
 <strong>Syntax:</strong>   DenyUsers  <em>user1 user2</em>  <b>OR</b> <em>*</em><br>
-<strong>Default:</strong>  see <a href="#acl">Access Control Lists</a><br>
+<strong>Default:</strong>  see <a href="#acl">Access Control List</a><br>
 <strong>Context:</strong>  Global,&lt;passwd&gt;,&lt;mailcfg&gt;
 <p>
 Specify a list of users that are denied to use CGIpaf see <a href="#acl">acl</a>
 </p>
 <h2><a name="allowgroups">AllowGroups</a></h2>
 <strong>Syntax:</strong>   AllowGroups  <em>group1 group2</em>  <b>OR</b> <em>*</em><br>
-<strong>Default:</strong>  see <a href="#acl">Access Control Lists</a><br>
+<strong>Default:</strong>  see <a href="#acl">Access Control List</a><br>
 <strong>Context:</strong>  Global,&lt;passwd&gt;,&lt;mailcfg&gt;
 <p>
 Specify a list of groups that are allowed to use CGIpaf see <a href="#acl">acl</a>
 </p>
 <h2><a name="denygroups">DenyGroups</a></h2>
 <strong>Syntax:</strong>   DenyGroups  <em>group1 group2</em>  <b>OR</b> <em>*</em><br>
-<strong>Default:</strong>  see <a href="#acl">Access Control Lists</a><br>
+<strong>Default:</strong>  see <a href="#acl">Access Control List</a><br>
 <strong>Context:</strong>  Global,&lt;passwd&gt;,&lt;mailcfg&gt;
 <p>
 Specify a list of groups that are denied to use CGIpaf see <a href="#acl">acl</a>
@@ -752,9 +752,9 @@ example:
   <pre><tt><code>
   run_success "/usr/sbin/smbpasswd -U %{name} &gt; /dev/null 2&gt;&amp;1" "%{password}\n%{password}\n"
   </code></tt></pre>
-<h1><a name="acl">Access Control Lists</a></h1>
+<h1><a name="acl">Access Control List</a></h1>
 <p>
-    With Access Control lists you can allow or deny users or groups. 
+    With the Access Control list you can allow or deny users or groups. 
 </p>
 <p> 
 The <a href="#aclorder">AclOrder</a> directive control the default access state and the order in which the acl is processed.

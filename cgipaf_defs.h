@@ -166,7 +166,7 @@
 #define  CFGSECTION             "mailadmin"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "admin"
-#define	 NEXT_ACTION		"mailadmin.cgi"
+#define	 NEXT_ACTION		"mailcfg.cgi"
 #endif   /* CGIPAF_MAILADMIN */
 
 #include <pwd.h>

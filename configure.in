@@ -14,12 +14,18 @@ AC_MSG_CHECKING(Is your system compatible with CGIpaf?);
 case $host_os in
 
  freebsd*) 
+    		AC_DEFINE(BSDHOST,1,BSD system)
+    		AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
+    		ARG="NOPAM"
  		AC_MSG_RESULT(yes)
 		;;
    linux*) 
    		AC_MSG_RESULT(yes)
 		;;
   netbsd*) 
+    		AC_DEFINE(BSDHOST,1,BSD system)
+    		AC_DEFINE(NETBSDHOST,1,NetBSD system)
+    		ARG="NOPAM"
   		AC_MSG_RESULT(yes)
   		;;
  openbsd*) 
@@ -69,20 +75,6 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default)],
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
 AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       include MD5-compatible crypt
 function (default)])
-
-dnl freebsd support
-
-if test "$host_os" = "freebsd"; then
-    AC_DEFINE(BSDHOST,1,BSD system)
-    AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
-    ARG="NOPAM"
-fi
-
-if test "$host_os" = "netbsd"; then
-    AC_DEFINE(BSDHOST,1,BSD system)
-    AC_DEFINE(NETBSDHOST,1,NetBSD system)
-    ARG="NOPAM"
-fi
 
 dnl pam support test
 

@@ -7,11 +7,17 @@
  * stdlib.h
  */
 
+
+#ifdef STDC_HEADERS
+#include <stdlib.h>
+#else
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #else
 #include <stdlib.h>
 #endif
+#endif
+
 #ifndef __XMALLOC_H
 
 #include <stdio.h>

@@ -10,7 +10,7 @@ use strict;
 # get the mail cfg from stdin
 #
 
-my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO,@MSG)=<>;
+my ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO)=<>;
 chomp ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
 
 #
@@ -19,6 +19,12 @@ chomp ($NAME,$DOMAIN,$HOMEDIR,$FORWARD,$KEEPMSG,$AUTOREPLY,$FORWARDTO);
 
 my   $DOTFORWARD="$HOMEDIR/.forward";
 my   $DOTVACATIONMSG="$HOMEDIR/.vacation.msg";
+
+#
+# set the vacations.txt path
+#
+
+my   $VACATIONSDOTTXT="$HOMEDIR/vacations.txt";
 
 #
 # delete the user's .forward if forward and autoreply is disabled
@@ -67,7 +73,14 @@ if("$AUTOREPLY" eq "yes" ) {
    #
    # create the user's .vacation.msg
    #
-    
+
+   my @MSG=();
+   
+   if (open(FH_VACTXT,"$VACATIONSDOTTXT")) {
+   	@MSG = <FH_VACTXT>;
+	close FH_VACTXT;
+   }
+   
    open(FH_MSG,">$DOTVACATIONMSG") or die "Unable to create $DOTVACATIONMSG";
    print FH_MSG "From: $NAME\@$DOMAIN\n";
    print FH_MSG "Subject: I am on vacation\n";

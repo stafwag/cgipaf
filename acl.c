@@ -1,5 +1,5 @@
 /*
- * acl functions
+ * CGIpaf acl functions
  *
  * author:  staf wagemakers <staf@patat.org>
  */
@@ -7,36 +7,25 @@
 #include "acl.h"
 #include "configfile.h"
 
-#define  USERACLORDER   "UserAclOrder"
-#define  GRPACLORDER    "GroupAclOrder"
-#define  USERALLOW	"UserAllow"
-#define  USERDENY	"UserDeny"
-#define  GRPALLOW	"GroupAllow"
-#define  GRPDENY	"GroupDeny"
-#define  ALLOW		"allow"
-#define  DENY		"deny"
-#define  DENYALLUSERS   "denyallusers"
-#define  DENYALLGRPS    "denyallgroups"
-#define  DENYALL	"DenyAll"
+#define  CFG_USERACLORDER   	"UserAclOrder"
+#define  CFG_GRPACLORDER    	"GroupAclOrder"
+#define  CFG_ALLOWUSERS 	"AllowUsers"
+#define  CFG_DENYUSERS  	"DenyUsers"
+#define  CFG_ALLOWGRPS  	"AllowGroups"
+#define  CFG_DENYGRPS   	"DenyGroups"
+#define  ALLOW          	"allow"
+#define  DENY           	"deny"
+
 
 static int useraclorder=0;
 static int grpaclorder=0;
-static int denyallusers=0;
-static int denyallgrps=0;
 
-
-void set_denyallusers(int i) {
-    denyallusers=i;
-}
-
-void set_denyallgrps(int i) {
-    denyallgrps=i;
-}
-
-void set_denyall(int i) {
-    denyallusers=denyallgrps=i;
-}
-
+/*
+ * check if *p is a member of an Unix group
+ * returns  1: is a member of grpname
+ *          0: if not
+ *         -1: error
+ */
 int memberofgrp (struct pw_info *p,char *grpname) {
     struct group *grp;
     char **gmem;
@@ -50,49 +39,60 @@ int memberofgrp (struct pw_info *p,char *grpname) {
     return(0);
 }
 
+/*
+ * Is *p is in the *users list?
+ *
+ * returns  1 : p is in the list
+ *          0 : if p is not in the list
+ */
 int check_useracl(struct pw_info *p,char **users) {
     char **user;  
     char *name=p->p->pw_name;
     if(users==NULL) return(0);
 
-    for (user=users; *user!=NULL;user++)
+    for (user=users; *user!=NULL;user++) {
+	if(!strcmp(*user,"*"))  return(1);
 	if(!strcmp(*user,name)) return(1);
+    }
 
     return(0);
     
 }
-
+/*
+ * Is p a member of the groups list
+ *
+ * returns  1 : p is a member
+ *          0 : p isn't a member
+ */
 int check_grpacl(struct pw_info *p,char **groups) {
     char **group;
     char *name=p->p->pw_name;
     if(groups==NULL) return(0);
 
-    for (group=groups;*group!=NULL;group++)
+    for (group=groups;*group!=NULL;group++) {
+	if(!strcmp(*group,"*")) return(1);
 	if(memberofgrp(p,*group)==1) return(1);
+    }
 
     return(0);
 
 }
-int get_denyallusers(FILE *config_file,char *section_name) {
-    char *cp;
-    
-    cp=get_sg_config(config_file,section_name,DENYALLUSERS);
-    
-    if(cp==NULL) return(denyallusers);
-    if(!is_var_yes(cp)) denyallusers=0;
-      else denyallusers=1;
-    free(cp);
-    return(denyallusers);
-}
 
-
+/*
+ * real aclorder function
+ *
+ * set *var to 0 if "allow,deny"
+ *             1 if "deny,allow"
+ *            -1 if none of above
+ * returns     *var
+ */ 
 int real_aclorder(FILE *config_file,char *section_name,char *itemname,int *var) {
     char *c,*item,*part1,*part2;
     int i;
 
     item=get_sg_config(config_file,section_name,itemname);
 
-    if (item==NULL) { 
+    if (item==NULL) {
 	     *var=0;
 	     return(*var);
 	   }
@@ -121,26 +121,55 @@ int real_aclorder(FILE *config_file,char *section_name,char *itemname,int *var) 
     free(part2);
     return(*var);
 }
-
+/*
+ * Get UserAclOrder out the configuration file
+ *
+ * set useraclorder to 0 if "allow,deny"
+ *                     1 if "deny,allow"
+ * returns useraclorder
+ */                     
 int get_useraclorder(FILE *config_file,char *section_name) {
-    return(real_aclorder(config_file,section_name,USERACLORDER,&useraclorder));
-}
-int get_groupaclorder(FILE *config_file,char *section_name) {
-    return(real_aclorder(config_file,section_name,GRPACLORDER,&grpaclorder));
+    return(real_aclorder(config_file,section_name,CFG_USERACLORDER,&useraclorder));
 }
 
+/*
+ * Get GroupAclOrder out the configuration file
+ *
+ * set grpaclorder  to 0 if "allow,deny"
+ *                     1 if "deny,allow"
+ * returns grpaclorder
+ */                     
+int get_groupaclorder(FILE *config_file,char *section_name) {
+    return(real_aclorder(config_file,section_name,CFG_GRPACLORDER,&grpaclorder));
+}
+
+/*
+ * test the user access control list
+ *
+ * returns 0  -> deny
+ *         1  -> allowed
+ */
 int user_acl (FILE *config_file,char *section_name, struct pw_info *p) {
     char **deny,**allow;
-    int ret=0; 
+    int ret=1; 
 
-    deny=get_sg_config_array(config_file,section_name,USERDENY);
-    allow=get_sg_config_array(config_file,section_name,USERALLOW);
+    if(useraclorder==-1)  return(0); 	/* deny on aclorder error */
+    
+    deny=get_sg_config_array(config_file,section_name,CFG_DENYUSERS);
+
+    allow=get_sg_config_array(config_file,section_name,CFG_ALLOWUSERS);
+    
+    if((deny==NULL)&&(allow==NULL)&&!useraclorder) return(1);
     
     if(!useraclorder) {
-      ret=check_useracl(p,allow)||(!check_useracl(p,deny)&&!denyallusers);
+      if(check_useracl(p,allow)) ret=1;
+        else
+         if(check_useracl(p,deny)) ret=0;
     }
     else {
-      ret=!check_useracl(p,deny)&&!denyallusers&&check_useracl(p,allow);
+      if(check_useracl(p,deny)) ret=0;
+	else
+         if(check_useracl(p,allow)) ret=1;
     }
 
     free(allow);
@@ -150,43 +179,32 @@ int user_acl (FILE *config_file,char *section_name, struct pw_info *p) {
 
 }
 
-int get_denyallgroups(FILE *config_file,char *section_name) {
-    char *cp;
-    
-    cp=get_sg_config(config_file,section_name,DENYALLGRPS);
-    
-    if(cp==NULL) return(-1);
-    if(!is_var_yes(cp)) denyallgrps=0;
-      else denyallgrps=1;
-    free(cp);
-    return(denyallgrps);
-}
-
-int get_denyall(FILE *config_file,char *section_name) {
-    char *cp;
-
-    cp=get_sg_config(config_file,section_name,DENYALL);
-
-    if(cp==NULL) return(-1);
-    if(!is_var_yes(cp)) denyallgrps=denyallusers=0;
-    else 
-      denyallgrps=denyallusers=1;
-    free(cp);
-    return(denyallusers);
-}
-
+/*
+ * test the group access control list
+ *
+ * returns 0  -> deny
+ *         1  -> allowed
+ */
 int group_acl (FILE *config_file,char *section_name, struct pw_info *p) {
     char **deny,**allow;
-    int ret=0; 
+    int ret=1; 
 
-    deny=get_sg_config_array(config_file,section_name,GRPDENY);
-    allow=get_sg_config_array(config_file,section_name,GRPALLOW);
+    if(grpaclorder==-1)  return(0);   /* deny on aclorder error */
+    
+    deny=get_sg_config_array(config_file,section_name,CFG_DENYGRPS);
+    allow=get_sg_config_array(config_file,section_name,CFG_ALLOWGRPS);
+    
+    if((deny==NULL)&&(allow==NULL)&&!grpaclorder) return(1);
     
     if(!grpaclorder) {
-      ret=check_grpacl(p,allow)||(!check_grpacl(p,deny)&&!denyallgrps);
+      if(check_grpacl(p,allow)) ret=1;
+        else
+         if(check_grpacl(p,deny)) ret=0;
     }
     else {
-      ret=!check_grpacl(p,deny)&&!denyallusers&&check_grpacl(p,allow);
+      if(check_grpacl(p,deny)) ret=0;
+	else
+         if(check_grpacl(p,allow)) ret=1;
     }
 
     free(allow);

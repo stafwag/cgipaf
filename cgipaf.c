@@ -369,14 +369,6 @@ main()
       write_log(LOG_USER,7,"get_useraclorder() returns %d",i);
    }
 
-   /* get DenyAllUsers */
-   i=get_denyallusers(config_file,CFGSECTION);
-   write_log(LOG_USER,7,"denyalluser set to %d",i);
-
-   /* Get DenyAll */
-   i=get_denyall(config_file,CFGSECTION);
-   write_log(LOG_USER,7,"denyall set to %d",i);
-
    /* Test User ACL */
 
    if(!user_acl(config_file,CFGSECTION,pw)) {
@@ -397,10 +389,6 @@ main()
       write_log(LOG_USER,7,"get_groupaclorder() returns %d",i);
    }
    
-   /* get DenyAllGroups */
-   i=get_denyallgroups(config_file,CFGSECTION);
-   write_log(LOG_USER,7,"denyallgroups set to %d",i);
-
    /* Test Group ACL */
 
    if(!group_acl(config_file,CFGSECTION,pw)) {

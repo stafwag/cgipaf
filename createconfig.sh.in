@@ -42,6 +42,22 @@ WWW="${datadir}"
    echo "loglevel		 6" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
+   echo "# Enable Access Control lists" >> $CFGFILE
+   echo "#" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# User acl example" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# UserAclOrder          Allow,Deny" >> $CFGFILE
+   echo "# AllowUsers            user1 user2 user3" >>$CFGFILE
+   echo "# DenyUsers             *" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# Group acl example" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "# GroupAclOrder         Allow,Deny" >> $CFGFILE
+   echo "# AllowGroups           user1 user2 user3" >>$CFGFILE
+   echo "# DenyGroups            *" >> $CFGFILE
+   echo >> $CFGFILE
+   echo "#" >> $CFGFILE
    echo "# accessdb configuration" >> $CFGFILE
    echo >> $CFGFILE
    echo "accessdb                /etc/cgipaf/accessdb" >> $CFGFILE
@@ -89,7 +105,7 @@ WWW="${datadir}"
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
    echo "min_length              5" >> $CFGFILE
-   echo "max_length              8" >> $CFGFILE
+   echo "max_length              16" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# enable cracklib support" >> $CFGFILE

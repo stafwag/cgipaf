@@ -2,9 +2,13 @@
  * mailconfig.c                                        (c) Staf Wagemakers
  */
 
-#include "mailconfig.h"
-#define  PROCMAIL ".procmailrc"
+#include                 "mailconfig.h"
+#define  PROCMAIL        ".procmailrc"
 #define  CGIPAFSTATEFILE ".cgipaf_state"
+#define  STATEFORWARD    "forward"
+#define  STATEFORWARDTO  "forwardto"
+#define  STATEKEEPMSG    "keepmsg"
+#define  STATEAUTOREPLY  "autoreply"
 
 /* 
  * return $HOME/dir
@@ -253,7 +257,7 @@ int tst_emailaddress(char *emailaddress)
  * save the user current mail config to $HOME/.cgipaf_status
  */
 
-int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply)
+int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,int autoreply)
 {
    FILE *fp;
    char *filename=add2home(p,CGIPAFSTATEFILE);
@@ -262,9 +266,40 @@ int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply)
      forward=1;
    fputs("# CGIPAF state file\n",fp);
    fputs("# Please don't edit!!!!!!!\n",fp);
-   fprintf(fp,"forward\t\t%d\n",forward);
-   fprintf(fp,"keepmsg\t\t%d\n",keep);
-   fprintf(fp,"autoreply\t%d\n",autoreply);
+   fprintf(fp,"%s\t\t%d\n",STATEFORWARD,forward);
+   fprintf(fp,"%s\t%s\n",STATEFORWARDTO,forwardto);
+   fprintf(fp,"%s\t\t%d\n",STATEKEEPMSG,keep);
+   fprintf(fp,"%s\t%d\n",STATEAUTOREPLY,autoreply);
    fclose(fp);
    return(0);
+}
+
+/*
+ * return mailcfg  status                                                   *
+ * bit 1 forward   status                                                   *
+ * bit 2 keepmsg   status                                                   *
+ * bit 3 autoreply status                                                   *
+*/
+
+int get_mailcfg_status(struct passwd *p)
+{
+   FILE *fp;
+   int  forward=0;
+   int  keepmsg=0;
+   int  autoreply=0;
+   int  ret=0;
+   char *buf;
+   char *filename=add2home(p,CGIPAFSTATEFILE);
+   if((fp=fopen(filename,"r"))==NULL) return(-1);
+   buf=get_config(fp,STATEFORWARD);
+   if(!strcmp(buf,"1")) forward=1;
+   free(buf);
+   buf=get_config(fp,STATEKEEPMSG);
+   if(!strcmp(buf,"1")) keepmsg=1;
+   free(buf);
+   buf=get_config(fp,STATEAUTOREPLY);
+   if(!strcmp(buf,"1")) autoreply=1;
+   free(buf);
+   ret=forward+keepmsg>>1+autoreply>>2;
+   return ret;
 }

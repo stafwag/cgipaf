@@ -367,6 +367,8 @@ main()
       }
    }
    
+   /* enable mail forwardin in .procmailrc */
+   
    if (!strcmp(forward,"yes")) {
       if (!strcmp(keep_msg,"yes")) {
 	 if (enable_kforward(pw,textarea2asc(forward_to),domain)==-1) {
@@ -382,11 +384,18 @@ main()
       }
    }
    
+   /* mail config update, inform the user */
+   
    show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
    write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
-   if(save_mailcfg_status(pw->p,forward_state,keep_state,autoreply_state)==-1) {
+   
+   /* create the user's .cgipaf_state */
+   
+   if(save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),keep_state,autoreply_state)==-1) {
       write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
    }
+   
+   /* start run_success if defined */
    
    i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
    if(i==-1)

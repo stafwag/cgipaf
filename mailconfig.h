@@ -20,6 +20,6 @@ int enable_forward(struct pw_info *pw,char *mailadres,char *domain);
 int enable_kforward(struct pw_info *pw, char *mailadres,char *domain);
 int tst_emailaddress(char *emailaddress);
 int write_procmailrchead(struct pw_info *pw, char *sendmail);
-int save_mailcfg_status(struct passwd *p,int forward,int keep,int autoreply);
+int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,int autoreply);
 
 #endif

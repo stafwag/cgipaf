@@ -110,7 +110,7 @@ CONFIGURATION
 
     If your system don't support md5 passwords remove md5 in the password line.
     
-    passwd.cgi should support all pam opties in the PAM configuration 
+    passwd.cgi should support all pam options in the PAM configuration 
     (cracklib, minimum/ maximum password length etc.).
     
     CGIpaf deletes the user's .procmailrc! If your users use procmail to

@@ -1,4 +1,4 @@
-* version 1.3.0pre1
+* version 1.3.0pre2    ( 31 Mar 2003 )
   
   + NetBSD support
   + BUGFIX: 1.3.0pre1 didn't compile on FreeBSD

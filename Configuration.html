@@ -50,7 +50,7 @@ Configuration</h1>
 <li><a href="#max_length">max_length</a></li>
 <li><a href="#accessdb">accessdb</a></li>
 <li><a href="#cracklib">cracklib</a></li>
-<li><a href="#cracklib">cracklib_dictpath</a></li>
+<li><a href="#cracklib_dictpath">cracklib_dictpath</a></li>
 <li><a href="#vmail_support">vmail_support</a></li>
 <li><a href="#passwd_location">passwd_location</a></li>
 <li><a href="#shadow_location">shadow_location</a></li>
@@ -86,7 +86,13 @@ Configuration</h1>
 <li><a href="#variables">Variables</a></li>
 <li><a href="#redirect">Redirect</a></li>
 <li><a href="#htmlfile">HTML files</a></li>
-<li><a href="#command">run_success and run_locked scripts</a></li>
+<li><a href="#command">Scripts</a>
+   <ul>
+      <li><a href="#command_overview">Overview</a></li>
+      <li><a href="#command_syntax">Syntax</a></li>
+      <li><a href="#command_examples">Examples</a></li>
+   </ul>
+</li>
 <li><a href="#acl">Access Control List</a>
   <ul><li><a href="#aclexamples">Examples</a></li></ul></li>
 </ul>
@@ -115,7 +121,7 @@ Configuration</h1>
 <h1><a name="directives">Directives</a></h1>
 <p>    
  The following parameters control cgipaf features and configuration. If a 
- option is not specified or invalid the default builtin messages are used.
+ option is not specified or invalid the default built-in messages are used.
 </p>
 <h2><a name="syslog">syslog</a></h2>
 <p><strong>Syntax:</strong> syslog <em>on|off</em><br>
@@ -581,7 +587,7 @@ error_illegalword  Redirect    <em>location</em><br>
 </p> 
 <h2><a name="run_locked">run_locked</a></h2>
 <strong>Syntax:</strong>   run_locked    <em>path_to_script</em>
-<em>stdout</em>
+<em>stdout</em><br>
 <strong>Default:</strong> not set<br>
 <strong>Run as:</strong>   root<br>
 <strong>Context:</strong>  &lt;passwd&gt;,  &lt;mailcfg&gt;<br>
@@ -589,7 +595,7 @@ error_illegalword  Redirect    <em>location</em><br>
      run a script is a user is locked.
 </p>
 <h2><a name="run_before_mailcfg">run_before_mailcfg</a></h2>
-<strong>Syntax:</strong>   run_before_mailcfg  <em>script</em>
+<strong>Syntax:</strong>   run_before_mailcfg  <em>script</em><br>
 <strong>Default:</strong>   not set<br>
 <strong>Run as:</strong>     <em>mail user</em><br>
 <strong>Context:</strong>  &lt;mailcfg&gt;<br>
@@ -601,13 +607,13 @@ error_illegalword  Redirect    <em>location</em><br>
      This can be used to copy the user's .procmailrc to a backup file. 
 <p>
 <h2><a name="run_after_mailcfg">run_after_mailcfg</a></h2>
-<strong>Syntax:</strong>   run_after_mailcfg   <em>script</em>
+<strong>Syntax:</strong>   run_after_mailcfg   <em>script</em><br>
 <strong>Default:</strong>   not set<br>
 <strong>Context:</strong>   &lt;mailcfg&gt;<br>
 <p>
      run a script after the mail configuration. mailcfg.cgi will
      execute the "run_after_mailcfg" script if the mail configuration state 
-     goes from active ( mail forwarding or autoreply enabled ) to nonactive.
+     goes from active ( mail forwarding or autoreply enabled ) to non-active.
 <br>
      This script can be used to restore the user's .procmailrc to his original
      state
@@ -656,7 +662,9 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Run as:</strong> user<br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>
-     define a view mail configuration script, if not set the built-in is used<br>
+     defines a view mail configuration script.<br>
+     if not set the <a href="#mailcfg_document">mailcfg_document</a> is used
+     after a successful login.
 </p>
 <h2><a name="set_script_filename">set_script_filename</a></h2>
 <strong>Syntax:</strong> set_script_filename   <em>on|off</em><br>
@@ -684,7 +692,7 @@ error_illegalword  Redirect    <em>location</em><br>
 <h2><a name="mailcfg_document">mailcfg_document</a></h2>
 <strong>Syntax:</strong>   mailcfg_document <em>filename</em>  <b>OR</b>
 mailcfg_document Redirect <em>Location</em><br>
-<strong>Default:</strong> builtin message<br>
+<strong>Default:</strong> built-in message<br>
 <strong>Context:</strong>  &lt;mailcfg&gt;<br>
 <p>	
      Path to the mail configuration document
@@ -837,22 +845,61 @@ example:
     PHP implementation is very limited. include("bottom.php") won't work for
     example.
 </p>
-<h1><a name="command">run_success and run_locked scripts</a></h1>
-<p>
-   With <a href="#run_success">run_success</a> and <a href="#run_locked">
-   run_locked</a> it's possible to run a script when a has update his 
-   password/mail configuration or when a user is locked out.
-</p>
+<h1><a name="command">Scripts</a></h1>
+<h2><a name="command_overview">Overview</a></h2>
+<ul>
+<li>
+   With <a href="#run_success">run_success</a> it's possible to run a script 
+   when a has update his password/mail configuration.
+</li>
+<li><a href="#run_locked">run_locked</a> allow you to run a script when a user
+   has <a href="#max_invalid">too many invalid logins</a>.
+</li>
+<li><a href="#run_before_mailcfg">run_before_mailcfg</a> and 
+   <a href="#run_after_mailcfg">run_after_mailfg</a> allow you to run a script
+   before and after the mail configuration.
+</li>
+<li>With <a href="#run_mailcfg">run_mailcfg</a> it's possible to run script to 
+   update the mail configuration.
+</li>
+<li><a href="#run_viewmailcfg">run_viewmailcfg</a> makes it possible to run a
+   script after a user has login successfully to viewmailcfg.cgi
+</li>
+</ul>
+<h2><a name="command_syntax">Syntax</a></h2>
 <p>
    The first argument is the script name, the second argument is send to 
    stdout. The second argument is usually used to pass the new password to
    a script.
 </p>
+<h2><a name="command_examples">Examples</a></h2>
 <p>
-  Example:
   <pre><tt><code>
+  &lt;passwd&gt;
+  ...
   run_success "/usr/sbin/smbpasswd -U %{name} &gt; /dev/null 2&gt;&amp;1" "%{password}\n%{password}\n"
+  ...
+  &lt;/passwd&gt;
   </code></tt></pre>
+  Executes a script to update the SAMBA password file after the system password
+  is updated.
+</p>
+  <pre><tt><code>
+  &lt;mailcfg&gt;
+  ...
+  mailcfg_check           off
+                                                                                
+  run_viewmailcfg         /etc/cgipaf/scripts/mailcfg.pl  "%{poststring}"
+  run_mailcfg             "/etc/cgipaf/scripts/mailcfg.pl update %{domain}" "%{poststring}"
+  ...
+  &lt;/mailcfg&gt;
+  </code></tt></pre>
+  Emulates a cgi environment for the mail configuration.<br>
+  The original http post is send back to stdout.<br>
+  mailcfg.cgi doesn't evaluate the httpd parameters since 
+  <a href="#mailcfg_check">mailcfg_check</a> is disabled. This way CGIpaf
+  only handles the authentication.
+</p>
 <h1><a name="acl">Access Control List</a></h1>
 <p>
     With the Access Control list you can allow or deny users or groups. 

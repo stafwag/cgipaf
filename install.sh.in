@@ -37,15 +37,25 @@ if [ ! -x ./passwd.cgi ]; then
 fi
 CFGFILE="${sysconfdir}/cgipaf.conf"
 CGIBIN="${bindir}"
-   if [ -d $CGIBIN ] 
-      then
+
+rootgroup="root"
+
+uname | grep -i bsd > /dev/null
+if [ "$?" = "0" ]
+   then
+         rootgroup="wheel"
+fi
+ 
+if [ -d $CGIBIN ] 
+   then
          mkdir -p @sysconfdir@
          cp -i passwd.cgi viewmailcfg.cgi mailcfg.cgi $CGIBIN
-         chown root:root $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
+         chown root:$rootgroup $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
          chmod 4555 $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
-       else
+   else
          echo "$CGIBIN doesn't exist...."
-       fi
+fi
+
 WWW="${datadir}"
 if [ -d $WWW ]
       then

@@ -1,6 +1,6 @@
 <hr>
 <p>
-<form action="/cgi-bin/viewmailcfg.cgi" method="post">
+<form action="<? echo $next_action_full ?>" method="post">
 <table width="80%">
 <tr>
 <td bgcolor="#b0b0b0" width="20%">Login name:</td>

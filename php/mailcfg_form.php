@@ -1,6 +1,6 @@
 <hr>
 <p>
-<form action="/cgi-bin/mailcfg.cgi" method="post">
+<form action="<? echo $next_action_full >" method="post">
 <table>
 <tr>
 <td>Login name:</td>

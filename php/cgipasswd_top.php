@@ -6,5 +6,5 @@ Web passwd program.
 </title>
 </head>
 <body text="#00000" bgcolor="#B0B0B0">
-<form method=POST ACTION="/cgi-bin/passwd.cgi">
+<form method=POST ACTION="<? echo $next_action_full ?>">
 <center>

@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf 1.2.1 FAQ</title>
+    <title>CGIpaf 1.2.3 FAQ</title>
   </head>
 
   <body>
     
-    <h1>CGIpaf 1.2.1 FAQ</h1>
+    <h1>CGIpaf 1.2.3 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -33,18 +33,19 @@
       <li>3.1 <a href="#ss3.1">passwd.cgi is unable to update the system password</a></li>
       <li>3.2 <a href="#ss3.2">Can I update the SAMBA password?</a></li>
       <li>3.3 <a href="#ss3.3">Is NIS supported?</a></li>
-      <li>3.4 <a href="#ss3.4">I get an internal server error</a></li>
-      <li>3.5 <a href="#ss3.5">How do I get debug output?</a></li>
-      <li>3.6 <a href="#ss3.6">Which authentication methods are supported</a></li>
-      <li>3.7 <a href="#ss3.7">CGIpaf is unable to authenticate?</a></li>
-      <li>3.8 <a href="#ss3.8">How do I enabled cracklib password testing?</a></li>
-      <li>3.9 <a href="#ss3.9">My .procmailrc is wipe out!</a></li>
-      <li>3.10 <a href="#ss3.10">My .forward is deleted!</a></li>
-      <li>3.11 <a href="#ss3.11">I get a "file not found" error message</a></li>
-      <li>3.12 <a href="#ss3.12">Mail forwarding and autoreply doesn't work</a></li>
-      <li>3.13 <a href="#ss3.13">Can I create my own html pages?</a></li>
-      <li>3.14 <a href="#ss3.14">Can I use vacation/.forward instead of procmail?</a></li>
-      <li>3.15 <a href="#ss3.15">I can't login with passwords longer than ...</a></li>
+      <li>3.4 <a href="#ss3.4">Is ldap supported?</a></li>
+      <li>3.5 <a href="#ss3.5">I get an internal server error</a></li>
+      <li>3.6 <a href="#ss3.6">How do I get debug output?</a></li>
+      <li>3.7 <a href="#ss3.7">Which authentication methods are supported</a></li>
+      <li>3.8 <a href="#ss3.8">CGIpaf is unable to authenticate?</a></li>
+      <li>3.9 <a href="#ss3.9">How do I enabled cracklib password testing?</a></li>
+      <li>3.10 <a href="#ss3.10">My .procmailrc is wipe out!</a></li>
+      <li>3.11 <a href="#ss3.11">My .forward is deleted!</a></li>
+      <li>3.12 <a href="#ss3.12">I get a "file not found" error message</a></li>
+      <li>3.13 <a href="#ss3.13">Mail forwarding and autoreply doesn't work</a></li>
+      <li>3.14 <a href="#ss3.14">Can I create my own html pages?</a></li>
+      <li>3.15 <a href="#ss3.15">Can I use vacation/.forward instead of procmail?</a></li>
+      <li>3.16 <a href="#ss3.16">I can't login with passwords longer than ...</a></li>
      </ul>
  
    <p>
@@ -109,10 +110,6 @@ are send unencrypted over the internet.
 <h2><a name="ss1.3">1.3 </a>Website</h2>
 
 <p>
-I've to move my homepage about every year :-( Apparently it get more and more 
-difficult to find a stable free webspace..
-</p>
-<p>
 I finally got a stable place for my homepage ( <a href="http://staf.patat.org">http://staf.patat.org</a> ).<br>
 <strong>thanks</strong> to <a href="http://www.patat.org/~kbr/">"de pirre"</a> for hosting my site.
 <p>
@@ -120,7 +117,7 @@ The current locations are:
 </p>
 
 <ul>
-<li><a href="http://staf.patat.org">http://staf.patat.org/cgipaf/</a> (Europe / Belgium)<br>&nbsp;</li>
+<li><a href="http://staf.patat.org">http://staf.patat.org/cgipaf/</a> (Europe / Belgium) main site<br>&nbsp;</li>
 <li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/</a> (North America / Canada)
 <p>
 Has a problem when you try to download the debian package with apt-get, because they add an ad to the 
@@ -132,8 +129,9 @@ to download the debian package with apt-get.
 </ul>
 
 <p>
-The last one is hosted by my current employer, we're moving to a new location. 
-Due the current economical situation I'm not sure my employer will continue to provide free webspace.
+The last one is hosted by my current employer, we're in the middle of a reorganization (again :-(.
+Due the current economical situation I'm not sure my employer will continue to provide free webspace.<br>
+... or will continue to pay me.
 </p>
 
 <p>
@@ -178,7 +176,7 @@ in the mailinglist. Your problem can be useful to the other CGIpaf users...
 <h2><a name="ss1.6">1.6 </a> License</h2>
 
 <p>
-CGIpaf is Free software published under the GNU Gernal Public License.
+CGIpaf is Free software published under the GNU General Public License.
 see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>
 for more information.
 </p>
@@ -200,15 +198,22 @@ Both passwd types (standard crypt, md5) are supported on a non-PAM system. Blowf
 <p>
 CGIpaf works on Solaris ( only tested on solaris 8 )
 </p>
+<p>
+There is a problem with CGIpaf with PAM on solaris 9 - I didn't had the time to debug it -
+</p>
 </li>
 <li><b>FreeBSD</b>
 <p>
 FreeBSD is supported, add <kbd>--host=freebsd</kbd> to <kbd>./configure</kbd>
 this will compile CGIpaf with FreeBSD support but without PAM support.
 </p></li>
-<li><b>OpenBSD, NetBSD</b>
+<li><b>NetBSD</b>
 <p>
-Unfortunately OpenBSD and NetBSD arn't supported (yet). I hope start a port some day.
+NetBSD is supported in development release see http://staf.patat.org/cgipaf/develop/ for more information.
+</p>
+<li><b>OpenBSD</b>
+<p>
+Unfortunately OpenBSD isn't supported (yet). I hope to start a port some day.
 </p>
 </li>
 <li><b>Other</b>
@@ -298,7 +303,11 @@ NIS password on the master NIS server and run pwupdate (8) through run_success
 <pre><tt><code>
     run_success     "/usr/lib/yp/pwupdate  > /dev/null 2>&1"
 </code></tt></pre>
-<h2><a name="ss3.4">3.4</a> I get an internal server error</h2>
+<h2><a name="ss3.4">3.4</a> Is ldap supported?</h2>
+<p>
+CGIpaf should support ldap through PAM, although I didn't had the time to test it...
+</p>
+<h2><a name="ss3.5">3.5</a> I get an internal server error</h2>
 
 <p>
 This can have several reasons...
@@ -313,18 +322,18 @@ see "How do I enable cracklib password testing".
 Another reason is possible BUG or misconfiguration in cgipaf, the error_log of your webserver and the 
 syslog messages ( set loglovel to 7 ) should give more information.
 </p>
-<h2><a name="ss3.5">3.5</a> How do I get debug output?</h2>
+<h2><a name="ss3.6">3.6</a> How do I get debug output?</h2>
 <p>
 Set the loglevel to 7 in cgipaf.conf, this will send debug messages to your system's syslog
 </p>
-<h2><a name="ss3.6">3.6</a> Which authentication methods are supported</h2>
+<h2><a name="ss3.7">3.7</a> Which authentication methods are supported</h2>
 <p>
 CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). 
-BSD uses different passwd locations. On a FreeBSD system /etc/passwd_master is updated and copied 
+BSD uses different passwd locations. On a Net|FreeBSD system /etc/passwd_master is updated and copied 
 to pwdb by the pw_mkdb command.<br>
-Open|NetBSD aren't (yet) supported... 
+OpenBSD isn't (yet) supported... 
 </p>
-<h2><a name="ss3.7">3.7</a> CGIpaf is unable to authenticate?</h2>
+<h2><a name="ss3.8">3.8</a> CGIpaf is unable to authenticate?</h2>
 <p>
 On a pam system: CGIpaf needs "auth" and "account" entries in his PAM configuration. If you don't set
 the pam_service directive CGIpaf uses the "passwd" service name. The passwd pam service ( /etc/pam.d/passwd )
@@ -342,26 +351,26 @@ the file /etc/pam.d/cgipaf that looks like this
     password required       pam_unix.so md5
 </tt></code></pre>
 Or better copy your system passwd configuration and add the lines for "auth" and "account".
-<h2><a name="ss3.8">3.8</a> How do I enabled cracklib password testing?</h2>
+<h2><a name="ss3.9">3.9</a> How do I enabled cracklib password testing?</h2>
 <p>
 On a PAM system: CGIpaf should support password testing trough PAM. Enable cracklib support in your PAM configuration.
 </p>
 <p>
 On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's cracklib dictpath.
 </p>
-<h2><a name="ss3.9">3.9</a> My .procmailrc is wipe out!</h2>
+<h2><a name="ss3.10">3.10</a> My .procmailrc is wipe out!</h2>
 <p>
 CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. 
 It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding is disabled 
 by the run_before_mailcfg and run_after_mailcfg directives.<br>
 Another alternative is to use .forward/vacation instead of procmail see examples/ for more information.
 </p>
-<h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
+<h2><a name="ss3.11">3.11</a> My .forward is deleted!</h2>
 <p>
 The user's .forward is deleted after a mail configuration update. If you don't like this you can disable the
 internal mail configuration and use your own run_mailcfg script. See examples/ for perl example with vacation support.
 </p>
-<h2><a name="ss3.11">3.11</a> I get a "file not found" error message in the webserver error_log</h2>
+<h2><a name="ss3.12">3.12</a> I get a "file not found" error message in the webserver error_log</h2>
 <p>
 CGIpaf uses "/cgi-bin" in his action fields, if you use another cgi-bin location eg ( /cgi-bin/cgipaf )
 you have to update:
@@ -371,12 +380,12 @@ you have to update:
  <li>mailcfg_form.php</li>
  <li>mailcfg_login.php</li>
 </ul>
-<h2><a name="ss3.12">3.12</a> Mail forwarding and autoreply doesn't work</h2>
+<h2><a name="ss3.13">3.13</a> Mail forwarding and autoreply doesn't work</h2>
 <p>
 Basically CGIpaf is web interface to configure procmail, so you need a mailserver with procmail support.
 Check the documentation of you mailserver howto enable procmail.
 </p>
-<h2><a name="ss3.13">3.13</a> Can I create my own html pages?</h2>
+<h2><a name="ss3.14">3.14</a> Can I create my own html pages?</h2>
 <p>
 Yes! You can modify the php file that come with the installation of cgipaf. Please note that
 CGIpaf doesn't have full PHP support it only emulates two PHP function (echo and include). 
@@ -389,12 +398,12 @@ e.g.:
 Will redirect to http://your_webserver/pwchanged.php?name="loginname" after a user has succeed to update 
 his password.
 </p>
-<h2><a name="ss3.14">3.14</a> Can I use vacation/.forward instead of procmail?</h2>
+<h2><a name="ss3.15">3.15</a> Can I use vacation/.forward instead of procmail?</h2>
 <p>
 Yes! You can disable the internal .procmailrc updater of CGIpaf and define an external script
 to update the user's mail configuration. See examples/ for a vacation example.
 </p>
-<h2><a name="ss3.15">3.15</a> I can't login with passwords longer than ...</h2>
+<h2><a name="ss3.16">3.16</a> I can't login with passwords longer than ...</h2>
 <p>
 You'll have to update mailcfg_login.php, the default maxlength for the password field is 16
 If you need to support longer passwords update mailcfg_login.php
@@ -412,22 +421,21 @@ mailconfiguration. I have added solaris support because we it at my work and I w
 explain users how they've to update their Un*x password.
 </p>
 <p>
-I've added slackware 8.0 and FreeBSD support because some users requested a port to these
-platforms. I hoped that I could reuse the FreeBSD code for the Open|Net BSD port, but the odds 
-were against me. The FreeBSD port doesn't works without trouble on the other BSD versions.
+I've added slackware 8.0, FreeBSD and NetBSD support because some users requested a port to these
+platforms. I hoped that I could reuse the BSD code for the OpenBSD port, but the odds 
+were against me. The BSD port doesn't works without trouble on OpenBSD versions.
 </p>
 <p>
 I still want to support FreeBSD with PAM enabled ( the non-pam code works fine, but PAM is more
 flexible ) the authentication works but the PAM password changer doesn't -weird-.
 <p>
-The Open|Net BSD port is still in the pipeline, the NetBSD port seems to be the easiest, so
-I'll probably start with this one.
+The OpenBSD port is still in the pipeline.
 </p>
 <hr>
     <address><a href="mailto:staf@patat.org">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jan 20 09:16:52 CET 2003
+Last modified: Mon Sep 29 15:57:47 CEST 2003
 <!-- hhmts end -->
   </body>
 </html>

@@ -141,27 +141,32 @@ if test "$NDBM_LIB" = "no"; then
   AC_CHECK_LIB(gdbm,dbm_fetch,[ ],[ GDBM_LIB="no" ])
   AC_CHECK_LIB(gdbm,dbm_store,[ ],[ GDBM_LIB="no" ])
   AC_CHECK_LIB(gdbm,dbm_close,,[ GDBM_LIB="no" ])
-  
+ 
   if test "$GDBM_LIB" = "no"; then
+  
+    AC_CHECK_LIB(gdbm_compat,dbm_open,[ ],[ GDBM_COMPAT_LIB="no" ])
+    AC_CHECK_LIB(gdbm_compat,dbm_fetch,[ ],[ GDBM_COMPAT_LIB="no" ])
+    AC_CHECK_LIB(gdbm_compat,dbm_store,[ ],[ GDBM_COMPAT_LIB="no" ])
+    AC_CHECK_LIB(gdbm_compat,dbm_close,,[ GDBM_COMPAT_LIB="no" ])
+  
+    if test "$GDBM_COMPAT_LIB" = "no"; then
 
      AC_CHECK_LIB(db1,dbm_open,[ ],[ DB1_LIB="no" ])
      AC_CHECK_LIB(db1,dbm_fetch,[ ],[ DB1_LIB="no" ])
      AC_CHECK_LIB(db1,dbm_store,[ ],[ DB1LIB="no" ])
      AC_CHECK_LIB(db1,dbm_close,,[ DB1_LIB="no" ])
    
-   if test "$DB1_LIB" = "no";then
+      if test "$DB1_LIB" = "no";then
   
-     AC_CHECK_LIB(db,dbm_open,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_fetch,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_store,,AC_MSG_ERROR(no valid ndbm library found)) 
-     AC_CHECK_LIB(db,dbm_close,,AC_MSG_ERROR(no valid ndbm library found)) 
+        AC_CHECK_LIB(db,dbm_open,[ ],AC_MSG_ERROR(no valid ndbm library found)) 
+        AC_CHECK_LIB(db,dbm_fetch,[ ],AC_MSG_ERROR(no valid ndbm library found))
+        AC_CHECK_LIB(db,dbm_store,,AC_MSG_ERROR(no valid ndbm library found)) 
+        AC_CHECK_LIB(db,dbm_close,,AC_MSG_ERROR(no valid ndbm library found)) 
    
-   fi
-  
+      fi
+    fi
   fi
-
 fi
-
 fi
 
 dnl Checks for header files.

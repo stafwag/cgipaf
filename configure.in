@@ -144,10 +144,10 @@ if test "$NDBM_LIB" = "no"; then
  
   if test "$GDBM_LIB" = "no"; then
   
-#    AC_CHECK_LIB(gdbm_compat,dbm_open,[ ],[ GDBM_COMPAT_LIB="no" ])
-#    AC_CHECK_LIB(gdbm_compat,dbm_fetch,[ ],[ GDBM_COMPAT_LIB="no" ])
-#    AC_CHECK_LIB(gdbm_compat,dbm_store,[ ],[ GDBM_COMPAT_LIB="no" ])
-#    AC_CHECK_LIB(gdbm_compat,dbm_close,,[ GDBM_COMPAT_LIB="no" ])
+     AC_CHECK_LIB(gdbm_compat,dbm_open,[ ],[ GDBM_COMPAT_LIB="no" ])
+     AC_CHECK_LIB(gdbm_compat,dbm_fetch,[ ],[ GDBM_COMPAT_LIB="no" ])
+     AC_CHECK_LIB(gdbm_compat,dbm_store,[ ],[ GDBM_COMPAT_LIB="no" ])
+     AC_CHECK_LIB(gdbm_compat,dbm_close,,[ GDBM_COMPAT_LIB="no" ])
     
     GDBM_COMPAT_LIB="no";
   

@@ -67,9 +67,7 @@ options=add_env_2_string_pair(options);
 
 get_data=read_get();
 
-/* if(get_data!=NULL) add_get_2_string_pair(get_data,options); */
-
-
+if(get_data!=NULL) options=add_get_2_string_pair(get_data,options);
 
 /*
  * test setuid(0)

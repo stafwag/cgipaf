@@ -23,15 +23,17 @@
 
 char *** add_webdata_2_string_pair (WEBDATA *data, char *** ret,char *head,char *tail) {
 	char *c;
+	char *value;
 
 	int i;
 
 	if(data==NULL)  return ret;
 
-
 	for (i=0;i<data->n;i++) {
 
-		if (data->name[i]) { 
+		printf("i= %d\n",i);
+
+		if (data->name[i]) {
 
 			c=xmalloc(strlen(head)+strlen(data->name[i])+strlen(tail)+1);
 
@@ -48,6 +50,24 @@ char *** add_webdata_2_string_pair (WEBDATA *data, char *** ret,char *head,char 
 
 	return(ret);
 
+
+}
+
+int print_strings(char ***str_pair) {
+
+	char ***pt;
+	int ret=0;
+
+	if(str_pair==NULL) return(ret);
+
+	for(pt=str_pair;pt[0][0]!=NULL;pt++) {
+
+		printf("%s -> %s\n",pt[0][0],pt[0][1]);
+		++ret;
+
+	}
+
+	return(ret);
 
 }
 

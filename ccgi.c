@@ -286,6 +286,7 @@ WEBDATA *read_get(void)
 {
    WEBDATA *wp;
    char *c;
+   int i;
    c=getenv("QUERY_STRING");
    if (c==NULL) return NULL;    /* No get data */
    wp=str2webdata('=','&',c);

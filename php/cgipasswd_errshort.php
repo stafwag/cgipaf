@@ -1,9 +1,9 @@
 <?
 include "cgipasswd_top.php"
 ?>
-<P>
-<H1><B><I><font color="#ff0000">Password too short...</font></I></B></H1>
-<p>minium length: <? echo $min_length; ?></P>
+<p>
+<h1><b><i><font color="#ff0000">Password too short...</font></i></b></h1>
+<p>minium length: <? echo $min_length; ?></p>
 <?
 include "cgipasswd_login.php"
 ?>

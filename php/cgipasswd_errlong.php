@@ -1,9 +1,9 @@
 <?
 include "cgipasswd_top.php"
 ?>
-<P>
-<H1><B><I><font color="#ff0000">Password too long...</font></I></B></H1>
-<P>maxium length:<? echo $max_length ?></P>
+<p>
+<h1><b><i><font color="#ff0000">Password too long...</font></i></b></h1>
+<p>maxium length:<? echo $max_length ?></p>
 <?
 include "cgipasswd_login.php"
 ?>

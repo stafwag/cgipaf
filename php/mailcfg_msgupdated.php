@@ -1,6 +1,6 @@
 <?
 include "./mailcfg_top.php";
 ?>
-<H1>Mail configuration updated successfully</H1>
+<h1>Mail configuration updated successfully</h1>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <?
 include "cgipasswd_top.php"
 ?>
-<P>
-<H1><B><font color="#ff0000"><I>Invalid password or username...</I></font></B></H1>
+<p>
+<h1><b><font color="#ff0000"><i>Invalid password or username...</i></font></b></h1>
 <?
 include "cgipasswd_login.php"
 ?>

@@ -1,7 +1,7 @@
 <?
 include "./mailcfg_top.php";
 ?>
-<H1><FONT COLOR="#FF0000">Access denied</FONT></H1>
+<h1><font color="#FF0000">Access denied</font></h1>
 <?
 include "./mailcfg_login.php";
 ?>

@@ -1,26 +1,26 @@
-<HR>
-<P>
-<FORM ACTION="/cgi-bin/viewmailcfg.cgi" METHOD=POST>
-<TABLE WIDTH="80%">
-<TR>
-<TD bgcolor="#B0B0B0" WIDTH="20%">Login name:</TD>
-<TD ALIGN="CENTER"><INPUT NAME=name TYPE=TEXT SIZE=10 MAXLENGTH=15 VALUE="<? echo $name ?>"></TD>
-<TD WIDTH="20%">password :</TD>
-<TD><INPUT NAME=passwd TYPE=PASSWORD SIZE=8 MAXLENGTH=10></TD>
-</TR>
-</TABLE>
-<HR>
-<CENTER>
-<TABLE>
-<TR>
-<TD>
-<INPUT TYPE=RESET VALUE="Clear">
-</TD>
-<TD>
-<INPUT TYPE=SUBMIT VALUE="Submit">
-</TD>
-</TR>
-</TABLE>
-</CENTER>
-</FORM>
-</BODY>
+<hr>
+<p>
+<form action="/cgi-bin/viewmailcfg.cgi" method="post">
+<table width="80%">
+<tr>
+<td bgcolor="#b0b0b0" width="20%">Login name:</td>
+<td align="center"><input name="name" type="text" size="10" maxlength="15" value="<? echo $name ?>"></td>
+<td width="20%">password :</td>
+<td><input name="passwd" type="password" size="8" maxlength="10"></td>
+</tr>
+</table>
+<hr>
+<center>
+<table>
+<tr>
+<td>
+<input type="reset" value="Clear">
+</td>
+<td>
+<input type="submit" value="Submit">
+</td>
+</tr>
+</table>
+</center>
+</form>
+</body>

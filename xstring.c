@@ -1,6 +1,6 @@
 /* --------------------------------------------------------------------------
  * xstring.c                                       (GPL) 2001 Staf Wagemakers
- *                                               http://stafwag.home7.dk3.com
+ *                                                http://stafwag.netfirms.com
  *                                                staf.wagemakers@advalvas.be
  * 
  * Tried of writing these things over and over again

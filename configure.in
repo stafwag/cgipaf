@@ -193,4 +193,4 @@ if test "$NEED_COMPAT_H" = "yes"; then
    NEED_COMPAT_H="NEED_COMPAT_H"
 fi
 
-AC_OUTPUT(Makefile install.sh)
+AC_OUTPUT(Makefile install.sh createconfig.sh)

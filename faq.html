@@ -1,0 +1,365 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>CGIpaf FAQ</title>
+  </head>
+
+  <body>
+    
+    <h1>CGIpaf FAQ</h1>
+    <p>
+    <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
+    <ul>
+      <li>1.1 <a href="#ss1.1">What is CGIpaf?</a></li>
+      <li>1.2 <a href="#ss1.2">Who secure is CGIpaf</a></li>
+      <li>1.3 <a href="#ss1.3">Website</a></li>
+      <li>1.4 <a href="#ss1.4">Mailinglist</a></li>
+      <li>1.5 <a href="#ss1.5">License</a></li>
+    </ul>
+    <p>
+    <h2>2 <a href="#s2">Installation</a></h2>
+    <ul>
+      <li>2.1 <a href="#ss2.1">What platforms are supported?</a></li>
+      <li>2.2 <a href="#ss2.2">Which libraries are required?</a></li>
+      <li>2.3 <a href="#ss2.3">Does CGIpaf depends on PHP?</a></li>
+      <li>2.4 <a href="#ss2.4">Common installation problems</a></li>
+    </ul>
+    <h2>3 <a href="#s3">Common configuration problems</a></h2>
+    <ul>
+      <li>3.1 <a href="#ss3.1">passwd.cgi is unable to update the system password</a></li>
+      <li>3.2 <a href="#ss3.2">Can I update the SAMBA password?</a></li>
+      <li>3.3 <a href="#ss3.3">Is NIS supported?</a></li>
+      <li>3.4 <a href="#ss3.4">I get an internal server error</a></li>
+      <li>3.5 <a href="#ss3.5">How do I get debug output?</a></li>
+      <li>3.6 <a href="#ss3.6">Which authentication methods are supported</a></li>
+      <li>3.7 <a href="#ss3.6">CGIpaf is unable to authenticate?</a></li>
+      <li>3.8 <a href="#ss3.7">How do I enabled cracklib password testing?</a></li>
+      <li>3.9 <a href="#ss3.8">PAM configuration</a></li>
+      <li>3.10 <a href="#ss3.9">My .procmailrc is wipe out!</a></li>
+      <li>3.11 <a href="#ss3.10">My .forward is deleted!</a></li>
+      <li>3.12 <a href="#ss3.11">I get a "file not found" error message</a></li>
+      <li>3.13 <a href="#ss3.12">Mail forwarding and autoreply doesn't work</a></li>
+      <li>3.14 <a href="#ss3.13">Can I create my own html pages?</a></li>
+   </ul>
+   <p>
+   <h2>4 <a href="#s4">Future Plans</a></h2>
+   <ul>
+      <li>4.1 <a href="#ss4.1">Supported Platforms</a></li>
+      <li>4.2 <a href="#ss4.2">Vacation and others</a></li>
+    </ul>
+<hr>
+<h1><a name="s1">1</a> Introduction</h1>
+<h2><a name="ss1.1">1.1</a> What is CGIpaf?</h2>
+
+<p>
+CGIpaf is a combination of three cgi-programs written in C, that allow users to update their
+system password and mail configuration ( autoreply, and mail forwarding ).<br>
+The mail configuration is done by procmail, if an user update his mail configuration CGIpaf
+creates a new .procmailrc. (The old one is deleted :-( )
+</p>
+
+<h2><a name="ss1.2">1.2 </a>How secure is CGIpaf</h2>
+
+<p>
+The CGIpaf cgi's are suid root programs, this means they runs as root. All suid programs are
+a security risk, I try to keep them so secure as possible...<br>
+If you use CGIpaf on the internet you must use CGIpaf over https otherwise the users passwords
+are send unencrypted over the internet.
+</p>
+<h2><a name="ss1.3">1.3 </a>Website</h2>
+<p>
+I've to move my homepage about every year :-( Apparently it get more and more 
+difficult to find a stable free webspace..
+</p>
+<p>
+The current locations are:
+</p>
+<ul>
+<li><a href="http://stafwag.netfirms.com/cgipaf/">http://stafwag.netfirms.com/cgipaf/ (Canada)</a></li>
+<li><a
+href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/
+(Europe / Belgium)</a></li>
+</ul>
+<p>
+The last one is hosted by my current employer, we're moving to a new location
+and I'm not sure my employer will continue to provide free webspace.
+</p>
+<p>
+If you're unable to access the website check
+<a href="http://freshmeat.net/projects/cgipaf">http://freshmeat.net/projects/cgipaf</a>
+for the correct location.
+</p>
+<h2><a name="ss1.4">1.4 </a>Mailinglist</h2>
+
+<p>
+<a href="http://groups.yahoo.com/group/cgipaf/">http://groups.yahoo.com/group/cgipaf/</a></p>
+
+<p>
+
+<table border="0" cellspacing="1" cellpadding="1">
+<tr>
+<td><font face="arial,helvetica" size=-1>Post message</font></td>
+<td><font face="arial,helvetica" size=-1>cgipaf@yahoogroups.com</font></td>
+</tr>
+<tr>
+<td><font face="arial,helvetica" size=-1>Subscribe:</font></td>
+<td><font face="arial,helvetica" size=-1>cgipaf-subscribe@yahoogroups.com</font></td>
+</tr>
+<tr>
+<td><font face="arial,helvetica" size=-1>Unsubscribe:</font></td>
+<td><font face="arial,helvetica" size=-1>cgipaf-unsubscribe@yahoogroups.com</font></td>
+</tr>
+<tr>
+<td><font face="arial,helvetica" size=-1>List owner:</font></td>
+<td><font face="arial,helvetica" size=-1>cgipaf-owner@yahoogroups.com</font></td>
+</tr>
+</table>
+
+<h2><a name="ss1.5">1.5 </a> License</h2>
+
+<p>
+CGIpaf is Free software published under the GNU Gernal Public License.<br>
+see <a
+href="http://www.gnu.org/copyleft.html">http://www.gnu.org/licenses/gpl.html</a> for more information.
+</p>
+
+<hr />
+
+<h1><a name="s2">2</a> Installation</h1>
+<h2><a name="ss2.1">2.1</a>What platforms are supported</h2>
+
+<ul>
+<li><b>GNU/Linux</b>
+<p>
+CGIpaf should compile and run on most GNU/Linux distributions. Please note that Slackware is
+only supported if it uses standard crypt passwords since Slackware doesn't have PAM support.
+I hope to resolve this in the future...
+</p>
+</li>
+<li><b>SUN Solaris</b>
+<p>
+CGIpaf works on Solaris ( only tested with solaris 7 &amp;  8 )
+</p>
+</li>
+<li><b>BSD</b>
+<p>
+Unfortunately BSD isn't supported (yet). I hope start a port some day.<br>
+FreeBSD has PAM support, CGIpaf might work on FreeBSD I doubt it'll works without trouble
+</p>
+</li>
+<li><b>Other</b>
+<p>
+CGIpaf might work on other Un*ces with pam support. Systems without pam support are only 
+supported if they use the standard password file location /etc/passwd /etc/shadow and the 
+standard crypt function to encrypt the password. md5 passwords aren't supported (yet)
+</p>
+</li>
+</ul>
+<h2><a name="ss2.2">2.2</a> Which libraries are required?</h2>
+<p>
+CGIpaf uses only standard libraries that are installed on most common Un*x installations,
+you need the development packages ( headers files etc ) to compile CGIpaf.
+</p>
+<p>
+List of required libraries:
+<ul>
+  <li>ndbm, gdbm of compatible library</li>
+  <li>libPAM ( optional )</li>
+  <li>libc ( of course )</li>
+  <li>cracklib ( optional )</li>
+</ul>
+<h2><a name="ss2.3">2.3</a> Does CGIpaf depends on PHP?</h2>
+<p>
+No! CGIpaf only emulate a few PHP functions ( include and echo ) in his html files.<br>
+If you need full PHP support you've to use a redirect.
+</p>
+<h2><a name="ss2.4">2.4</a> Common installation problems</h2>
+<p>
+<ol>
+ <li><b>I get a "configure: error: no valid ndbm library found" error message</b>
+ <p>
+ CGIpaf depends on ndbm or compatible library, you need the development files to
+ compile it. If ndbm ( and the development file ) isn't installed on your
+system install them, look for a gdbm or ndbm package<br>If ndbm isn't installed on standard location on your system ( e.g.
+/opt ) try to create symbolic links:
+<p>
+<pre><tt><kbd>
+   ln -s /opt/lib/libndbm.so /usr/lib/libndbm.so
+   ln -s /opt/include/db1/ndbm.h /usr/include/ndbm.h
+</kbd></tt></pre>
+<p>
+and rerun ./configure
+</p>
+ <li><b>pam development files</b>
+ <p>
+ To compile CGIpaf with PAM support you need the PAM development files, which
+aren't install on every default installation. Look for a package with a name
+like *libpam-dev and install it. ( Type apt-get install libpam0g-dev on a
+Debian GNU/Linux system )
+ </p>
+ </li>
+ <li><b>cracklib</b>
+ <p>
+To compile cgipaf with cracklib support you need the libcrack development
+files... If you've a system with PAM support try to enable cracklib
+support through PAM (see below).
+<p>
+On a non-PAM system set "cracklib" to "on" and "cracklib_dictpath" you your
+cracklib dict path.<br>
+The cracklib_dictpath is the path to the dictionary filename without the extension ( .pwi ), not the directory path.<br>
+The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/cracklib_dict, on RedHat 6.2 you'll have to use /usr/lib/cracklib_dict.
+</p>
+</li>
+</ol>
+<hr>
+<h1><a name="s3">3</a> Common configuration problems</h1>
+<h2><a name="s3.1">3.1</a> CGIpaf is unable to update the password</h2>
+<p>
+If you're using a PAM system, try to set the "set_PAM_EXPIRED_AUTHTOK" to "off". On most
+GNU/Linux distributions this cause passwd.cgi to support all common pam
+messages. ( minium / maximum password length, password unchanged, cracklib
+... )<br>
+Unfortunately this doesn't work on all Un*x flavors. If you need to set this
+flag to "off" all common PAM error messages are ignored by passwd.cgi. But
+you can enable cracklib password testing, minium password etc in the cgipaf
+configuration file ( cgipaf.conf ).
+</p>
+<p>
+On a non-pam system cgipaf uses a lock file in /var/lock if this directory doesn't exists on your
+system passwd.cgi will end with "Can't create lockfile" error. Create /var/lock or update pam.h 
+to your own needs.
+</p>
+<h2><a name="ss3.2">3.2</a> Can I update the SAMBA password?</h2>
+<p>
+Yes, passwd.cgi doesn't support SAMBA passwords directly but you can use a
+"run_success" script.
+<pre><tt><code>
+     run_success "/usr/sbin/smbpasswd -U %{name} &gt; /dev/null 2&gt;&amp;1" "%{password}\n%{password}\n"
+</code></tt></pre>
+<h2><a name="ss3.3">3.3</a> Is NIS supported?</h2>
+<p>
+CGIpaf doesn't support NIS directly, but it's possible to update the
+NIS password on the master NIS server and run pwupdate (8) trough run_success
+<pre><tt><code>
+    run_success     "/usr/lib/yp/pwupdate  > /dev/null 2>&1"
+</code></tt></pre>
+<h2><a name="ss3.4">3.4</a> I get an internal server error</h2>
+
+<p>
+This can have several reasons...
+</p>
+<p>
+If you've enabled cracklib in cgipaf and the cracklib_dictpath to a invalid 
+location passwd.cgi will end with a internal server and an error message in
+your webserver error log. Try to disable cracklib if this resolves the problem
+see "How do I enable cracklib password testing".
+</p>
+<p>
+Another reason is possible BUG or misconfiguration in cgipaf, the error_log of your webserver and the syslog messages ( set loglovel to 7 ) should give more information.
+</p>
+<h2><a name="ss3.5">3.5</a> How do I get debug output?</h2>
+<p>
+Set the loglevel to 7 in cgipaf, this will send debug messages to your system's syslog
+</p>
+<h2><a name="ss3.6">3.6</a> Which authentication methods are supported</h2>
+<p>
+CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). md5, blowfish 
+passwords aren't (yet) supported.
+</p>
+<h2><a name="ss3.7">3.7</a> CGIpaf is unable to authenticate?</h2>
+<p>
+On a pam system: CGIpaf needs "auth" and "account" entries in his PAM configuration. If you don't set
+the pam_service directive CGIpaf uses the "passwd" service name. The passwd pam service ( /etc/pam.d/passwd )
+usually doesn't have an entry for user authentication, therefor /etc/pam.d/other has to have a line auth set
+to pam_unix.so.
+<pre><code><tt>
+    auth     required       pam_unix.so
+    account  required       pam_unix.so
+</tt></code></pre>
+If you don't like this for security reason etc, you can set the pam_service directive to "cgipaf" and create
+the file /etc/pam.d/cgipaf that looks like this
+<pre><code><tt>
+    auth     required       pam_unix.so
+    account  required       pam_unix.so
+    password required       pam_unix.so md5
+</tt></code></pre>
+Or better copy your system passwd configuration and add the lines for "auth" and "account".<p>
+On a non-pam system: CGIpaf supports only standard encrypted passwords, if your systems uses
+md5 passwords ( FreeBSD, Slackware 8 ) CGIpaf is unable to authenticate the user. You'll
+have to wait till the next version of CGIpaf :-)
+</p>
+<h2><a name="ss3.7">3.8</a> How do I enabled cracklib password testing?</h2>
+<p>
+On a pam system: set the set_PAM_EXPIRED_AUTHTOK_FLAG to on and enable cracklib support in
+your pam configuration. If the PAM_EXPRIRED_AUTHTOK_FLAG doesn't work on your system or behaves
+differently disable it and set the cracklib to on in cgipaf.conf ( see below ).
+</p>
+<p>
+On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's
+cracklib dictpath.
+</p>
+<h2><a name="ss3.9">3.9</a> My .procmailrc is wipe out!</h2>
+<p>
+CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration.
+</p>
+<h2><a name="ss3.10">3.10</a> My .forward is deleted!</h2>
+<p>
+The user's .forward is deleted after a mail configuration update.
+</p>
+<h2><a name="ss3.11">3.11</a> I get a "file not found" error message in the webserver error_log</h2>
+<p>
+CGIpaf uses "/cgi-bin" in his action fields, if you use another cgi-bin location eg ( /cgi-bin/cgipaf )
+you have to update:
+</p>
+<ul>
+ <li>cgipasswd_top.php</li>
+ <li>mailcfg_form.php</li>
+ <li>mailcfg_login.php</li>
+</ul>
+<h2><a name="ss3.12">3.12</a> Mail forwarding and autoreply doesn't work</h2>
+<p>
+Basically CGIpaf is web interface to configure procmail, so you need a mailserver with procmail support.
+Check the documentation of you mailserver howto enable procmail.
+</p>
+<h2><a name="ss3.13">3.13</a> Can I create my own html pages?</h2>
+<p>
+Yes! You can modify the php file that come with the installation of cgipaf. Please note that
+CGIpaf doesn't have full PHP support it only emulates two PHP function (echo and include). 
+If you need full PHP support or what to use another web scripting language you've to use a Redirect.<br>
+e.g.:
+<pre><code><tt>
+       msg_success   redirect  /pwchanged.php?name="%{name}"
+</tt></code></pre>
+<p>
+Will redirect to /pwchanged.php?name="loginname" after a user has succeed to update his password.
+</p>
+<hr>
+<h1><a name="s4">4</a> Future plans</h1>
+<h2><a name="ss4.1">4.1</a> Supported Platforms</h2>
+<p>
+CGIpaf started as GNU/Linux project I needed to create site that allowed users to update their
+mailconfiguration. I have added solaris support because we it at my work and I was tired to 
+explain users how they've to update their Un*x password.
+</p>
+<p>
+I'll add md5 password support in the near future. BSD support is also in the pipeline but
+I first need to free some diskspace to install BSD. I'll probably start with the FreeBSD port.
+</p>
+<h2><a name="ss4.2">4.2</a> Vacation and others</h2>
+<p>
+Currently, CGIpaf destroys the user's .forward and .procmailrc. This isn't real problem when the
+users don't have access to these files but when they use it to distribute their mailinglists into
+separate mailboxes etc they lose their configuration.
+</p>
+<p>
+I'm not sure how I'll resolve this problem I'm thinking of a "run_before_mailcfg" and a "run_after_mailcfg" scripts. This should make it possible to backup the user's mailcfg and copy it back if the user disables mail forwarding and autoreply. Or to let the "run_before_mailcfg" script to create the .procmailrc from a template, this should also add .forward/vacation support to CGIpaf
+</p> 
+ 
+    <hr>
+    <address><a href="mailto:staf.wagemakers@advalvas.be">staf wagemakers</a></address>
+<!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
+<!-- hhmts start -->
+Last modified: Sat Apr 13 01:53:25 CEST 2002
+<!-- hhmts end -->
+  </body>
+</html>

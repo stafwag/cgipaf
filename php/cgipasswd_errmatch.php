@@ -1,8 +1,8 @@
 <?
 include "cgipasswd_top.php"
 ?>
-<P>
-<H1><B><I><font color="#ff0000">They don't match...</font></I></B></H1>
+<p>
+<h1><b><i><font color="#ff0000">They don't match...</font></i></b></h1>
 <?
 include "cgipasswd_login.php"
 ?>

@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------- */
 /* pass.c						                  */
 /*									  */
-/* (GPL) 2000 Belgium                        http://stafwag.home7.dk3.com */
+/* (GPL) 2000 Belgium                         http://stafwag.netfirms.com */
 /* Staf Wagemakers                            staf.wagemakers@advalvas.be */
 /* ---------------------------------------------------------------------- */
 #include "pass.h"

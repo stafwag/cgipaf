@@ -1,7 +1,7 @@
 <?
 include "./mailcfg_top.php";
 ?>
-<H1>View your mailbox settings</H1>
+<h1>View your mailbox settings</h1>
 <?
 include "./mailcfg_login.php";
 ?>

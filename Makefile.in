@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
-# (GPL) 2001 Belgium                        http://stafwag.home7.dk3.com
-# Staf Wagemakers	                               stafwag@yahoo.com
+# (GPL) 2001 Belgium                         http://stafwag.netfirms.com
+# Staf Wagemakers	                     staf.wagemakers@advalvas.be
 # ----------------------------------------------------------------------
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@
@@ -85,8 +85,11 @@ write_log.o: write_log.c write_log.h
 clean:
 	rm -f *.cgi *.o 
 
+distclean: dist-clean
 dist-clean: clean
 	rm -f config.cache config.h config.log config.status
 	rm -f Makefile
 	rm -f install.sh
+	rm -f createconfig.sh
+	rm -f cgipaf.conf
 	rm -f *~

@@ -53,13 +53,24 @@ INSTALLATION
 
     and owned by root.
 
+    CGIpaf uses "/cgi-bin" in his action fields, if you use another cgi-bin 
+    location ( /cgi-bin/cgipaf )
+    you have to update:
+      
+      cgipasswd_top.php
+      mailcfg_form.php
+      mailcfg_login.php
+
 CONFIGURATION
 
     The configuration file ( cgipaf.conf ) allow you to set several options 
     see Configuration.html for more information.
 
-    If you're upgrading from a previous version of CGIpaf and want to cracklib
-    you have to set cracklib_dictpath to your cracklib dictpath in cgipaf.conf
+    If you're upgrading from a previous version of CGIpaf with cracklib enabled
+    in cgipaf.conf you have to set cracklib_dictpath to your cracklib dictpath.
+
+    The cracklib_dictpath is the path to the dictionary filename without the 
+    extension ( .pwi ), not the directory path.
 
     If cgipaf fails to update your password, try to set
     "set_PAM_CHANGE_EXPIRED_AUTHTOK" to off. 
@@ -78,7 +89,10 @@ CONFIGURATION
 
     auth     required       pam_unix.so
     account  required       pam_unix.so
-    password required       pam_unix.so md5 
+    password required       pam_unix.so md5
+
+    Or better copy your system passwd configuration and the entries for 
+    "auth" and "account"
 
     If your system has a single PAM configuration file (usually /etc/pam.conf)
     you've to update /etc/pam.conf.

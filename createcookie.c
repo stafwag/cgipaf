@@ -3,6 +3,9 @@
  */
 #include "createcookie.h"
 #define  MAX_COOKIE_SIZE 60
+/*
+ * create a valid random char
+ */
 int gen_random_char(int s)
 {
 int i;
@@ -17,6 +20,9 @@ if(i<12) return (i+46);
 if((i>=12)&&(i<38)) return (i+(65-12));
 if(i>=38) return (i+(97-38));
 }
+/*
+ * create a random cookie string
+ */
 char *create_cookie() {
 char *c,*cookie;
 int i;

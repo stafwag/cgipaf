@@ -45,16 +45,12 @@ WWW="${datadir}"
    echo "# Enable Access Control lists" >> $CFGFILE
    echo "#" >> $CFGFILE
    echo >> $CFGFILE
-   echo "# User acl example" >> $CFGFILE
+   echo "# ACL example" >> $CFGFILE
    echo >> $CFGFILE
-   echo "# UserAclOrder          Allow,Deny" >> $CFGFILE
+   echo "# AclOrder              Allow,Deny" >> $CFGFILE
    echo "# AllowUsers            user1 user2 user3" >>$CFGFILE
+   echo "# AllowGroups           group1 group2 group3" >>$CFGFILE
    echo "# DenyUsers             *" >> $CFGFILE
-   echo >> $CFGFILE
-   echo "# Group acl example" >> $CFGFILE
-   echo >> $CFGFILE
-   echo "# GroupAclOrder         Allow,Deny" >> $CFGFILE
-   echo "# AllowGroups           user1 user2 user3" >>$CFGFILE
    echo "# DenyGroups            *" >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE

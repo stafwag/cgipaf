@@ -267,7 +267,7 @@ int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,in
    fputs("# CGIPAF state file\n",fp);
    fputs("# Please don't edit!!!!!!!\n",fp);
    fprintf(fp,"%s\t\t%d\n",STATEFORWARD,forward);
-   fprintf(fp,"%s\t%s\n",STATEFORWARDTO,forwardto);
+   fprintf(fp,"%s\t\"%s\"\n",STATEFORWARDTO,forwardto);
    fprintf(fp,"%s\t\t%d\n",STATEKEEPMSG,keep);
    fprintf(fp,"%s\t%d\n",STATEAUTOREPLY,autoreply);
    fclose(fp);
@@ -300,6 +300,7 @@ int get_mailcfg_status(struct passwd *p)
    buf=get_config(fp,STATEAUTOREPLY);
    if(!strcmp(buf,"1")) autoreply=1;
    free(buf);
-   ret=forward+keepmsg>>1+autoreply>>2;
-   return ret;
+   ret=forward+keepmsg*2+autoreply*4;
+   fclose(fp);
+   return(ret);
 }

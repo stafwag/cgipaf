@@ -41,6 +41,7 @@
 #define  CFG_CRACKLIB		"cracklib"
 #define  CFG_PAM_CHANGE_EXPIRED_AUTHTOK	"set_PAM_CHANGE_EXPIRED_AUTHTOK"
 #define  CFG_CRACKLIB_DICTPATH	"cracklib_dictpath"
+
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"
 #define  MINLENGTH 		6
@@ -59,6 +60,8 @@
 #define  CFG_MAILCFG            "mailcfg_document"
 #define  RUN_SUCCESS            "run_success"
 #define  RUN_LOCKED             "run_locked"
+#define  RUN_BEFORE_MAILCFG     "run_before_mailcfg"
+#define  RUN_AFTER_MAILCFG      "run_after_mailcfg"
 #define  CFG_PAM_SERVICE        "pam_service"
 #define  CGIPAFSTATEFILE        ".cgipaf_state"
 

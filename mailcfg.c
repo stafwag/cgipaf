@@ -38,6 +38,8 @@ main()
    int    forward_state=0;
    int    keep_state=0;
    int    autoreply_state=0;
+   int    oldstate=0;
+   int    newstate=0;
    char   *c=NULL;
    char   *sendmail=NULL;
    char   *domain=NULL;
@@ -314,6 +316,37 @@ main()
    write_log(LOG_USER,7,"set umask to 0177");
    umask(0177);
 
+   /* get the previos mailcfg state out the user's .cgipaf_state file */
+   
+   if((oldstate=get_mailcfg_status(pw->p))==-1) 
+     write_log,(LOG_USER,7,"failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
+   
+   /* calculate the new state */
+   
+   newstate=forward_state+2*keep_state+4*autoreply_state; 
+   
+   if(oldstate==-1) oldstate=0;  /* if .cgipaf_state doesn; exists asume state 0 */
+   
+   /* if not configured  -> configured
+    * run run_before_mailcfg
+    */
+   
+   if(!oldstate&&newstate) {
+      i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
+      if(i==-1)
+	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+   }
+   
+   /* if configured -> not configured
+    * run run_after_mailcfg
+    */
+   
+   if(oldstate&&!newstate) {
+      i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
+      if(i==-1)
+	write_log(LOG_USER,1,"Can't executed %s %s",RUN_BEFORE_MAILCFG,strerror(errno));
+   }
+
    /* deletes the user's .forward */
    
    c=add2home(pw->p,DOTFORWARD);
@@ -390,7 +423,7 @@ main()
    write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
    
    /* create the user's .cgipaf_state */
-   
+
    if(save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),keep_state,autoreply_state)==-1) {
       write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
    }

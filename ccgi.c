@@ -6,6 +6,7 @@ WEBDATA *str2webdata(char equals, char end, char *c)
 {
 WEBDATA *wp;
 char *tmp=NULL;
+char *cp;
 int t;
 wp=(WEBDATA *) xmalloc(sizeof(WEBDATA));
 wp->n=0;
@@ -28,9 +29,10 @@ if (*c!=equals&&*c!=end&&*c!='\n'&&*c!='\0') {
    else {
       if (*c==equals) {
          if (tmp) {
+            cp=mv_2_next(tmp);
 	    wp->name=(char **) xrealloc(wp->name,sizeof(char *)*wp->n+1);
-	    wp->name[wp->n]=(char *)xmalloc(strlen(tmp)+1);
-	    strcpy(wp->name[wp->n],tmp);
+	    wp->name[wp->n]=(char *)xmalloc(strlen(cp)+1);
+	    strcpy(wp->name[wp->n],cp);
 	    }
 	 }
 	 else {

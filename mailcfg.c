@@ -188,11 +188,12 @@ if (!(pw=get_pw(name))) {
 cookies=get_cookies();
 
 if(cookies==NULL) {
-   write_log(LOG_AUTHPRIV,1,"create_cookie() failed");
+   write_log(LOG_AUTHPRIV,1,"get_cookies() failed");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_COOKIE,err_cookie,options);
 }
 else {
    if((cookie=get_cookie(cookies,"cgipaf"))==NULL) {
+   write_log(LOG_AUTHPRIV,1,"get_cookie() failed");
    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
    }
    else{

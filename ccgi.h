@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "xmalloc.h"
+#include "xstring.h"
 
 typedef struct w {
 int n;

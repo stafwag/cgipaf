@@ -1,3 +1,6 @@
+* version 1.0rc4pre2 ( 23 oct 2001 )
+  + fixed: mailcfg.cgi failed, if another cookie exists
+
 * version 1.0rc4pre1 ( 22 oct 2001 )
   + fixed: mailcfg.cgi crashed if the syslog directive wasn't set
   + fixed: setgid() failed because it was performed after setuid()

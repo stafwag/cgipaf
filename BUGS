@@ -1,3 +1,7 @@
+version 1.0rc4pre1
+ 
+  mailcfg.cgi failed, if another cookie exists
+
 version 1.0rc3
   
   + mailcfg.cgi crashed if the syslog directive wasn't set

@@ -396,7 +396,7 @@ printf("</FORM>");
 printf("</BODY>");   
    
 }
-write_log(LOG_AUTHPRIV,1,"User %s has login successfully");
+write_log(LOG_AUTHPRIV,6,"User %s has login successfully",name);
 #endif
 if (config_file != NULL) fclose(config_file);
 exit(0);

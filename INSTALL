@@ -20,10 +20,6 @@ SUPPORTED SYSTEMS
     built-in BSD support by default. If you need PAM support on FreeBSD you
     can add --enable-pam to configure.
 
-    All Solaris versions before Solaris 9 are supported, there is a problem
-    with PAM on Solaris 9 - I didn't had the the time to debug it - but
-    you're still able to use CGIpaf without PAM support ( --disable-pam ).
-
     Operating systems are automatically detected by configure. 
     
     CGIpaf depends on the ndbm or compatible library. The GNU dbm library

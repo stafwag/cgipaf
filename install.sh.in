@@ -67,7 +67,7 @@ if [ -d $WWW ]
 	 read_yesno
 	 if [ "$YESNO" = "1" ]
 	    then
-	      mkdir $WWW
+	      mkdir -p $WWW
               cp -i php/*.php $WWW
               chmod 644 $WWW/cgipasswd*.php $WWW/mailcfg*.php $WWW/viewmailcfg*.php 
 	 else

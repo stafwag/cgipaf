@@ -3,12 +3,9 @@ WHAT IS CGIPAF?
    "cgipaf" allows users to change their un*x Password, Autoreply and
    mail Forwarding by a web interface.
    
-   This program is still a beta version, use at your own risk!
-
 REQUIREMENTS
   
-    + a Un*x server ( only tested with Debian gnu/Linux woody & potato and
-      solaris 8 )
+    + a Un*x server
     + a mailserver
     + webserver
     + gcc, ndbm or gdbm
@@ -74,5 +71,5 @@ CONTACT INFO
 
     email:  staf@patat.org
     
-    Future improvements will be available at http://staf.patat.org
+    Future improvements will be available at http://staf.patat.org/cgipaf/
     

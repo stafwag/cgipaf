@@ -1,10 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.3.0rc1<br>
+<h1>CGIpaf 1.3.0<br>
 Configuration</h1>
 <h1>Content</h1>
 <ul>
@@ -55,7 +56,8 @@ Configuration</h1>
 <li><a href="#passwd_location">passwd_location</a></li>
 <li><a href="#shadow_location">shadow_location</a></li>
 <li><a href="#illegal_words">illegal_words</a></li>
-<li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>This directive is absolute, and will be removed...</li>
+<li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>
+<strong><font color="red">This directive is absolute, and will be removed...</font></strong></li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
@@ -248,7 +250,7 @@ error_toolong  Redirect <em>location</em><br>
     the password length is above <a href="#max_length">max_length</a>
 </p>
 <h2><a name="error_locked">error_locked</a></h2>
-<strong>Syntax:</strong> error_locked<em>filename</em> <b>OR</b>
+<strong>Syntax:</strong> error_locked <em>filename</em> <b>OR</b>
 error_locked  Redirect <em>location</em><BR>
 <strong>Default:</strong> "Maximum number of tries exceeded...\n"<br>
 <strong>Context:</strong>  &lt;passwd&gt;, &lt;mailcfg&gt;
@@ -503,7 +505,7 @@ error_illegalword  Redirect    <em>location</em><br>
 <h2><a name="illegal_words">illegal_words</a></h2>
 <strong>Syntax:</strong> illegal_words <em>word1 word2</em><br>
 <strong>Default:</strong> not set<br>
-<strong>Context:</strong> &t;passwd&lt;
+<strong>Context:</strong> &lt;passwd&gt;
 <p>
    Specify a list of words that are illegal to use as a part of a new password
 </p>
@@ -513,7 +515,7 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Context:</strong> &lt;passwd&gt;
 <p>
      Set the PAM_CHANGE_EXPIRED_AUTHTOK flag.<br>
-     <strong>This directive is obsolete and will be removed in the next Releases of CGIpaf</strong>
+     <strong><font color="red">This directive is obsolete and will be removed in the next Releases of CGIpaf</font></strong>
 </p>
 <h2><a name="max_invalid">max_invalid</a></h2>
 <strong>Syntax:</strong> max_invalid  <em>tries</em><br>
@@ -655,7 +657,7 @@ error_illegalword  Redirect    <em>location</em><br>
 	<li><a href="#run_before_mailcfg">run_before_mailcfg</a> and 
 	    <a href="#run_after_mailcfg">run_after_mailcfg</a> are not executed</li>
      </ul>
-</p>
+
 <h2><a name="run_viewmailcfg">run_viewmailcfg</a></h2>
 <strong>Syntax:</strong> run_viewmailcfg   <em>path_to_script</em><br>
 <strong>Default:</strong> built-in <br>
@@ -810,7 +812,7 @@ seconds</td></tr>
 <tr><td><b>pam_error</b></td><td>pam error message</td></tr>
 <tr><td><b>password</b></td><td>the user's new password, is only set at
 <a href="#run_success">run_success</a></td></tr>
-<tr><td><b>mailcfg_exitcode</b></td><td>exitcode of the <a href="#run_mailcfg">
+<tr><td><b>mailcfg_exitcode</b></td><td>exitcode of the <a href="#run_mailcfg">run_mailcfg script</a></td></tr>
 <tr><td><b>viewmailcfg_exitcode</b></td><td>exitcode of the <a href="#viewrun_mailcfg">
 run_viewmailcfg script</a></td></tr>
 <tr><td><b>homedir</b></td><td>the user's home directory</td></tr>
@@ -881,6 +883,7 @@ example:
   ...
   &lt;/passwd&gt;
   </code></tt></pre>
+<p>
   Executes a script to update the SAMBA password file after the system password
   is updated.
 </p>
@@ -894,6 +897,7 @@ example:
   ...
   &lt;/mailcfg&gt;
   </code></tt></pre>
+<p>
   Emulates a cgi environment for the mail configuration.<br>
   The original http post is send back to stdout.<br>
   mailcfg.cgi doesn't evaluate the httpd parameters since 
@@ -928,7 +932,7 @@ DenyUsers    *
 AllowUsers   foo
 </code></pre>
 <p>
-Access to user "foo" will be allowed and all other will be denied.   
+Access to user "foo" will be allowed and all others will be denied.   
 </p>
 <pre><code>
 AclOrder     Allow,Deny
@@ -942,6 +946,6 @@ AclOrder Allow,Deny
 </code></pre>
 <p>
 Will denied access to all, because the default state is set to deny.
-
+</p>
 </body>
 </html>

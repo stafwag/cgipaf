@@ -1,12 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf 1.3.0pre4 FAQ</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>CGIpaf 1.3.0 FAQ</title>
   </head>
 
   <body>
     
-    <h1>CGIpaf 1.3.0pre4 FAQ</h1>
+    <h1>CGIpaf 1.3.0 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -125,15 +126,14 @@ Package file. Please use the main site <a href="http://staf.patat.org/debian/">h
 to download the debian package with apt-get.
 </p>
 </li>
-<li><a href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)</li>
-</ul>
-
+<li><a href="http://stafwag.pws.the-ecorp.com/cgipaf/">http://stafwag.pws.the-ecorp.com/cgipaf/</a> (Europe / Belgium)
 <p>
 The last one is hosted by my current employer, we're in the middle of a reorganization (again).
 Due the current economical situation I'm not sure my employer will continue to provide free webspace.<br>
 ... or will continue to pay me ;-)
 </p>
-
+</li>
+</ul>
 <p>
 If you're unable to access the website check
 <a href="http://freshmeat.net/projects/cgipaf">http://freshmeat.net/projects/cgipaf</a>
@@ -198,19 +198,15 @@ Both passwd types (standard crypt, md5) are supported on a non-PAM system. Blowf
 <p>
 CGIpaf works on Solaris ( only tested on solaris 8 )
 </p>
-<p>
-There is a problem with CGIpaf with PAM on solaris 9 - I didn't had the time to debug it -
-</p>
 </li>
 <li><b>FreeBSD</b>
 <p>
-FreeBSD is supported, add <kbd>--host=freebsd</kbd> to <kbd>./configure</kbd>
-this will compile CGIpaf with FreeBSD support but without PAM support.
+FreeBSD is supported, but the PAM password updater doesn't seems to work on FreeBSD.
+Therefor CGIpaf is compiled without PAM support on FreeBSD.
 </p></li>
 <li><b>NetBSD</b>
 <p>
-NetBSD is suppored,add <kbd>--host=netbsd</kbd> to <kbd>./configure</kbd> this will compile
-CGIpaf with NetBSD support.
+NetBSD is suppored.
 </p>
 <li><b>OpenBSD</b>
 <p>
@@ -225,7 +221,7 @@ are only supported if they use the standard password file location /etc/passwd
 </p>
 </li>
 </ul>
-<h2><a name="ss2.2">2.2</a> Which libraries are required?</h2>
+<h2><a name="ss2.2">2.2</a> What libraries are required?</h2>
 <p>
 CGIpaf uses only standard libraries that are installed on most common Un*x installations, you need the 
 development packages ( headers files etc ) to compile CGIpaf.
@@ -275,10 +271,10 @@ support through PAM (see below).
 <p>
 On a non-PAM system set "cracklib" to "on" and "cracklib_dictpath" you your
 cracklib dict path.<br>
-The cracklib_dictpath is the path to the dictionary filename without the extension ( .pwi ), not the 
-directory path.<br>
-The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/cracklib_dict, on RedHat 6.2 
-you'll have to use /usr/lib/cracklib_dict.
+The cracklib_dictpath is the path to the dictionary filename without the extension
+( .pwi ), not the directory path.<br>
+The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/cracklib_dict
+, on RedHat 6.2 you'll have to use /usr/lib/cracklib_dict.
 </p>
 </li>
 </ol>
@@ -313,16 +309,19 @@ CGIpaf should support ldap through PAM, altought I didn't had the time to test i
 <p>
 This can have several reasons...
 </p>
+
 <p>
 If you've enabled cracklib in cgipaf and the cracklib_dictpath to a invalid 
 location passwd.cgi will end with a internal server and an error message in
 your webserver error log. Try to disable cracklib if this resolves the problem
 see "How do I enable cracklib password testing".
 </p>
+
 <p>
-Another reason is possible BUG or misconfiguration in cgipaf, the error_log of your webserver and the 
-syslog messages ( set loglovel to 7 ) should give more information.
+Another reason is possible BUG or misconfiguration in cgipaf, the error_log of
+your webserver and the syslog messages ( set loglovel to 7 ) should give more information.
 </p>
+
 <h2><a name="ss3.6">3.6</a> How do I get debug output?</h2>
 <p>
 Set the loglevel to 7 in cgipaf.conf, this will send debug messages to your system's syslog
@@ -330,22 +329,22 @@ Set the loglevel to 7 in cgipaf.conf, this will send debug messages to your syst
 <h2><a name="ss3.7">3.7</a> Which authentication methods are supported</h2>
 <p>
 CGIpaf supports PAM and standard Un*x password files ( /etc/passwd /etc/shadow ). 
-BSD uses different passwd locations. On a Net|FreeBSD system /etc/passwd_master is updated and copied 
-to pwdb by the pw_mkdb command.<br>
+BSD uses different passwd locations. On a Net|FreeBSD system /etc/passwd_master is updated
+and copied to pwdb by the pw_mkdb command.<br>
 OpenBSD isn't (yet) supported... 
 </p>
 <h2><a name="ss3.8">3.8</a> CGIpaf is unable to authenticate?</h2>
 <p>
-On a pam system: CGIpaf needs "auth" and "account" entries in his PAM configuration. If you don't set
-the pam_service directive CGIpaf uses the "passwd" service name. The passwd pam service ( /etc/pam.d/passwd )
-usually doesn't have an entry for user authentication, therefor /etc/pam.d/other has to have a line auth set
-to pam_unix.so.
+On a pam system: CGIpaf needs "auth" and "account" entries in his PAM configuration.
+If you don't set the pam_service directive CGIpaf uses the "passwd" service name. The passwd
+pam service ( /etc/pam.d/passwd ) usually doesn't have an entry for user authentication, therefor
+/etc/pam.d/other has to have a line auth set to pam_unix.so.
 <pre><code><tt>
     auth     required       pam_unix.so
     account  required       pam_unix.so
 </tt></code></pre>
-If you don't like this for security reason etc, you can set the pam_service directive to "cgipaf" and create
-the file /etc/pam.d/cgipaf that looks like this
+If you don't like this for security reason etc, you can set the pam_service directive to "cgipaf"
+and create the file /etc/pam.d/cgipaf that looks like this
 <pre><code><tt>
     auth     required       pam_unix.so
     account  required       pam_unix.so
@@ -354,17 +353,19 @@ the file /etc/pam.d/cgipaf that looks like this
 Or better copy your system passwd configuration and add the lines for "auth" and "account".
 <h2><a name="ss3.9">3.9</a> How do I enabled cracklib password testing?</h2>
 <p>
-On a PAM system: CGIpaf should support password testing trough PAM. Enable cracklib support in your PAM configuration.
+On a PAM system: CGIpaf should support password testing trough PAM. Enable cracklib support in
+your PAM configuration.
 </p>
 <p>
-On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's cracklib dictpath.
+On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to your
+system's cracklib dictpath.
 </p>
 <h2><a name="ss3.10">3.10</a> My .procmailrc is wipe out!</h2>
 <p>
 CGIpaf deletes or replaces the user's ~/.procmailrc after a user has updated his mail configuration. 
 It's possible to copy the your .procmailrc and restore it when autoreply and mailforwarding is disabled 
 by the run_before_mailcfg and run_after_mailcfg directives.<br>
-Another alternative is to use .forward/vacation instead of procmail see examples/ for more information.
+An alternative is to use .forward/vacation instead of procmail see examples/ for more information.
 </p>
 <h2><a name="ss3.11">3.11</a> My .forward is deleted!</h2>
 <p>
@@ -427,8 +428,8 @@ platforms. I hoped that I could reuse the BSD code for the OpenBSD port, but the
 were against me. The BSD port doesn't works without trouble on OpenBSD versions.
 </p>
 <p>
-I still want to support FreeBSD with PAM enabled ( the non-pam code works fine, but PAM is more
-flexible ) the authentication works but the PAM password changer doesn't -weird-.
+I still want to support FreeBSD with PAM enabled (the non-pam code works fine, but PAM is more
+flexible) the authentication works but the PAM password changer doesn't -weird-.
 <p>
 The OpenBSD port is still in the pipeline.
 </p>
@@ -436,7 +437,7 @@ The OpenBSD port is still in the pipeline.
     <address><a href="mailto:staf@patat.org">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu May 29 00:41:33 CEST 2003
+Last modified: Wed Apr 21 15:57:10 CEST 2004
 <!-- hhmts end -->
   </body>
 </html>

@@ -256,6 +256,9 @@
 /* system host os */
 #undef HOSTOS
 
+/* system os release */
+#undef HOSTREL
+
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
 #undef LSTAT_FOLLOWS_SLASHED_SYMLINK
@@ -280,6 +283,12 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* do not auth at chpw */
+#undef PAM_CHPW_NOAUTH
+
+/* solaris system */
+#undef SOLARISHOST
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

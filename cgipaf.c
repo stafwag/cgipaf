@@ -1,18 +1,23 @@
 /*
- *
  * cgiPAF.c     		
  *
+ * Copyright (C) 2000-04 Staf Wagemakers Belgie/Belgium
  *
- * Copyright (C) 2000-03 Staf Wagemakers Belgie/Belgium 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 
 #include "cgipaf_defs.h"
 
@@ -164,7 +169,6 @@ main()
    write_log(LOG_USER,7,"pw->p->pwuid = %d",pw->p->pw_uid);
 
 #ifdef _WITHPAM
-#ifdef CGIPAF_PASSWD
   
    /*
     * Set the real uid to the user's uid, set the effective uid to root
@@ -174,7 +178,6 @@ main()
         write_log(LOG_USER,7,"setreuid() failed: %s",strerror(errno));
    }; 
 
-#endif
 #endif
 
    

@@ -40,6 +40,8 @@ case $host_os in
 		;;
  solaris*) 
  		AC_MSG_RESULT(yes, the biggest unix vendor) 
+    		AC_DEFINE(SOLARISHOST,1,solaris system)
+		SOLARISHOST=1
 		;;
         *) 
 		AC_MSG_RESULT(unkown)
@@ -52,8 +54,40 @@ esac
 
 AC_SUBST(host)
 AC_SUBST(host_os)
+
+AC_MSG_CHECKING(checking OS version)
+HOSTREL=`uname -r 2> /dev/null`
+AC_MSG_RESULT($HOSTREL)
+
+RESULT_MSG="I guess so"
+AC_MSG_CHECKING(authentication required at pam_chauthtok)
+
+if test "$SOLARISHOST" = "1";then
+
+   MAJORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\1/'`
+   MINORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\2/'`
+
+
+   if test "$MAJORREL" -eq "5"; then
+
+      if test "$MINORREL" -ge "9"; then
+
+    		AC_DEFINE(PAM_CHPW_NOAUTH,1,do not auth at chpw)
+   		RESULT_MSG="no"
+
+      fi
+
+   fi
+
+fi
+
+AC_MSG_RESULT($RESULT_MSG)
+
+
+
 AC_DEFINE_UNQUOTED(HOST,"$host",system host)
 AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
+AC_DEFINE_UNQUOTED(HOSTREL,"$HOSTREL",system os release)
 
 NEED_COMPAT_H="COMPAT"
 

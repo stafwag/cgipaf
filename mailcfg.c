@@ -201,6 +201,7 @@ main()
    /* copy the data in the options array */
    
    options[0][1]=name;
+   options[6][1]=forward_to;
    options[13][1]=autoreply_msg;
    
    /* if name is NULL or has no lenght show error and exit */
@@ -272,7 +273,9 @@ main()
       write_log(LOG_AUTHPRIV,1,"try to use mailcfg.cgi as %s which doesn't exist");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    };
-
+   
+   options[19][1]=pw->p->pw_dir;
+   
    /* get the cookies */
    
    cookies=get_cookies();
@@ -436,26 +439,26 @@ main()
 	    }
 	 }
       }
-      
-      /* mail config update, inform the user */
-      
-      show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
-      write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
-      
-      /* create the user's .cgipaf_state */
-      
-      if(save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),keep_state,autoreply_state)==-1) {
-	 write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
-      }
-      
-      /* start run_success if defined */
-      
-      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
-      if(i==-1)
-	write_log(LOG_USER,1,"Can't executed run_succes %s",strerror(errno));
-      else
-	if((i=WEXITSTATUS(i)))
-	  write_log(LOG_USER,1,"run_succes returns a non-null value",i);
-      if(config_file!=NULL) fclose(config_file);
    }
+   
+   /* mail config update, inform the user */
+      
+   show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_updated,options);
+   write_log(LOG_AUTHPRIV,6,"User %s has updated his mail configuration successfully",name);
+      
+   /* create the user's .cgipaf_state */
+      
+   if(save_mailcfg_status(pw->p,forward_state,textarea2asc(forward_to),keep_state,autoreply_state)==-1) {
+      write_log(LOG_USER,1,"Can't create statefile %s",strerror(errno));
+   }
+   
+   /* start run_success if defined */
+   
+   i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+   if(i==-1)
+     write_log(LOG_USER,1,"Can't executed run_succes %s",strerror(errno));
+   else
+     if((i=WEXITSTATUS(i)))
+       write_log(LOG_USER,1,"run_succes returns a non-null value",i);
+   if(config_file!=NULL) fclose(config_file);
 }

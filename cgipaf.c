@@ -321,6 +321,7 @@ if ((i=ckpw(pw,pass))!=PASS_SUCCESS) {
 #endif
    show_msg(config_file,doc_root,CFGSECTION,ERR_INVALID,err_invalid,options);
    write_log(LOG_AUTHPRIV,6,"Invalid password for user %s",name);
+   options[19][1]=pw->p->pw_dir;
    if (accessdb) {
       if (save_access_status(accessdb,name,1,invalid_timeout,cookie)==-1) {
 	 printf("%s %s",warn_update_accessdb,accessdb);

@@ -109,8 +109,8 @@ error_openvacations	 mailcfg_erropenvacations.php
 msg_success		 mailcfg_msgupdated.php
 # sendmail              /usr/lib/sendmail
 # domain		 your_domain_name
-run_mailcfg		"/etc/cgipaf/mailcfg.sh"
-run_before_mailcfg	"cp ~/.procmailrc ~/.procmailrc.backup"
-run_after_mailcfg	"cp ~/.procmailrc.backup ~/.procmailrc"
+run_mailcfg		"/etc/cgipaf/scripts/mailcfg.sh" "%{name}\n%{homedir}\n%{forward}\n%{keep_msg}\n%{autoreply}\n%{forward_to}\n"
+# run_before_mailcfg	"cp ~/.procmailrc ~/.procmailrc.backup"
+# run_after_mailcfg	"cp ~/.procmailrc.backup ~/.procmailrc"
 use_statefile		yes
 </mailcfg>

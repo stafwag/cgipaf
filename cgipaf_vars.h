@@ -53,6 +53,7 @@ char   txt_password[]="password";
 char   txt_passwd[]="passwd";
 char   txt_crackliberror[]="cracklib_error";
 char   txt_mailcfg_exitcode[]="mailcfg_exitcode";
+char   txt_homedir[]="homedir";
 char   mailcfg_exitcode_txt[80]="\0";
 char   txt_pamerrormsg[]="pam_error";
 char   *pam_servicename=txt_passwd;
@@ -78,6 +79,7 @@ char   *options[][2]={
      txt_crackliberror,txt_NULL,		       /* 16 */
      txt_pamerrormsg,txt_NULL,			       /* 17 */
      txt_mailcfg_exitcode,txt_NULL,                    /* 18 */
+     txt_homedir,txt_NULL,                             /* 19 */
      NULL,NULL};
 
 #endif  /* _CGIPAF_VARS_H */

@@ -2,33 +2,39 @@
 
 unset IFS
 
+read NAME
+read HOMEDIR
 read FORWARD
 read KEEPMSG
 read AUTOREPLY
 read FORWARDTO
 
-DOTFORWARD="$HOME/.forward"
+DOTFORWARD="$HOMEDIR/.forward"
 
+echo "NAME:    $NAME"
+echo "HOMEDIR: $HOMEDIR"
 echo "forward: $FORWARD"
 echo "KEEPMSG: $KEEPMSG"
 echo "AUTOREPLY: $AUTOREPLY"
 echo "FORWARDTO: $FORWARDTO"
 
 rm -f "$DOTFORWARD"
-if [ "$FORWARD" = "1" ]; then
+if [ "$FORWARD" = "yes" ]; then
    echo -en "$FORWARDTO" >> "$DOTFORWARD"
-   if [ "$KEEPMSG" = "1" ]; then
-      echo -en ",\\$USER" >> "$DOTFORWARD"
+   if [ "$KEEPMSG" = "yes" ]; then
+      echo -en ",\\$NAME" >> "$DOTFORWARD"
    fi
 fi
-if [ "$AUTOREPLY" = "1" ]; then
-   if [ "$FORWARD" = "1" ]; then
-      if [ "$KEEPMSG" != "1" ]; then
-         echo -en ",\\$USER" >> "$DOTFORWARD"
+if [ "$AUTOREPLY" = "yes" ]; then
+   if [ "$FORWARD" = "yes" ]; then
+      if [ "$KEEPMSG" != "yes" ]; then
+         echo -en ",\\$NAME" >> "$DOTFORWARD"
       fi
       echo -en "," >> $DOTFORWARD
    else
-      echo -en "\\$USER," >> "$DOTFORWARD"
+      echo -en "\\$NAME," >> "$DOTFORWARD"
    fi
-   echo -en "\"|/usr/bin/vacation -m vacations.txt $USER\"" >> $DOTFORWARD
+   echo -en "\"|/usr/bin/vacation -m vacations.txt $NAME\"" >> $DOTFORWARD
 fi
+
+exit 0

@@ -38,7 +38,7 @@
 
 	if(strstr(name,"..")) {
             write_log(LOG_USER,7,"vmail: loginname contains \"..\"");
-            show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options);
+            show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_ACCESS,err_access,options,txt_message);
 
 	}
     	if((cp=strchr(name,'@'))!=NULL) {

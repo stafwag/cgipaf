@@ -92,7 +92,7 @@ int save_access_status (char *accessdb, char *loginname, int status, int delay,c
    if (cookie==NULL) {
       cookie=txt_nul;
       }
-   db=dbm_open(accessdb, O_RDWR | O_CREAT, 0666);
+   db=dbm_open(accessdb, O_RDWR | O_CREAT, 0600);
    if (!db) return(-1);               /* failed to create db */
    key.dptr=(void *)loginname;
    key.dsize=strlen(loginname);

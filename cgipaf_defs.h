@@ -147,7 +147,8 @@
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "name"
-#define	 NEXT_ACTION		"mailadmin.cgi"
+#define  LOGIN_ACTION		"viewmailcfg.cgi"
+#define	 NEXT_ACTION		"mailcfg.cgi"
 #include "mailconfig.h"
 #endif   /* CGIPAF_VIEWMAILCFG */
 
@@ -155,6 +156,7 @@
 #define  CFGSECTION             "mailcfg"
 #define  UPDATESECTION		"mailcfg"
 #define  LOGIN                  "name"
+#define  LOGIN_ACTION		"viewmailcfg.cgi"
 #define  NEXT_ACTION		"mailcfg.cgi"
 #include "mailconfig.h"
 #endif   /* CGIPAF_MAILCFG */

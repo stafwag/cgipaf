@@ -96,6 +96,7 @@ int    max_postlength=150;
 int    set_script_filename=0;
 char   *cgi_path=NULL;
 char   *next_actionfull=NULL;
+char   *login_actionfull=NULL;
 char   txt_nextaction[]="next_action";
 char   txt_nextactionfull[]="next_action_full";
 

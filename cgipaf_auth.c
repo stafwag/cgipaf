@@ -121,6 +121,11 @@
 	   write_log(LOG_USER,7,"ckpw() succeed");
    }
    options[19][1]=pw->p->pw_dir;
-	   write_log(LOG_USER,7,"DEBUG: cgipaf_auth ends");
+   write_log(LOG_USER,7,"DEBUG: cgipaf_auth ends");
 
 
+#ifdef LOGIN_ACTION
+
+   update_string_pair_item(options,txt_nextactionfull,next_actionfull,0);
+
+#endif

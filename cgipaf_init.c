@@ -168,9 +168,18 @@ if (setuid(0)==-1) {
 	next_actionfull=xmalloc(strlen(cgi_path)+strlen(NEXT_ACTION)+1);
 	strcpy(next_actionfull,cgi_path);
 	strcat(next_actionfull,NEXT_ACTION);
-
 	update_string_pair_item(options,txt_cgipath,cgi_path,0);
 	update_string_pair_item(options,txt_nextactionfull,next_actionfull,0);
+
+#ifdef LOGIN_ACTION
+
+	login_actionfull=xmalloc(strlen(cgi_path)+strlen(NEXT_ACTION)+1);
+	strcpy(login_actionfull,cgi_path);
+	strcat(login_actionfull,LOGIN_ACTION);
+	update_string_pair_item(options,txt_nextactionfull,login_actionfull,0);
+
+#endif
+
 
 	if(config_file) { 
 		

@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>CGIpaf 1.2.0pre1 FAQ</title>
+    <title>CGIpaf 1.2.0RC1 FAQ</title>
   </head>
 
   <body>
     
-    <h1>CGIpaf 1.2.0pre1 FAQ</h1>
+    <h1>CGIpaf 1.2.0RC1 FAQ</h1>
     <p>
     <h2>1 <a href="#s1">Introduction to CGIpaf</a></h2>
     <ul>
@@ -271,16 +271,6 @@ The correct_dictpath on Debian ( potato and woody ) is /var/cache/cracklib/crack
 <h1><a name="s3">3</a> Common configuration problems</h1>
 <h2><a name="ss3.1">3.1</a> CGIpaf is unable to update the password</h2>
 <p>
-If you're using a PAM system, try to set the "set_PAM_EXPIRED_AUTHTOK" to "off". On most
-GNU/Linux distributions this cause passwd.cgi to support all common pam
-messages. ( minium / maximum password length, password unchanged, cracklib
-... )<br>
-Unfortunately this doesn't work on all Un*x flavors. If you need to set this
-flag to "off" all common PAM error messages are ignored by passwd.cgi. But
-you can enable cracklib password testing, minium password etc in the cgipaf
-configuration file ( cgipaf.conf ).
-</p>
-<p>
 On a non-pam system cgipaf uses a lock file in /var/lock if this directory doesn't exists on your
 system passwd.cgi will end with "Can't create lockfile" error. Create /var/lock or update pam.h 
 to your own needs.
@@ -343,7 +333,7 @@ the file /etc/pam.d/cgipaf that looks like this
 Or better copy your system passwd configuration and add the lines for "auth" and "account".
 <h2><a name="ss3.8">3.8</a> How do I enabled cracklib password testing?</h2>
 <p>
-On a pam system: set the set_PAM_EXPIRED_AUTHTOK_FLAG to on and enable cracklib support in your pam configuration. If the PAM_EXPRIRED_AUTHTOK_FLAG doesn't work on your system or behaves differently disable it and set the cracklib to on in cgipaf.conf ( see below ).
+On a PAM system: CGIpaf should support password testing trough PAM. Enable cracklib support in your PAM configuration.
 </p>
 <p>
 On a non pam system you've to set the cracklib directive to "on" and cracklib_dictpath to you system's cracklib dictpath.
@@ -421,7 +411,7 @@ I'll probably start with this one.
     <address><a href="mailto:staf.wagemakers@advalvas.be">staf wagemakers</a></address>
 <!-- Created: Mon Apr  8 20:42:51 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Oct 22 14:07:29 CEST 2002
+Last modified: Tue Nov 26 11:37:26 CET 2002
 <!-- hhmts end -->
   </body>
 </html>

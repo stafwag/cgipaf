@@ -4,7 +4,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.2.0PRE1 Configuration</h1>
+<h1>CGIpaf 1.2.0RC1 Configuration</h1>
 <h1>Content</h1>
 <ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -50,7 +50,7 @@
 <li><a href="#cracklib">cracklib</a></li>
 <li><a href="#cracklib">cracklib_dictpath</a></li>
 <li><a href="#illegal_words">illegal_words</a></li>
-<li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a></li>
+<li><a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>This directive is absolete, and will be removed...</li>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
@@ -439,9 +439,8 @@ error_illegalword  Redirect    <em>location</em><br>
      directive to your cracklib dictpath otherwise cracklib is disabled.
 </p>
 <p>
-  if cracklib is enabled in your PAM configuration and 
-  <a href="#set_pam_change_expired_authtok">set_PAM_CHANGE_EXPIRED_AUTHTOK</a>
-  is "on", you should set cracklib to off.
+  CGIpaf support cracklib password testing in the PAM configuration, if cracklib is enabled in 
+  your PAM configuration and you should set cracklib to off.
 </p>
 <h2><a name="cracklib_dictpath">cracklib_dictpath</a></h2>
 <strong>Syntax:</strong> cracklib_dictpath  <em>/path/to/cracklib_dict</em><br>
@@ -463,7 +462,8 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Default:</strong> on<br>
 <strong>Context:</strong> &lt;passwd&gt;
 <p>
-     Set the PAM_CHANGE_EXPIRED_AUTHTOK flag
+     Set the PAM_CHANGE_EXPIRED_AUTHTOK flag.<br>
+     <strong>This directive is obsolete and will be removed in the next Releases of CGIpaf</strong>
 </p>
 <h2><a name="max_invalid">max_invalid</a></h2>
 <strong>Syntax:</strong> max_invalid  <em>tries</em><br>

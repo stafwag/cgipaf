@@ -72,7 +72,22 @@ if (setuid(0)==-1) {
 	 xfree(cp);
 	 write_log(LOG_USER,7,"Set loglevel to %d",set_loglevel(-1));
       }
+
+      /* set_SCRIPT_FILENAME */
+      
+      if ((cp=get_sg_item(config_file,CFGSECTION,CFG_UNSET_SCRIPT_FILENAME))!=NULL) {
+	 if (is_var_yes(cp)==0) set_script_filename=0;
+	    else set_script_filename=2;
+	 xfree(cp);
+      }
+
+      if ((cp=get_sg_item(config_file,CFGSECTION,CFG_SET_SCRIPT_FILENAME))!=NULL) {
+	 if (is_var_yes(cp)==0) set_script_filename=0;
+	    else set_script_filename=1;
+	 xfree(cp);
+      }
    }
+
 
 #if defined(CGIPAF_MAILCFG) || defined(CGIPAF_VIEWMAILCFG)
   else {

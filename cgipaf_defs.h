@@ -53,6 +53,8 @@
 #define  CFG_SHADOW_LOCATION    "shadow_location"
 #define  CFG_VMAIL_SUPPORT	"vmail_support"
 #define	 CFG_MAILCFG_CHECK	"mailcfg_check"
+#define	 CFG_SET_SCRIPT_FILENAME	"set_SCRIPT_FILENAME"
+#define	 CFG_UNSET_SCRIPT_FILENAME	"unset_SCRIPT_FILENAME"
 
 #define  NEWPASS1 		"newpass1"
 #define  NEWPASS2 		"newpass2"

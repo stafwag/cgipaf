@@ -313,7 +313,7 @@ main()
    
       if (!oldstate&&newstate) {
 
-         i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options);
+         i=run_cmd(config_file,CFGSECTION,RUN_BEFORE_MAILCFG,options,set_script_filename);
 
          if (i<0) {
 
@@ -344,7 +344,7 @@ main()
    if ((cp=get_section_config_item(config_file,CFGSECTION,RUN_MAILCFG))!=NULL) {
 
       xfree(cp);
-      i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options);
+      i=run_cmd(config_file,CFGSECTION,RUN_MAILCFG,options,set_script_filename);
       if(i<0)
 	write_log(LOG_USER,1,"run_mailcfg failed, run_cmd() returns %d",i);
       else
@@ -439,7 +439,7 @@ main()
    
       /* start run_success if defined */
    
-      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options,set_script_filename);
       if (i<0) {
          if (i==-1)
 	    write_log(LOG_USER,1,"Can't executed run_success %s",strerror(errno));
@@ -455,7 +455,7 @@ main()
    
       if (oldstate&&!newstate) {
 
-	 i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options);
+	 i=run_cmd(config_file,CFGSECTION,RUN_AFTER_MAILCFG,options,set_script_filename);
 
       if(i<0) {
 	 if(i==-1)

@@ -212,7 +212,7 @@ main()
       if ((brol=get_access_status(accessdb,options[0][1],max_invalid,invalid_timeout))>0) {
 	 snprintf(invalid_wait_txt,80,"%d",brol);
 	 show_msg(config_file,doc_root,CFGSECTION,ERR_LOCKED,err_locked,options,txt_message);
-	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options);
+	 i=run_cmd(config_file,CFGSECTION,RUN_LOCKED,options,set_script_filename);
 	 if(i<0) {
 	    if(i==-1) 
 	      write_log(LOG_USER,1,"Can't execute run_locked %s run_cmd() failed",strerror(errno));
@@ -296,7 +296,7 @@ main()
         write_log(LOG_USER,7,"setuid(0) failed: %s",strerror(errno));
       };
 
-      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options);
+      i=run_cmd(config_file,CFGSECTION,RUN_SUCCESS,options,set_script_filename);
       options[15][1]=txt_NULL;
       if(i<0) {
 	 if(i==-1) 
@@ -384,7 +384,7 @@ main()
 /*	   setenv("SCRIPT_FILENAME",cp,1); */
 
       	xfree(cp);
-      	i=run_cmd(config_file,CFGSECTION,RUN_VIEWMAILCFG,options);
+      	i=run_cmd(config_file,CFGSECTION,RUN_VIEWMAILCFG,options,set_script_filename);
 
       	if(i<0)
 		write_log(LOG_USER,1,"run_viewmailcfg failed, run_cmd() returns %d",i);

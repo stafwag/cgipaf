@@ -68,6 +68,8 @@ Configuration</h1>
 <li><a href="#run_mailcfg">run_mailcfg</a></li>
 <li><a href="#mailcfg_check">mailcfg_check</a></li>
 <li><a href="#run_viewmailcfg">run_viewmailcfg</a></li>
+<li><a href="#set_script_filename">set_script_filename</a></li>
+<li><a href="#unset_script_filename">set_script_filename</a></li>
 <li><a href="#cookie_timeout">cookie_timeout</a></li>
 <li><a href="#mailcfg_document">mailcfg_document</a></li>
 <li><a href="#error_deldotforward">error_deldotforward</a></li>
@@ -587,6 +589,22 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Context:</strong> &lt;mailcfg&gt;
 <p>
      define a view mail configuration script, if not set the built-in is used<br>
+</p>
+<h2><a name="set_script_filename">set_script_filename</a></h2>
+<strong>Syntax:</strong> set_script_filename   <em>on|off</em>
+<strong>Default:</strong> off <br>
+<strong>Run as:</strong> user<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+     set the SCRIPT_FILENAME environment variable to the real scriptname.
+</p>
+<h2><a name="unset_script_filename">set_script_filename</a></h2>
+<strong>Syntax:</strong> unset_script_filename   <em>on|off</em>
+<strong>Default:</strong> off <br>
+<strong>Run as:</strong> user<br>
+<strong>Context:</strong> &lt;passwd&gt;, &lt;mailcfg&gt;
+<p>
+     unset the SCRIPT_FILENAME environment variable to the real scriptname.
 </p>
 <h2><a name="run_success">run_success</a></h2>
 <strong>Syntax:</strong> run_success   <em>path_to_script</em>

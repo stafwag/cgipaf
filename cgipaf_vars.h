@@ -69,5 +69,6 @@ char   txt_message[]="message";
 char   *msg_success[]={"msg_success","msg_updated","msg_changed",NULL};
 char   ***options=NULL;
 int    max_postlength=150;
+int    set_script_filename=0;
 #endif  /* _CGIPAF_VARS_H */
 	 

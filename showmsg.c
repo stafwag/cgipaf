@@ -76,7 +76,7 @@ if (config_file==NULL) {
    return(show_alt_msg(alt_msg));
 }
 if (cc==NULL) {
-   write_log(LOG_USER,7,"showmsg.c: directive array is NULL (directive not found???), display alt_msg");
+   write_log(LOG_USER,7,"showmsg.c: directive array is NULL ( directive not found??? ), display alt_msg");
    return(show_alt_msg(alt_msg));
 }
 if (*cc==NULL) {
@@ -116,7 +116,7 @@ if (root==NULL) {
 fullname=(char *) malloc(strlen(root)+strlen(*cc)+1+strlen("/"));
    
 if (fullname==NULL) {
-   write_log(LOG_USER,7,"showmsg.c: fullname is NULL (malloc error???), display alt_msg");
+   write_log(LOG_USER,7,"showmsg.c: fullname is NULL ( malloc error??? ), display alt_msg");
    return(show_alt_msg(alt_msg));
 }
 else {

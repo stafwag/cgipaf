@@ -22,9 +22,7 @@
 #ifndef _STAF_CONFIGFILE_H
 #define _STAF_CONFIGFILE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "common.h"
 #include <errno.h>
 #include "xstring.h"
 

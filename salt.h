@@ -21,9 +21,7 @@
 
 #ifndef __CGIPAFSALTH
 #define __CGIPAFSLATH
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>

@@ -26,6 +26,10 @@
 #include "config.h"
 #include "xmalloc.h"
 
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #ifdef	HAVE_STRINGS_H 
 #include <string.h>
 #endif

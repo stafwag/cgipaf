@@ -19,8 +19,7 @@
  *
  */
 
-#include <string.h>
-#include <stdio.h>
+#include "common.h"
 #include "xmalloc.h"
 #include "xstring.h"
 int print_phpfile (char * filename,char ***values);

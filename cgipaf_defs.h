@@ -22,7 +22,7 @@
 #ifndef  _CGIPAF_DEFS_H
 #define  _CGIPAF_DEFS_H
 
-#include "config.h"
+#include "common.h"
 
 #ifndef  _WITHPAM
 #include "fgetpwnam.h"

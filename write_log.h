@@ -19,9 +19,9 @@
  *
  */
 
+#include "common.h"
 #include <stdarg.h>
 #include <syslog.h>
-#include <stdlib.h>
 #ifndef LOG_AUTHPRIV
 #define LOG_AUTHPRIV LOG_AUTH
 #endif

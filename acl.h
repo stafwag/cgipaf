@@ -19,7 +19,7 @@
  *
  */
 
-#include "config.h"
+#include "common.h"
 #include "pass.h"
 #include <grp.h>
 int memberofgrp (struct pw_info *p,char *grpname);

@@ -19,10 +19,11 @@
  *
  */
 
+#include "common.h"
 #include "pass.h"
-#include <string.h>
 char txt_usage[]="Usage \"echo $USER:$PASSWORD\" |";
 char *prgname;
+char *arguments[]={"-h","--help","-e","--encrypted"};
 
 /*
  * display usage message
@@ -30,6 +31,10 @@ char *prgname;
 
 void usage() {
       fprintf(stderr,"%s %s\n",txt_usage,prgname);
+}
+
+int match_args(char *arg) {
+
 }
 
 int main (int argn,char * argv[]) 
@@ -44,8 +49,28 @@ int main (int argn,char * argv[])
    prgname=argv[0];              /* set prgname to the real program name */
 
    if(argn>1) {                  /* we've no arguments */
-      usage();
-      exit(1);
+
+	   int i;
+
+
+	   while ((i = getopt(argn, argv, ":h:")) != -1) {
+
+		   switch(i) {
+
+		   	case 'h':
+			  		usage();
+			        	exit(1);
+		   	case '?':	
+					fprintf(stderr,"invalid argument\n\n");
+					usage();
+					exit(1);
+
+		   }
+
+
+
+	   }
+
    }
    
 #ifdef _WITHPAM

@@ -22,10 +22,7 @@
 #ifndef __CCGI_H
 #define __CCGI_H
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "xmalloc.h"
+#include "common.h"
 
 #include <stdarg.h>
 #include "xstring.h"

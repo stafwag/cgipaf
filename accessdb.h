@@ -1,7 +1,7 @@
 /*
  * accessdb.h
  *
- * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2003, 2006 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,7 @@
  *
  */
 
-#include "config.h" 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "common.h" 
 
 #ifdef HAVE_GDBM_NDBM_H
 #include <gdbm-ndbm.h>

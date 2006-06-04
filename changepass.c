@@ -37,7 +37,7 @@ int match_args(char *arg) {
 
 }
 
-int main (int argn,char * argv[]) 
+int main (int argn,char **argv) 
 {
    int i;
    char line[1024]="\0";
@@ -51,25 +51,36 @@ int main (int argn,char * argv[])
    if(argn>1) {                  /* we've no arguments */
 
 	   int i;
+	   int hlpflag=0;
 
 
-	   while ((i = getopt(argn, argv, ":h:")) != -1) {
+	   while ((i = getopt(argn, argv, "h")) != -1) {
 
 		   switch(i) {
 
 		   	case 'h':
-			  		usage();
-			        	exit(1);
-		   	case '?':	
-					fprintf(stderr,"invalid argument\n\n");
-					usage();
-					exit(1);
+					hlpflag=1;
+					break;
+		   	case '?':
+					if (isprint(optopt) ) {	
 
+						fprintf(stderr,"Unknown option '-%c'\n",optopt);
+					}
+					else {
+					       	fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
+					}
+					break;
+			default:
+					abort();
 		   }
 
 
 
 	   }
+
+	   usage();
+
+	   exit(1);
 
    }
    

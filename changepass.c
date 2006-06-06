@@ -52,31 +52,79 @@ int main (int argn,char **argv)
 
 	   int i;
 	   int hlpflag=0;
+	   int encryptflag=0;
+	   int nopamflag=0;
+	   int md5flag=0;
 
+	   char *longargs[]={"encrypted","md5","help","nopam",NULL};
 
-	   while ((i = getopt(argn, argv, "h")) != -1) {
+	   for (i=1;i<argn;i++) {
+
+		   char *shortarg=NULL;
+
+		   if (strncmp("--",argv[i],2)==0) {
+
+			   	char **ccp;
+				int found=0;
+
+			   	for(ccp=longargs;*ccp!=NULL;++ccp) {
+
+					if (!strcmp(argv[i]+2,*ccp)) {
+			   	
+						shortarg=xmalloc(3*sizeof(char));
+						shortarg[0]=0;
+						strncat(shortarg,(argv[i]+1),2);
+						argv[i]=shortarg;
+						found=1;
+						break;
+
+					}
+
+				}
+
+				if (!found) {
+						fprintf(stderr,"Unkown argument %s\n",argv[i]);
+				        	hlpflag=1;
+
+				}
+		   }
+	   }
+
+	   if(!hlpflag) {
+
+	   while ((i = getopt(argn, argv, "hemn")) != -1) {
 
 		   switch(i) {
 
 		   	case 'h':
 					hlpflag=1;
 					break;
-		   	case '?':
-					if (isprint(optopt) ) {	
-
-						fprintf(stderr,"Unknown option '-%c'\n",optopt);
-					}
-					else {
-					       	fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
-					}
+		   	case 'e':
+					encryptflag=1;
+					break;
+		   	case 'm':
+					md5flag=1;
+					break;
+		   	case 'n':
+					nopamflag=1;
+					break;
+		   	case '?':	
+					hlpflag=1;
 					break;
 			default:
-					abort();
+					hlpflag=1;
 		   }
 
 
 
 	   }
+
+	   }
+
+	   printf("hlpflag = %d\n",hlpflag);
+	   printf("encryptflag = %d\n",encryptflag);
+	   printf("nopamflag = %d\n",nopamflag);
+	   printf("md5flag = %d\n",md5flag);
 
 	   usage();
 

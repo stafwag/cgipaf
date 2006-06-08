@@ -21,16 +21,17 @@
 
 #include "common.h"
 #include "pass.h"
-char txt_usage[]="Usage \"echo $USER:$PASSWORD\" |";
+
+char txt_usage[]="[OPTION]\n\noptions:\n\n   -h,--help\tprint this help\n   -n,--nopam\tdon't use pam\n   -p,--pam\tuse pam (default)\n   -e,--encrypt\tpassword is already encrypted, this option will disable pam\n   -m,--md5\tuse md5 encryption, this option will disable pam\n\n";
+
 char *prgname;
-char *arguments[]={"-h","--help","-e","--encrypted"};
 
 /*
  * display usage message
  */
 
 void usage() {
-      fprintf(stderr,"%s %s\n",txt_usage,prgname);
+      fprintf(stderr,"usage: %s %s\n",prgname,txt_usage);
 }
 
 int match_args(char *arg) {
@@ -54,9 +55,10 @@ int main (int argn,char **argv)
 	   int hlpflag=0;
 	   int encryptflag=0;
 	   int nopamflag=0;
+	   int pamflag=0;
 	   int md5flag=0;
 
-	   char *longargs[]={"encrypted","md5","help","nopam",NULL};
+	   char *longargs[]={"encrypted","md5","help","nopam","pam",NULL};
 
 	   for (i=1;i<argn;i++) {
 
@@ -92,7 +94,7 @@ int main (int argn,char **argv)
 
 	   if(!hlpflag) {
 
-	   while ((i = getopt(argn, argv, "hemn")) != -1) {
+	   while ((i = getopt(argn, argv, "hpemn")) != -1) {
 
 		   switch(i) {
 
@@ -107,6 +109,9 @@ int main (int argn,char **argv)
 					break;
 		   	case 'n':
 					nopamflag=1;
+					break;
+		   	case 'p':
+					pamflag=1;
 					break;
 		   	case '?':	
 					hlpflag=1;
@@ -123,6 +128,7 @@ int main (int argn,char **argv)
 
 	   printf("hlpflag = %d\n",hlpflag);
 	   printf("encryptflag = %d\n",encryptflag);
+	   printf("pamflag = %d\n",pamflag);
 	   printf("nopamflag = %d\n",nopamflag);
 	   printf("md5flag = %d\n",md5flag);
 

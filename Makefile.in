@@ -5,6 +5,7 @@
 
 ARG=-D_@ARG@ -D@NEED_COMPAT_H@
 OBJS=@OBJS@
+CHPASSOBJS=@CHPASSOBJS@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
@@ -32,14 +33,14 @@ mailcfg.cgi: mailcfg.c ${OBJS} mailconfig.o ${inc_files}
 viewmailcfg.cgi: cgipaf.c ${OBJS} mailconfig.o ${inc_files}
 	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
 	
-changepass: changepass.c ${OBJS} ${inc_files}
-	$(CC) $(CFLAGS) -o changepass changepass.c ${OBJS} @LIBS@ ${ARG} 
+changepass: changepass.c ${CHPASSOBJS} ${inc_files}
+	$(CC) $(CFLAGS) -o changepass changepass.c ${CHPASSOBJS} @LIBS@ ${ARG} 
 
 install: all
 	 su root -c "/bin/sh ./install.sh"
 
 pass.o: pass.c pass.h
-	$(CC) $(CFLAGS) -c pass.c
+	$(CC) $(CFLAGS) $(ARG) -c pass.c
 
 passpam.o: passpam.c pass.h
 	   $(CC) $(CFLAGS) $(ARG) -c passpam.c 

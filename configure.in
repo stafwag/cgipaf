@@ -92,6 +92,7 @@ AC_DEFINE_UNQUOTED(HOSTREL,"$HOSTREL",system os release)
 NEED_COMPAT_H="COMPAT"
 
 AC_SUBST(OBJS)
+AC_SUBST(CHPASSOBJS)
 
 PRESET_CFLAGS="$CFLAGS"
 
@@ -182,6 +183,8 @@ dnl freebsd has built-in md5 support
       AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
    fi
 
+	CHPASSOBJS=$OBJS
+
  else
 	AC_CHECK_LIB(pam,pam_authenticate,PAMLIB_ERROR="no",PAMLIB_ERROR="yes")
    	AC_CHECK_LIB(pam,pam_chauthtok,PAMLIB_ERROR="no",PAMLIB_ERROR="yes")
@@ -190,6 +193,30 @@ dnl freebsd has built-in md5 support
    		AC_MSG_ERROR(no valid pam library found)
    	fi
    	OBJS="$OBJS passpam.o"
+	CHPASSOBJS="$OBJS pass.o salt.o"
+
+   AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
+
+	dnl freebsd has built-in md5 support
+ 
+     	if test "$FREEBSDHOST" != "1"; then
+
+       		CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
+
+     	fi
+
+	if test "$BSDHOST" != "1"; then
+
+       		CHPASSOBJS="$CHPASSOBJS fgetpwnam.o";
+
+     	else
+
+       		AC_MSG_WARN("BSD host detected vmail password are disabled")
+
+     	fi
+
+      	AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
+
 fi
 
 if test "$with_libcrack" != "no"; then

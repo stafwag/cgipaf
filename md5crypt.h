@@ -1,3 +1,4 @@
+#include "common.h"
 #include "md5.h"
 
 char * libshadow_md5_crypt(const char *pw, const char *salt);

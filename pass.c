@@ -108,7 +108,11 @@ return(lock);
  * returns         passwd info
  *                 NULL = error
 */
+#ifndef _WITHPAM
 struct pw_info * get_pw(char *name)
+#else
+struct pw_info * get_pw_nopam(char *name)
+#endif
 {
 struct pw_info *pw;
 FILE *pw_file=NULL,*sh_file=NULL;
@@ -197,7 +201,11 @@ return (is_md5password(pass));
  * returns:        -1 = wrong passwd
  *                 0 = ok
 */
+#ifndef _WITHPAM
 int ckpw(struct pw_info *pw,char *pass)
+#else
+int ckpw_nopam(struct pw_info *pw,char *pass)
+#endif
 {
 char *c,*p,salt[3];
 if((p=get_pwfield(pw))==NULL) return(-1);  /* error! */
@@ -351,7 +359,11 @@ return(PASS_SUCCESS);
  *             -3:  can't create lockfile
  */
 
+#ifndef _WITHPAM
 int chpw(struct pw_info *pw,char *pass)
+#else
+int chpw_nopam(struct pw_info *pw,char *pass)
+#endif
 {
 FILE *pwfile;
 FILE *tmpfile;

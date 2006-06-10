@@ -20,6 +20,7 @@
  */
 
 #include "pass.h"
+#include "fgetpwnam.h"
 
 /*
  * if BSDHOST is not defined assume /etc/passwd

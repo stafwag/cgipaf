@@ -89,4 +89,9 @@ struct pw_info {
 struct pw_info * get_pw(char *name);
 int ckpw(struct pw_info *pw,char *pass);
 int chpw(struct pw_info *pw,char *pass);
+#ifdef _WITHPAM
+int ckpw_nopam(struct pw_info *pw,char *pass);
+int chpw_nopam(struct pw_info *pw,char *pass);
+struct pw_info * get_pw_nopam(char *name);
+#endif
 #endif

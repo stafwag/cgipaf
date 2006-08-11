@@ -19,7 +19,7 @@
  *
  */
 
-#include "config.h"
+#include "compat.h"
 #include "xmalloc.h"
 #include <stdlib.h>
 #ifdef HAVE_SYS_SYSTEMINFO_H

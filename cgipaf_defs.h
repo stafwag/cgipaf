@@ -23,6 +23,8 @@
 #define  _CGIPAF_DEFS_H
 
 #include "common.h"
+#include "run_cmd.h"
+#include "acl.h"
 
 #ifndef  _WITHPAM
 #include "fgetpwnam.h"

@@ -24,6 +24,7 @@ case $host_os in
  		AC_MSG_RESULT(yes)
 		;;
    linux*) 
+    		AC_DEFINE(LINUXHOST,1,GNU Linux system)
    		AC_MSG_RESULT(yes)
 		;;
   netbsd*) 
@@ -70,7 +71,7 @@ if test "$SOLARISHOST" = "1";then
 
    if test "$MAJORREL" -eq "5"; then
 
-      if test "$MINORREL" -ge "9"; then
+      if test "$MINORREL" -ge "8"; then
 
     		AC_DEFINE(PAM_CHPW_NOAUTH,1,do not auth at chpw)
    		RESULT_MSG="no"
@@ -93,6 +94,7 @@ NEED_COMPAT_H="COMPAT"
 
 AC_SUBST(OBJS)
 AC_SUBST(CHPASSOBJS)
+AC_SUBST(HAVE_CHPASS_CRYPT)
 
 PRESET_CFLAGS="$CFLAGS"
 
@@ -160,6 +162,8 @@ if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
    AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
 
+   HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
+
 dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
 dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
@@ -195,27 +199,38 @@ dnl freebsd has built-in md5 support
    	OBJS="$OBJS passpam.o"
 	CHPASSOBJS="$OBJS pass.o salt.o"
 
-   AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
+   	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_WARN(no crypt library ))
 
-	dnl freebsd has built-in md5 support
+	if test "$CHPASSCRYPT" = "yes"; then
+
+		HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
+		LIBS="$LIBS -lcrypt"
+
+		dnl freebsd has built-in md5 support
  
-     	if test "$FREEBSDHOST" != "1"; then
+     		if test "$FREEBSDHOST" != "1"; then
 
-       		CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
+       			CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
 
-     	fi
+     		fi
 
-	if test "$BSDHOST" != "1"; then
+		if test "$BSDHOST" != "1"; then
 
-       		CHPASSOBJS="$CHPASSOBJS fgetpwnam.o";
+       			CHPASSOBJS="$CHPASSOBJS fgetpwnam.o";
 
-     	else
+     		else
 
-       		AC_MSG_WARN("BSD host detected vmail password are disabled")
+       			AC_MSG_WARN("BSD host detected vmail password are disabled")
 
-     	fi
+     		fi
 
-      	AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
+      		AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
+
+	else
+
+		HAVE_CHPASS_CRYPT="NO_CHPASS_CRYPT"
+
+	fi
 
 fi
 
@@ -350,6 +365,7 @@ fi
 
 
 AC_CHECK_HEADERS(sys/time.h)
+
 AC_HEADER_TIME
 
 AC_HEADER_SYS_WAIT
@@ -359,6 +375,7 @@ AC_CHECK_HEADERS(unistd.h,,AC_MSG_ERROR(unistd.h not found))
 AC_CHECK_HEADERS(stdlib.h,,AC_MSG_ERROR(stdlib.h not found))
 AC_CHECK_HEADERS(stdio.h,,AC_MSG_ERROR(stdio.h not found))
 AC_CHECK_HEADERS(string.h,,AC_MSG_ERROR(string.h not found))
+AC_CHECK_HEADERS(ctype.h,,)
 AC_CHECK_HEADERS(fcntl.h,,AC_MSG_ERROR(fcntl.h not found))
 AC_CHECK_HEADERS(malloc.h,,)
 AC_CHECK_HEADERS(errno.h,,AC_MSG_ERROR(errno.h not found))
@@ -366,10 +383,10 @@ AC_CHECK_HEADERS(sys/stat.h,,AC_MSG_ERROR(sys/stat.h not found))
 AC_CHECK_HEADERS(pwd.h,,AC_MSG_ERROR(pwd.h not found))
 AC_CHECK_HEADERS(stdarg.h,,AC_MSG_ERROR(stdarg.h not found))
 AC_CHECK_HEADERS(syslog.h,,AC_MSG_ERROR(syslog.h not found))
+AC_CHECK_HEADERS(shadow.h,,)
 
 if test "$ARG" != "WITHPAM"; then
  
-    AC_CHECK_HEADERS(shadow.h,,)
     ARG="NOPAM"
  
 else

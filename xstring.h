@@ -19,12 +19,11 @@
  *
  */
 
-#include "xmalloc.h"
-#include <string.h>
-#include <stdlib.h>
+#include "common.h"
 void cut_space (char *c);
 void cut_after_quote(char *c);
 void cut_after_char(char *c, char ch);
+void cut_rem (char *c);
 char * mv_2_next (char *c);
 int get_item_size (char *c);
 int get_quoted_item_size (char *c);

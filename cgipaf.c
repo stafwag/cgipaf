@@ -21,7 +21,7 @@
 
 #include "cgipaf_defs.h"
 
-main()
+int main()
 {
 #include "cgipaf_vars.h"
 #include "cgipaf_init.c"

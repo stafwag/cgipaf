@@ -151,6 +151,13 @@ int main (int argn,char **argv)
 
 				nopamflag=1;
 
+				if (md5flag && encryptflag) {
+
+					fprintf(stderr,"Can't use --md5 and --encrypted at the same time\n\n");
+					hlpflag=1;
+
+				}
+
 			}
 
 		   }
@@ -166,16 +173,44 @@ int main (int argn,char **argv)
 
    }
    
+#ifdef _WITHPAM
+
   if (!nopamflag) {
 
 	   pamflag=1;
 
   }
 
-#ifdef _WITHPAM
+#ifdef NO_CHPASS_CRYPT
+
+  else {
+
+	  fprintf(stderr,"%s is compiled without --nopam support\n",prgname);
+	  exit(1);
+
+  }
+
+#endif
+
    
    set_pam_service("passwd");      /* set PAM service name */
    set_pam_chauth_flag(0);
+
+#else
+
+	if (pamflag) {
+
+		fprintf(stderr,"%s is compiled without --pam support\n",prgname);
+		exit(1);
+
+
+	}
+	else {
+
+		pamflag=0;
+		nopamflag=1;
+
+	}
    
 #endif
 
@@ -240,8 +275,22 @@ int main (int argn,char **argv)
 
    }
    else {
+	   int mode=0;
 
-	   i=chpw_nopam(pw,pass);
+	   if (md5flag) {
+
+		   mode=1;
+
+	   }
+	   else {
+		   if(encryptflag) {
+
+			   mode =2;
+
+		   }
+	   }
+
+	   i=chpw_nopam(pw,pass,mode);
 
    }
 

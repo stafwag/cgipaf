@@ -19,7 +19,7 @@
  *
  */
 
-#include "config.h"
+#include "common.h"
 #include <pwd.h>
 
 #ifdef HAVE_SHADOW_H

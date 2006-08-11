@@ -20,6 +20,7 @@
  */
 
 #include "pass.h"
+#include <stdio.h>
 #include "fgetpwnam.h"
 
 /*
@@ -179,9 +180,10 @@ char * get_pwfield (struct pw_info *pw)
      if(pw->sp==NULL) return(pw->p->pw_passwd);
 #ifdef HAVE_SHADOW_H
      return(pw->sp->sp_pwdp);
-#endif
+#else
      return(NULL);
-};
+#endif
+}
 
 /*
  * returns password crypt type
@@ -352,19 +354,29 @@ errno=0;
 return(PASS_SUCCESS);
 }
 
+#ifndef _WITHPAM
+int chpw(struct pw_info *pw,char *pass)
+{
+	chpw_nopam(pw,pass,0);
+
+}
+
+#endif
+
 /*
  * update the user's password
+ *
+ * mode:	
+ * 		0:  normal mode
+ * 		1:  force md5 passwords
+ * 		2:  pass is already encrypted 
  * 
  * returns:
  *             -2:  lockfile exists
  *             -3:  can't create lockfile
  */
 
-#ifndef _WITHPAM
-int chpw(struct pw_info *pw,char *pass)
-#else
-int chpw_nopam(struct pw_info *pw,char *pass)
-#endif
+int chpw_nopam (struct pw_info *pw, char *pass,int mode)
 {
 FILE *pwfile;
 FILE *tmpfile;
@@ -411,26 +423,61 @@ while (count--) {
    
 if (fd_tmplock==-1) return(-3); /* can't create lock */
 
-switch(get_crypttype(pw))
-{
-	case 0:      c=std_seed();           /* standard crypt password */
-                     encrypt_pass=crypt(pass,c);
-		     break;
+switch(mode) {
+
+	case 2:
+		encrypt_pass=pass;
+		break;
+
+	case 1:
+
+		/*
+ 		 * force md5 passwords if mode=1
+ 		 */
+
+		i=1;
+		break;
+
+	default:
+		i=get_crypttype(pw);
+
+}
+
+/*
+ * Create an encrypted password
+ */
+
+if (mode != 2) {
+
+	switch(i) {
+
+		case 0: 
+			c=std_seed();       /* standard crypt password */
+                     	encrypt_pass=crypt(pass,c);
+		     	break;
+
 #ifdef MD5_CRYPT
-        case 1:
-         	     c=md5_seed();           /* md5 password            */
+
+        	case 1:
+         	     	c=md5_seed();       /* md5 password            */
+
 #ifndef FREEBSDHOST
-		     encrypt_pass=libshadow_md5_crypt(pass,c); 
+
+		     	encrypt_pass=libshadow_md5_crypt(pass,c); 
 #else
-		     encrypt_pass=xmalloc(_PASSWORD_LEN+1);
-		     encrypt_pass[0]='\0';
-		     (void)crypt_set_format("md5");
-		     encrypt_pass=crypt(pass,c);
+		     	encrypt_pass=xmalloc(_PASSWORD_LEN+1);
+		     	encrypt_pass[0]='\0';
+		     	(void)crypt_set_format("md5");
+		     	encrypt_pass=crypt(pass,c);
 #endif
-		     break;
+		     	break;
 #endif
-        default:     c=NULL;                 /* unsupported crypt type! */
-		     i=-13;
+        	default:
+			c=NULL;            /* unsupported crypt type! */
+		        i=-13;
+
+	}
+
 }
 
 if (c!=NULL) {

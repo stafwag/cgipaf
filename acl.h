@@ -29,3 +29,4 @@ int check_grpacl(struct pw_info *p,char **groups);
 int get_useraclorder(FILE *config_file,char *section_name);
 int get_groupaclorder(FILE *config_file,char *section_name);
 int acl (FILE *config_file,char *section_name, struct pw_info *p,char *usermaildomain);
+int get_aclorder(FILE *config_file,char *section_name);

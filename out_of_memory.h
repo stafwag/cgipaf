@@ -21,4 +21,5 @@
 
 #include "xmalloc.h"
 #include "write_log.h"
+#include "ccgi.h"
 void out_of_memory(void);

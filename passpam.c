@@ -45,11 +45,19 @@ char *last_pam_msg()
 return(pam_msg);   
 }
 
+#ifdef SOLARISHOST
+int chpasswd(int num_msg, struct pam_message **msg,
+    	     struct pam_response **resp, void *appdata_ptr)
+#else
+
 int chpasswd(num_msg, msg, resp, appdata_ptr)
     int          num_msg;
     const struct pam_message **msg;
     struct       pam_response **resp;
     void         *appdata_ptr;
+
+#endif
+
 {
     int i;
     struct pam_response *rp = xmalloc(sizeof(struct pam_response) * num_msg);
@@ -83,9 +91,10 @@ int chpasswd(num_msg, msg, resp, appdata_ptr)
 }
 
 static struct pam_conv conv = {
-	chpasswd, 
+        chpasswd, 
 	NULL
 };
+
 /* ---------------------------------------------- */
 /* reads the passwd info out /etc/passwd and      */
 /* /etc/shadow                                    */

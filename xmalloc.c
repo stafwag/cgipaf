@@ -25,9 +25,9 @@ void xmalloc_out_of_memory() {
    fprintf(stderr,"Out of memory\n");
    exit(1);
 }
-void *set_memerr(void *s)
+void (*set_memerr(void (*s)()))()
 {
-static void *err=xmalloc_out_of_memory;
+static void (*err)()=&xmalloc_out_of_memory;
 if (s!=NULL) err=s;
 return err;
 }

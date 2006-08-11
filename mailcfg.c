@@ -49,7 +49,7 @@ void yes_no(char *test,char *name,char *not_name,int *state)
    }
 }
 
-main()
+int main()
 {
    int    forward_state=0;
    int    keep_state=0;

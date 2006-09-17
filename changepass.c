@@ -1,7 +1,7 @@
 /*
  * changepass.c
  *
- * Copyright (C) 2002 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2006 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,12 +34,41 @@ void usage() {
       fprintf(stderr,"usage: %s %s\n",prgname,txt_usage);
 }
 
+struct  pw_info * get_pw_info (char *name,int pamflag) {
+
+   	struct pw_info *pw;
+
+	#ifdef _WITHPAM
+
+   	if (pamflag) {
+
+	   	pw=get_pw(name);
+
+   	}
+   	else {
+	   	pw=get_pw_nopam(name);
+
+   	}
+
+	#else
+
+   		pw=get_pw(name);
+
+	#endif
+
+	return(pw);
+
+}
+
+
 int main (int argn,char **argv) 
 {
    int i;
    char line[1024]="\0";
    char *pass;
+   char **passwords=NULL;
    char *name;
+   char **names=NULL;
    char *c;
    struct pw_info *pw;
    int hlpflag=0;
@@ -47,7 +76,10 @@ int main (int argn,char **argv)
    int nopamflag=0;
    int pamflag=0;
    int md5flag=0;
-
+   int linecounter=0;
+   int number_of_lines=0;
+   int error=0;
+   int pass_updated=0;
    
    prgname=argv[0];              /* set prgname to the real program name */
 
@@ -214,109 +246,205 @@ int main (int argn,char **argv)
    
 #endif
 
-   fgets(line,1023,stdin);          /* read the data from stdin */
+	/*
+	 * parse stdin line by line
+	 */
 
-   if(strlen(line)==0) {
-      usage();                      /* oops, no data */
-      exit(1);
-   }
-   
-   if(line[strlen(line)-1]!='\n') {
-      fprintf(stderr,"Too much data...\n");  /* buffer too small */
-      exit(1);
-   }
+	linecounter=0;
 
-   line[strlen(line)-1]='\0';
+	for (;;) {
+
+   		if (fgets(line,1023,stdin)==NULL) break;          /* read the data from stdin */
+
+   			if(strlen(line)==0) {
+
+				if (linecounter == 0 ) {
+
+      					usage();                      /* oops, no data */
+      					exit(1);
+
+				}else {
+					continue;
+				}
+
+   		}
+
+		/* 
+		 * detect a buffer overrun
+		 */
    
-   if((c=strstr(line,":"))==NULL) {
-      usage();                      /* no ':' to seperate username and pw */
-      exit(1);
-   }
+   		if(line[strlen(line)-1]!='\n') {
+
+      			fprintf(stderr,"\nToo much data...\n");  /* buffer too small */
+      			exit(1);
+
+   		}
+
+
+		/*
+		 * chop
+		 */
+
+   		line[strlen(line)-1]='\0';
+
+		/*
+		 * Ignore empty lines
+		 */
+
+		if (strlen(line)==0) {
+
+			continue;
+
+		}
+
+		/*
+		 * check on password seperator
+		 */
    
-   /* copy the username into name */
+   		if((c=strstr(line,":"))==NULL) {
+
+      			fprintf(stderr,"\nInput error no \":\" in input\n\n");
+      			exit(1);
+
+   		}
    
-   name=(char *) xmalloc((c-line)+1);
-   strncpy(name,line,(c-line));
-   name[c-line]='\0';
+   		/* copy the username into name */
    
-   /* copy the password into pass */
+   		name=(char *) xmalloc((c-line)+1);
+   		strncpy(name,line,(c-line));
+   		name[c-line]='\0';
+		names=(char **) xrealloc(names,(linecounter+2)*sizeof(char **));
+		names[linecounter]=name;
+		names[linecounter+1]=NULL;
    
-   pass=(char *) xmalloc(strlen(c));
-   strncpy(pass,c+1,strlen(c)-1);
-   pass[strlen(c)]='\0';
+   		/* copy the password into pass */
+   
+   		pass=(char *) xmalloc(strlen(c));
+   		strncpy(pass,c+1,strlen(c)-1);
+   		pass[strlen(c)]='\0';
+		passwords=(char **) xrealloc(passwords,(linecounter+2)*sizeof(char **));
+		passwords[linecounter]=pass;
+		passwords[linecounter+1]=NULL;
+
+		++linecounter;
+
+	}
+
+	number_of_lines=linecounter;
+
+	/*
+	 * loop through the user and vrfy that we can get the password info
+	 */
+
+	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
+
+		fprintf(stderr,"%s %s\n",names[linecounter],passwords[linecounter]);
+
+		name=names[linecounter];
+		pass=passwords[linecounter];
+
+		pw=get_pw_info(name,pamflag);
+
+
+   		if (!pw) {
+
+      			fprintf(stderr,"\nFailed to get password info for user: %s on line: %d\n\n",name,linecounter+1); /* get_pw() failed */
+      			exit(1);
+
+   		};
+
+	}
+
+	/*
+	 * walk again to update the passwords
+	 */
+
+	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
+
+		fprintf(stderr,"%s %s\n",names[linecounter],passwords[linecounter]);
+
+		name=names[linecounter];
+		pass=passwords[linecounter];
+
+		pw=get_pw_info(name,pamflag);
+
+
+   		if (!pw) {
+
+      			fprintf(stderr,"\nFailed to get password info for user: %s on line: %d\n\n",name,linecounter+1); /* get_pw() failed */
+			error=1;
+      			continue;
+
+   		};
 
 #ifdef _WITHPAM
 
-   if (pamflag) {
+   		if (pamflag) {
 
-	   pw=get_pw(name);
+			i=chpw(pw,pass);
 
-   }
-   else {
-	   pw=get_pw_nopam(name);
+   		}
+   		else {
 
-   }
+	   		int mode=0;
+
+	   		if (md5flag) {
+
+		   		mode=1;
+
+	   		}
+	   		else {
+
+		   		if(encryptflag) {
+
+			   	mode=2;
+
+		   		}
+	   		}
+
+	   		i=chpw_nopam(pw,pass,mode);
+
+   		}
 
 #else
 
-   pw=get_pw(name);
-
-#endif
-   if (!pw) {
-      fprintf(stderr,"User %s doesn't exists\n",name); /* get_pw() failed */
-      exit(1);
-   };
-
-#ifdef _WITHPAM
-
-   if (pamflag) {
-
-	   i=chpw(pw,pass);
-
-   }
-   else {
-	   int mode=0;
-
-	   if (md5flag) {
-
-		   mode=1;
-
-	   }
-	   else {
-		   if(encryptflag) {
-
-			   mode =2;
-
-		   }
-	   }
-
-	   i=chpw_nopam(pw,pass,mode);
-
-   }
-
-#else
-
-   i=chpw(pw,pass);
+   		i=chpw(pw,pass);
 
 #endif
 
-   if (i!=PASS_SUCCESS) {
-      /* chpw() failed */
-      fprintf(stderr,"Can't update password for user %s\n",name);
+   		if (i!=PASS_SUCCESS) {
+
+      			/* chpw() failed */
+      			fprintf(stderr,"\nCan't update password for user %s on line %d \n\n",name,linecounter+1);
 #ifdef _WITHPAM
 
-      if (pamflag) {
+      			if (pamflag) {
 
-      	puts(pam_strerror(pw->pamh,i));
+      				puts(pam_strerror(pw->pamh,i));
 
-      }
-#endif 
-      exit(1);
-   }
+      			}
+#endif
 
-   /* password updated */
+			error=1;
+
+   		}
+		else {
+
+			pass_updated++;
+
+		}
+
+	}
+
+   	/* password updated */
+
+	if (error) {
+
+		fprintf(stderr,"\nSorry, couldn't update all passwords\n");
+
+	}
    
-   fprintf(stderr,"passwd updated...\n");
-   exit(0);
+   	fprintf(stderr,"%d of %d passwords updated...\n\n",pass_updated,number_of_lines);
+   	exit(error);
 
 }

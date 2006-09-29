@@ -303,7 +303,7 @@ int main (int argn,char **argv)
    
    		if((c=strstr(line,":"))==NULL) {
 
-      			fprintf(stderr,"\nInput error no \":\" in input\n\n");
+      			fprintf(stderr,"\nInput error no \":\" in input on line: %d\n\n",linecounter+1);
       			exit(1);
 
    		}

@@ -21,8 +21,9 @@
 
 #include "common.h"
 #include "pass.h"
+#include <libgen.h>
 
-char txt_usage[]="[OPTION]\n\noptions:\n\n   -h,--help\tprint this help\n   -n,--nopam\tdon't use pam\n   -p,--pam\tuse pam (default)\n   -e,--encrypt\tpassword is already encrypted, this option will disable pam\n   -m,--md5\tuse md5 encryption, this option will disable pam\n\n";
+char txt_usage[]="[OPTION]\n\noptions:\n\n   -h,--help\tprint this help\n   -n,--nopam\tdon't use pam\n   -p,--pam\tuse pam (default)\n   -e,--encrypt\tpassword is already encrypted, this option will disable pam\n   -m,--md5\tuse md5 encryption, this option will disable pam\n   -v,--verbose\tenable verbose output\n\n";
 
 char *prgname;
 
@@ -76,17 +77,18 @@ int main (int argn,char **argv)
    int nopamflag=0;
    int pamflag=0;
    int md5flag=0;
+   int verboseflag=0;
    int linecounter=0;
    int number_of_lines=0;
    int error=0;
    int pass_updated=0;
    
-   prgname=argv[0];              /* set prgname to the real program name */
+   prgname=basename(argv[0]);              /* set prgname to the real program name */
 
    if(argn>1) {                  /* we've no arguments */
 
 	   int i;
-	   char *longargs[]={"encrypted","md5","help","nopam","pam",NULL};
+	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose",NULL};
 
 	   /*
 	    * convert long opts to shorts opt
@@ -117,7 +119,7 @@ int main (int argn,char **argv)
 				}
 
 				if (!found) {
-						fprintf(stderr,"Unkown argument %s\n",argv[i]);
+						fprintf(stderr,"%s: Unkown argument %s\n",prgname,argv[i]);
 				        	hlpflag=1;
 
 				}
@@ -126,7 +128,7 @@ int main (int argn,char **argv)
 
 	   if(!hlpflag) {
 
-	   	while ((i = getopt(argn, argv, "hpemn")) != -1) {
+	   	while ((i = getopt(argn, argv, "hpemnv")) != -1) {
 
 			switch(i) {
 
@@ -145,6 +147,9 @@ int main (int argn,char **argv)
 		   		case 'p':
 						pamflag=1;
 						break;
+				case 'v':
+						verboseflag=1;
+						break;
 		   		case '?':	
 						hlpflag=1;
 						break;
@@ -156,15 +161,22 @@ int main (int argn,char **argv)
 
 	   }
 
-	   printf("hlpflag = %d\n",hlpflag);
-	   printf("encryptflag = %d\n",encryptflag);
-	   printf("pamflag = %d\n",pamflag);
-	   printf("nopamflag = %d\n",nopamflag);
-	   printf("md5flag = %d\n",md5flag);
+	   if ( verboseflag ) {
+
+		fprintf(stderr,"DEBUG: option flags\n\n");
+
+	   	fprintf(stderr,"hlpflag = %d\n",hlpflag);
+	   	fprintf(stderr,"encryptflag = %d\n",encryptflag);
+	   	fprintf(stderr,"pamflag = %d\n",pamflag);
+	   	fprintf(stderr,"nopamflag = %d\n",nopamflag);
+	   	fprintf(stderr,"md5flag = %d\n",md5flag);
+	   	fprintf(stderr,"verboseflag = %d\n",verboseflag);
+
+	   }
 
 	   if (pamflag && nopamflag) {
 
-		   fprintf(stderr,"Can't enable pam and nopam.\n\n");
+		   fprintf(stderr,"%s: Can't enable pam and nopam.\n\n",prgname);
 
 		   hlpflag=1;
 
@@ -173,7 +185,7 @@ int main (int argn,char **argv)
 
 		   if ( pamflag && ( md5flag || encryptflag ) ) {
 
-			   fprintf(stderr,"--md5 and --encrypted are invalid with forced pam.\n\n");
+			   fprintf(stderr,"%s: --md5 and --encrypted are invalid with forced pam.\n\n",prgname);
 
 			   hlpflag=1;
 
@@ -185,7 +197,7 @@ int main (int argn,char **argv)
 
 				if (md5flag && encryptflag) {
 
-					fprintf(stderr,"Can't use --md5 and --encrypted at the same time\n\n");
+					fprintf(stderr,"%s: Can't use --md5 and --encrypted at the same time\n\n",prgname);
 					hlpflag=1;
 
 				}
@@ -205,6 +217,7 @@ int main (int argn,char **argv)
 
    }
    
+
 #ifdef _WITHPAM
 
   if (!nopamflag) {
@@ -217,7 +230,7 @@ int main (int argn,char **argv)
 
   else {
 
-	  fprintf(stderr,"%s is compiled without --nopam support\n",prgname);
+	  fprintf(stderr,"%s: is compiled without --nopam support\n\n",prgname);
 	  exit(1);
 
   }
@@ -232,7 +245,7 @@ int main (int argn,char **argv)
 
 	if (pamflag) {
 
-		fprintf(stderr,"%s is compiled without --pam support\n",prgname);
+		fprintf(stderr,"%s: is compiled without --pam support\n\n",prgname);
 		exit(1);
 
 
@@ -245,6 +258,19 @@ int main (int argn,char **argv)
 	}
    
 #endif
+
+   	if ( verboseflag ) {
+
+		fprintf(stderr,"DEBUG: option flags after evaluation\n\n");
+
+   		fprintf(stderr,"hlpflag = %d\n",hlpflag);
+   		fprintf(stderr,"encryptflag = %d\n",encryptflag);
+   		fprintf(stderr,"pamflag = %d\n",pamflag);
+   		fprintf(stderr,"nopamflag = %d\n",nopamflag);
+   		fprintf(stderr,"md5flag = %d\n",md5flag);
+   		fprintf(stderr,"verboseflag = %d\n",verboseflag);
+
+   	}
 
 	/*
 	 * parse stdin line by line
@@ -275,7 +301,7 @@ int main (int argn,char **argv)
    
    		if(line[strlen(line)-1]!='\n') {
 
-      			fprintf(stderr,"\nToo much data...\n");  /* buffer too small */
+      			fprintf(stderr,"\n%s: Too much data...\n\n",prgname);  /* buffer too small */
       			exit(1);
 
    		}
@@ -285,7 +311,11 @@ int main (int argn,char **argv)
 		 * chop
 		 */
 
-   		line[strlen(line)-1]='\0';
+		if (line[strlen(line)-1] == '\n' ) {
+
+   			line[strlen(line)-1]='\0'; 
+
+		}
 
 		/*
 		 * Ignore empty lines
@@ -303,7 +333,7 @@ int main (int argn,char **argv)
    
    		if((c=strstr(line,":"))==NULL) {
 
-      			fprintf(stderr,"\nInput error no \":\" in input on line: %d\n\n",linecounter+1);
+      			fprintf(stderr,"\n%s: Input error no \":\" in input on line: %d\n\n",prgname,linecounter+1);
       			exit(1);
 
    		}
@@ -319,9 +349,10 @@ int main (int argn,char **argv)
    
    		/* copy the password into pass */
    
-   		pass=(char *) xmalloc(strlen(c));
-   		strncpy(pass,c+1,strlen(c)-1);
-   		pass[strlen(c)]='\0';
+   		pass=(char *) xmalloc(strlen(c)+1);
+   		/* strncpy(pass,c+1,strlen(c)-1); */
+   		strcpy(pass,c+1);
+   		/* pass[strlen(c)]='\0'; */
 		passwords=(char **) xrealloc(passwords,(linecounter+2)*sizeof(char **));
 		passwords[linecounter]=pass;
 		passwords[linecounter+1]=NULL;
@@ -338,7 +369,8 @@ int main (int argn,char **argv)
 
 	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
 
-		fprintf(stderr,"%s %s\n",names[linecounter],passwords[linecounter]);
+
+		if (verboseflag) fprintf(stderr,"DEBUG \"%s\" \"%s\"\n",names[linecounter],passwords[linecounter]);
 
 		name=names[linecounter];
 		pass=passwords[linecounter];
@@ -348,7 +380,8 @@ int main (int argn,char **argv)
 
    		if (!pw) {
 
-      			fprintf(stderr,"\nFailed to get password info for user: %s on line: %d\n\n",name,linecounter+1); /* get_pw() failed */
+      			fprintf(stderr,"\n%s: get_pw() failed. Failed to get password info for user: %s on line: %d\n",prgname,name,linecounter+1); /* get_pw() failed */
+			fprintf(stderr,"%s: Errors detected, changes ignored\n\n",prgname);
       			exit(1);
 
    		};
@@ -361,7 +394,7 @@ int main (int argn,char **argv)
 
 	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
 
-		fprintf(stderr,"%s %s\n",names[linecounter],passwords[linecounter]);
+		if (verboseflag) fprintf(stderr,"DEBUG \"%s\" \"%s\"\n",names[linecounter],passwords[linecounter]);
 
 		name=names[linecounter];
 		pass=passwords[linecounter];
@@ -371,7 +404,7 @@ int main (int argn,char **argv)
 
    		if (!pw) {
 
-      			fprintf(stderr,"\nFailed to get password info for user: %s on line: %d\n\n",name,linecounter+1); /* get_pw() failed */
+      			fprintf(stderr,"\n%s: Failed to get password info for user: %s on line: %d\n",prgname,name,linecounter+1); /* get_pw() failed */
 			error=1;
       			continue;
 
@@ -381,6 +414,7 @@ int main (int argn,char **argv)
 
    		if (pamflag) {
 
+			if (verboseflag) fprintf(stderr,"DEBUG: running chpw() for user \"%s\" \"%s\"\n",name,pass);
 			i=chpw(pw,pass);
 
    		}
@@ -402,12 +436,22 @@ int main (int argn,char **argv)
 		   		}
 	   		}
 
+			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
+
 	   		i=chpw_nopam(pw,pass,mode);
+
+			if (i==-3) {
+
+				fprintf(stderr,"\n%s: failed to create lock %s",prgname,TMPLOCK);
+
+
+			}
 
    		}
 
 #else
 
+		if (verboseflag) fprintf(stderr,"DEBUG: running chpw() (_WITHPAM is disabled) for user %s\n",name);
    		i=chpw(pw,pass);
 
 #endif
@@ -415,12 +459,12 @@ int main (int argn,char **argv)
    		if (i!=PASS_SUCCESS) {
 
       			/* chpw() failed */
-      			fprintf(stderr,"\nCan't update password for user %s on line %d \n\n",name,linecounter+1);
+      			fprintf(stderr,"\n%s: Can't update password for user %s on line %d",prgname,name,linecounter+1);
 #ifdef _WITHPAM
 
       			if (pamflag) {
 
-      				puts(pam_strerror(pw->pamh,i));
+      				fprintf(stderr,"%s: %s\n",pam_strerror(pw->pamh,i));
 
       			}
 #endif
@@ -440,11 +484,11 @@ int main (int argn,char **argv)
 
 	if (error) {
 
-		fprintf(stderr,"\nSorry, couldn't update all passwords\n");
+		fprintf(stderr,"\n%s: Sorry, couldn't update all passwords\n",prgname);
 
 	}
    
-   	fprintf(stderr,"%d of %d passwords updated...\n\n",pass_updated,number_of_lines);
+   	fprintf(stderr,"%s: %d of %d passwords updated...\n\n",prgname,pass_updated,number_of_lines);
    	exit(error);
 
 }

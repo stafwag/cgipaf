@@ -19,17 +19,36 @@ user's password in script with \fBusermod\fP
 .br
 but it's possible to see the encrypted password in the process
 list, which is not very secure.
+.br
+\fBchangapass\fP reads a list of user name and password pairs
+from \fBstdin\fP  and updates the users passwords
+.br
+Each line has format:
+.br
+username:password
+.br    
+.SH OPTIONS
+.br
+   -h,--help    print this help
+   -n,--nopam   don't use pam
+   -p,--pam     use pam (default)
+   -e,--encrypt password is already encrypted, this option
+.br             will disable pam
+   -m,--md5     use md5 encryption, this option will
+.br             disable pam
+   -v,--verbose enable verbose output
+
 .br    
 .SH USAGE
 .br 
-echo "username:new_password" | changepass
+cat user_password_pairs | changepass
 .br
 
 .SH AUTHOR
 Written by Staf Wagemakers <staf@wagemakers.be>
     
 .SH COPYRIGHT
-Copyright (c)2002 Staf Wagemakers.
+Copyright (c)2002, 2006 Staf Wagemakers.
 .br    
 You are free to distribute this software under the terms of the 
 GNU General Public License. The complete text of the GNU General

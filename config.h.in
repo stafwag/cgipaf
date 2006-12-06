@@ -265,6 +265,9 @@
 /* GNU Linux system */
 #undef LINUXHOST
 
+/* lock directory */
+#undef LOCKDIR
+
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
 #undef LSTAT_FOLLOWS_SLASHED_SYMLINK
@@ -301,6 +304,9 @@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
+
+/* lock file */
+#undef TMPLOCK
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

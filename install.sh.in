@@ -1,7 +1,25 @@
 #!/bin/sh
-# cgipaf install script			        staf wagemakers
-#                                               staf@wagemakers.be
-#                                               http://www.wagemakers.be
+#
+# cgipaf install script
+#
+# Copyright (C) 2000-06 Staf Wagemakers Belgie/Belgium
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#
+
 read_yesno () {
 read INPUT
   case "$INPUT" in
@@ -56,6 +74,13 @@ if [ ! -d $CGIBIN ]
    if [ "$YESNO" = "1" ]
       then
            mkdir -p $CGIBIN
+
+	   if [ "$?" != "0" ]; then
+
+		echo "ERROR: sorry, failed to create $CGIBIN"
+		exit 1
+
+	   fi
       fi
 
 fi
@@ -63,34 +88,124 @@ fi
 if [ -d $CGIBIN ] 
    then
          mkdir -p @sysconfdir@
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: sorry failed to create @sysconfdir@"
+		exit 1
+
+	 fi
+
+	 chmod 755 @sysconfdir@
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: sorry chmod on @sysconfdir@ failed"
+		exit 1
+
+	 fi
+
          cp -i passwd.cgi viewmailcfg.cgi mailcfg.cgi $CGIBIN
+
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: failed to copy binaries to $CGIBIN"
+		exit 1
+
+	 fi
+
          chown root:$rootgroup $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: chown on binaries failed"
+		exit 1
+
+	 fi
+
          chmod 4555 $CGIBIN/passwd.cgi $CGIBIN/viewmailcfg.cgi $CGIBIN/mailcfg.cgi
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: chmod on binaries failed"
+		exit 1
+
+	 fi
+
    else
          echo "$CGIBIN doesn't exist...."
 	 echo "Can't copy binary files!!!!"
 	 sleep 5
+	 exit 1
 fi
 
 WWW="${datadir}"
+
 if [ -d $WWW ]
       then
+
          cp -i php/*.php $WWW
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: copy datafiles failed"
+		exit 1
+
+	 fi
+
          chmod 644 $WWW/cgipasswd*.php $WWW/mailcfg*.php $WWW/viewmailcfg*.php 
+
+	 if [ "$?" != "0" ]; then
+
+		echo "ERROR: chmod on datafiles failed"
+		exit 1
+
+	 fi
+
       else
+
          echo "$WWW doesn't exist...."
 	 echo "Create $WWW? (yes/no)"
 	 read_yesno
 	 if [ "$YESNO" = "1" ]
 	    then
 	      mkdir -p $WWW
+
+		if [ "$?" != "0" ]; then
+
+			echo "ERROR: failed to create $WWW"
+			exit 1
+
+		fi
+
               cp -i php/*.php $WWW
+
+		if [ "$?" != "0" ]; then
+
+		echo "ERROR: copy datafiles failed"
+		exit 1
+
+		fi
+
               chmod 644 $WWW/cgipasswd*.php $WWW/mailcfg*.php $WWW/viewmailcfg*.php 
+
+	 	if [ "$?" != "0" ]; then
+
+			echo "ERROR: chmod on datafiles failed"
+			exit 1
+
+	 	fi
+
 	 else
+
 	    echo "Couldn't copy standard php files"
 	    sleep 5
+	    exit 1
+
 	 fi		   
 fi
+
    if [ -f $CFGFILE ]
       then
         echo "$CFGFILE already exists. Overwrite? (yes/no)"
@@ -98,10 +213,28 @@ fi
       else
         YESNO=1
    fi
+
    if [ "$YESNO" = "1" ]; then
-   sh ./createconfig.sh
-   cp ./cgipaf.conf $CFGFILE
-   chmod 644 $CFGFILE
+
+   	sh ./createconfig.sh
+
+   	cp ./cgipaf.conf $CFGFILE
+
+	if [ "$?" != "0" ]; then
+
+		echo "ERROR: failed to copy $CFGFILE"
+		exit 1
+
+	fi
+
+   	chmod 644 $CFGFILE
+
+	if [ "$?" != "0" ]; then
+
+		echo "ERROR: chmod on $CFGFILE failed"
+		exit 1
+
+	fi
  
    fi
    

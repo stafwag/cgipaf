@@ -468,7 +468,12 @@ sub display ($) {
 	print h1("$BODY_TITLE");
 	print "<hr />\n";
 
-	print start_form('POST',"$MAILCFG");
+#
+#	replaced build-in perl start_form to avoid encoding problem
+#	print start_form('POST',"$MAILCFG");
+#
+
+	print "<form method=\"POST\" action=\"$MAILCFG\">\n";
 
 	print table(Tr({ -align => 'left' },  [
 	               td( [ 
@@ -529,6 +534,7 @@ sub display ($) {
 		     )
 	       );
 	print "\n</center>\n";
+	print "</form>\n";
 
 
 	print end_html;

@@ -1,7 +1,7 @@
 /*
  * ccgi.c     		- cgi functions -
  *
- * Copyright (C) 1999,2001,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2001,2003,2006 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ wp->value=NULL;
 wp->string=NULL;
 
 t=0;
+
 while (1) {
 
 if (tmp==NULL) {
@@ -49,6 +50,7 @@ if (tmp==NULL) {
 }
 
 if (*c!=equals && *c!=end && *c!='\n' && *c!='\0') {
+
    tmp=(char *)xrealloc(tmp,t+2);
    tmp[t]=*c; 
    tmp[++t]='\0';
@@ -63,18 +65,26 @@ if (*c!=equals && *c!=end && *c!='\n' && *c!='\0') {
 	    }
 	 }
 	 else {
-	     if (strlen(tmp)) {
-	        wp->value=xrealloc(wp->value,sizeof(char *)*(wp->n+1));
-	        wp->value[wp->n]=xmalloc(strlen(tmp)+1);
-	        strcpy(wp->value[wp->n],tmp);
-	        ++wp->n;
-		}
+
+		 if (wp->name!=NULL) {
+
+	     		if (strlen(tmp)) {
+
+	        		wp->value=xrealloc(wp->value,sizeof(char *)*(wp->n+1));
+	        		wp->value[wp->n]=xmalloc(strlen(tmp)+1);
+	        		strcpy(wp->value[wp->n],tmp);
+	        		++wp->n;
+
+				}
+
+		 }
 	 }
       t=0;free(tmp);tmp=NULL;
    };
  if (!*c) break;
  ++c;
  }
+
 return wp;
 }
 
@@ -126,22 +136,31 @@ char * get_cookie(WEBDATA *wp,char *name)
  */
 WEBDATA *read_post(void)
 {
-WEBDATA *wp;
-int bytes=0;
-char *c;
-c=getenv("REQUEST_METHOD");
-if (c==0) return(NULL);
-if (strcmp(c,"POST")) return(NULL);
-c=getenv("CONTENT_LENGTH");
-if(c==0) return(NULL);
-sscanf(c,"%d",&bytes);
-++bytes;
-c=(char *)xmalloc(bytes+1);
-fgets(c,bytes,stdin);
-wp=str2webdata('=','&',c);
-if(wp==NULL) return NULL;
-wp->string=c;			/* save the orignal post */
-return wp;
+	WEBDATA *wp;
+	int bytes=0;
+	char *c;
+
+	c=getenv("REQUEST_METHOD");
+
+	if (c==0) return(NULL);
+	if (strcmp(c,"POST")) return(NULL);
+
+	c=getenv("CONTENT_LENGTH");
+
+	if(c==0) return(NULL);
+
+	sscanf(c,"%d",&bytes);
+	++bytes;
+
+	c=(char *)xmalloc(bytes+1);
+	fgets(c,bytes,stdin);
+
+	wp=str2webdata('=','&',c);
+
+	if(wp==NULL) return NULL;
+	wp->string=c;			/* save the orignal post */
+
+	return wp;
 }
 
 /*

@@ -313,20 +313,27 @@ if (setuid(0)==-1) {
 #endif
 
    /* read the POST data */
-   
+
    write_log(LOG_USER,7,"Reading POST data...");
    data=read_post();
+   write_log(LOG_USER,7,"Finished reading POST data...");
 
    /* No Post? -> Ask the user to login */
    
-   if (!data) {
+   if (data==NULL) {
       write_log(LOG_USER,7,"no POST data, show login_document");
+      show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options,txt_message);
+   }
+
+   if (data->name==NULL) {
+      write_log(LOG_USER,7,"empty post array, show login_document");
       show_msg_and_exit(config_file,doc_root,CFGSECTION,LOGIN_DOCUMENT,err_readdata,options,txt_message);
    }
 
    /* add post variabeles to the options table */
 
+   write_log(LOG_USER,7,"cgipaf_init.c: add_post_2_string_pair started.");
+
    options=add_post_2_string_pair(data,options);
 
-
-
+   write_log(LOG_USER,7,"cgipaf_init.c ends...");

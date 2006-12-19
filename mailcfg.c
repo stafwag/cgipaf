@@ -19,6 +19,7 @@
  *
  */
 
+#include "cgipaf_defs.h"
 #define  FORWARD               "forward"
 #define  FORWARD_TO            "forward_to"
 #define  AUTOREPLY             "autoreply"
@@ -28,7 +29,6 @@
 #define  KEEP_MSG              "keep_msg"
 #define  SENDMAIL              "sendmail"
 #define  CFGDOMAIN             "domain"
-#include "cgipaf_defs.h"
 
 char txt_yes[]="yes";
 char txt_no[]="no";
@@ -64,6 +64,9 @@ int main()
    FILE   *fp;
    WEBDATA *cookies;
 #include "cgipaf_vars.h"
+
+   write_log(LOG_USER,7,"mailcfg.c started");
+
 #include "cgipaf_init.c"
 
 

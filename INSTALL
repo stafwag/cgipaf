@@ -5,14 +5,10 @@ NOTE
 
 SUPPORTED SYSTEMS
 
-    cgipaf has been tested with Debian GNU/Linux (woody), Solaris 8, FreeBSD 
-    and should work on other Un*ces with pam support. Systems without pam 
-    support are only supported if they use the standard password file 
-    location /etc/passwd /etc/shadow and standard crypt or md5 passwords.
-
-    If you're using cgipaf on a system without pam support a lock file
-    /var/lock/cgipaf.lock is used. The directory /var/lock have to exist
-    on our system or you can modify pass.h to your own needs.
+    cgipaf has been tested with Debian GNU/Linux, Solaris 10 and should work
+    on other Un*ces with pam support. Systems without pam support are only
+    supported if they use the standard password file location /etc/passwd
+    /etc/shadow and standard crypt or md5 passwords.
 
     FreeBSD and NetBSD are supported, OpenBSD is not (yet) supported. Although 
     FreeBSD has PAM support the PAM password changer doesn't seem to work on 

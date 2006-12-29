@@ -1,3 +1,10 @@
+* version 1.3.2
+  + changepass improved
+  + BUGFIX: lock dir is detected correctly
+  + BUGFIX: corrected compile warnings
+  + BUGFIX: vacation_cgi example has been update to work with newer
+            versions of perl/cgi module
+
 * version 1.3.1		( 13 jul 2004 )
   + BUGFIX: install.sh will now ask to create the cgi-bin directory
             (Thanks to Koen de Jong for reporting this problem)

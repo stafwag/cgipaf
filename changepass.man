@@ -1,6 +1,6 @@
 .\" changepass 1.0.0
 .\"
-.TH CHANGEPASS 8 "JUL 15, 2002"
+.TH CHANGEPASS 8 "DEC 29, 2006"
 .AT 8
 .SH NAME
     \fBchangepass\fP \- update an user's password
@@ -11,20 +11,20 @@
 .SH DESCRIPTION
 \fBchangepass\fP is a chpasswd clone, it might be useful on 
 platforms that doesn't have such a command like Solaris.
-.br 
+.br.br
 Most GNU/Linux distributions have chpasswd (8), on FreeBSD 
 you can use "pw usermod name -h 0" but many commercial Un*ces
 doesn't have tool like this.  An alternative is to update the 
 user's password in script with \fBusermod\fP
-.br
+.br.br
 but it's possible to see the encrypted password in the process
 list, which is not very secure.
-.br
-\fBchangapass\fP reads a list of user name and password pairs
+.br.br
+\fBchangepass\fP reads a list of user name and password pairs
 from \fBstdin\fP  and updates the users passwords
-.br
+.br.br
 Each line has format:
-.br
+.br.
 username:password
 .br    
 .SH OPTIONS

@@ -316,9 +316,11 @@ int main()
 
       /* get the previous mailcfg state out the user's .cgipaf_state file */
       
+   	write_log(LOG_USER,7,"mailcfg_check is enabled, vrfing current state");
+
       if ((oldstate=get_mailcfg_status(pw))==-1) 
          write_log(LOG_USER,7,
-		 "failed to read old status file .cgipaf_state: %s for user %s",strerror(errno));
+		 "failed to read old status file .cgipaf_state: %s for user %s",strerror(errno),name);
    
       /* calculate the new state */
    

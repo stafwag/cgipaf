@@ -273,7 +273,19 @@ dnl freebsd has built-in md5 support
      		fi
 
       		AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
+       		AC_CHECK_HEADERS(stdint.h,,[ HAVE_STDINT_H="no" ])
 
+		if test HAVE_STDINT_H = "no"; then
+
+       			AC_CHECK_HEADERS(sys/stdint.h,,[ HAVE_SYS_STDINT_H="no" ])
+
+			if test HAVE_SYS_STDINT_H = "no"; then
+
+       				AC_CHECK_HEADERS(sys/inttypes.h,,[ AC_MSG_ERROR(no valid stdint header file found) ])
+
+			fi
+
+		fi
 	else
 
 		HAVE_CHPASS_CRYPT="NO_CHPASS_CRYPT"

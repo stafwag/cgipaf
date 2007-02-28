@@ -38,6 +38,25 @@
 #include <ctype.h>
 #endif
 
+#ifdef HAVE_STDINT_H 
+
+#include <stdint.h>
+
+#else
+# if HAVE_SYS_STDINT_H
+#  include <sys/stdint.h>
+# else
+#  if HAVE_INTTYPES_H
+#  	include <inttypes.h>
+#  else
+#    if  HAVE_SYS_INTTYPES_H 
+#	include <sys/inttypes.h>
+#    endif
+# endif /* HAVE_INTTYPES_H */
+#endif 	/* HAVE_SYS_STDINT_H */
+#endif 	/* HAVE_STDINT_H */
+
+
 #endif
 
 

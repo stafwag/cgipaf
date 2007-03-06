@@ -15,6 +15,12 @@ localstatedir="@localstatedir@"
 srcdir="@srcdir@"
 datadir="@datadir@"
 
+if [ -z $datadir ]; then
+
+	datadir="@datarootdir@"
+
+fi
+
 
 if [ ! -x ./passwd.cgi ]; then
    echo "type make to compile cgipaf"

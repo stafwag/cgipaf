@@ -464,7 +464,7 @@ int main (int argn,char **argv)
 
       			if (pamflag) {
 
-      				fprintf(stderr,"%s: %s\n",pam_strerror(pw->pamh,i));
+      				fprintf(stderr,"\n%s: pam return code = %d\n",pam_strerror(pw->pamh,i));
 
       			}
 #endif

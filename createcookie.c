@@ -1,7 +1,7 @@
 /*
  * createcookie.c
  *
- * Copyright (C) 2001   Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2007   Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,9 @@ if(i>63) i=63;
 if(i<12) return (i+46);
 if((i>=12)&&(i<38)) return (i+(65-12));
 if(i>=38) return (i+(97-38));
+
+return(i);
+
 }
 /*
  * create a random cookie string
@@ -64,6 +67,6 @@ for(i=0;i<10;i++) {
    cookie[strlen(cookie)]=gen_random_char(time(0)-rand());
 }
 cookie[strlen(cookie)]='.';
-snprintf(cookie+strlen(cookie),10,"%d",time(0));
+snprintf(cookie+strlen(cookie),10,"%d",(int) time(0));
 return(cookie);
 }

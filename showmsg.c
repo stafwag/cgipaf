@@ -1,7 +1,7 @@
 /*
  * showmsg.c
  *
- * Copyright (C) 2001 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ int show_alt_msg(char *alt_msg)
  */
 int show_msg(FILE *config_file,char *root,char *section_name,char *msgfile, char *alt_msg,char ***parms, char *update_item)
 {
-char *cp,*fullname,**cc;
+char *fullname,**cc;
 struct stat statbuf;
 
 if (update_item!=NULL) {
@@ -166,13 +166,16 @@ void show_msg_and_exit(FILE *config_file,char *root,char *virtual_name,char *msg
 int show_msgs(FILE *config_file,char *root,char *section_name,char **msgfiles, char *alt_msg,char ***parms,char *update_item)
 {
    char **cc;
-   int i;
+   int i=0;
+
    if(msgfiles==NULL) return(-1);
+
    for(cc=msgfiles;*cc!=NULL;++cc) {
       i=show_msg(config_file,root,section_name,*cc,NULL,parms,update_item);
       fflush(stdout);
       if(i!=3) break;
    }
+
    if(i==3) {
       print_txt_msg(alt_msg);
       i=2;

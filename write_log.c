@@ -1,7 +1,7 @@
 /*
  * write_log.c
  *
- * Copyright (C) 2001 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001, 2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,16 +37,16 @@ return level;
 void write_log(int facility, int priority, char *fmt, ...)
 {
   va_list ap;
-  int d;
-  unsigned level;
   char txt_unknown[] ="unknown";
   char buf[128];
   char prefix[32];
   char clientmsg[96];
   char syslog_msg[256];
   char *clientip;
-  char c, *p, *s;
+
+  /*
   int  loglevels[]={LOG_EMERG,LOG_ALERT,LOG_CRIT,LOG_ERR,LOG_WARNING,LOG_NOTICE,LOG_INFO,LOG_DEBUG};
+	*/
   if(!enable_log(-1)) return;
   if(priority>set_loglevel(-1)) return;
   memset(syslog_msg,'\0',sizeof(syslog_msg));

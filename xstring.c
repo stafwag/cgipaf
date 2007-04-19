@@ -1,7 +1,7 @@
 /*
- * xstring.c  	- Tried of writing these things over and over again -
+ * xstring.c  	- Tired of writing these things over and over again -
  *
- * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2003,2006 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,21 +57,33 @@ void cut_after_char (char *c,char ch)
  */
 void cut_after_quote (char *c) 
 {
+
 char *cp;
+
+cp = c;
+
 do {
-   if(*c=='\"') {
-      if(c==cp) 
-	{
-	   *c='\0';
-	   break;
-	}
-      if(*(c-1)!='\\')
-	{
-	   *c='\0';
-	   break;
-	}
-   }
-++c;
+
+	if(*c=='\"') {
+
+      		if(c==cp) {
+
+	   		*c='\0';
+	   		break;
+
+		}
+
+      		if(*(c-1)!='\\') {
+
+	   		*c='\0';
+	   		break;
+
+		}
+
+   	}
+
+	++c;
+
 } while(*c);
 }
 
@@ -83,7 +95,6 @@ do {
 int get_quoted_item_size (char *c)
 {
 char *cc=c;
-int i;
 for(;*c!='\0';c++) {
   if (*c=='\"') 
      {
@@ -134,7 +145,6 @@ return c;
 int get_char_item_size (char *c,char ch)
 {
 char *cc=c;
-int i;
 do if ((*c!=ch)&&(*c!='\0')) ++c; else break; while (*c);
 return(c-cc);
 }
@@ -147,7 +157,6 @@ return(c-cc);
 int get_item_size (char *c)
 {
 char *cc=c;
-int i;
 do if (!isspace(*c)&&(*c!='\0')) ++c; else break; while (*c);
 return(c-cc);
 }
@@ -214,7 +223,7 @@ char * replace_needle(char *txt, char *needle, char *replace)
  */
 char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail)
 {
-   int i=0,first=1;
+   int i=0;
    char *txt2,*ret;
    ret=NULL;
    txt2=(char *) xmalloc(strlen(txt)+1);
@@ -590,7 +599,6 @@ int delete_string_pair_item(char ***str_pair,char *item,int free_mode) {
 
 	char ***pt;
 	int ret=0;
-	int n=0;
 
 	if(str_pair==NULL) return(-1);
 	

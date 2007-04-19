@@ -1,8 +1,7 @@
 /*
  * acl.c		- CGIpaf acl functions -
- * accessdb.c
  *
- * Copyright (C) 2002,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2003,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +80,7 @@ int check_useracl(struct pw_info *p,char **users) {
  */
 int check_grpacl(struct pw_info *p,char **groups) {
     char **group;
-    char *name=p->p->pw_name;
+
     if(groups==NULL) return(0);
 
     for (group=groups;*group!=NULL;group++) {

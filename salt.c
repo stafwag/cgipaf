@@ -1,7 +1,7 @@
 /*
  * salt.c
  *
- * Copyright (C) 2002 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,9 @@ if(i>63) i=63;
 if(i<12) return (i+46);
 if((i>=12)&&(i<38)) return (i+(65-12));
 if(i>=38) return (i+(97-38));
+
+return(i);
+
 }
 #ifdef MD5_CRYPT
 
@@ -59,19 +62,14 @@ if(i>=38) return (i+(97-38));
 char * md5_seed(void)
 {
 struct timeval tv;
-int randinit;
 static char md5salt[32];
 
-if (!randinit) {
-     randinit = 1;
 #ifndef FREEBSDHOST
      srandom(getpid());
 #else
      srandomdev();
 #endif
      
-}
-
 gettimeofday(&tv,0);
 
 to64(&md5salt[0], random(), 3);

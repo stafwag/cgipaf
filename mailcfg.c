@@ -1,7 +1,7 @@
 /*
  * mailcfg.c
  *
- * Copyright (C) 1999,2001-03 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2001,2002,2003,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -494,4 +494,6 @@ int main()
    }
 
    if(config_file!=NULL) fclose(config_file);
+	
+   return(0);
 }

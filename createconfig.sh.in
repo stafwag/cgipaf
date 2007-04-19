@@ -100,7 +100,7 @@ WWW="${datadir}"
    echo "error_illegalword       cgipasswd_errbadpassword.php" >> $CFGFILE
    echo "error_pam               cgipasswd_errpam.php" >> $CFGFILE
    echo "msg_success             cgipasswd_msgchanged.php" >> $CFGFILE
-   echo "# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\n\"" >> $CFGFILE
+   echo '# run_success             \"/usr/bin/smbpasswd -s -U %{name} > /dev/null 2>&1\" 	\"%{password}\n%{password}\n\"' >> $CFGFILE
    echo >> $CFGFILE
    echo "#" >> $CFGFILE
    echo "# set the minimum & maximum password length" >> $CFGFILE

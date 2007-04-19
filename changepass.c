@@ -1,7 +1,7 @@
 /*
  * changepass.c
  *
- * Copyright (C) 2002,2006 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2006,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -464,7 +464,7 @@ int main (int argn,char **argv)
 
       			if (pamflag) {
 
-      				fprintf(stderr,"\n%s: pam return code = %d\n",pam_strerror(pw->pamh,i));
+      				fprintf(stderr,"\n%s: pam return code = %d\n",pam_strerror(pw->pamh,i),i);
 
       			}
 #endif

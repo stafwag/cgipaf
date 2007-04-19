@@ -1,7 +1,7 @@
 /*
  * createcookie.h
  *
- * Copyright (C) 2001   Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2007   Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,15 @@
  */
 
 #include "common.h"
-#ifdef HAVE_SYS_TIME_H
+#if TIME_WITH_SYS_TIME
+#include <sys/time.h>
+#include <time.h>
+#else
+#if HAVE_SYS_TIME_H
 #include <sys/time.h>
 #else
 #include <time.h>
+#endif
 #endif
 
 char *create_cookie();

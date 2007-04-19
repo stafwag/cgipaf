@@ -1,7 +1,7 @@
 /*
  * ephp.c     		- emulate php -
  *
- * Copyright (C) 2001,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2003,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ return(ret);
  */
 char *replace_vars(char *txt,char ***vars)
 {
-  int i=0,first=1;
+  int i=0;
   char *txt2,*ret;
   ret=NULL;
   txt2=(char *) xmalloc(strlen(txt)+1);

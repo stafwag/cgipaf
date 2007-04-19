@@ -1,7 +1,7 @@
 /*
  * passpam.c
  *
- * Copyright (C) 2000-02 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2002,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ static int chauth_flag=0;
 char passwd_service[]="passwd";
 int  set_pam_chauth_flag (int flag) {
      chauth_flag=flag;
+
+     return (chauth_flag);
 }
 
 char * set_pam_service(char *s)

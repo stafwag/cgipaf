@@ -1,7 +1,7 @@
 /*
  * configfile.c
  *
- * Copyright (C) 1999,2001,2003 Staf Wagemakers Belgie/Belgium 
+ * Copyright (C) 1999,2001,2003,2007 Staf Wagemakers Belgie/Belgium 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@
 char *only_global(char *line,char **current_section,int *global)
 {
 char *c,*s=line,*globals,*found,*end_section;
-int first=1;
 globals=(char *)calloc(strlen(line)+1,sizeof(char *));
 end_section=(char *)xmalloc(1);
 while(1) {
@@ -83,7 +82,7 @@ return(globals);
 char * real_get_config(FILE *fp,char *section_name,char *var_name,int mode)
 {
 
-	int l,ii=0;
+	int l;
 	int sect=0,global=1;
 	char *r=NULL,*c=NULL,*ss=NULL,s[BUFFER_LEN],*start_section=NULL;
 	char *end_section=NULL,*current_section=NULL;
@@ -365,7 +364,7 @@ return(ret);
 char * save_config(FILE *fp,char *var_name,char *value)
 {
 char *c=(char *)xmalloc(strlen(var_name)+strlen(value)+strlen("\t")+strlen("\n")+1);
-if (fp=NULL) return NULL;
+if ( fp==NULL ) return NULL;
 strcpy(c,var_name);
 strcat(c,"\t");
 strcat(c,value);

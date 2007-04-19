@@ -1,7 +1,7 @@
 /*
  * pass.c
  *
- * Copyright (C) 2000,2002 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2000,2002,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ char * set_shadow_location ( char * shadow_file ) {
  * Set to shadow_location to NULL
  * ( use system shadow file )
  */
-char * reset_shadow_location() {
+void reset_shadow_location() {
 	shadow_location=NULL;
 }
 
@@ -245,6 +245,7 @@ return(PASS_SUCCESS);
  *	   -12 = user not found
  *         -13 = reserved (unsupported crypt type)
  * 	   -14 = pw_mkdb failed ( freebsd only )
+ * 	   -15 = encrypt_pass is NULL
  */
 int update_pwfile(char *pwfilename,struct pw_info *pw,char *encrypt_pass)
 {
@@ -264,6 +265,7 @@ if (!(pwfile=fopen(pwfilename,"r"))) return(-1); /* can't open password file */
 if (!(tmpfile=fopen(TMPFILE,"w"))) return(-4);   /* can't create tmp file    */
 if ((fd=fileno(tmpfile))==-1) return(-5);        /* can't convert stream to int file */
 if (fchmod(fd,256)==-1) return(-6);              /* can't chmod tmpfile */
+if (encrypt_pass==NULL) return(-15);		 /* encrypt_pass is NULL */
 
 /*
  * password file parser
@@ -378,13 +380,13 @@ int chpw(struct pw_info *pw,char *pass)
 
 int chpw_nopam (struct pw_info *pw, char *pass,int mode)
 {
-FILE *pwfile;
-FILE *tmpfile;
-int i;
-int fd,fd_tmplock,lock,count;
-char *c;
-char *passwdfile;
-char *encrypt_pass;
+int i=0;
+int fd_tmplock=0;
+int lock=0;
+int count=0;
+char *c=NULL;
+char *passwdfile=PASSWDFILE;
+char *encrypt_pass=NULL;
 struct stat st;
 
 /*

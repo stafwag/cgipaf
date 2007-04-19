@@ -162,7 +162,7 @@ int main (int argn,char **argv)
 	   }
 
 	   if ( verboseflag ) {
-
+		
 		fprintf(stderr,"DEBUG: option flags\n\n");
 
 	   	fprintf(stderr,"hlpflag = %d\n",hlpflag);
@@ -173,6 +173,10 @@ int main (int argn,char **argv)
 	   	fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
 	   }
+
+	   /*
+ 	    * invalid arguments handling
+ 	    */
 
 	   if (pamflag && nopamflag) {
 
@@ -208,6 +212,10 @@ int main (int argn,char **argv)
 
 	   }
 
+	   /*
+ 	    *  display usage and exit if hlpflag is enabled.
+ 	    */
+
 	   if(hlpflag) {
 
 	   	usage();
@@ -220,6 +228,10 @@ int main (int argn,char **argv)
 
 #ifdef _WITHPAM
 
+  /*
+   * enable pam by default on pam systems
+   */
+
   if (!nopamflag) {
 
 	   pamflag=1;
@@ -227,6 +239,10 @@ int main (int argn,char **argv)
   }
 
 #ifdef NO_CHPASS_CRYPT
+
+  /* 
+   * on pam only system nopam is not available
+   */
 
   else {
 
@@ -236,12 +252,15 @@ int main (int argn,char **argv)
   }
 
 #endif
-
    
    set_pam_service("passwd");      /* set PAM service name */
    set_pam_chauth_flag(0);
 
 #else
+
+        /*
+         * On non-pam systems the --pam argument is invalid
+         */
 
 	if (pamflag) {
 
@@ -369,8 +388,10 @@ int main (int argn,char **argv)
 
 	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
 
-
+/*
 		if (verboseflag) fprintf(stderr,"DEBUG \"%s\" \"%s\"\n",names[linecounter],passwords[linecounter]);
+
+*/
 
 		name=names[linecounter];
 		pass=passwords[linecounter];
@@ -394,7 +415,10 @@ int main (int argn,char **argv)
 
 	for (linecounter=0;linecounter<number_of_lines;++linecounter) {
 
+/*
 		if (verboseflag) fprintf(stderr,"DEBUG \"%s\" \"%s\"\n",names[linecounter],passwords[linecounter]);
+
+*/
 
 		name=names[linecounter];
 		pass=passwords[linecounter];
@@ -414,7 +438,7 @@ int main (int argn,char **argv)
 
    		if (pamflag) {
 
-			if (verboseflag) fprintf(stderr,"DEBUG: running chpw() for user \"%s\" \"%s\"\n",name,pass);
+			if (verboseflag) fprintf(stderr,"DEBUG: running chpw() for user \"%s\"\n",name);
 			i=chpw(pw,pass);
 
    		}
@@ -436,7 +460,7 @@ int main (int argn,char **argv)
 		   		}
 	   		}
 
-			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
+			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s pass %s mode %d\n",name,pass,mode);
 
 	   		i=chpw_nopam(pw,pass,mode);
 

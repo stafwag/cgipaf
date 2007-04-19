@@ -389,6 +389,7 @@ char *passwdfile=PASSWDFILE;
 char *encrypt_pass=NULL;
 struct stat st;
 
+
 /*
  * wait until the lockfile is unlocked
  */
@@ -429,6 +430,7 @@ switch(mode) {
 
 	case 2:
 		encrypt_pass=pass;
+		c=encrypt_pass;
 		break;
 
 	case 1:
@@ -449,59 +451,66 @@ switch(mode) {
  * Create an encrypted password
  */
 
-if (mode != 2) {
+
+if (mode !=2 ) {
 
 	switch(i) {
 
 		case 0: 
 			c=std_seed();       /* standard crypt password */
-                     	encrypt_pass=crypt(pass,c);
-		     	break;
+               		encrypt_pass=crypt(pass,c);
+	     		break;
 
 #ifdef MD5_CRYPT
 
-        	case 1:
-         	     	c=md5_seed();       /* md5 password            */
+       		case 1:
+       	     		c=md5_seed();       /* md5 password            */
 
 #ifndef FREEBSDHOST
 
-		     	encrypt_pass=libshadow_md5_crypt(pass,c); 
+	     		encrypt_pass=libshadow_md5_crypt(pass,c); 
 #else
-		     	encrypt_pass=xmalloc(_PASSWORD_LEN+1);
-		     	encrypt_pass[0]='\0';
-		     	(void)crypt_set_format("md5");
-		     	encrypt_pass=crypt(pass,c);
+	     		encrypt_pass=xmalloc(_PASSWORD_LEN+1);
+	     		encrypt_pass[0]='\0';
+	     		(void)crypt_set_format("md5");
+	     		encrypt_pass=crypt(pass,c);
 #endif
-		     	break;
+	     		break;
 #endif
-        	default:
+
+       		default:
 			c=NULL;            /* unsupported crypt type! */
-		        i=-13;
+	        	i=-13;
 
 	}
 
 }
 
+
 if (c!=NULL) {
 
+	/*
+ 	* set passwdfile to the real password file
+ 	*/
 
-/*
- * set passwdfile to the real password file
- */
+	if (pw->sp) { 
 
-if (pw->sp) { 
-	if((passwdfile=shadow_location)==NULL)
+		if((passwdfile=shadow_location)==NULL)
 		passwdfile=SHADOWFILE;
-   }
-   else {
-	   if((passwdfile=passwd_location)==NULL) 
-		   passwdfile=PASSWDFILE;
-   }
 
-/*
- * try to update the user's password
- */
-i=update_pwfile(passwdfile,pw,encrypt_pass);
+   	}
+   	else {
+
+	   	if((passwdfile=passwd_location)==NULL) 
+		   passwdfile=PASSWDFILE;
+
+   	}
+
+	/*
+ 	* try to update the user's password
+ 	*/
+
+	i=update_pwfile(passwdfile,pw,encrypt_pass);
 
 }
 

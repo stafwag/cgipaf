@@ -460,7 +460,7 @@ int main (int argn,char **argv)
 		   		}
 	   		}
 
-			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s pass %s mode %d\n",name,pass,mode);
+			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
 
 	   		i=chpw_nopam(pw,pass,mode);
 

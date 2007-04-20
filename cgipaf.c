@@ -259,14 +259,45 @@ int main()
    /* test the new password if cracklib is enabled */
    
    if(enable_cracklib) {
-      if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB_DICTPATH))!=NULL) {
-	 cracklib_dictpath=xmalloc(strlen(cp)+1);
-	 strcpy(cracklib_dictpath,cp);
-	 xfree(cp);
-	 write_log(LOG_INFO,7,"cracklib_dictpath set to \"%s\"",cracklib_dictpath);
+      	if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB_DICTPATH))!=NULL) {
+	 	cracklib_dictpath=xmalloc(strlen(cp)+1);
+	 	strcpy(cracklib_dictpath,cp);
+	 	xfree(cp);
+	 	write_log(LOG_INFO,7,"cracklib_dictpath set to \"%s\"",cracklib_dictpath);
+      	}
+
+	/* vrfy that cracklib_dictpath is readable */
+
+      	if (cracklib_dictpath!=NULL) {
+
+		FILE *fp;
+		if((fp=fopen(cracklib_dictpath,"r"))==NULL) {
+
+			cracklib_dictpath=NULL;
+
+	 		write_log(LOG_INFO,7,"cracklib_dictpath %s is not readable clearing",cracklib_dictpath);
+
+		}
+		else {
+
+			fclose(fp);
+
+		}
+
+
       }
+
+      /* running Fascistcheck is cracklib_dictpath is not empty */
+
       if (cracklib_dictpath!=NULL) {
-	 char const * const crack_msg = FascistCheck(newpass1,cracklib_dictpath);
+
+	 char const * crack_msg;
+	 write_log(LOG_INFO,7,"running FascistCheck");
+
+	 crack_msg = FascistCheck(newpass1,cracklib_dictpath);
+
+	 write_log(LOG_INFO,7,"FascistCheck done");
+
 	 if (0 != crack_msg) {
 	    options[16][1]=(char *) xmalloc(strlen(crack_msg)+1);
 	    strcpy(options[16][1],crack_msg);
@@ -289,7 +320,7 @@ int main()
    if ((brol=chpw(pw,newpass1))==PASS_SUCCESS) {
       show_msgs(config_file,doc_root,CFGSECTION,msg_success,msg_changed,options,txt_message);
       fflush(stdout);
-      write_log(LOG_AUTHPRIV,6,"Password for %s was changed",name);
+      write_log(LOG_AUTHPRIV,6,"Password for %s updated",name);
       options[15][1]=newpass1;
 
       /*

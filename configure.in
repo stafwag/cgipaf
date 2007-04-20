@@ -28,7 +28,7 @@ case $host_os in
  		AC_MSG_RESULT(yes)
 		;;
    linux*) 
-    		AC_DEFINE(LINUXHOST,1,GNU Linux system)
+		AC_DEFINE(LINUXHOST,1,GNU Linux system)
    		AC_MSG_RESULT(yes)
 		;;
   netbsd*) 
@@ -159,7 +159,8 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default) ],
 	fi
       else
         ARG="NOPAM"
-      fi ]
+      fi
+   ]
    ) 
 
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
@@ -205,9 +206,12 @@ if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(location /etc/passwd /etc/shadow and uses the crypt)
    AC_MSG_WARN(function to encrypt the passwords)
    AC_MSG_WARN(***********************************************************)
-   AC_CHECK_LIB(crypt,crypt,,AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
 
-   HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
+
+   	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
+
+	HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
+	LIBS="$LIBS -lcrypt"
 
 dnl
 dnl  most un*ces have crypt defined in unistd.h
@@ -256,36 +260,23 @@ dnl freebsd has built-in md5 support
 
 		dnl freebsd has built-in md5 support
  
-     		if test "$FREEBSDHOST" != "1"; then
+   		if test "$FREEBSDHOST" != "1"; then
 
-       			CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
+     			CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
 
-     		fi
+   		fi
 
 		if test "$BSDHOST" != "1"; then
 
-       			CHPASSOBJS="$CHPASSOBJS fgetpwnam.o";
+     			CHPASSOBJS="$CHPASSOBJS fgetpwnam.o";
 
-     		else
+   		else
 
-       			AC_MSG_WARN("BSD host detected vmail password are disabled")
+     			AC_MSG_WARN("BSD host detected vmail password are disabled")
 
-     		fi
+   		fi
 
-      		AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
-       		AC_CHECK_HEADERS(stdint.h,,[ HAVE_STDINT_H="no" ])
-
-		if test HAVE_STDINT_H = "no"; then
-
-       			AC_CHECK_HEADERS(sys/stdint.h,,[ HAVE_SYS_STDINT_H="no" ])
-
-			if test HAVE_SYS_STDINT_H = "no"; then
-
-       				AC_CHECK_HEADERS(sys/inttypes.h,,[ AC_MSG_ERROR(no valid stdint header file found) ])
-
-			fi
-
-		fi
+    		AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
 	else
 
 		HAVE_CHPASS_CRYPT="NO_CHPASS_CRYPT"
@@ -293,6 +284,21 @@ dnl freebsd has built-in md5 support
 	fi
 
 fi
+
+   		AC_CHECK_HEADERS(stdint.h,, [ HAVE_STDINT_H="no" ])
+
+		if test HAVE_STDINT_H = "no"; then
+
+     			AC_CHECK_HEADERS(sys/stdint.h,,[ HAVE_SYS_STDINT_H="no" ])
+
+			if test HAVE_SYS_STDINT_H = "no"; then
+
+    				AC_CHECK_HEADERS(sys/inttypes.h,,[ AC_MSG_ERROR(no valid stdint header file found) ])
+
+			fi
+
+		fi
+
 
 if test "$with_libcrack" != "no"; then
    AC_CHECK_LIB(crack,FascistCheck,,AC_MSG_WARN(cracklib not found cracklib support is disabled!!!!))
@@ -381,11 +387,11 @@ dnl Checks for header files.
 
 AC_HEADER_STDC
 
-dnl freebsd has crypt() defined in unstd.h
+dnl freebsd has crypt() defined in unistd.h
 
 if test "$FREEBSDHOST" != "1"; then
 
-AC_CHECK_HEADERS(crypt.h,,[ AC_MSG_WARN(crypt.h not found) ])
+ AC_CHECK_HEADERS(crypt.h,,[ AC_MSG_WARN(crypt.h not found) ])
 
 fi
 

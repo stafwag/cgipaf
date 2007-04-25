@@ -270,12 +270,18 @@ int main()
 
       	if (cracklib_dictpath!=NULL) {
 
+		char *full_cracklib_dictpath;
 		FILE *fp;
-		if((fp=fopen(cracklib_dictpath,"r"))==NULL) {
 
+		full_cracklib_dictpath=xmalloc(strlen(cracklib_dictpath)+strlen(".pwi")+1);
+
+		strcpy(full_cracklib_dictpath,cracklib_dictpath);
+		strcat(full_cracklib_dictpath,".pwi");
+
+		if(!(fp=fopen(full_cracklib_dictpath,"r"))) {
+
+	 		write_log(LOG_INFO,6,"full_cracklib_dictpath \"%s\" is not readable clearing",full_cracklib_dictpath);
 			cracklib_dictpath=NULL;
-
-	 		write_log(LOG_INFO,7,"cracklib_dictpath %s is not readable clearing",cracklib_dictpath);
 
 		}
 		else {

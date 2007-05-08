@@ -12583,6 +12583,7 @@ fi
 if test "$NEED_COMPAT_H" = "yes"; then
 
     OBJS="$OBJS compat.o"
+    CHPASSOBJS="$CHPASSOBJS compat.o"
     NEED_COMPAT_H="NEED_COMPAT_H"
 
 fi

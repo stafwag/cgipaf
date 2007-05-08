@@ -27,6 +27,8 @@
  *
  */
 #include "run_cmd.h"
+#include "write_log.h"
+
 int run_cmd(FILE *config_file,char *section,char *directive,char ***vars,int mode)
 {
    char **cc,*cmd_name=NULL,*c=NULL;
@@ -41,6 +43,9 @@ int run_cmd(FILE *config_file,char *section,char *directive,char ***vars,int mod
    stripslahes(cmd_name);
    if(mode==1) setenv("SCRIPT_FILENAME",cmd_name,1);
      else if (mode==2) unsetenv("SCRIPT_FILENAME");
+
+   write_log(LOG_USER,7,"run_cmd() executing popen(%s,w)",cmd_name);
+
    cmd=popen(cmd_name,"w");
    ret=1;
    if(cmd==NULL) 

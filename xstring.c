@@ -1,7 +1,7 @@
 /*
  * xstring.c  	- Tired of writing these things over and over again -
  *
- * Copyright (C) 2001,2003,2006 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2003,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -666,4 +666,19 @@ char * clone_string(char *str) {
 
 }
 
+void replace_char(char *str,char src,char dest) {
+
+        char *cp;
+
+        for(cp=str;*cp!=0;cp++) {
+
+                if (*cp == src) {
+
+                        *cp=dest;
+
+                }
+
+        }
+
+}
 

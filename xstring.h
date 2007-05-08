@@ -1,7 +1,7 @@
 /*
  * xstring.h
  *
- * Copyright (C) 2001 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001, 2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,3 +51,4 @@ int update_string_pair_item(char ***str_pair,char *item, char *value, int free_m
 int delete_string_pair_item(char ***str_pair,char *item,int free_mode);
 char * clone_string(char *str);
 void free_string_pair (char *** str_pair );
+void replace_char(char *str,char src,char dest);

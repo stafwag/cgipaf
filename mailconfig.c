@@ -205,9 +205,15 @@ char *get_maildomain(char *domain)
    hostdomainname[0]='\0';
    gethostname(hostname,99);
    searchdomain(domainname,99);
+
    if(hostname!=NULL) strcat(hostdomainname,hostname);
    strcat(hostdomainname,".");
+
    if(domainname!=NULL) strcat(hostdomainname,domainname);
+
+   replace_char(hostdomainname,'(','_');
+   replace_char(hostdomainname,')','_');
+
    return(hostdomainname);
 }
 

@@ -237,6 +237,15 @@ if (setuid(0)==-1) {
    
    write_log(LOG_USER,7,"sendmail set to %s",sendmail);
 
+   /* set the formail cmd path */
+
+
+   if ((formail=get_section_config_item(config_file,CFGSECTION,FORMAIL))==NULL)
+
+	formail=txt_formail;
+
+   write_log(LOG_USER,7,"formail set to %s",formail);
+
    /* set the mailerdomain */ 
    
    domain=get_section_config_item(config_file,CFGSECTION,CFGDOMAIN);

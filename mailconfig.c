@@ -52,11 +52,12 @@ char * add2home(struct passwd *p,char *dir)
  * write the $HOME/.procmailrc header 
  */
 
-int write_procmailrchead(struct pw_info *pw, char *sendmail)
+int write_procmailrchead(struct pw_info *pw, char *sendmail,char *formail)
 {
    FILE *fp;
    if(!(fp=fopen(add2home(pw->p,PROCMAIL),"w"))) return(-1);
    fputs("SENDMAIL=",fp);fputs(sendmail,fp);fputs("\n",fp);
+   fputs("FORMAIL=",fp);fputs(formail,fp);fputs("\n",fp);
    fputs("SHELL=/bin/sh\n",fp);
    fclose(fp);
    return(1);
@@ -236,7 +237,7 @@ int enable_reply(struct pw_info *pw,char *domain)
    fputs("* !^Precedence: list\n",fp);
    fputs("* !^Precedence: junk\n",fp);
    fprintf(fp,"* !^X-Loop: %s@%s\n",pw->p->pw_name,loopdomain);
-   fputs("| (formail -r -A\"Precedence: junk\" \\\n",fp);
+   fputs("| ($FORMAIL -r -A\"Precedence: junk\" \\\n",fp);
    fprintf(fp,"-A\"X-Loop: %s@%s\" ; \\\n",pw->p->pw_name,loopdomain);
    fputs("cat $HOME/vacations.txt) | $SENDMAIL -t\n",fp);
    fclose(fp);
@@ -252,7 +253,7 @@ int write_forwardbody(FILE *fp,struct pw_info *pw,char *mailadres,char *domain)
 {
    char *loopdomain=get_maildomain(domain);
    fprintf(fp,"* !^X-Loop: %s@%s\n",pw->p->pw_name,loopdomain);
-   fprintf(fp,"| formail -A \"X-Loop: %s@%s\" | \\\n",pw->p->pw_name,loopdomain);
+   fprintf(fp,"| $FORMAIL -A \"X-Loop: %s@%s\" | \\\n",pw->p->pw_name,loopdomain);
    fprintf(fp,"$SENDMAIL -oi %s\n",mailadres);
    return(0);
 }

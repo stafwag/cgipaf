@@ -152,6 +152,7 @@ WWW="${datadir}"
    echo "error_openvacations	 mailcfg_erropenvacations.php" >> $CFGFILE
    echo "msg_success		 mailcfg_msgupdated.php" >> $CFGFILE
    echo "# sendmail              /usr/lib/sendmail" >> $CFGFILE
+   echo "# formail               /opt/csw/bin/formail" >> $CFGFILE
    echo "# domain		 your_domain_name" >> $CFGFILE
    echo >> $CFGFILE
    echo "# create a backup of the user's .procmailrc and restore it" >> $CFGFILE

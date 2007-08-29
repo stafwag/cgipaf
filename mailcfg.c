@@ -28,6 +28,7 @@
 #define  DOTFORWARD            ".forward"
 #define  KEEP_MSG              "keep_msg"
 #define  SENDMAIL              "sendmail"
+#define  FORMAIL               "formail"
 #define  CFGDOMAIN             "domain"
 
 char txt_yes[]="yes";
@@ -59,8 +60,10 @@ int main()
    int 	  mailcfg_check=1;
    char   *c=NULL;
    char   *sendmail=NULL;
+   char   *formail=NULL;
    char   *domain=NULL;
    char   txt_sendmail[]="/usr/lib/sendmail";
+   char   txt_formail[]="formail";
    FILE   *fp;
    WEBDATA *cookies;
 #include "cgipaf_vars.h"
@@ -415,7 +418,7 @@ int main()
       /* if auto replay if enabled create a new .procmailrc */
       
       if(!strcmp(autoreply,txt_yes)||!strcmp(forward,txt_yes)) {
-	 if(write_procmailrchead(pw,sendmail)==-1) {
+	 if(write_procmailrchead(pw,sendmail,formail)==-1) {
 	    write_log(LOG_USER,1,"%s write_procmailrchead() failed",err_updateprocmailrc);
 	    show_msg_and_exit(config_file,doc_root,CFGSECTION,ERR_UPDATEPROCMAILRC,err_updateprocmailrc,options,txt_message);
 	 }

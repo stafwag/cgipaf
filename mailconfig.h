@@ -1,7 +1,7 @@
 /*
  * mailconfig.h
  *
- * Copyright (C) 2001,2006 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2006,2007 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ int enable_reply(struct pw_info *pw,char *domain);
 int enable_forward(struct pw_info *pw,char *mailadres,char *domain);
 int enable_kforward(struct pw_info *pw, char *mailadres,char *domain);
 int tst_emailaddress(char *emailaddress);
-int write_procmailrchead(struct pw_info *pw, char *sendmail);
+int write_procmailrchead(struct pw_info *pw, char *sendmail,char *formail);
 int save_mailcfg_status(struct passwd *p,int forward,char *forwardto,int keep,int autoreply);
 char *get_maildomain(char *domain);
 int use_mailcfg_statefile(int setflag);

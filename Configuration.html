@@ -5,7 +5,7 @@
 <title>CGIpaf configuration</title>
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#2f009f">
-<h1>CGIpaf 1.3.0<br>
+<h1>CGIpaf 1.3.2<br>
 Configuration</h1>
 <h1>Content</h1>
 <ul>
@@ -61,6 +61,7 @@ Configuration</h1>
 <li><a href="#max_invalid">max_invalid</a></li>
 <li><a href="#invalid_timeout">invalid_timeout</a></li>
 <li><a href="#sendmail">sendmail</a></li>
+<li><a href="#formail">formail</a></li>
 <li><a href="#domain">domain</a></li>
 <li><a href="#use_statefile">use_statefile</a></li>
 <li><a href="#run_success">run_success</a></li>
@@ -538,9 +539,16 @@ error_illegalword  Redirect    <em>location</em><br>
 <strong>Context:</strong>  &lt;mailcfg&gt;<br>
 <p>       
      mailcfg.cgi uses the path_to_sendmail in ~/.procmailrc, if your mailer is 
-     on another location location than "/usr/lib/sendmail" you've to set the 
+     on another location than "/usr/lib/sendmail" you've to set the 
      sendmail directive.
 </p>       
+<h2><a name="formail">formail</a></h2>
+<strong>Syntax:</strong> formail  <em>path_to_formail</em><br>
+<strong>Default:</strong> "formail"<br>
+<strong>Context:</strong>  &lt;mailcfg&gt;<br>
+<p>       
+     mailcfg.cgi uses the path_to_formail in ~/.procmailrc, by default the basename 'forname' is used. 
+</p>
 <h2><a name="domain">domain</a></h2>
 <strong>Syntax:</strong> domain <em>domain_name</em><br>
 <strong>Default:</strong> nisdomain or domain name in

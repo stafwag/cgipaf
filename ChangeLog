@@ -1,5 +1,6 @@
-* version 1.3.2
+* version 1.3.2		( 30 Aug 2007 )
   + changepass improved
+  + added formail directive
   + BUGFIX: lock dir is detected correctly
   + BUGFIX: corrected compile warnings
   + BUGFIX: vacation_cgi example has been update to work with newer

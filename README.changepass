@@ -1,32 +1,52 @@
-NAME
-    changepass - update an user's password
+CHANGEPASS(8)                                                    CHANGEPASS(8)
 
-SYNOPSIS
-    changepass
-    
-DESCRIPTION
-    changepass is a chpasswd clone, it might be useful on platforms that 
-    doesn't have such a command like Solaris.
-    
-    Most GNU/Linux distributions have chpasswd (8), on FreeBSD you can use 
-    "pw usermod name -h 0" but many commercial Un*ces doesn't have tool like 
-    this. 
 
-    An alternative is to update the user's password in script with "usermod" 
-    but it's possible to see the encrypted password in the process list, 
-    which is not very secure.
-    
-USAGE
-    
-             echo "username:new_password" | changepass
-	     
-AUTHOR
-    Written by Staf Wagemakers <staf@wagemakers.be>
-    
-COPYRIGHT
-    Copyright (c)2002 Staf Wagemakers.
-    
-    You are free to distribute this software under the terms of the 
-    GNU General Public License. The complete text of the GNU General Public
-    License can be found at http://www.gnu.org/licenses/gpl.html
 
+NNAAMMEE
+           cchhaannggeeppaassss - update an user's password
+
+
+SSYYNNOOPPSSIISS
+           changepass
+
+
+DDEESSCCRRIIPPTTIIOONN
+       cchhaannggeeppaassss  is  a  chpasswd clone, it might be useful on platforms that
+       doesn't have such a command like Solaris.
+       Most GNU/Linux distributions have chpasswd (8), on FreeBSD you can  use
+       "pw  usermod  name  -h  0" but many commercial Un*ces doesn't have tool
+       like this.  An alternative is to update the user's password  in  script
+       with uusseerrmmoodd
+       but  it's  possible  to see the encrypted password in the process list,
+       which is not very secure.
+       cchhaannggeeppaassss reads a list of user name and password pairs from ssttddiinn  and
+       updates the users passwords
+       Each line has format:
+       username:password
+
+OOPPTTIIOONNSS
+          -h,--help    print this help
+          -n,--nopam   don't use pam
+          -p,--pam     use pam (default)
+          -e,--encrypt password is already encrypted, this option
+          -m,--md5     use md5 encryption, this option will
+          -v,--verbose enable verbose output
+
+
+UUSSAAGGEE
+       cat user_password_pairs | changepass
+
+
+AAUUTTHHOORR
+       Written by Staf Wagemakers <staf@wagemakers.be>
+
+
+CCOOPPYYRRIIGGHHTT
+       Copyright (c)2002, 2007 Staf Wagemakers.
+       You  are  free  to  distribute this software under the terms of the GNU
+       General Public License. The complete text of  the  GNU  General  Public
+       License can be found at http://www.gnu.org/licenses/gpl.html
+
+
+
+7th Edition                      AUG 30, 2007                    CHANGEPASS(8)

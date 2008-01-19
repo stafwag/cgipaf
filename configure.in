@@ -56,6 +56,20 @@ case $host_os in
 
 esac
 
+AC_C_BIGENDIAN(ENDIAN="BIG",ENDIAN="LITTLE",ENDIAN="UNKNOWN")
+AC_MSG_CHECKING(checking endian)
+
+if test $ENDIAN = "BIG"; then
+
+	AC_MSG_RESULT("yes")
+	AC_DEFINE(HIGHFIRST,1,big endian)
+
+else
+	AC_MSG_RESULT("no")
+
+fi
+
+
 
 AC_SUBST(host)
 AC_SUBST(host_os)

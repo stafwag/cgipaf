@@ -256,6 +256,9 @@
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
 
+/* big endian */
+#undef HIGHFIRST
+
 /* system host */
 #undef HOST
 

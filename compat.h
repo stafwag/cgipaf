@@ -27,7 +27,7 @@
 void unsetenv(char *env_name);
 #endif
 #ifndef HAVE_SETENV
-void unsetenv(char *env_name);
+void setenv(char *env_name);
 #endif
 #ifndef HAVE_GETDOMAINNAME
 char *getdomainname(); 

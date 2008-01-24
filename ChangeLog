@@ -1,4 +1,4 @@
-* version 1.3.3		( 19 Jan 2008 )
+* version 1.3.3		( 24 Jan 2008 )
   + BUGFIX: md5 passwords on BIG ENDIAN systems were not calculated correctly
 
 * version 1.3.2		( 30 Aug 2007 )

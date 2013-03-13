@@ -1,7 +1,7 @@
 /*
  * xmalloc.c
  *
- * Copyright (C) 2001 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001, 2006, 2012 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,50 @@
  */
 
 #include "xmalloc.h"
+
+#ifndef HAVE_MALLOC
+
+     #undef malloc
+
+     #include <sys/types.h>
+
+     void *malloc ();
+
+     /* Allocate an N-byte block of memory from the heap.
+        If N is zero, allocate a 1-byte block.  */
+
+     void *
+     rpl_malloc (size_t n)
+     {
+       if (n == 0)
+         n = 1;
+       return malloc (n);
+     }
+
+#endif
+
+#ifndef HAVE_REALLOC
+
+     #undef realloc
+
+     #include <sys/types.h>
+
+     void *realloc ();
+
+     /* Allocate an N-byte block of memory from the heap.
+        If N is zero, allocate a 1-byte block.  */
+
+     void *
+     rpl_realloc (void *p,size_t n)
+     {
+       if (n == 0)
+         n = 1;
+       return realloc (p,n);
+     }
+
+#endif
+
+
 
 void xmalloc_out_of_memory() {
    fprintf(stderr,"Out of memory\n");

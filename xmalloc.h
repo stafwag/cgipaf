@@ -1,7 +1,7 @@
 /*
  * xmalloc.h
  *
- * Copyright (C) 2001,2002 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001, 2002, 2006 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

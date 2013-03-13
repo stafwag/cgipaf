@@ -35,8 +35,29 @@ case $host_os in
 		BSDHOST=1
     		AC_DEFINE(NETBSDHOST,1,NetBSD system)
 		NETBSDHOST=1
-    		ARG="NOPAM"
   		AC_MSG_RESULT(yes)
+
+		AC_MSG_CHECKING(NetBsd Release)
+		AC_MSG_RESULT($host_os)
+
+		MAJORREL=`echo $host_os | sed -e 's/netbsd\(.*\)/\1/' | cut -f 1 -d \.`
+		
+		AC_MSG_CHECKING(Major NetBSD Release)
+		AC_MSG_RESULT($MAJORREL)
+
+		AC_MSG_CHECKING(If we can enable PAM on this NetBsd Release)
+
+		if test $MAJORREL -lt 6; then
+
+    			ARG="NOPAM"
+			AC_MSG_RESULT(no)
+
+		else
+			
+			AC_MSG_RESULT(yes)
+
+		fi
+
   		;;
  openbsd*) 
  		AC_MSG_RESULT(no)
@@ -139,6 +160,7 @@ if test "$FREEBSDHOST" = "1"; then
 	fi
 
 fi
+
 
 NEED_COMPAT_H="COMPAT"
 

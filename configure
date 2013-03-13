@@ -2351,9 +2351,37 @@ $as_echo "#define BSDHOST 1" >>confdefs.h
 $as_echo "#define NETBSDHOST 1" >>confdefs.h
 
 		NETBSDHOST=1
-    		ARG="NOPAM"
   		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking NetBsd Release" >&5
+$as_echo_n "checking NetBsd Release... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
+$as_echo "$host_os" >&6; }
+
+		MAJORREL=`echo $host_os | sed -e 's/netbsd\(.*\)/\1/' | cut -f 1 -d \.`
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Major NetBSD Release" >&5
+$as_echo_n "checking Major NetBSD Release... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MAJORREL" >&5
+$as_echo "$MAJORREL" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking If we can enable PAM on this NetBsd Release" >&5
+$as_echo_n "checking If we can enable PAM on this NetBsd Release... " >&6; }
+
+		if test $MAJORREL -lt 6; then
+
+    			ARG="NOPAM"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+		else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+		fi
+
   		;;
  openbsd*)
  		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3903,6 +3931,7 @@ $as_echo "\"Version below 7.3 disabling PAM\"" >&6; }
 	fi
 
 fi
+
 
 NEED_COMPAT_H="COMPAT"
 

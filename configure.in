@@ -25,6 +25,34 @@ case $host_os in
     		AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
 		FREEBSDHOST=1
  		AC_MSG_RESULT(yes)
+
+		AC_MSG_CHECKING(FreeBSD release)
+		AC_MSG_RESULT($host_os)
+		MAJORREL=`echo $host_os | sed -e 's/freebsd\(.*\)/\1/' | cut -f 1 -d \.`
+		AC_MSG_CHECKING(Major FreeBSD Release)
+		AC_MSG_RESULT($MAJORREL)
+
+		MINORREL=`echo $host_os | sed -e 's/freebsd\(.*\)/\1/' | cut -f 2 -d \.`
+		AC_MSG_CHECKING(Minor FreeBSD Release)
+		AC_MSG_RESULT($MINORREL)
+
+		AC_MSG_CHECKING(Verifing if the pam password changer should work)
+		if test "$MAJORREL" -lt 7; then
+
+			AC_MSG_RESULT("Major version below 7 disabling PAM")
+    			ARG="NOPAM"
+
+		else
+
+			if test "$MINORREL" -lt 3; then
+
+				AC_MSG_RESULT("Version below 7.3 disabling PAM")
+    				ARG="NOPAM"
+
+			fi
+
+		fi
+
 		;;
    linux*) 
 		AC_DEFINE(LINUXHOST,1,GNU Linux system)
@@ -47,7 +75,7 @@ case $host_os in
 
 		AC_MSG_CHECKING(If we can enable PAM on this NetBsd Release)
 
-		if test $MAJORREL -lt 6; then
+		if test "$MAJORREL" -lt 6; then
 
     			ARG="NOPAM"
 			AC_MSG_RESULT(no)
@@ -124,42 +152,6 @@ AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
 AC_DEFINE_UNQUOTED(HOSTREL,"$HOSTREL",system os release)
 
 
-if test "$FREEBSDHOST" = "1"; then
-
-	AC_MSG_CHECKING(Freebsd Release)
-	AC_MSG_RESULT($HOSTREL)
-
-   	MAJORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\1/'`
-   	MINORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\2/' | sed -e 's/^\(.*\)\-.*$/\1/'`
-
-	AC_MSG_CHECKING(Major Release)
-
-	AC_MSG_RESULT($MAJORREL)
-
-	AC_MSG_CHECKING(Minor Release)
-	AC_MSG_RESULT($MINORREL)
-
-	AC_MSG_CHECKING(Verifing if the pam password changer should work)
-
-	if test "$MAJORREL" -lt 7; then
-
-		AC_MSG_RESULT("Major version below 7 disabling PAM")
-
-    		ARG="NOPAM"
-
-	else
-
-		if test "$MINORREL" -lt 3; then
-
-			AC_MSG_RESULT("Version below 7.3 disabling PAM")
-
-    			ARG="NOPAM"
-
-		fi
-
-	fi
-
-fi
 
 
 NEED_COMPAT_H="COMPAT"
@@ -447,8 +439,8 @@ if test "$NEED_NDBMLIB" = "yes"; then
 	          AC_DEFINE_UNQUOTED(HAVE_DB_H_DB_DBM_HSEARCH,"1",db4 with hsearch)
 	          AC_MSG_RESULT(yes)
 
-	       fi  
-            fi	
+	       fi
+            fi
 	 fi
       fi
    fi

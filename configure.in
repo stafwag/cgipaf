@@ -24,7 +24,6 @@ case $host_os in
 		BSDHOST=1
     		AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
 		FREEBSDHOST=1
-    		ARG="NOPAM"
  		AC_MSG_RESULT(yes)
 		;;
    linux*) 
@@ -41,16 +40,16 @@ case $host_os in
   		;;
  openbsd*) 
  		AC_MSG_RESULT(no)
- 	   	AC_MSG_ERROR($host_os isn't supported)
+ 	   	AC_MSG_ERROR($host_os is not supported)
 		;;
  solaris*) 
- 		AC_MSG_RESULT(yes, the biggest unix vendor) 
+ 		AC_MSG_RESULT(yes) 
     		AC_DEFINE(SOLARISHOST,1,solaris system)
 		SOLARISHOST=1
 		;;
         *) 
 		AC_MSG_RESULT(unkown)
-	   	AC_MSG_WARN(CGIpaf isn't tested with your system: $host_os)
+	   	AC_MSG_WARN(CGIpaf is not tested with your system: $host_os)
 	   	AC_MSG_WARN(Please inform me about the result)
 		;;
 
@@ -68,8 +67,6 @@ else
 	AC_MSG_RESULT("no")
 
 fi
-
-
 
 AC_SUBST(host)
 AC_SUBST(host_os)
@@ -104,6 +101,44 @@ AC_MSG_RESULT($RESULT_MSG)
 AC_DEFINE_UNQUOTED(HOST,"$host",system host)
 AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
 AC_DEFINE_UNQUOTED(HOSTREL,"$HOSTREL",system os release)
+
+
+if test "$FREEBSDHOST" = "1"; then
+
+	AC_MSG_CHECKING(Freebsd Release)
+	AC_MSG_RESULT($HOSTREL)
+
+   	MAJORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\1/'`
+   	MINORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\2/' | sed -e 's/^\(.*\)\-.*$/\1/'`
+
+	AC_MSG_CHECKING(Major Release)
+
+	AC_MSG_RESULT($MAJORREL)
+
+	AC_MSG_CHECKING(Minor Release)
+	AC_MSG_RESULT($MINORREL)
+
+	AC_MSG_CHECKING(Verifing if the pam password changer should work)
+
+	if test "$MAJORREL" -lt 7; then
+
+		AC_MSG_RESULT("Major version below 7 disabling PAM")
+
+    		ARG="NOPAM"
+
+	else
+
+		if test "$MINORREL" -lt 3; then
+
+			AC_MSG_RESULT("Version below 7.3 disabling PAM")
+
+    			ARG="NOPAM"
+
+		fi
+
+	fi
+
+fi
 
 NEED_COMPAT_H="COMPAT"
 
@@ -222,7 +257,7 @@ if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
 
 
-   	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_ERROR(no pam and no crypt library found i'm giving up))
+   	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_ERROR(no pam and no crypt library found I am giving up))
 
 	HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
 	LIBS="$LIBS -lcrypt"

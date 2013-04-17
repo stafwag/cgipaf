@@ -2353,6 +2353,7 @@ $as_echo "$MINORREL" >&6; }
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if the pam password changer should work" >&5
 $as_echo_n "checking Verifing if the pam password changer should work... " >&6; }
+
 		if test "$MAJORREL" -lt 7; then
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"Major version below 7 disabling PAM\"" >&5
@@ -2361,13 +2362,24 @@ $as_echo "\"Major version below 7 disabling PAM\"" >&6; }
 
 		else
 
-			if test "$MINORREL" -lt 3; then
+			if test "$MAJORREL" -eq 7; then
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"Version below 7.3 disabling PAM\"" >&5
+				if test "$MINORREL" -lt 3; then
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"Version below 7.3 disabling PAM\"" >&5
 $as_echo "\"Version below 7.3 disabling PAM\"" >&6; }
-    				ARG="NOPAM"
+    					ARG="NOPAM"
+
+				fi
 
 			fi
+
+		fi
+
+		if test "$ARG" = "WITHPAM"; then
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"yes\"" >&5
+$as_echo "\"yes\"" >&6; }
 
 		fi
 

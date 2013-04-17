@@ -1,5 +1,3 @@
-dnl ugly configure script dont use as an example
-
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(cgipaf.c)
 AC_PREREQ(2.53)
@@ -37,6 +35,7 @@ case $host_os in
 		AC_MSG_RESULT($MINORREL)
 
 		AC_MSG_CHECKING(Verifing if the pam password changer should work)
+
 		if test "$MAJORREL" -lt 7; then
 
 			AC_MSG_RESULT("Major version below 7 disabling PAM")
@@ -44,12 +43,22 @@ case $host_os in
 
 		else
 
-			if test "$MINORREL" -lt 3; then
+			if test "$MAJORREL" -eq 7; then
 
-				AC_MSG_RESULT("Version below 7.3 disabling PAM")
-    				ARG="NOPAM"
+				if test "$MINORREL" -lt 3; then
+
+					AC_MSG_RESULT("Version below 7.3 disabling PAM")
+    					ARG="NOPAM"
+
+				fi
 
 			fi
+
+		fi
+
+		if test "$ARG" = "WITHPAM"; then
+
+			AC_MSG_RESULT("yes")
 
 		fi
 

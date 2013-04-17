@@ -503,6 +503,8 @@ fi
 
 
 AC_CHECK_HEADERS(sys/time.h)
+AC_CHECK_HEADERS(sys/wait.h)
+AC_CHECK_HEADERS(sys/types.h)
 
 AC_HEADER_TIME
 

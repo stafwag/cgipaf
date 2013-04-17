@@ -24,7 +24,7 @@
 #ifdef FREEBSDHOST
 static unsigned char itoa64[] =         /* 0 ... 63 => ascii - 64 */
         "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-to64(char *s, long v, int n)
+void to64(char *s, long v, int n)
 {
   while (--n >= 0) {
         *s++ = itoa64[v&0x3f];

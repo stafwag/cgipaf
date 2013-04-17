@@ -6311,6 +6311,30 @@ fi
 
 done
 
+for ac_header in sys/wait.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "sys/wait.h" "ac_cv_header_sys_wait_h" "$ac_includes_default"
+if test "x$ac_cv_header_sys_wait_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SYS_WAIT_H 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in sys/types.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "sys/types.h" "ac_cv_header_sys_types_h" "$ac_includes_default"
+if test "x$ac_cv_header_sys_types_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SYS_TYPES_H 1
+_ACEOF
+
+fi
+
+done
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether time.h and sys/time.h may both be included" >&5
 $as_echo_n "checking whether time.h and sys/time.h may both be included... " >&6; }

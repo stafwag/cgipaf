@@ -89,7 +89,7 @@ void write_log(int facility, int priority, char *fmt, ...)
   strncpy(syslog_msg,prefix,255);
   strncat(syslog_msg,clientmsg,255-strlen(syslog_msg));
   strncat(syslog_msg,buf,255-strlen(syslog_msg));
-  syslog(priority,syslog_msg);
+  syslog(priority,"%s",syslog_msg);
   closelog();
 }
   

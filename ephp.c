@@ -152,6 +152,7 @@ int ephp_parse(char *phpstr,char ***values)
 {
    char *s,*php_instr,*buf;
    int i;
+   int size;
    php_instr=(char *)xmalloc(sizeof(char *));
    php_instr[0]='\0';
    buf=phpstr;
@@ -159,7 +160,8 @@ int ephp_parse(char *phpstr,char ***values)
       s=strstr(buf,";");
       if(s!=NULL) {
 	 php_instr=(char *)xrealloc(php_instr,(s-buf)+1);
-	 memset(php_instr,'\0',sizeof(php_instr));
+	 size=sizeof(php_instr);
+	 memset(php_instr,'\0',size);
 	 php_instr[s-buf]='\0'; 
 	 strncpy(php_instr,buf,s-buf);
       }

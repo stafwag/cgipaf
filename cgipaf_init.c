@@ -1,7 +1,7 @@
 /*
  * cgipaf_init.c
  *
- * Copyright (C) 2002,2003 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002, 2003, 2013 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,11 +218,13 @@ if (setuid(0)==-1) {
    
    cp=get_section_config_item(config_file,CFGSECTION,CFG_COOKIETIMEOUT); 
 
-   if(cp!=NULL) sscanf(cp,"%d",&cookie_timeout);
+   if(cp!=NULL) sscanf(cp,"%d",&tmpInt);
+
+   cookie_timeout=tmpInt;
 
    write_log(LOG_USER,7,"cookie_timeout set to %d",cookie_timeout);
    
-   snprintf(cookie_timeout_txt,80,"%d",cookie_timeout);
+   snprintf(cookie_timeout_txt,80,"%d",(int) cookie_timeout);
 
 
 #endif

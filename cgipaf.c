@@ -1,7 +1,7 @@
 /*
  * cgiPAF.c     		
  *
- * Copyright (C) 2000-04 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2000-13 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -516,7 +516,7 @@ int main()
       		printf("<HR>\n");
       		printf("<P>\n");
       		printf("<FORM ACTION=\"/cgi-bin/mailcfg.cgi\" METHOD=\"POST\">\n");
-      		printf("<TABLE WIDTH=100%>\n");
+      		printf("<TABLE WIDTH=100%%>\n");
       		printf("<TR>\n");
       		printf("<TD>Login name: %s</TD>\n",options[0][1]);
       		printf("<TD ALIGN=\"LEFT\"><INPUT NAME=name VALUE=\"%s\" TYPE=HIDDEN SIZE=10 MAXLENGTH=15></TD>\n",options[0][1]);

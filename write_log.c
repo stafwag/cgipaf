@@ -1,7 +1,7 @@
 /*
  * write_log.c
  *
- * Copyright (C) 2001, 2007 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001, 2007, 2013 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

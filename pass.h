@@ -1,7 +1,7 @@
 /*
  * pass.h
  *
- * Copyright (C) 1999, 2002, 2006 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999, 2002, 2006, 2013 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

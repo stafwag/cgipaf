@@ -62,7 +62,7 @@ WWW="${datadir}"
    echo "#" >> $CFGFILE
    echo "# accessdb configuration" >> $CFGFILE
    echo >> $CFGFILE
-   echo "accessdb                /etc/cgipaf/accessdb" >> $CFGFILE
+   echo "accessdb                ${sysconfdir}/accessdb" >> $CFGFILE
    echo "max_invalid             10" >> $CFGFILE
    echo "invalid_timeout         60" >> $CFGFILE
    echo >> $CFGFILE

@@ -38,7 +38,7 @@ changepass: changepass.c ${CHPASSOBJS} ${inc_files}
 	$(CC) $(CFLAGS) -o changepass changepass.c ${CHPASSOBJS} @LIBS@ ${ARG} ${HAVE_CHPASS_CRYPT}
 
 install: all
-	 su root -c "/bin/sh ./install.sh"
+	/bin/sh ./install.sh
 
 pass.o: pass.c pass.h
 	$(CC) $(CFLAGS) $(ARG) -c pass.c

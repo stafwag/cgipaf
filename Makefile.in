@@ -20,22 +20,23 @@ HAVE_CHPASS_CRYPT  	= -D@HAVE_CHPASS_CRYPT@
 inc_files       = msg.h cgipaf_defs.h cgipaf_vars.h cgipaf_acl.c cgipaf_pwlocation.c cgipaf_init.c
 CC=@CC@
 CFLAGS=@CFLAGS@
+LDFLAGS=@LDFLAGS@
 
 CONFIGFILE=$(sysconfdir)/cgipaf.conf
 
 all: passwd.cgi viewmailcfg.cgi mailcfg.cgi changepass
 
 passwd.cgi: cgipaf.c ${OBJS} ${inc_files}
-	$(CC) $(CFLAGS) -o passwd.cgi cgipaf.c ${OBJS} @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
+	$(CC) $(CFLAGS) $(LDFLAGS) -o passwd.cgi cgipaf.c ${OBJS} @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_PASSWD
 
 mailcfg.cgi: mailcfg.c ${OBJS} mailconfig.o ${inc_files}
-	$(CC) $(CFLAGS) -o mailcfg.cgi mailcfg.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
+	$(CC) $(CFLAGS) $(LDFLAGS) -o mailcfg.cgi mailcfg.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_MAILCFG
 
 viewmailcfg.cgi: cgipaf.c ${OBJS} mailconfig.o ${inc_files}
-	$(CC) $(CFLAGS) -o viewmailcfg.cgi cgipaf.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
+	$(CC) $(CFLAGS) $(LDFLAGS) -o viewmailcfg.cgi cgipaf.c ${OBJS} mailconfig.o @LIBS@ ${ARG} -DCONFIGFILE=\"$(CONFIGFILE)\" -DCGIPAF_VIEWMAILCFG
 	
 changepass: changepass.c ${CHPASSOBJS} ${inc_files}
-	$(CC) $(CFLAGS) -o changepass changepass.c ${CHPASSOBJS} @LIBS@ ${ARG} ${HAVE_CHPASS_CRYPT}
+	$(CC) $(CFLAGS) $(LDFLAGS) -o changepass changepass.c ${CHPASSOBJS} @LIBS@ ${ARG} ${HAVE_CHPASS_CRYPT}
 
 install: all
 	/bin/sh ./install.sh

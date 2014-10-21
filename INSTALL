@@ -10,11 +10,9 @@ SUPPORTED SYSTEMS
     supported if they use the standard password file location /etc/passwd
     /etc/shadow and standard crypt or md5 passwords.
 
-    FreeBSD and NetBSD are supported, OpenBSD is not (yet) supported. Although 
-    FreeBSD has PAM support the PAM password changer doesn't seem to work on 
-    FreeBSD. Therefor CGIpaf is compiled without PAM support but with 
-    built-in BSD support by default. If you need PAM support on FreeBSD you
-    can add --enable-pam to configure.
+    FreeBSD and NetBSD are supported, OpenBSD is not (yet) supported.
+
+    PAM support is enabled on FreeBSD 7.3 or above and NetBSD 6 or above. 
 
     Operating systems are automatically detected by configure. 
     
@@ -24,18 +22,26 @@ SUPPORTED SYSTEMS
 
 INSTALLATION
 
+    If you have library/include files installed on non-default location e.g.
+    /usr/local/lib /usr/local/include set LDFLAGS and CFLAGS environment
+    variables.
+
+	# export CFLAGS="-I /usr/local/include"
+	# export LDFLAGS="-L /usr/local/lib"
+
     type: 
 
-          ./configure --bindir=/usr/local/apache/cgi-bin \ 
+	# ./configure --bindir=/usr/local/apache/cgi-bin \ 
                       --datadir=/etc/cgipaf/data \ 
                       --sysconfdir=/etc/cgipaf
-    
+
     Update the above command with your real cgi-bin directory.
 
     This will create Makefile, install.sh and config.h
     
     If you want to disable pam support you can add "--disable-pam" 
     configure should normally detect pam and no-pam systems.
+
           
     type: 
           make

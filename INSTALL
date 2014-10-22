@@ -14,6 +14,8 @@ SUPPORTED SYSTEMS
 
     PAM support is enabled on FreeBSD 7.3 or above and NetBSD 6 or above. 
 
+    GNU make is required to build cgipaf on a BSD system.
+
     Operating systems are automatically detected by configure. 
     
     CGIpaf depends on the ndbm or compatible library. The GNU dbm library

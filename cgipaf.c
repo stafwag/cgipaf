@@ -280,8 +280,23 @@ int main()
 
 		if(!(fp=fopen(full_cracklib_dictpath,"r"))) {
 
-	 		write_log(LOG_INFO,6,"full_cracklib_dictpath \"%s\" is not readable clearing",full_cracklib_dictpath);
-			cracklib_dictpath=NULL;
+	 		write_log(LOG_INFO,6,"full_cracklib_dictpath \"%s\" is not readable configuration mistake?",full_cracklib_dictpath);
+
+			char err_cracklibdictpath[]="Configuration error failed to open dictionary: ";
+
+			/*
+			 * Save the error into the cracklib error and badpassword options array 
+			*/
+
+	    		options[16][1]=(char *) xmalloc(strlen(err_cracklibdictpath)+strlen(full_cracklib_dictpath)+1);
+	    		strcpy(options[16][1],err_cracklibdictpath);
+			strcat(options[16][1],full_cracklib_dictpath);
+	    		options[21][1]=options[16][1];
+
+	    		show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options,txt_message);
+
+			exit(0);
+
 
 		}
 		else {

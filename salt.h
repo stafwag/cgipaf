@@ -20,7 +20,7 @@
  */
 
 #ifndef __CGIPAFSALTH
-#define __CGIPAFSLATH
+#define __CGIPAFSALTH
 #include "common.h"
 
 #if TIME_WITH_SYS_TIME

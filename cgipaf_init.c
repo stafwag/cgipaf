@@ -1,7 +1,7 @@
 /*
  * cgipaf_init.c
  *
- * Copyright (C) 2002, 2003, 2013 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002, 2003, 2013, 2014 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,6 +174,7 @@ if (setuid(0)==-1) {
    /* enable cracklib if cracklib is set to "on" */
    
    if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB))!=NULL) {
+
       if (is_var_yes(cp)==0) {
 	 enable_cracklib=0;
          write_log(LOG_USER,7,"cracklib disabled");
@@ -183,7 +184,70 @@ if (setuid(0)==-1) {
 	 write_log(LOG_USER,7,"cracklib enabled");
       }
       xfree(cp);
-}
+
+
+      if (enable_cracklib==1) {
+
+       	if ((cp=get_sg_item(config_file,CFGSECTION,CFG_CRACKLIB_DICTPATH))!=NULL) {
+                cracklib_dictpath=xmalloc(strlen(cp)+1);
+                strcpy(cracklib_dictpath,cp);
+                xfree(cp);
+                write_log(LOG_INFO,7,"cracklib_dictpath set to \"%s\"",cracklib_dictpath);
+        }
+
+      /* vrfy that cracklib_dictpath is readable */
+
+        if (cracklib_dictpath==NULL) {
+
+                write_log(LOG_INFO,6,"cracklib_dictpath is NULL, please set cracklib_dictpath if you want to enable cracklib.");
+                char err_cracklibdictpath[]="Configuration error cracklib_dictpath is NULL, please set cracklib_dictpath if you want to enable cracklib.";
+                options[16][1]=(char *) xmalloc(strlen(err_cracklibdictpath));
+                options[21][1]=options[16][1];
+
+                strcpy(options[16][1],err_cracklibdictpath);
+                show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options,txt_message);
+                exit(0);
+
+        }
+
+        char *full_cracklib_dictpath;
+        FILE *fp;
+
+        full_cracklib_dictpath=xmalloc(strlen(cracklib_dictpath)+strlen(".pwi")+1);
+
+        strcpy(full_cracklib_dictpath,cracklib_dictpath);
+        strcat(full_cracklib_dictpath,".pwi");
+
+        if(!(fp=fopen(full_cracklib_dictpath,"r"))) {
+
+                write_log(LOG_INFO,6,"full_cracklib_dictpath \"%s\" is not readable configuration mistake?",full_cracklib_dictpath);
+
+                char err_cracklibdictpath[]="Configuration error failed to open dictionary: ";
+
+                /*
+                 * Save the error into the cracklib error and badpassword options array
+                */
+
+                options[16][1]=(char *) xmalloc(strlen(err_cracklibdictpath)+strlen(full_cracklib_dictpath)+1);
+                strcpy(options[16][1],err_cracklibdictpath);
+                strcat(options[16][1],full_cracklib_dictpath);
+                options[21][1]=options[16][1];
+
+                show_msg(config_file,doc_root,CFGSECTION,ERR_CRACKLIB,err_cracklib,options,txt_message);
+                exit(0);
+
+
+        }
+        else {
+
+                fclose(fp);
+
+        }
+
+      }
+
+    }
+
 #endif  /* HAVE_LIBCRACK */
 #endif  /* CGIPAF_PASSWD */
 

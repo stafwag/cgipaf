@@ -1,3 +1,7 @@
+* version 1.3.4		( ?? Nov 2014 )
+  + Cracklib configuration checking has been improved
+  + LDFLAGS is passed to the linker correctly .
+
 * version 1.3.4pre1	( 15 Sep 2013 )
   + Enable PAM on FreeBSD 7.3 or above  
   + Enable PAM on NetBSD 6.0 or above

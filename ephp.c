@@ -192,31 +192,52 @@ int found=0;
 if((fp=fopen(filename,"r"))==NULL) return(-1);
 
 while (fgets(buffer,500,fp)) {
-s=strstr(buffer,"<?");
 
-if (!found) {
-   if (s==NULL) printf("%s",buffer);
-     else {
-          strncpy(buffer2,buffer,s-buffer);
-          buffer2[s-buffer]='\0';
-          printf("%s",buffer2);
-          found=1;
-          strcpy(buffer2,buffer);
-          strcpy(buffer,buffer2+(s-buffer)+2);
-     }
-}
-if (found) {
-   buffer2[0]='\0';
-   s=strstr(buffer,"?>");
-   if(s!=NULL) {
-     fseek(fp,0-((buffer+strlen(buffer))-s-2),SEEK_CUR);
-     *s='\0'; 
-     found=0;
-   }
-   if(ephp_parse(buffer,values)==-1) return(-1);  
-}
+	s=strstr(buffer,"<?");
+
+	if (!found) {
+
+   		if (s==NULL) printf("%s",buffer);
+
+     		else {
+
+          		strncpy(buffer2,buffer,s-buffer);
+          		buffer2[s-buffer]='\0';
+          		printf("%s",buffer2);
+          		found=1;
+          		strcpy(buffer2,buffer);
+          		strcpy(buffer,buffer2+(s-buffer)+2);
+
+     		}
+
+	}
+
+	if (found) {
+
+   		buffer2[0]='\0';
+   		s=strstr(buffer,"?>");
+
+   		if(s!=NULL) {
+
+     			fseek(fp,0-((buffer+strlen(buffer))-s-2),SEEK_CUR);
+     			*s='\0'; 
+     			found=0;
+
+   		}
+
+   		if(ephp_parse(buffer,values)==-1) {
+
+			fclose(fp);
+	 		return(-1);  
+
+   		}
+
+	}
     
 }
+
 fflush(stdout);
+fclose(fp);
 return(0);
+
 }

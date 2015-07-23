@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(cgipaf.c)
-AC_PREREQ(2.53)
+AC_PREREQ([2.69])
+AC_INIT(cgipaf,1.3.5,staf@wagemakers.be)
+AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 AC_SUBST(ARG)
 AC_SUBST(NEED_COMPAT_H)

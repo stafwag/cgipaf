@@ -35,7 +35,6 @@
 #ifdef MD5_CRYPT
 #include "md5crypt.h"
 #endif
-#include "salt.h"
 
 static char *passwd_location=NULL;
 static char *shadow_location=NULL;
@@ -164,12 +163,47 @@ return(pw);
 }
 
 /*
- * returns 0 if p is a std password
- *         1 if p is a md5 password
+ * returns 0 if p is no md5 password
+ *         1 if p is a  md5 password
  */
-int is_md5password(char *p) {
+int is_md5(char *p) {
    if (strncmp(p,"$1$",3) == 0) return(1);
    return(0);
+}
+
+/*
+ * returns 0 if p is no blowfish password
+ *         1 if p is a  blowfish password
+ */
+int is_blowfish(char *p) {
+   if (strncmp(p,"$2a$",4) == 0) return(1);
+   return(0);
+}
+
+/*
+ * returns 0 if p is no sha256 password
+ *         1 if p is a  sha256 password
+ */
+int is_sha256(char *p) {
+   if (strncmp(p,"$5$",3) == 0) return(1);
+   return(0);
+}
+
+/*
+ * returns 0 if p is no sha512 password
+ *         1 if p is a  sha512 password
+ */
+int is_sha512(char *p) {
+   if (strncmp(p,"$6$",3) == 0) return(1);
+   return(0);
+}
+
+int is_des(char *p) {
+
+   if (strlen(p)<4) return(1);
+   if (p[0]=='$' && p[2]=='$') return(0); 
+   return(1);
+
 }
 
 /*
@@ -189,12 +223,19 @@ char * get_pwfield (struct pw_info *pw)
  * returns password crypt type
  *         0 = std crypt
  *         1 = md5
+ *         2 = blowfish
+ *         3 = sha256
+ *         4 = sha512
  */
-int get_crypttype (struct pw_info *pw)
+int get_crypttype(struct pw_info *pw)
 {
 char *pass=get_pwfield(pw);
 if (pass==NULL) return(-1);
-return (is_md5password(pass));
+if (is_des(pass)) return(0);;
+if (is_md5(pass)) return(1);;
+if (is_blowfish(pass)) return(2);;
+if (is_sha256(pass)) return(3);;
+if (is_sha512(pass)) return(4);;
 }
 
 /*
@@ -212,14 +253,13 @@ int ckpw_nopam(struct pw_info *pw,char *pass)
 {
 char *c,*p,salt[3];
 if((p=get_pwfield(pw))==NULL) return(-1);  /* error! */
-if (is_md5password(p)) {
-   c=p;  	  /* p is a md5 password use complete password as salt */ 
-   }
-else {
+if (is_des(p)) {
    salt[0]=p[0];  /* p in no md5 password use std salt; */
    salt[1]=p[1];
    salt[2]='\0';
    c=salt;
+} else {
+   c=p;  	  /* p is a md5 password or better use complete password as salt */ 
 }
 if (strcmp(p,crypt(pass,c))) return(-1);   /* wrong password */
 return(PASS_SUCCESS);
@@ -359,7 +399,11 @@ return(PASS_SUCCESS);
 #ifndef _WITHPAM
 int chpw(struct pw_info *pw,char *pass)
 {
-	chpw_nopam(pw,pass,0);
+
+	int ret;
+	ret=chpw_nopam(pw,pass,0);
+
+	return(ret);
 
 }
 
@@ -384,7 +428,7 @@ int i=0;
 int fd_tmplock=0;
 int lock=0;
 int count=0;
-char *c=NULL;
+const char *c=NULL;
 char *passwdfile=PASSWDFILE;
 char *encrypt_pass=NULL;
 struct stat st;
@@ -457,24 +501,20 @@ if (mode !=2 ) {
 	switch(i) {
 
 		case 0: 
-			c=std_seed();       /* standard crypt password */
+			c=crypt_make_salt("DES",NULL);       /* standard crypt password */
                		encrypt_pass=crypt(pass,c);
 	     		break;
 
 #ifdef MD5_CRYPT
 
        		case 1:
-       	     		c=md5_seed();       /* md5 password            */
+       	     		c=crypt_make_salt("MD5",NULL);       /* md5 password            */
 
-#ifndef FREEBSDHOST
+#ifndef MODERNCRYPT
 
 	     		encrypt_pass=libshadow_md5_crypt(pass,c); 
-#else
-	     		encrypt_pass=xmalloc(_PASSWORD_LEN+1);
-	     		encrypt_pass[0]='\0';
-	     		(void)crypt_set_format("md5");
-	     		encrypt_pass=crypt(pass,c);
 #endif
+	     		encrypt_pass=crypt(pass,c);
 	     		break;
 #endif
 

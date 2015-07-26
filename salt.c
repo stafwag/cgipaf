@@ -1,100 +1,256 @@
 /*
- * salt.c
+ * salt.c - generate a random salt string for crypt()
  *
- * Copyright (C) 2002, 2007, 2013 Staf Wagemakers Belgie/Belgium
+ * Written by Marek Michalkiewicz <marekm@i17linuxb.ists.pwr.wroc.pl>,
+ * it is in the public domain.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- *
+ * l64a was Written by J.T. Conklin <jtc@netbsd.org>. Public domain.
  */
 
-#include "salt.h"
+#include "config.h"
+#include "xmalloc.h"
 
-#ifdef FREEBSDHOST
-static unsigned char itoa64[] =         /* 0 ... 63 => ascii - 64 */
-        "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-void to64(char *s, long v, int n)
+#ident "$Id$"
+
+#include <sys/time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
+
+/* local function prototypes */
+static void seedRNG (void);
+static /*@observer@*/const char *gensalt (size_t salt_size);
+static long shadow_random (long min, long max);
+static /*@observer@*/const char *SHA_salt_rounds (/*@null@*/int *prefered_rounds);
+
+#ifndef HAVE_L64A
+static /*@observer@*/char *l64a(long value)
 {
-  while (--n >= 0) {
-        *s++ = itoa64[v&0x3f];
-        v >>= 6;
-        }
+	static char buf[8];
+	char *s = buf;
+	int digit;
+	int i;
+
+	if (value < 0) {
+		errno = EINVAL;
+		return(NULL);
+	}
+
+	for (i = 0; value != 0 && i < 6; i++) {
+		digit = value & 0x3f;
+
+		if (digit < 2) {
+			*s = digit + '.';
+		} else if (digit < 12) {
+			*s = digit + '0' - 2;
+		} else if (digit < 38) {
+			*s = digit + 'A' - 12;
+		} else {
+			*s = digit + 'a' - 38;
+		}
+
+		value >>= 6;
+		s++;
+	}
+
+	*s = '\0';
+
+	return(buf);
 }
-#endif
+#endif /* !HAVE_L64A */
+
+static void seedRNG (void)
+{
+	struct timeval tv;
+	static int seeded = 0;
+
+	if (0 == seeded) {
+		(void) gettimeofday (&tv, NULL);
+		srandom (tv.tv_sec ^ tv.tv_usec ^ getpid ());
+		seeded = 1;
+	}
+}
 
 /*
- * retruns a random char with valid ascii char's
+ * Add the salt prefix.
+ */
+#define MAGNUM(array,ch)	(array)[0]=(array)[2]='$',(array)[1]=(ch),(array)[3]='\0'
+
+/* It is not clear what is the maximum value of random().
+ * We assume 2^31-1.*/
+#define RANDOM_MAX 0x7FFFFFFF
+
+/*
+ * Return a random number between min and max (both included).
  *
- * s should be a random integer
+ * It favors slightly the higher numbers.
  */
-int gen_random(int s)
+static long shadow_random (long min, long max)
 {
-int i;
-srand(s);
-i=rand();
-i=i/(RAND_MAX/63);
-if(i<0) i=0;
-if(i>63) i=63;
-if(i<12) return (i+46);
-if((i>=12)&&(i<38)) return (i+(65-12));
-if(i>=38) return (i+(97-38));
-
-return(i);
-
+	double drand;
+	long ret;
+	seedRNG ();
+	drand = (double) (max - min + 1) * random () / RANDOM_MAX;
+	/* On systems were this is not random() range is lower, we favor
+	 * higher numbers of salt. */
+	ret = (long) (max + 1 - drand);
+	/* And we catch limits, and use the highest number */
+	if ((ret < min) || (ret > max)) {
+		ret = max;
+	}
+	return ret;
 }
-#ifdef MD5_CRYPT
+
+/* Default number of rounds if not explicitly specified.  */
+#define ROUNDS_DEFAULT 5000
+/* Minimum number of rounds.  */
+#define ROUNDS_MIN 1000
+/* Maximum number of rounds.  */
+#define ROUNDS_MAX 999999999
+
+#define SHA_CRYPT_MIN_ROUNDS -1;
+#define SHA_CRYPT_MAX_ROUNDS -1;
+
 
 /*
- * returns a md5 salt ( based on FreeBSD code )
+ * Return a salt prefix specifying the rounds number for the SHA crypt methods.
  */
-
-char * md5_seed(void)
+static /*@observer@*/const char *SHA_salt_rounds (/*@null@*/int *prefered_rounds)
 {
-struct timeval tv;
-static char md5salt[32];
+	static char rounds_prefix[18]; /* Max size: rounds=999999999$ */
+	long rounds;
 
-#ifndef FREEBSDHOST
-     srandom(getpid());
-#else
-     srandomdev();
-#endif
-     
-gettimeofday(&tv,0);
+	if (NULL == prefered_rounds) {
+		long min_rounds = SHA_CRYPT_MIN_ROUNDS;
+		long max_rounds = SHA_CRYPT_MAX_ROUNDS;
 
-to64(&md5salt[0], random(), 3);
-to64(&md5salt[3], tv.tv_usec, 3);
-to64(&md5salt[6], tv.tv_sec, 2);
-to64(&md5salt[8], random(), 5);
-to64(&md5salt[13], random(), 5);
-to64(&md5salt[17], random(), 5);
-to64(&md5salt[22], random(), 5);
-md5salt[27] = '\0';
-return(md5salt);
+		if ((-1 == min_rounds) && (-1 == max_rounds)) {
+			return "";
+		}
+
+		if (-1 == min_rounds) {
+			min_rounds = max_rounds;
+		}
+
+		if (-1 == max_rounds) {
+			max_rounds = min_rounds;
+		}
+
+		if (min_rounds > max_rounds) {
+			max_rounds = min_rounds;
+		}
+
+		rounds = shadow_random (min_rounds, max_rounds);
+	} else if (0 == *prefered_rounds) {
+		return "";
+	} else {
+		rounds = *prefered_rounds;
+	}
+
+	/* Sanity checks. The libc should also check this, but this
+	 * protects against a rounds_prefix overflow. */
+	if (rounds < ROUNDS_MIN) {
+		rounds = ROUNDS_MIN;
+	}
+
+	if (rounds > ROUNDS_MAX) {
+		rounds = ROUNDS_MAX;
+	}
+
+	(void) snprintf (rounds_prefix, sizeof rounds_prefix,
+	                 "rounds=%ld$", rounds);
+
+	return rounds_prefix;
 }
-
-#endif
 
 /*
- * returns a 2 char random salt
+ *  Generate salt of size salt_size.
  */
-char * std_seed(void)
+#define MAX_SALT_SIZE 64
+#define MIN_SALT_SIZE 8
+
+static /*@observer@*/const char *gensalt (size_t salt_size)
 {
-static char stdsalt[3];
-srand(getpid());
-stdsalt[0]=gen_random(time(0)-rand());
-stdsalt[1]=gen_random(time(0)+getpid());
-stdsalt[2]='\0';
-return(stdsalt);
+
+
+	static char salt[MAX_SALT_SIZE+1];
+
+	salt[0] = '\0';
+
+	assert (salt_size >= MIN_SALT_SIZE &&
+	        salt_size <= MAX_SALT_SIZE);
+	seedRNG ();
+	strcat (salt, l64a (random()));
+	do {
+		strcat (salt, l64a (random()));
+	} while (strlen (salt) < salt_size);
+
+	salt[salt_size] = '\0';
+
+	return salt;
 }
 
+/*
+ * Generate 8 base64 ASCII characters of random salt.  If MD5_CRYPT_ENAB
+ * in /etc/login.defs is "yes", the salt string will be prefixed by "$1$"
+ * (magic) and pw_encrypt() will execute the MD5-based FreeBSD-compatible
+ * version of crypt() instead of the standard one.
+ * Other methods can be set with ENCRYPT_METHOD
+ *
+ * The method can be forced with the meth parameter.
+ * If NULL, the method will be defined according to the MD5_CRYPT_ENAB and
+ * ENCRYPT_METHOD login.defs variables.
+ *
+ * If meth is specified, an additional parameter can be provided.
+ *  * For the SHA256 and SHA512 method, this specifies the number of rounds
+ *    (if not NULL).
+ */
+/*@observer@*/const char *crypt_make_salt (/*@null@*//*@observer@*/const char *meth, /*@null@*/void *arg)
+{
+	/* Max result size for the SHA methods:
+	 *  +3		$5$
+	 *  +17		rounds=999999999$
+	 *  +16		salt
+	 *  +1		\0
+	 */
+	static char *result;
+	size_t salt_len = 8;
+	const char *method=meth;
+
+	result=xmalloc((MAX_SALT_SIZE+5)*sizeof(char));
+	result[0] = '\0';
+
+	if (0 == strcmp (method, "MD5")) {
+		MAGNUM(result, '1');
+		salt_len = (size_t) shadow_random (MIN_SALT_SIZE, MAX_SALT_SIZE);
+
+	} else if (0 == strcmp (method, "SHA256")) {
+		MAGNUM(result, '5');
+		strcat(result, SHA_salt_rounds((int *)arg));
+		salt_len = (size_t) shadow_random (MIN_SALT_SIZE, MAX_SALT_SIZE);
+	} else if (0 == strcmp (method, "SHA512")) {
+		MAGNUM(result, '6');
+		strcat(result, SHA_salt_rounds((int *)arg));
+		salt_len = (size_t) shadow_random (MIN_SALT_SIZE, MAX_SALT_SIZE);
+	} else if (0 != strcmp (method, "DES")) {
+		fprintf (stderr,
+			 ("Invalid ENCRYPT_METHOD value: '%s'.\n"
+			   "Defaulting to DES.\n"),
+			 method);
+		result[0] = '\0';
+	}
+
+	/*
+	 * Concatenate a pseudo random salt.
+	 */
+
+	result=xrealloc(result,strlen(result) + strlen(result) + salt_len + 1 );
+
+	strcat (result,gensalt (salt_len));
+
+	return result;
+}

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT(cgipaf,1.3.5,staf@wagemakers.be)
+AC_INIT(cgipaf,1.4.0pre1,staf@wagemakers.be)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 AC_SUBST(ARG)
@@ -22,7 +22,9 @@ case $host_os in
     		AC_DEFINE(BSDHOST,1,BSD system)
 		BSDHOST=1
     		AC_DEFINE(FREEBSDHOST,1,FreeBSD system)
+		AC_DEFINE(MODERNCRYPT,1,FreeBSD has a modern crypt)
 		FREEBSDHOST=1
+		MODERNCRYPT=1
  		AC_MSG_RESULT(yes)
 
 		AC_MSG_CHECKING(FreeBSD release)
@@ -67,6 +69,53 @@ case $host_os in
    linux*) 
 		AC_DEFINE(LINUXHOST,1,GNU Linux system)
    		AC_MSG_RESULT(yes)
+
+		AC_MSG_CHECKING(Linux kernel release)
+		LINUXREL=`uname -r`
+		AC_MSG_RESULT($LINUXREL)
+		AC_MSG_CHECKING(Major Linux kernel Release)
+		MAJORREL=`echo $LINUXREL | cut -f1 -d\.`
+		AC_MSG_RESULT($MAJORREL)
+		AC_MSG_CHECKING(Minor Linux kernel Release)
+		MINORREL=`echo $LINUXREL | cut -f2 -d\.`
+		AC_MSG_RESULT($MINORREL)
+
+		AC_MSG_CHECKING(Verifing that a modern crypt is present)
+
+		if test "$MAJORREL" -ge 3; then
+
+			AC_MSG_RESULT(Major Release is 3 or higher assume a modern crypt)
+			AC_DEFINE(MODERNCRYPT,1,Linux kernel version is high enough assume a modern crypt)
+			MODERNCRYPT=1
+		else
+
+			if test "$MAJORREL" -lt 2; then
+
+				AC_MSG_RESULT(Major Release is lower thean 2 or higher assume  DESonly crypt)
+
+			else
+
+				AC_MSG_RESULT(Major Release is 2)
+				AC_MSG_CHECKING(Verifing minor release)
+
+				if test "$MINORREL" -ge 6; then
+
+					AC_MSG_RESULT(Kernel version is higher than 2.6 assume modern crypt)
+					AC_DEFINE(MODERNCRYPT,1,Linux kernel version is high enough assume a modern crypt)
+					MODERNCRYPT=1
+
+				else
+
+					AC_MSG_RESULT(Kernel version is lower than 2.6 assume DESonly crypt)
+
+				fi
+
+			fi
+
+
+		fi
+
+
 		;;
   netbsd*) 
     		AC_DEFINE(BSDHOST,1,BSD system)
@@ -237,8 +286,7 @@ AC_ARG_ENABLE(pam,[  --enable-pam            Enable pam support (default) ],
    ) 
 
 AC_ARG_WITH(libcrack, [  --with-libcrack   try to use librack ])
-AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       include MD5-compatible crypt
-function (default) ])
+AC_ARG_ENABLE(md5crypt, [  --enable-md5crypt       enable MD5 or higher (default) ])
 
 dnl pam support test
 
@@ -299,7 +347,7 @@ dnl
 
 dnl freebsd has built-in md5 support
  
-     if test "$FREEBSDHOST" != "1"; then
+     if test "$MODERNCRYPT" != "1"; then
         OBJS="$OBJS md5.o md5crypt.o"
      fi
 
@@ -333,7 +381,7 @@ dnl freebsd has built-in md5 support
 
 		dnl freebsd has built-in md5 support
  
-   		if test "$FREEBSDHOST" != "1"; then
+   		if test "$MODERNCRYPT" != "1"; then
 
      			CHPASSOBJS="$CHPASSOBJS md5.o md5crypt.o"
 
@@ -549,7 +597,7 @@ AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 
-AC_CHECK_FUNCS(free realloc strdup strerror strstr strcasecmp strncasecmp strrchr strchr strnchr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid getspnam gettimeofday memset)
+AC_CHECK_FUNCS(free realloc strdup strerror strstr strcasecmp strncasecmp strrchr strchr strnchr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid getspnam gettimeofday memset l64a)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 AC_CHECK_FUNCS(setenv,,NEED_COMPAT_H="yes")
 

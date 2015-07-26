@@ -81,6 +81,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `l64a' function. */
+#undef HAVE_L64A
+
 /* Define to 1 if you have the `crack' library (-lcrack). */
 #undef HAVE_LIBCRACK
 
@@ -283,6 +286,9 @@
 
 /* md5 crypt functions required */
 #undef MD5_CRYPT
+
+/* Linux kernel version is high enough assume a modern crypt */
+#undef MODERNCRYPT
 
 /* NetBSD system */
 #undef NETBSDHOST

@@ -23,8 +23,12 @@
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "md5crypt.h"
 #include "salt.h"
+
+#ifndef MODERNCRYPT
+#include "md5crypt.h"
+#endif
+
 #ifdef HAVE_CRYPT_H
 #include <crypt.h>
 #endif
@@ -101,4 +105,6 @@ char * set_passwd_location ( char * passwd_file );
 int ckpw_nopam(struct pw_info *pw,char *pass);
 struct pw_info * get_pw_nopam(char *name);
 #endif
+int is_des(char *p);
+int get_crypttype(struct pw_info *pw);
 #endif

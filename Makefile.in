@@ -117,4 +117,5 @@ dist-clean: clean
 	rm -f install.sh
 	rm -f createconfig.sh
 	rm -f cgipaf.conf
+	rm -f config.h
 	rm -f *~

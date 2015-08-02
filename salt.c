@@ -237,11 +237,7 @@ static /*@observer@*/const char *gensalt (size_t salt_size)
 		strcat(result, SHA_salt_rounds((int *)arg));
 		salt_len = (size_t) shadow_random (MIN_SALT_SIZE, MAX_SALT_SIZE);
 	} else if (0 != strcmp (method, "DES")) {
-		fprintf (stderr,
-			 ("Invalid ENCRYPT_METHOD value: '%s'.\n"
-			   "Defaulting to DES.\n"),
-			 method);
-		result[0] = '\0';
+		return(NULL);
 	}
 
 	/*

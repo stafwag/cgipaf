@@ -1,7 +1,7 @@
 /*
  * pass.c
  *
- * Copyright (C) 2000,2002,2007 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2000,2002,2007,2015 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,6 +211,9 @@ int is_des(char *p) {
  */
 char * get_pwfield (struct pw_info *pw) 
 {
+
+     if (pw == NULL) return NULL;
+
      if(pw->sp==NULL) return(pw->p->pw_passwd);
 #ifdef HAVE_SHADOW_H
      return(pw->sp->sp_pwdp);
@@ -221,6 +224,7 @@ char * get_pwfield (struct pw_info *pw)
 
 /*
  * returns password crypt type
+ * 	  -1 = error
  *         0 = std crypt
  *         1 = md5
  *         2 = blowfish
@@ -230,12 +234,71 @@ char * get_pwfield (struct pw_info *pw)
 int get_crypttype(struct pw_info *pw)
 {
 char *pass=get_pwfield(pw);
+
 if (pass==NULL) return(-1);
 if (is_des(pass)) return(0);;
 if (is_md5(pass)) return(1);;
 if (is_blowfish(pass)) return(2);;
 if (is_sha256(pass)) return(3);;
 if (is_sha512(pass)) return(4);;
+
+return(-1);
+}
+
+/*
+ * return a string with the CRYPTTYPE
+ */
+
+char * crypttype2str(int i) 
+{
+
+	switch(i) {
+
+		case 0:
+			return("DES");
+			break;
+		case 1:
+			return("MD5");
+			break;
+		case 2:
+			return("BLOWFISH");
+			break;
+		case 3:
+			return("SHA256");
+			break;
+		case 4:
+			return("SHA512");
+			break;
+
+		default:
+			return("UNKNOWN");
+			break;
+
+	}
+
+	return("UNKNOWN");
+
+}
+
+int cryptstr2int(char *txt) 
+{
+
+	char *cryptType;
+
+	if (strlen(txt)>10) return(-1);
+
+	cryptType=xmalloc(strlen(txt)+1);
+	strcpy(cryptType,txt);
+	strtoupper(cryptType);
+
+	if (strcmp(cryptType,"DES") == 0 ) return(0);
+	if (strcmp(cryptType,"MD5") == 0 ) return(1);
+	if (strcmp(cryptType,"BLOWFISH") == 0) return(2);
+	if (strcmp(cryptType,"SHA256") == 0) return(3);
+	if (strcmp(cryptType,"SHA512") == 0) return(4);
+
+	return(-1);
+
 }
 
 /*
@@ -413,9 +476,12 @@ int chpw(struct pw_info *pw,char *pass)
  * update the user's password
  *
  * mode:	
- * 		0:  normal mode
+ * 		0:  normal mode ( use existing crypttype )
  * 		1:  force md5 passwords
- * 		2:  pass is already encrypted 
+ * 		2:  pass is already encrypted
+ *		3:  force sha256 passwords
+ *		4:  force sha512 passwords 
+ *
  * 
  * returns:
  *             -2:  lockfile exists
@@ -486,6 +552,24 @@ switch(mode) {
 		i=1;
 		break;
 
+	case 3:
+ 
+		/*
+ 		 * force sha256 passwords if mode=3
+ 		 */
+
+		i=3;
+		break;
+
+	case 4:
+ 
+		/*
+ 		 * force sha512 passwords if mode=3
+ 		 */
+
+		i=4;
+		break;
+
 	default:
 		i=get_crypttype(pw);
 
@@ -498,24 +582,24 @@ switch(mode) {
 
 if (mode !=2 ) {
 
+	c=crypt_make_salt(crypttype2str(i),NULL);
+
 	switch(i) {
 
-		case 0: 
-			c=crypt_make_salt("DES",NULL);       /* standard crypt password */
-               		encrypt_pass=crypt(pass,c);
-	     		break;
-
+		case 0:
 #ifdef MD5_CRYPT
 
-       		case 1:
-       	     		c=crypt_make_salt("MD5",NULL);       /* md5 password            */
-
-#ifndef MODERNCRYPT
-
-	     		encrypt_pass=libshadow_md5_crypt(pass,c); 
-#endif
-	     		encrypt_pass=crypt(pass,c);
+#ifdef MODERNCRYPT
+		case 1: 
+		case 3:
+		case 4:
+               		encrypt_pass=crypt(pass,c);
 	     		break;
+#else
+       		case 1:
+	     		encrypt_pass=libshadow_md5_crypt(pass,c); 
+	     		break;
+#endif
 #endif
 
        		default:

@@ -1,4 +1,4 @@
-#include "newsalt.h"
+#include "salt.h"
 #include "salt.h"
 #include <stdio.h>
 

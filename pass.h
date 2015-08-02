@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "salt.h"
+#include "xstring.h"
 
 #ifndef MODERNCRYPT
 #include "md5crypt.h"
@@ -107,4 +108,6 @@ struct pw_info * get_pw_nopam(char *name);
 #endif
 int is_des(char *p);
 int get_crypttype(struct pw_info *pw);
+char * crypttype2str(int i);
+int cryptstr2int(char *txt);
 #endif

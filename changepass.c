@@ -1,7 +1,7 @@
 /*
  * changepass.c
  *
- * Copyright (C) 2002,2006,2007 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2006,2007,2015 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "pass.h"
 #include <libgen.h>
 
-char txt_usage[]="[OPTION]\n\noptions:\n\n   -h,--help\tprint this help\n   -n,--nopam\tdon't use pam\n   -p,--pam\tuse pam (default)\n   -e,--encrypt\tpassword is already encrypted, this option will disable pam\n   -m,--md5\tuse md5 encryption, this option will disable pam\n   -v,--verbose\tenable verbose output\n\n";
+char txt_usage[]="[OPTION]\n\noptions:\n\n -h,--help\tprint this help\n -n,--nopam\tdon't use pam\n -p,--pam\tuse pam (default)\n -e,--encrypt\tpassword is already encrypted, this option will disable pam\n -m,--md5\tuse md5 encryption, this option will disable pam\n -a,--algorithm\tdes|md5|sha256|sha512 use DES,MD5,SHA256 or SHA512 encryption, this option will disable pam\n -v,--verbose\tenable verbose output\n\n";
 
 char *prgname;
 
@@ -75,8 +75,12 @@ int main (int argn,char **argv)
    int hlpflag=0;
    int encryptflag=0;
    int nopamflag=0;
+   int nopammode=-1;
    int pamflag=0;
    int md5flag=0;
+   int algoflag=0;
+   char *algorithme=NULL;
+   char algomode=-1; 
    int verboseflag=0;
    int linecounter=0;
    int number_of_lines=0;
@@ -88,7 +92,7 @@ int main (int argn,char **argv)
    if(argn>1) {                  /* we've no arguments */
 
 	   int i;
-	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose",NULL};
+	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose","algorithm",NULL};
 
 	   /*
 	    * convert long opts to shorts opt
@@ -128,7 +132,7 @@ int main (int argn,char **argv)
 
 	   if(!hlpflag) {
 
-	   	while ((i = getopt(argn, argv, "hpemnv")) != -1) {
+	   	while ((i = getopt(argn, argv, "hpemnva:")) != -1) {
 
 			switch(i) {
 
@@ -137,9 +141,11 @@ int main (int argn,char **argv)
 						break;
 		   		case 'e':
 						encryptflag=1;
+						nopammode=2;
 						break;
 		   		case 'm':
 						md5flag=1;
+						nopammode=1;
 						break;
 		   		case 'n':
 						nopamflag=1;
@@ -152,6 +158,30 @@ int main (int argn,char **argv)
 						break;
 		   		case '?':	
 						hlpflag=1;
+						break;
+				case 'a':
+						algoflag=1;
+						algorithme=optarg;
+
+						algomode=cryptstr2int(algorithme);
+
+						switch(algomode) {
+
+							case 2:
+								fprintf(stderr,"Sorry, blowfish is not supported.\n\n");
+								hlpflag=1;
+								break;
+
+							case -1:
+								fprintf(stderr,"Sorry, unsupported crypt type (%s).\n\n",algorithme);
+								hlpflag=1;
+								break;
+							default:
+								nopammode=algomode;
+								break;
+
+						}
+
 						break;
 				default:
 						hlpflag=1;
@@ -169,7 +199,10 @@ int main (int argn,char **argv)
 	   	fprintf(stderr,"encryptflag = %d\n",encryptflag);
 	   	fprintf(stderr,"pamflag = %d\n",pamflag);
 	   	fprintf(stderr,"nopamflag = %d\n",nopamflag);
+	   	fprintf(stderr,"nopammode = %d\n",nopammode);
 	   	fprintf(stderr,"md5flag = %d\n",md5flag);
+	   	fprintf(stderr,"algoflag = %d\n",algoflag);
+	   	fprintf(stderr,"algorithme = %s\n",algorithme);
 	   	fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
 	   }
@@ -187,21 +220,35 @@ int main (int argn,char **argv)
 	   }
 	   else {
 
-		   if ( pamflag && ( md5flag || encryptflag ) ) {
+		   if ( pamflag && ( md5flag || encryptflag || algoflag ) ) {
 
-			   fprintf(stderr,"%s: --md5 and --encrypted are invalid with forced pam.\n\n",prgname);
+			   fprintf(stderr,"%s: --md5, --algorithm and --encrypted are invalid with forced pam.\n\n",prgname);
 
 			   hlpflag=1;
 
 		   }
 		   else {
-		   	if ( md5flag || encryptflag ) {
+		   	if ( md5flag || encryptflag || algoflag ) {
 
 				nopamflag=1;
 
 				if (md5flag && encryptflag) {
 
 					fprintf(stderr,"%s: Can't use --md5 and --encrypted at the same time\n\n",prgname);
+					hlpflag=1;
+
+				}
+
+				if (md5flag && algoflag) {
+
+					fprintf(stderr,"%s: Can't use --md5 and --algorithm at the same time\n\n",prgname);
+					hlpflag=1;
+
+				}
+
+				if (algoflag && encryptflag) {
+
+					fprintf(stderr,"%s: Can't use --algorithm and --encrypted at the same time\n\n",prgname);
 					hlpflag=1;
 
 				}
@@ -287,9 +334,12 @@ int main (int argn,char **argv)
    		fprintf(stderr,"pamflag = %d\n",pamflag);
    		fprintf(stderr,"nopamflag = %d\n",nopamflag);
    		fprintf(stderr,"md5flag = %d\n",md5flag);
+	   	fprintf(stderr,"algoflag = %d\n",algoflag);
+	   	fprintf(stderr,"algorithme = %s\n",algorithme);
    		fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
    	}
+
 
 	/*
 	 * parse stdin line by line
@@ -446,19 +496,27 @@ int main (int argn,char **argv)
 
 	   		int mode=0;
 
-	   		if (md5flag) {
+			if (algoflag) {
 
-		   		mode=1;
+				mode=algomode;
 
-	   		}
-	   		else {
+			} else {
 
-		   		if(encryptflag) {
+	   			if (md5flag) {
 
-			   	mode=2;
+		   			mode=1;
 
-		   		}
-	   		}
+	   			}
+	   			else {
+
+		   			if(encryptflag) {
+
+			   		mode=2;
+
+		   			}
+	   			}
+
+			}
 
 			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
 

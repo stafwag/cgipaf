@@ -30,17 +30,28 @@ int main() {
 
 	}
 
-	e=crypt("password",crypt_make_salt("UNKOWN",NULL));
+	char *mysalt=crypt_make_salt("UNKOWN",NULL);
 
-	if (e==NULL) {
+	if (mysalt!=NULL) {  
 
-		printf("ERROR crypt fake failed errno = %d , errstr = %s \n",errno,strerror(errno));
+		e=crypt("password",crypt_make_salt("UNKOWN",NULL));
 
-	}
+		if (e==NULL) {
 
-	else {
+			printf("ERROR crypt fake failed errno = %d , errstr = %s \n",errno,strerror(errno));
 
-		puts(e);
+		}
+
+		else {
+
+			puts(e);
+
+
+		}
+
+	} else { 	
+
+		fprintf(stderr,"Sorry mysalt = NULL - unsupported crypt type? -\n");
 
 
 	}

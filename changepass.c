@@ -22,6 +22,7 @@
 #include "common.h"
 #include "pass.h"
 #include <libgen.h>
+#include <errno.h>
 
 char txt_usage[]="[OPTION]\n\noptions:\n\n -h,--help\tprint this help\n -n,--nopam\tdon't use pam\n -p,--pam\tuse pam (default)\n -e,--encrypt\tpassword is already encrypted, this option will disable pam\n -m,--md5\tuse md5 encryption, this option will disable pam\n -a,--algorithm\tdes|md5|sha256|sha512 use DES,MD5,SHA256 or SHA512 encryption, this option will disable pam\n -v,--verbose\tenable verbose output\n\n";
 
@@ -529,6 +530,8 @@ int main (int argn,char **argv)
 
 			}
 
+			if (verboseflag) fprintf(stderr,"DEBUG: chpw_nopam() return code = %d \n",i);
+
    		}
 
 #else
@@ -547,6 +550,7 @@ int main (int argn,char **argv)
       			if (pamflag) {
 
       				fprintf(stderr,"\n%s: pam return code = %d\n",pam_strerror(pw->pamh,i),i);
+				fprintf(stderr,"\n errno = %d %s\n",errno,strerror(errno));
 
       			}
 #endif

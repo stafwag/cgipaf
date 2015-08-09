@@ -154,6 +154,41 @@ case $host_os in
  		AC_MSG_RESULT(yes) 
     		AC_DEFINE(SOLARISHOST,1,solaris system)
 		SOLARISHOST=1
+		AC_MSG_CHECKING(Solaris release)
+		AC_MSG_RESULT($host_os)
+		AC_MSG_CHECKING(Solaris version)
+		SOLARISVERSION=`echo $host_os | sed -e 's/^solaris//'`
+		AC_MSG_RESULT($SOLARISVERSION)
+
+		AC_MSG_CHECKING(Solaris major release)
+		MAJORREL=`echo $SOLARISVERSION |sed -e 's/^\(.*\)\..*/\1/'`
+		AC_MSG_RESULT($MAJORREL)
+		AC_MSG_CHECKING(Solaris minor release)
+		MINORREL=`echo $SOLARISVERSION |sed -e 's/^.*\.\(.*\)/\1/'`
+		AC_MSG_RESULT($MINORREL)
+
+		AC_MSG_CHECKING(Verifing if we can enable MODERNCRYPT)
+		if test "$MAJORREL" -ge 2; then
+
+
+			if test "$MINORREL" -ge 10; then
+		
+				AC_MSG_RESULT(Yes)
+				MODERNCRYPT=1
+				AC_DEFINE(MODERNCRYPT,1,solaris version is high enough assume a modern crypt)
+
+			else
+
+				AC_MSG_RESULT(No)
+
+			fi
+
+		else
+
+			AC_MSG_RESULT(No)
+
+
+		fi
 		;;
         *) 
 		AC_MSG_RESULT(unkown)

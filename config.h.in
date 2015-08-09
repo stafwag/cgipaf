@@ -287,7 +287,7 @@
 /* md5 crypt functions required */
 #undef MD5_CRYPT
 
-/* Linux kernel version is high enough assume a modern crypt */
+/* solaris version is high enough assume a modern crypt */
 #undef MODERNCRYPT
 
 /* NetBSD system */

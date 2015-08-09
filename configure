@@ -2519,6 +2519,55 @@ $as_echo "yes" >&6; }
 $as_echo "#define SOLARISHOST 1" >>confdefs.h
 
 		SOLARISHOST=1
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris release" >&5
+$as_echo_n "checking Solaris release... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
+$as_echo "$host_os" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris version" >&5
+$as_echo_n "checking Solaris version... " >&6; }
+		SOLARISVERSION=`echo $host_os | sed -e 's/^solaris//'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOLARISVERSION" >&5
+$as_echo "$SOLARISVERSION" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris major release" >&5
+$as_echo_n "checking Solaris major release... " >&6; }
+		MAJORREL=`echo $SOLARISVERSION |sed -e 's/^\(.*\)\..*/\1/'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MAJORREL" >&5
+$as_echo "$MAJORREL" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris minor release" >&5
+$as_echo_n "checking Solaris minor release... " >&6; }
+		MINORREL=`echo $SOLARISVERSION |sed -e 's/^.*\.\(.*\)/\1/'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MINORREL" >&5
+$as_echo "$MINORREL" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if we can enable MODERNCRYPT" >&5
+$as_echo_n "checking Verifing if we can enable MODERNCRYPT... " >&6; }
+		if test "$MAJORREL" -ge 2; then
+
+
+			if test "$MINORREL" -ge 10; then
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Yes" >&5
+$as_echo "Yes" >&6; }
+				MODERNCRYPT=1
+
+$as_echo "#define MODERNCRYPT 1" >>confdefs.h
+
+
+			else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+$as_echo "No" >&6; }
+
+			fi
+
+		else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+$as_echo "No" >&6; }
+
+
+		fi
 		;;
         *)
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: unkown" >&5

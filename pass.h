@@ -1,7 +1,7 @@
 /*
  * pass.h
  *
- * Copyright (C) 1999, 2002, 2006, 2013 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999, 2002, 2006, 2013, 2015  Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,9 +98,11 @@ int ckpw(struct pw_info *pw,char *pass);
 int chpw_nopam(struct pw_info *pw,char *pass,int mode);
 int chpw(struct pw_info *pw,char *pass);
 
+char * str_passerror(int passerror); 
 
 char * set_shadow_location ( char * shadow_file );
 char * set_passwd_location ( char * passwd_file );
+char ** pass_supported_crypts(); 
 
 #ifdef _WITHPAM
 int ckpw_nopam(struct pw_info *pw,char *pass);

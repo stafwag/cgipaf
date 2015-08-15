@@ -198,6 +198,10 @@ int is_sha512(char *p) {
    return(0);
 }
 
+/*
+ * returns 0 if p is no des password
+ *         1 if p is a  des password
+ */
 int is_des(char *p) {
 
    if (strlen(p)<4) return(1);
@@ -243,6 +247,32 @@ if (is_sha256(pass)) return(3);;
 if (is_sha512(pass)) return(4);;
 
 return(-1);
+}
+
+/*
+ * returns an array with the supported crypt types
+ */
+
+char ** pass_supported_crypts() {
+
+#ifdef MODERNCRYPT
+#ifdef MODERNCRYPT_SHA2
+
+	static char *ret[]={"des","md5","sha256","sha512",NULL};
+#else
+	static char *ret[]={"des","md5",NULL};
+
+#endif
+#else
+#ifdef MD5_CRYPT
+	static char *ret[]={"des","md5",NULL};
+#else
+	static char *ret[]={"des",NULL};
+#endif
+#endif
+
+	return(ret);
+
 }
 
 /*
@@ -326,6 +356,37 @@ if (is_des(p)) {
 }
 if (strcmp(p,crypt(pass,c))) return(-1);   /* wrong password */
 return(PASS_SUCCESS);
+}
+
+char * str_passerror(int passerror) {
+
+ 	if(passerror > 0) return("Error is higher than 0 should be ok");
+
+	passerror=abs(passerror);
+	
+	char * passErrorMessages[] = {
+		"ok",					/* 0 	= ok 					*/
+		"error open pwfilename", 		/* -1  	= error open pwfilename 		*/
+          	"locking failed", 			/* -2  	= locking 				*/
+		"locking failed", 			/* -3  	= locking 				*/
+ 		"error open TMPFILE", 			/* -4  	= error open TMPFILE 			*/
+ 		"fileno failed", 			/* -5  	= fileno failed				*/
+ 		"fchmod failed", 			/* -6  	= fchmod failed				*/
+ 		"bufferlength too small", 		/* -7  	= bufferlength too small		*/
+ 		"error updating tmpfile", 		/* -8  	= error updating tmpfile		*/
+ 		"out of memory", 			/* -9  	= out of memory				*/
+ 		"lsstat failed", 			/* -10 	= lsstat failed				*/
+ 		"rename failed", 			/* -11 	= rename failed				*/
+ 		"user not found", 			/* -12 	= user not found			*/
+ 		"unsupported crypt type",		/* -13 	= unsupported crypt type		*/
+ 		"pw_mkdb failed ( freebsd only )" 	/* -14 	= pw_mkdb failed ( freebsd only )	*/
+ 		"encrypt_pass is NULL"  	   	/* -15 = encrypt_pass is NULL 			*/
+		};
+
+	int max=sizeof(passErrorMessages)/sizeof(char *);
+
+	if(passerror > max) return("unkown error");
+	return(passErrorMessages[passerror]);
 }
 
 /*
@@ -588,11 +649,12 @@ if (mode !=2 ) {
 
 		case 0:
 #ifdef MD5_CRYPT
-
 #ifdef MODERNCRYPT
-		case 1: 
+		case 1:
+#ifdef MODERNCRYPT_SHA2 
 		case 3:
 		case 4:
+#endif
                		encrypt_pass=crypt(pass,c);
 	     		break;
 #else

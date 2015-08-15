@@ -1,7 +1,7 @@
 /*
  * xstring.c  	- Tired of writing these things over and over again -
  *
- * Copyright (C) 2001,2003,2007 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2003,2007,2015 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -494,6 +494,37 @@ int copy_string_array_pointers (char **dest, char **src) {
 }
 
 /*
+ * converts an array of string to a string
+ */
+
+char * string_array_to_str(char **array) {
+
+        char *txt=NULL;
+        char **cc=array;
+
+        for(;*cc!=NULL;cc++) {
+
+                if(txt==NULL) {
+
+                        txt=xmalloc(strlen(*cc)+1);
+                        strcpy(txt,*cc);
+                        continue;
+
+
+                }
+
+                txt=xrealloc(txt,strlen(txt)+strlen(" ")+strlen(*cc)+1);
+                strcat(txt," ");
+                strcat(txt,*cc);
+
+        };
+
+        return(txt);
+
+}
+
+
+/*
  *
  * add item to a string pair
  *
@@ -679,6 +710,13 @@ void replace_char(char *str,char src,char dest) {
                 }
 
         }
+
+}
+
+char * null2str(char *str) {
+
+	if(str==NULL) return("null");
+	return(str);
 
 }
 

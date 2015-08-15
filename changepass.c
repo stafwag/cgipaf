@@ -24,7 +24,6 @@
 #include <libgen.h>
 #include <errno.h>
 
-char txt_usage[]="[OPTION]\n\noptions:\n\n -h,--help\tprint this help\n -n,--nopam\tdon't use pam\n -p,--pam\tuse pam (default)\n -e,--encrypt\tpassword is already encrypted, this option will disable pam\n -m,--md5\tuse md5 encryption, this option will disable pam\n -a,--algorithm\tdes|md5|sha256|sha512 use DES,MD5,SHA256 or SHA512 encryption, this option will disable pam\n -v,--verbose\tenable verbose output\n\n";
 
 char *prgname;
 
@@ -33,7 +32,22 @@ char *prgname;
  */
 
 void usage() {
-      fprintf(stderr,"usage: %s %s\n",prgname,txt_usage);
+
+	char txt_usage000[]="[OPTION]\n\noptions:\n\n -h,--help\tprint this help\n -n,--nopam\tdon't use pam\n -p,--pam\tuse pam (default)\n -e,--encrypt\tpassword is already encrypted, this option will disable pam\n";
+	char txt_usage001[]=" -m,--md5\tuse md5 encryption, this option will disable pam\n";
+	char txt_usage002[]=" -a,--algorithm\tuse";
+	char txt_usage003[]="encryption, this option will disable pam\n";
+	char txt_usage004[]=" -v,--verbose\tenable verbose output\n\n";
+
+	char * txt_supported_algo=string_array_to_str(pass_supported_crypts());
+	replace_char(txt_supported_algo,' ','|');
+      	fprintf(stderr,"usage: %s %s",prgname,txt_usage000);
+#ifdef MD5_CRYPT
+	fprintf(stderr,"%s",txt_usage001);
+#endif
+ 	fprintf(stderr,"%s %s %s",txt_usage002,txt_supported_algo,txt_usage003);
+ 	fprintf(stderr,"%s",txt_usage004);
+	fprintf(stderr,"\n");
 }
 
 struct  pw_info * get_pw_info (char *name,int pamflag) {
@@ -174,7 +188,7 @@ int main (int argn,char **argv)
 								break;
 
 							case -1:
-								fprintf(stderr,"Sorry, unsupported crypt type (%s).\n\n",algorithme);
+								fprintf(stderr,"Sorry, unsupported crypt type (%s).\n\n",null2str(algorithme));
 								hlpflag=1;
 								break;
 							default:
@@ -203,7 +217,7 @@ int main (int argn,char **argv)
 	   	fprintf(stderr,"nopammode = %d\n",nopammode);
 	   	fprintf(stderr,"md5flag = %d\n",md5flag);
 	   	fprintf(stderr,"algoflag = %d\n",algoflag);
-	   	fprintf(stderr,"algorithme = %s\n",algorithme);
+	   	fprintf(stderr,"algorithme = %s\n",null2str(algorithme));
 	   	fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
 	   }
@@ -336,7 +350,7 @@ int main (int argn,char **argv)
    		fprintf(stderr,"nopamflag = %d\n",nopamflag);
    		fprintf(stderr,"md5flag = %d\n",md5flag);
 	   	fprintf(stderr,"algoflag = %d\n",algoflag);
-	   	fprintf(stderr,"algorithme = %s\n",algorithme);
+	   	fprintf(stderr,"algorithme = %s\n",null2str(algorithme));
    		fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
    	}
@@ -530,7 +544,10 @@ int main (int argn,char **argv)
 
 			}
 
-			if (verboseflag) fprintf(stderr,"DEBUG: chpw_nopam() return code = %d \n",i);
+			if (verboseflag) {
+				fprintf(stderr,"DEBUG: chpw_nopam() return code = %d \n",i);
+				fprintf(stderr,"DEBUG: str_passerror = \"%s\"\n",str_passerror(i));
+			}
 
    		}
 

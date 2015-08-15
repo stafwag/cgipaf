@@ -2382,6 +2382,11 @@ $as_echo "\"Version below 7.3 disabling PAM\"" >&6; }
     					ARG="NOPAM"
 
 				fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if modern crypt shoud support sha2 protocols" >&5
+$as_echo_n "checking Verifing if modern crypt shoud support sha2 protocols... " >&6; }
+
+$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
+
 
 			fi
 
@@ -2450,6 +2455,7 @@ $as_echo "Kernel version is higher than 2.6 assume modern crypt" >&6; }
 
 $as_echo "#define MODERNCRYPT 1" >>confdefs.h
 
+
 					MODERNCRYPT=1
 
 				else
@@ -2464,6 +2470,13 @@ $as_echo "Kernel version is lower than 2.6 assume DESonly crypt" >&6; }
 
 		fi
 
+		if test "$MODERNCRYPT"; then
+
+
+$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
+
+
+		fi
 
 		;;
   netbsd*)
@@ -2552,6 +2565,9 @@ $as_echo "Yes" >&6; }
 				MODERNCRYPT=1
 
 $as_echo "#define MODERNCRYPT 1" >>confdefs.h
+
+
+$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
 
 
 			else

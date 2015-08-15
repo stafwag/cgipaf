@@ -1,7 +1,7 @@
 /*
  * xstring.h
  *
- * Copyright (C) 2001, 2007 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2007,2015 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ int is_var_yes(char *var);
 void free_string_array (char **array);
 int number_of_strings (char **array);
 int copy_string_array_pointers (char **dest, char **src);
+char * string_array_to_str(char **array);
 char *** add_2_string_pair (char ***str_array,char *str1, char *str2);
 int number_of_string_pairs (char *** str_pair);
 char * get_string_pair_item(char *** str_pair,char *item);
@@ -52,3 +53,4 @@ int delete_string_pair_item(char ***str_pair,char *item,int free_mode);
 char * clone_string(char *str);
 void free_string_pair (char *** str_pair );
 void replace_char(char *str,char src,char dest);
+char * null2str(char *str);

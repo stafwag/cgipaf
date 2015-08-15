@@ -290,6 +290,9 @@
 /* solaris version is high enough assume a modern crypt */
 #undef MODERNCRYPT
 
+/* Solaris 10+ should support sha2 */
+#undef MODERNCRYPT_SHA2
+
 /* NetBSD system */
 #undef NETBSDHOST
 

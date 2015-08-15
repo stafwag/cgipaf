@@ -54,6 +54,8 @@ case $host_os in
     					ARG="NOPAM"
 
 				fi
+				AC_MSG_CHECKING(Verifing if modern crypt shoud support sha2 protocols)
+				AC_DEFINE(MODERNCRYPT_SHA2,1,FreeBSD 7.3 should support sha2)
 
 			fi
 
@@ -102,6 +104,7 @@ case $host_os in
 
 					AC_MSG_RESULT(Kernel version is higher than 2.6 assume modern crypt)
 					AC_DEFINE(MODERNCRYPT,1,Linux kernel version is high enough assume a modern crypt)
+
 					MODERNCRYPT=1
 
 				else
@@ -115,6 +118,11 @@ case $host_os in
 
 		fi
 
+		if test "$MODERNCRYPT"; then
+
+			AC_DEFINE(MODERNCRYPT_SHA2,1,Linux 2.6 should support sha2)
+
+		fi
 
 		;;
   netbsd*) 
@@ -176,6 +184,7 @@ case $host_os in
 				AC_MSG_RESULT(Yes)
 				MODERNCRYPT=1
 				AC_DEFINE(MODERNCRYPT,1,solaris version is high enough assume a modern crypt)
+				AC_DEFINE(MODERNCRYPT_SHA2,1,Solaris 10+ should support sha2)
 
 			else
 

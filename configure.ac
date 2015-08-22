@@ -33,8 +33,8 @@ case $host_os in
 		AC_MSG_CHECKING(Major FreeBSD Release)
 		AC_MSG_RESULT($MAJORREL)
 
-		MINORREL=`echo $host_os | sed -e 's/freebsd\(.*\)/\1/' | cut -f 2 -d \.`
 		AC_MSG_CHECKING(Minor FreeBSD Release)
+		MINORREL=`echo $host_os | sed -e 's/freebsd\(.*\)/\1/' | cut -f 2 -d \.`
 		AC_MSG_RESULT($MINORREL)
 
 		AC_MSG_CHECKING(Verifing if the pam password changer should work)
@@ -135,9 +135,10 @@ case $host_os in
 		AC_MSG_CHECKING(NetBsd Release)
 		AC_MSG_RESULT($host_os)
 
+		AC_MSG_CHECKING(Major NetBSD Release)
+
 		MAJORREL=`echo $host_os | sed -e 's/netbsd\(.*\)/\1/' | cut -f 1 -d \.`
 		
-		AC_MSG_CHECKING(Major NetBSD Release)
 		AC_MSG_RESULT($MAJORREL)
 
 		AC_MSG_CHECKING(If we can enable PAM on this NetBsd Release)
@@ -155,9 +156,42 @@ case $host_os in
 
   		;;
  openbsd*) 
- 		AC_MSG_RESULT(no)
- 	   	AC_MSG_ERROR($host_os is not supported)
-		;;
+    		AC_DEFINE(BSDHOST,1,BSD system)
+		BSDHOST=1
+    		AC_DEFINE(OPENBSDHOST,1,OpenBSD system)
+		OPENBSDHOST=1
+		AC_MSG_CHECKING(OpenBsd Release)
+
+		AC_MSG_RESULT($host_os)
+
+		AC_MSG_CHECKING(Major OpenBSD Release)
+		MAJORREL=`echo $host_os | sed -e 's/openbsd\(.*\)/\1/' | cut -f 1 -d \.`
+		AC_MSG_RESULT($MAJORREL)
+
+		AC_MSG_CHECKING(Minor OpenBSD Release)
+		MINORREL=`echo $host_os | sed -e 's/openbsd\(.*\)/\1/' | cut -f 2 -d \.`
+		AC_MSG_RESULT($MINORREL)
+		AC_DEFINE(OPENBSD_BLOWFISH,1,openbsd supports blowfish)
+
+		AC_MSG_CHECKING(Checking if this OpenBSD Release is supported)
+
+		if test $MAJORREL -lt "5"; then
+
+  	   		AC_MSG_ERROR($host_os is not supported)
+
+		fi
+
+		if test $MINORREL -lt "7"; then
+
+  	   		AC_MSG_ERROR($host_os is not supported)
+
+		fi
+		AC_MSG_RESULT(yes)
+		AC_CHECK_FUNCS(crypt_newhash )
+		AC_MSG_CHECKING(Disabling PAM)
+        	ARG="NOPAM"
+		AC_MSG_RESULT(done)
+ 		;;
  solaris*) 
  		AC_MSG_RESULT(yes) 
     		AC_DEFINE(SOLARISHOST,1,solaris system)
@@ -227,25 +261,29 @@ AC_MSG_CHECKING(checking OS version)
 HOSTREL=`uname -r 2> /dev/null`
 AC_MSG_RESULT($HOSTREL)
 
-RESULT_MSG="I guess so"
-AC_MSG_CHECKING(authentication required at pam_chauthtok)
+if test "$ARG" = "WITHPAM"; then
 
-if test "$SOLARISHOST" = "1";then
+	RESULT_MSG="I guess so"
+	AC_MSG_CHECKING(authentication required at pam_chauthtok)
 
-   MAJORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\1/'`
-   MINORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\2/'`
+	if test "$SOLARISHOST" = "1";then
+
+   		MAJORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\1/'`
+   		MINORREL=`echo $HOSTREL | sed -e 's/\(.*\)\.\(.*\)/\2/'`
 
 
-   if test "$MAJORREL" -eq "5"; then
+   		if test "$MAJORREL" -eq "5"; then
 
-      if test "$MINORREL" -ge "8"; then
+      			if test "$MINORREL" -ge "8"; then
 
-    		AC_DEFINE(PAM_CHPW_NOAUTH,1,do not auth at chpw)
-   		RESULT_MSG="no"
+    				AC_DEFINE(PAM_CHPW_NOAUTH,1,do not auth at chpw)
+   				RESULT_MSG="no"
 
-      fi
+      			fi
 
-   fi
+   		fi
+
+	fi
 
 fi
 
@@ -253,9 +291,6 @@ AC_MSG_RESULT($RESULT_MSG)
 AC_DEFINE_UNQUOTED(HOST,"$host",system host)
 AC_DEFINE_UNQUOTED(HOSTOS,"$host_os",system host os)
 AC_DEFINE_UNQUOTED(HOSTREL,"$HOSTREL",system os release)
-
-
-
 
 NEED_COMPAT_H="COMPAT"
 
@@ -373,11 +408,17 @@ if test "$ARG" != "WITHPAM"; then
    AC_MSG_WARN(***********************************************************)
 
 
-   	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_ERROR(no pam and no crypt library found I am giving up))
+	AC_CHECK_FUNCS(crypt,CHPASSCRYPT="yes",NEED_CRYPTLIB="yes")
+
+
+	if test "$NEED_CRYPTLIB" = "yes"; then
+
+   		AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_ERROR(no pam and no crypt library found I am giving up))
+		LIBS="$LIBS -lcrypt"
+
+	fi
 
 	HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
-	LIBS="$LIBS -lcrypt"
-
 dnl
 dnl  most un*ces have crypt defined in unistd.h
 dnl   if test "$HAVE_CRYPT_H" != "1"; then
@@ -616,6 +657,7 @@ AC_CHECK_HEADERS(sys/stat.h,,AC_MSG_ERROR(sys/stat.h not found))
 AC_CHECK_HEADERS(pwd.h,,AC_MSG_ERROR(pwd.h not found))
 AC_CHECK_HEADERS(stdarg.h,,AC_MSG_ERROR(stdarg.h not found))
 AC_CHECK_HEADERS(syslog.h,,AC_MSG_ERROR(syslog.h not found))
+AC_CHECK_HEADERS(libgen.h,,AC_MSG_ERROR(libgen.h not found))
 AC_CHECK_HEADERS(shadow.h,,)
 
 if test "$ARG" != "WITHPAM"; then

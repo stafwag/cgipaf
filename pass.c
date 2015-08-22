@@ -265,7 +265,11 @@ char ** pass_supported_crypts() {
 #endif
 #else
 #ifdef MD5_CRYPT
+#ifdef OPENBSD_BLOWFISH
+	static char *ret[]={"des","md5","blowfish",NULL};
+#else
 	static char *ret[]={"des","md5",NULL};
+#endif
 #else
 	static char *ret[]={"des",NULL};
 #endif
@@ -379,8 +383,9 @@ char * str_passerror(int passerror) {
  		"rename failed", 			/* -11 	= rename failed				*/
  		"user not found", 			/* -12 	= user not found			*/
  		"unsupported crypt type",		/* -13 	= unsupported crypt type		*/
- 		"pw_mkdb failed ( freebsd only )" 	/* -14 	= pw_mkdb failed ( freebsd only )	*/
- 		"encrypt_pass is NULL"  	   	/* -15 = encrypt_pass is NULL 			*/
+ 		"pw_mkdb failed ( bsd only )", 		/* -14 	= pw_mkdb failed ( bsd only 	)	*/
+ 		"encrypt_pass is NULL",  	   	/* -15 = encrypt_pass is NULL 			*/
+ 		"crypt_newhash failed (OpenBSD only)"  	/* -16 = encrypt_pass is NULL 			*/
 		};
 
 	int max=sizeof(passErrorMessages)/sizeof(char *);
@@ -413,6 +418,7 @@ char * str_passerror(int passerror) {
  */
 int update_pwfile(char *pwfilename,struct pw_info *pw,char *encrypt_pass)
 {
+
 FILE *pwfile;
 FILE *tmpfile;
 int fd=0;
@@ -420,6 +426,7 @@ int uf=0;                 /* user found, set if user is found */
 char buffer[BUFFERLEN];
 char buffer2[BUFFERLEN];
 char *cp;
+
 struct stat st;
 char *name=pw->p->pw_name;
 
@@ -495,16 +502,24 @@ if (uf) {
 #ifdef NETBSDHOST
 /* use / if NETBSD */
    char *mppath = "/";
+   char *pwd_mkdb_file=TMPFILE;
 #else
+#ifdef OPENBSDHOST
+/* use /etc if OpenBSD */
+   char *mppath = "/etc";
+   char *pwd_mkdb_file=TMPFILE;
    /* assume FREEBSD */
+#else
    char *mppath = _PATH_PWD;
+   char *pwd_mkdb_file=basename(TMPFILE);
+#endif
 #endif
    
    if(!( pid=fork() )) {
       if (!name)
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,TMPFILE,NULL);
+         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,pwd_mkdb_file,NULL);
       else
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,TMPFILE,NULL);
+         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,pwd_mkdb_file,NULL);
    }
    pid = waitpid(pid,&pstat,0);
 
@@ -525,7 +540,7 @@ int chpw(struct pw_info *pw,char *pass)
 {
 
 	int ret;
-	ret=chpw_nopam(pw,pass,0);
+	ret=chpw_nopam(pw,pass,255);
 
 	return(ret);
 
@@ -537,11 +552,13 @@ int chpw(struct pw_info *pw,char *pass)
  * update the user's password
  *
  * mode:	
- * 		0:  normal mode ( use existing crypttype )
+ * 		0:  force des passwors
  * 		1:  force md5 passwords
- * 		2:  pass is already encrypted
+ * 		2:  force blowfish
  *		3:  force sha256 passwords
  *		4:  force sha512 passwords 
+ *		254:  already encrypted
+ * 		255:  use existing crypttype
  *
  * 
  * returns:
@@ -599,9 +616,11 @@ if (fd_tmplock==-1) return(-3); /* can't create lock */
 
 switch(mode) {
 
-	case 2:
-		encrypt_pass=pass;
-		c=encrypt_pass;
+	case 0:
+		/*
+ 		 * force DES passwords if mode=0 	
+ 		 */
+		i=0;
 		break;
 
 	case 1:
@@ -611,6 +630,9 @@ switch(mode) {
  		 */
 
 		i=1;
+		break;
+	case 2:
+		i=2;
 		break;
 
 	case 3:
@@ -630,6 +652,11 @@ switch(mode) {
 
 		i=4;
 		break;
+	case 254:
+		encrypt_pass=pass;
+		c=encrypt_pass;
+		i=254;
+		break;
 
 	default:
 		i=get_crypttype(pw);
@@ -641,34 +668,77 @@ switch(mode) {
  */
 
 
-if (mode !=2 ) {
+if (mode !=254 ) {
 
-	c=crypt_make_salt(crypttype2str(i),NULL);
+	int salt_skipped=0;
 
-	switch(i) {
+	if(i==2) {
 
-		case 0:
-#ifdef MD5_CRYPT
-#ifdef MODERNCRYPT
-		case 1:
-#ifdef MODERNCRYPT_SHA2 
-		case 3:
-		case 4:
-#endif
-               		encrypt_pass=crypt(pass,c);
-	     		break;
+#ifdef OPENBSDHOST
+		salt_skipped=1;
+
+		encrypt_pass=xmalloc(255);
+
+		if (crypt_newhash(pass, "blowfish,8", encrypt_pass,254)==0) {
+
+			c=encrypt_pass;
+			i=2;
+
+
+		} else {
+
+			c=NULL;
+			i=-16;
+
+		};
+
 #else
-       		case 1:
-	     		encrypt_pass=libshadow_md5_crypt(pass,c); 
-	     		break;
-#endif
-#endif
+		i=-13;
+		c=NULL;
 
-       		default:
-			c=NULL;            /* unsupported crypt type! */
-	        	i=-13;
+#endif
 
 	}
+	
+	if(salt_skipped == 0) {
+
+		c=crypt_make_salt(crypttype2str(i),NULL);
+
+		if(c!=NULL) {
+
+			switch(i) {
+
+				case 0:
+               				encrypt_pass=crypt(pass,c);
+					break;
+#ifdef MD5_CRYPT
+#ifdef MODERNCRYPT
+				case 1:
+#ifdef MODERNCRYPT_SHA2 
+				case 3:
+				case 4:
+#endif
+               				encrypt_pass=crypt(pass,c);
+	     				break;
+#else
+       				case 1:
+	     				encrypt_pass=libshadow_md5_crypt(pass,c); 
+	     				break;
+#endif
+#endif
+       				default:
+					c=NULL;            /* unsupported crypt type! */
+	        			i=-13;
+
+			}
+
+		} else {
+
+			i=-13;
+
+		}
+
+	};
 
 }
 

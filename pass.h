@@ -23,6 +23,7 @@
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libgen.h>
 #include "salt.h"
 #include "xstring.h"
 

@@ -1,4 +1,4 @@
-#include "config.h"
+#include "../config.h"
 
 #include <unistd.h>
 
@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-#include "salt.h"
+#include "../salt.h"
 
 int main() {
 
@@ -104,4 +104,7 @@ int main() {
 
 	}
 
+	e=crypt("password","$2b$qwerty");
+
+	puts(e);
 }

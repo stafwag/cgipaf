@@ -33,20 +33,32 @@ char *prgname;
 
 void usage() {
 
-	char txt_usage000[]="[OPTION]\n\noptions:\n\n -h,--help\tprint this help\n -n,--nopam\tdon't use pam\n -p,--pam\tuse pam (default)\n -e,--encrypt\tpassword is already encrypted, this option will disable pam\n";
-	char txt_usage001[]=" -m,--md5\tuse md5 encryption, this option will disable pam\n";
-	char txt_usage002[]=" -a,--algorithm\tuse";
-	char txt_usage003[]="encryption, this option will disable pam\n";
-	char txt_usage004[]=" -v,--verbose\tenable verbose output\n\n";
+	char txt_usage000[]="[OPTION]\n\noptions:\n\n -h,--help\t\tprint this help\n -n,--nopam\t\tdon't use pam\n";
+	char txt_usage001[]=" -p,--pam\t\tuse pam (default)\n";
+	char txt_usage002[]=" -e,--encrypt\t\tpassword is already encrypted";
+	char txt_usage003[]=" -m,--md5\t\tuse md5 algorithm";
+	char txt_usage004[]=" -c,--crypt-method\tuse";
+	char txt_usage005[]="crypt method";
+	char txt_usage006[]=" -v,--verbose\t\tenable verbose output\n\n";
+
+#ifdef _WITHPAM
+	char txt_disable_pam[]=", this option will disable pam\n";
+#else
+	char txt_disable_pam[]="\n";
+#endif
 
 	char * txt_supported_algo=string_array_to_str(pass_supported_crypts());
 	replace_char(txt_supported_algo,' ','|');
       	fprintf(stderr,"usage: %s %s",prgname,txt_usage000);
-#ifdef MD5_CRYPT
+#ifdef _WITHPAM
 	fprintf(stderr,"%s",txt_usage001);
 #endif
- 	fprintf(stderr,"%s %s %s",txt_usage002,txt_supported_algo,txt_usage003);
- 	fprintf(stderr,"%s",txt_usage004);
+	fprintf(stderr,"%s %s",txt_usage002,txt_disable_pam);
+#ifdef MD5_CRYPT
+	fprintf(stderr,"%s %s",txt_usage003,txt_disable_pam);
+#endif
+ 	fprintf(stderr,"%s %s %s %s",txt_usage004,txt_supported_algo,txt_usage005,txt_disable_pam);
+ 	fprintf(stderr,"%s",txt_usage006);
 	fprintf(stderr,"\n");
 }
 
@@ -107,7 +119,7 @@ int main (int argn,char **argv)
    if(argn>1) {                  /* we've no arguments */
 
 	   int i;
-	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose","algorithm",NULL};
+	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose","crypt-method",NULL};
 
 	   /*
 	    * convert long opts to shorts opt
@@ -147,7 +159,7 @@ int main (int argn,char **argv)
 
 	   if(!hlpflag) {
 
-	   	while ((i = getopt(argn, argv, "hpemnva:")) != -1) {
+	   	while ((i = getopt(argn, argv, "hpemnvc:")) != -1) {
 
 			switch(i) {
 
@@ -156,7 +168,7 @@ int main (int argn,char **argv)
 						break;
 		   		case 'e':
 						encryptflag=1;
-						nopammode=2;
+						nopammode=254;
 						break;
 		   		case 'm':
 						md5flag=1;
@@ -174,7 +186,7 @@ int main (int argn,char **argv)
 		   		case '?':	
 						hlpflag=1;
 						break;
-				case 'a':
+				case 'c':
 						algoflag=1;
 						algorithme=optarg;
 
@@ -182,10 +194,13 @@ int main (int argn,char **argv)
 
 						switch(algomode) {
 
+#ifndef OPENBSD_BLOWFISH
+
 							case 2:
 								fprintf(stderr,"Sorry, blowfish is not supported.\n\n");
 								hlpflag=1;
 								break;
+#endif
 
 							case -1:
 								fprintf(stderr,"Sorry, unsupported crypt type (%s).\n\n",null2str(algorithme));
@@ -222,14 +237,24 @@ int main (int argn,char **argv)
 
 	   }
 
-	   /*
- 	    * invalid arguments handling
- 	    */
+	
+	/*
+ 	 * invalid arguments handling
+	 */
 
+#ifndef _WITHPAM
+
+	if(pamflag) {
+
+		fprintf(stderr,"%s: Sorry, this version is compiled without pam support.\n\n",prgname);
+	   	hlpflag=1;
+
+	}
+
+#endif
 	   if (pamflag && nopamflag) {
 
 		   fprintf(stderr,"%s: Can't enable pam and nopam.\n\n",prgname);
-
 		   hlpflag=1;
 
 	   }
@@ -482,8 +507,8 @@ int main (int argn,char **argv)
 
 /*
 		if (verboseflag) fprintf(stderr,"DEBUG \"%s\" \"%s\"\n",names[linecounter],passwords[linecounter]);
-
 */
+
 
 		name=names[linecounter];
 		pass=passwords[linecounter];
@@ -509,7 +534,9 @@ int main (int argn,char **argv)
    		}
    		else {
 
-	   		int mode=0;
+#endif
+
+	   		int mode=255;
 
 			if (algoflag) {
 
@@ -526,14 +553,19 @@ int main (int argn,char **argv)
 
 		   			if(encryptflag) {
 
-			   		mode=2;
+			   			mode=254;
 
 		   			}
 	   			}
 
 			}
 
-			if (verboseflag) fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
+			if (verboseflag) {
+
+				 fprintf(stderr,"DEBUG: running chpw_nopam() for user %s\n",name);
+				 fprintf(stderr,"DEBUG: mode = %d\n",mode);
+
+			}
 
 	   		i=chpw_nopam(pw,pass,mode);
 
@@ -549,14 +581,15 @@ int main (int argn,char **argv)
 				fprintf(stderr,"DEBUG: str_passerror = \"%s\"\n",str_passerror(i));
 			}
 
+#ifdef _WITHPAM
    		}
+#endif
 
-#else
-
+/*
 		if (verboseflag) fprintf(stderr,"DEBUG: running chpw() (_WITHPAM is disabled) for user %s\n",name);
    		i=chpw(pw,pass);
+*/
 
-#endif
 
    		if (i!=PASS_SUCCESS) {
 

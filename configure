@@ -1456,6 +1456,116 @@ fi
 
 } # ac_fn_c_try_compile
 
+# ac_fn_c_try_run LINENO
+# ----------------------
+# Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
+# that executables *can* be run.
+ac_fn_c_try_run ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if { { ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } && { ac_try='./conftest$ac_exeext'
+  { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }; then :
+  ac_retval=0
+else
+  $as_echo "$as_me: program exited with status $ac_status" >&5
+       $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+       ac_retval=$ac_status
+fi
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+  as_fn_set_status $ac_retval
+
+} # ac_fn_c_try_run
+
+# ac_fn_c_try_cpp LINENO
+# ----------------------
+# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
+ac_fn_c_try_cpp ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if { { ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
+  ac_status=$?
+  if test -s conftest.err; then
+    grep -v '^ *+' conftest.err >conftest.er1
+    cat conftest.er1 >&5
+    mv -f conftest.er1 conftest.err
+  fi
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } > conftest.i && {
+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       }; then :
+  ac_retval=0
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+    ac_retval=1
+fi
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+  as_fn_set_status $ac_retval
+
+} # ac_fn_c_try_cpp
+
+# ac_fn_c_check_header_compile LINENO HEADER VAR INCLUDES
+# -------------------------------------------------------
+# Tests whether HEADER exists and can be compiled using the include files in
+# INCLUDES, setting the cache variable VAR accordingly.
+ac_fn_c_check_header_compile ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+#include <$2>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  eval "$3=yes"
+else
+  eval "$3=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_header_compile
+
 # ac_fn_c_try_link LINENO
 # -----------------------
 # Try to link conftest.$ac_ext, and return whether this succeeded.
@@ -1568,116 +1678,6 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_c_check_func
-
-# ac_fn_c_try_run LINENO
-# ----------------------
-# Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
-# that executables *can* be run.
-ac_fn_c_try_run ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if { { ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_link") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } && { ac_try='./conftest$ac_exeext'
-  { { case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }; then :
-  ac_retval=0
-else
-  $as_echo "$as_me: program exited with status $ac_status" >&5
-       $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-       ac_retval=$ac_status
-fi
-  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-  as_fn_set_status $ac_retval
-
-} # ac_fn_c_try_run
-
-# ac_fn_c_try_cpp LINENO
-# ----------------------
-# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
-ac_fn_c_try_cpp ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if { { ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
-  ac_status=$?
-  if test -s conftest.err; then
-    grep -v '^ *+' conftest.err >conftest.er1
-    cat conftest.er1 >&5
-    mv -f conftest.er1 conftest.err
-  fi
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } > conftest.i && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then :
-  ac_retval=0
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-    ac_retval=1
-fi
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-  as_fn_set_status $ac_retval
-
-} # ac_fn_c_try_cpp
-
-# ac_fn_c_check_header_compile LINENO HEADER VAR INCLUDES
-# -------------------------------------------------------
-# Tests whether HEADER exists and can be compiled using the include files in
-# INCLUDES, setting the cache variable VAR accordingly.
-ac_fn_c_check_header_compile ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-#include <$2>
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  eval "$3=yes"
-else
-  eval "$3=no"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_c_check_header_compile
 
 # ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
 # -------------------------------------------------------
@@ -2520,6 +2520,25 @@ $as_echo "yes" >&6; }
 
 		fi
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verify if we can enable modern crypt" >&5
+$as_echo_n "checking Verify if we can enable modern crypt... " >&6; }
+
+		if test "$MAJORREL" -lt 6; then
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+		else
+
+
+$as_echo "#define MODERNCRYPT 1" >>confdefs.h
+
+			MODERNCRYPT=1
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+		fi
+
   		;;
  openbsd*)
 
@@ -2567,7 +2586,84 @@ $as_echo_n "checking Checking if this OpenBSD Release is supported... " >&6; }
 		fi
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-		ac_ext=c
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Disabling PAM" >&5
+$as_echo_n "checking Disabling PAM... " >&6; }
+        	ARG="NOPAM"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: done" >&5
+$as_echo "done" >&6; }
+ 		;;
+ solaris*)
+ 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define SOLARISHOST 1" >>confdefs.h
+
+		SOLARISHOST=1
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris release" >&5
+$as_echo_n "checking Solaris release... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
+$as_echo "$host_os" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris version" >&5
+$as_echo_n "checking Solaris version... " >&6; }
+		SOLARISVERSION=`echo $host_os | sed -e 's/^solaris//'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOLARISVERSION" >&5
+$as_echo "$SOLARISVERSION" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris major release" >&5
+$as_echo_n "checking Solaris major release... " >&6; }
+		MAJORREL=`echo $SOLARISVERSION |sed -e 's/^\(.*\)\..*/\1/'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MAJORREL" >&5
+$as_echo "$MAJORREL" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris minor release" >&5
+$as_echo_n "checking Solaris minor release... " >&6; }
+		MINORREL=`echo $SOLARISVERSION |sed -e 's/^.*\.\(.*\)/\1/'`
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MINORREL" >&5
+$as_echo "$MINORREL" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if we can enable MODERNCRYPT" >&5
+$as_echo_n "checking Verifing if we can enable MODERNCRYPT... " >&6; }
+		if test "$MAJORREL" -ge 2; then
+
+
+			if test "$MINORREL" -ge 10; then
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Yes" >&5
+$as_echo "Yes" >&6; }
+				MODERNCRYPT=1
+
+$as_echo "#define MODERNCRYPT 1" >>confdefs.h
+
+
+$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
+
+
+			else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+$as_echo "No" >&6; }
+
+			fi
+
+		else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+$as_echo "No" >&6; }
+
+
+		fi
+		;;
+        *)
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: unkown" >&5
+$as_echo "unkown" >&6; }
+	   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: CGIpaf is not tested with your system: $host_os" >&5
+$as_echo "$as_me: WARNING: CGIpaf is not tested with your system: $host_os" >&2;}
+	   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Please inform me about the result" >&5
+$as_echo "$as_me: WARNING: Please inform me about the result" >&2;}
+		;;
+
+esac
+
+ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -3356,95 +3452,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
-for ac_func in crypt_newhash
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Disabling PAM" >&5
-$as_echo_n "checking Disabling PAM... " >&6; }
-        	ARG="NOPAM"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: done" >&5
-$as_echo "done" >&6; }
- 		;;
- solaris*)
- 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define SOLARISHOST 1" >>confdefs.h
-
-		SOLARISHOST=1
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris release" >&5
-$as_echo_n "checking Solaris release... " >&6; }
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
-$as_echo "$host_os" >&6; }
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris version" >&5
-$as_echo_n "checking Solaris version... " >&6; }
-		SOLARISVERSION=`echo $host_os | sed -e 's/^solaris//'`
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOLARISVERSION" >&5
-$as_echo "$SOLARISVERSION" >&6; }
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris major release" >&5
-$as_echo_n "checking Solaris major release... " >&6; }
-		MAJORREL=`echo $SOLARISVERSION |sed -e 's/^\(.*\)\..*/\1/'`
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MAJORREL" >&5
-$as_echo "$MAJORREL" >&6; }
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Solaris minor release" >&5
-$as_echo_n "checking Solaris minor release... " >&6; }
-		MINORREL=`echo $SOLARISVERSION |sed -e 's/^.*\.\(.*\)/\1/'`
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MINORREL" >&5
-$as_echo "$MINORREL" >&6; }
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if we can enable MODERNCRYPT" >&5
-$as_echo_n "checking Verifing if we can enable MODERNCRYPT... " >&6; }
-		if test "$MAJORREL" -ge 2; then
-
-
-			if test "$MINORREL" -ge 10; then
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Yes" >&5
-$as_echo "Yes" >&6; }
-				MODERNCRYPT=1
-
-$as_echo "#define MODERNCRYPT 1" >>confdefs.h
-
-
-$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
-
-
-			else
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
-$as_echo "No" >&6; }
-
-			fi
-
-		else
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
-$as_echo "No" >&6; }
-
-
-		fi
-		;;
-        *)
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: unkown" >&5
-$as_echo "unkown" >&6; }
-	   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: CGIpaf is not tested with your system: $host_os" >&5
-$as_echo "$as_me: WARNING: CGIpaf is not tested with your system: $host_os" >&2;}
-	   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Please inform me about the result" >&5
-$as_echo "$as_me: WARNING: Please inform me about the result" >&2;}
-		;;
-
-esac
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4971,6 +4978,21 @@ $as_echo "$as_me: WARNING: \"BSD host detected vmail password are disabled\"" >&
 $as_echo "#define MD5_CRYPT 1" >>confdefs.h
 
    fi
+
+
+	if test "$OPENBSDHOST" = "1"; then
+		for ac_func in crypt_newhash
+do :
+  ac_fn_c_check_func "$LINENO" "crypt_newhash" "ac_cv_func_crypt_newhash"
+if test "x$ac_cv_func_crypt_newhash" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CRYPT_NEWHASH 1
+_ACEOF
+
+fi
+done
+
+	fi
 
 	CHPASSOBJS=$OBJS
 

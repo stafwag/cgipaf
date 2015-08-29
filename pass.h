@@ -114,3 +114,5 @@ int get_crypttype(struct pw_info *pw);
 char * crypttype2str(int i);
 int cryptstr2int(char *txt);
 #endif
+int * set_sha2_prefered_rounds(int i);
+int get_sha2_prefered_rounds();

@@ -38,6 +38,44 @@
 
 static char *passwd_location=NULL;
 static char *shadow_location=NULL;
+static int  *sha2_prefered_rounds=NULL;
+
+/*
+ * set the prefered rounds for sha2
+ */
+
+int * set_sha2_prefered_rounds(int i) {
+
+	if(sha2_prefered_rounds!=NULL) {
+		xfree(sha2_prefered_rounds);
+	}
+
+	if(i==0) {
+
+		sha2_prefered_rounds=NULL;
+
+	} else {
+
+		sha2_prefered_rounds=xmalloc(sizeof(int));
+		*sha2_prefered_rounds=i;
+	}
+
+	return(sha2_prefered_rounds);
+
+};
+
+/*
+ * returns the prefered_rounds value
+ */
+
+int get_sha2_prefered_rounds() {
+
+	if(sha2_prefered_rounds==NULL) return(0);
+
+	return(*sha2_prefered_rounds);
+
+
+};
 
 /*
  * Set the password file location 
@@ -702,7 +740,7 @@ if (mode !=254 ) {
 	
 	if(salt_skipped == 0) {
 
-		c=crypt_make_salt(crypttype2str(i),NULL);
+		c=crypt_make_salt(crypttype2str(i),sha2_prefered_rounds);
 
 		if(c!=NULL) {
 

@@ -82,7 +82,7 @@ static void seedRNG (void)
 
 /* It is not clear what is the maximum value of random().
  * We assume 2^31-1.*/
-#define RANDOM_MAX 0x7FFFFFFF
+#define SALT_RANDOM_MAX 0x7FFFFFFF
 
 /*
  * Return a random number between min and max (both included).
@@ -94,7 +94,7 @@ static long shadow_random (long min, long max)
 	double drand;
 	long ret;
 	seedRNG ();
-	drand = (double) (max - min + 1) * random () / RANDOM_MAX;
+	drand = (double) (max - min + 1) * random () / SALT_RANDOM_MAX;
 	/* On systems were this is not random() range is lower, we favor
 	 * higher numbers of salt. */
 	ret = (long) (max + 1 - drand);

@@ -154,6 +154,20 @@ case $host_os in
 
 		fi
 
+		AC_MSG_CHECKING(Verify if we can enable modern crypt)
+
+		if test "$MAJORREL" -lt 6; then
+
+			AC_MSG_RESULT(no)
+
+		else
+			
+			AC_DEFINE(MODERNCRYPT,1,NetBSD 6 has built-in md5 support)
+			MODERNCRYPT=1
+			AC_MSG_RESULT(yes)
+
+		fi
+
   		;;
  openbsd*) 
     		AC_DEFINE(BSDHOST,1,BSD system)
@@ -187,7 +201,6 @@ case $host_os in
 
 		fi
 		AC_MSG_RESULT(yes)
-		AC_CHECK_FUNCS(crypt_newhash )
 		AC_MSG_CHECKING(Disabling PAM)
         	ARG="NOPAM"
 		AC_MSG_RESULT(done)
@@ -444,6 +457,14 @@ dnl freebsd has built-in md5 support
 
       AC_DEFINE(MD5_CRYPT,1,md5 crypt functions required)
    fi
+
+dnl
+dnl crypt_newhash if required for OpenBSD
+dnl
+
+	if test "$OPENBSDHOST" = "1"; then
+		AC_CHECK_FUNCS(crypt_newhash)
+	fi
 
 	CHPASSOBJS=$OBJS
 

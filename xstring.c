@@ -720,3 +720,18 @@ char * null2str(char *str) {
 
 }
 
+int isstrdigit(char *str) {
+
+	char *cp;
+
+	for(cp=str;*cp!=0;cp++) {
+
+		if(!isdigit(*cp)) return(0);
+
+	}
+
+	return(1);
+
+
+}
+

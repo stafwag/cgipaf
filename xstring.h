@@ -54,3 +54,4 @@ char * clone_string(char *str);
 void free_string_pair (char *** str_pair );
 void replace_char(char *str,char src,char dest);
 char * null2str(char *str);
+int isstrdigit(char *str);

@@ -27,6 +27,28 @@
 
 char *prgname;
 
+int isoptarg(char *optstr) {
+
+	if(optstr==NULL) return 0;
+
+	switch(*optstr) {
+
+		case 0:
+				return(0);
+				break;
+		case '-':	
+				return(0);
+				break;
+		default:
+				return(1);
+				break;
+
+	}
+
+	return(0);
+
+}
+
 /*
  * display usage message
  */
@@ -39,7 +61,8 @@ void usage() {
 	char txt_usage003[]=" -m,--md5\t\tuse md5 algorithm";
 	char txt_usage004[]=" -c,--crypt-method\tuse";
 	char txt_usage005[]="crypt method";
-	char txt_usage006[]=" -v,--verbose\t\tenable verbose output\n\n";
+	char txt_usage006[]=" -s,--sha-rounds\tnumber of sha2 rounds\n";
+	char txt_usage007[]=" -v,--verbose\t\tenable verbose output\n\n";
 
 #ifdef _WITHPAM
 	char txt_disable_pam[]=", this option will disable pam\n";
@@ -53,12 +76,15 @@ void usage() {
 #ifdef _WITHPAM
 	fprintf(stderr,"%s",txt_usage001);
 #endif
-	fprintf(stderr,"%s %s",txt_usage002,txt_disable_pam);
+	fprintf(stderr,"%s%s",txt_usage002,txt_disable_pam);
 #ifdef MD5_CRYPT
-	fprintf(stderr,"%s %s",txt_usage003,txt_disable_pam);
+	fprintf(stderr,"%s%s",txt_usage003,txt_disable_pam);
 #endif
- 	fprintf(stderr,"%s %s %s %s",txt_usage004,txt_supported_algo,txt_usage005,txt_disable_pam);
+ 	fprintf(stderr,"%s %s %s\n\t\t\t%s",txt_usage004,txt_supported_algo,txt_usage005,txt_disable_pam);
+#ifdef MODERNCRYPT_SHA2 
  	fprintf(stderr,"%s",txt_usage006);
+#endif
+ 	fprintf(stderr,"%s",txt_usage007);
 	fprintf(stderr,"\n");
 }
 
@@ -108,6 +134,9 @@ int main (int argn,char **argv)
    int algoflag=0;
    char *algorithme=NULL;
    char algomode=-1; 
+   int sharoundsflag=0;
+   char *sharounds_str=NULL;
+   int sharounds=0;
    int verboseflag=0;
    int linecounter=0;
    int number_of_lines=0;
@@ -119,7 +148,7 @@ int main (int argn,char **argv)
    if(argn>1) {                  /* we've no arguments */
 
 	   int i;
-	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose","crypt-method",NULL};
+	   char *longargs[]={"encrypted","md5","help","nopam","pam","verbose","crypt-method","--sha-rounds",NULL};
 
 	   /*
 	    * convert long opts to shorts opt
@@ -159,7 +188,7 @@ int main (int argn,char **argv)
 
 	   if(!hlpflag) {
 
-	   	while ((i = getopt(argn, argv, "hpemnvc:")) != -1) {
+	   	while ((i = getopt(argn, argv, "hpemnvc:s:")) != -1) {
 
 			switch(i) {
 
@@ -188,6 +217,15 @@ int main (int argn,char **argv)
 						break;
 				case 'c':
 						algoflag=1;
+
+						if(!isoptarg(optarg)) {
+
+							fprintf(stderr,"Sorry, option -c requires an argument.\n\n");
+							hlpflag=1;
+							break;
+
+						}
+
 						algorithme=optarg;
 
 						algomode=cryptstr2int(algorithme);
@@ -213,6 +251,56 @@ int main (int argn,char **argv)
 						}
 
 						break;
+				case 's':
+   						sharoundsflag=1;
+
+						if(!isoptarg(optarg)) {
+
+							fprintf(stderr,"Sorry, option -s requires an argument.\n\n");
+							hlpflag=1;
+							break;
+
+						}
+
+						sharounds_str=optarg;
+
+						if(!isstrdigit(sharounds_str)) {
+
+							fprintf(stderr,"Sorry, option -s needs to be a digit string\n\n");
+							hlpflag=1;
+							break;
+
+						}
+
+						int i=sscanf(sharounds_str,"%d",&sharounds);
+
+						if(i!=1) {
+
+	   						fprintf(stderr,"sscanf failed (i=%d) is not 1, errno=%d errstr=%s",i,errno,null2str(strerror(errno)));
+							exit(3);
+
+						}
+
+						char sharounds_test_buffer[1024];
+
+						if (snprintf(sharounds_test_buffer,1023,"%d",sharounds)>=1023) {
+
+							fprintf(stderr,"Invalid nummeric value length>1023\n");
+							hlpflag=1;
+							break;
+
+						}
+
+						if(strcmp(sharounds_test_buffer,sharounds_str)) {
+
+							fprintf(stderr,"Invalid nummeric value\n");
+							hlpflag=1;
+							break;
+
+						}
+
+						break;
+
 				default:
 						hlpflag=1;
 		   	}
@@ -233,6 +321,9 @@ int main (int argn,char **argv)
 	   	fprintf(stderr,"md5flag = %d\n",md5flag);
 	   	fprintf(stderr,"algoflag = %d\n",algoflag);
 	   	fprintf(stderr,"algorithme = %s\n",null2str(algorithme));
+	   	fprintf(stderr,"sharoundsflag = %d\n",sharoundsflag);
+	   	fprintf(stderr,"sharounds_str = %s\n",null2str(sharounds_str));
+	   	fprintf(stderr,"sharounds = %d\n",sharounds);
 	   	fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
 	   }
@@ -262,7 +353,7 @@ int main (int argn,char **argv)
 
 		   if ( pamflag && ( md5flag || encryptflag || algoflag ) ) {
 
-			   fprintf(stderr,"%s: --md5, --algorithm and --encrypted are invalid with forced pam.\n\n",prgname);
+			   fprintf(stderr,"%s: --md5, --crypt-method and --encrypted are invalid with forced pam.\n\n",prgname);
 
 			   hlpflag=1;
 
@@ -281,15 +372,39 @@ int main (int argn,char **argv)
 
 				if (md5flag && algoflag) {
 
-					fprintf(stderr,"%s: Can't use --md5 and --algorithm at the same time\n\n",prgname);
+					fprintf(stderr,"%s: Can't use --md5 and --crypt-method at the same time\n\n",prgname);
 					hlpflag=1;
 
 				}
 
 				if (algoflag && encryptflag) {
 
-					fprintf(stderr,"%s: Can't use --algorithm and --encrypted at the same time\n\n",prgname);
+					fprintf(stderr,"%s: Can't use --crypt-method and --encrypted at the same time\n\n",prgname);
 					hlpflag=1;
+
+				}
+
+			} else {
+
+				if (sharoundsflag && !algoflag  ) {
+
+					fprintf(stderr,"%s: Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
+					hlpflag=1;
+
+				} else {
+
+					switch (algomode) {
+
+						case 3:
+						case 4:
+							break;
+						default:
+							fprintf(stderr,"%s: Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
+							hlpflag=1;
+							break;
+
+
+					}
 
 				}
 
@@ -376,9 +491,38 @@ int main (int argn,char **argv)
    		fprintf(stderr,"md5flag = %d\n",md5flag);
 	   	fprintf(stderr,"algoflag = %d\n",algoflag);
 	   	fprintf(stderr,"algorithme = %s\n",null2str(algorithme));
+	   	fprintf(stderr,"sharoundsflag = %d\n",sharoundsflag);
+	   	fprintf(stderr,"sharounds_str = %s\n",null2str(sharounds_str));
+	   	fprintf(stderr,"sharounds = %d\n",sharounds);
    		fprintf(stderr,"verboseflag = %d\n",verboseflag);
 
    	}
+
+	switch(algomode) {
+
+		case 3:
+		case 4:
+			if(sharoundsflag) {
+
+				if (verboseflag) {
+
+					fprintf(stderr,"DEBUG: set sha2 rounds to %d\n",sharounds);
+
+				}
+
+				set_sha2_prefered_rounds(sharounds);
+
+				if(get_sha2_prefered_rounds() != sharounds ) {
+
+					fprintf(stderr,"ERROR: set sha2rounds failed\n");
+					exit(3);
+
+
+				}
+
+			}
+
+	}
 
 
 	/*

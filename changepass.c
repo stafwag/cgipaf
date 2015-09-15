@@ -70,7 +70,7 @@ void usage() {
 	char txt_disable_pam[]="\n";
 #endif
 
-	char * txt_supported_algo=string_array_to_str(pass_supported_crypts());
+	char * txt_supported_algo=string_array_to_str(xcrypt_supported_crypts());
 	replace_char(txt_supported_algo,' ','|');
       	fprintf(stderr,"usage: %s %s",prgname,txt_usage000);
 #ifdef _WITHPAM
@@ -386,24 +386,27 @@ int main (int argn,char **argv)
 
 			} else {
 
-				if (sharoundsflag && !algoflag  ) {
+				if (sharoundsflag) {
 
-					fprintf(stderr,"%s: Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
-					hlpflag=1;
+					if (!algoflag  ) {
 
-				} else {
+						fprintf(stderr,"%s: Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
+						hlpflag=1;
 
-					switch (algomode) {
+					} else {
 
-						case 3:
-						case 4:
-							break;
-						default:
-							fprintf(stderr,"%s: Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
-							hlpflag=1;
-							break;
+						switch (algomode) {
+
+							case 3:
+							case 4:
+								break;
+							default:
+								fprintf(stderr,"%s: 2 Sorry --sha-rounds is only allowed with a sha2 algorithm\n\n",prgname);
+								hlpflag=1;
+								break;
 
 
+						}
 					}
 
 				}

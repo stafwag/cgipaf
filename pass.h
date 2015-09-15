@@ -20,11 +20,11 @@
  */
 
 #include "common.h"
+#include "xcrypt.h"
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
-#include "salt.h"
 #include "xstring.h"
 
 #ifndef MODERNCRYPT
@@ -109,10 +109,7 @@ char ** pass_supported_crypts();
 int ckpw_nopam(struct pw_info *pw,char *pass);
 struct pw_info * get_pw_nopam(char *name);
 #endif
-int is_des(char *p);
 int get_crypttype(struct pw_info *pw);
-char * crypttype2str(int i);
-int cryptstr2int(char *txt);
 #endif
 int * set_sha2_prefered_rounds(int i);
 int get_sha2_prefered_rounds();

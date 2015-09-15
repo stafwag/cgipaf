@@ -305,6 +305,9 @@
 /* NetBSD system */
 #undef NETBSDHOST
 
+/* NetBSD 6 has sha1 support */
+#undef NETBSD_SHA1
+
 /* OpenBSD system */
 #undef OPENBSDHOST
 

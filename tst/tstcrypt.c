@@ -104,7 +104,4 @@ int main() {
 
 	}
 
-	e=crypt("password","$2b$qwerty");
-
-	puts(null2str(e));
 }

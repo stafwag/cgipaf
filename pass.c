@@ -201,54 +201,6 @@ return(pw);
 }
 
 /*
- * returns 0 if p is no md5 password
- *         1 if p is a  md5 password
- */
-int is_md5(char *p) {
-   if (strncmp(p,"$1$",3) == 0) return(1);
-   return(0);
-}
-
-/*
- * returns 0 if p is no blowfish password
- *         1 if p is a  blowfish password
- */
-int is_blowfish(char *p) {
-   if (strncmp(p,"$2a$",4) == 0) return(1);
-   return(0);
-}
-
-/*
- * returns 0 if p is no sha256 password
- *         1 if p is a  sha256 password
- */
-int is_sha256(char *p) {
-   if (strncmp(p,"$5$",3) == 0) return(1);
-   return(0);
-}
-
-/*
- * returns 0 if p is no sha512 password
- *         1 if p is a  sha512 password
- */
-int is_sha512(char *p) {
-   if (strncmp(p,"$6$",3) == 0) return(1);
-   return(0);
-}
-
-/*
- * returns 0 if p is no des password
- *         1 if p is a  des password
- */
-int is_des(char *p) {
-
-   if (strlen(p)<4) return(1);
-   if (p[0]=='$' && p[2]=='$') return(0); 
-   return(1);
-
-}
-
-/*
  * returns a pointer to the password field
  */
 char * get_pwfield (struct pw_info *pw) 
@@ -276,101 +228,7 @@ char * get_pwfield (struct pw_info *pw)
 int get_crypttype(struct pw_info *pw)
 {
 char *pass=get_pwfield(pw);
-
-if (pass==NULL) return(-1);
-if (is_des(pass)) return(0);;
-if (is_md5(pass)) return(1);;
-if (is_blowfish(pass)) return(2);;
-if (is_sha256(pass)) return(3);;
-if (is_sha512(pass)) return(4);;
-
-return(-1);
-}
-
-/*
- * returns an array with the supported crypt types
- */
-
-char ** pass_supported_crypts() {
-
-#ifdef MODERNCRYPT
-#ifdef MODERNCRYPT_SHA2
-
-	static char *ret[]={"des","md5","sha256","sha512",NULL};
-#else
-	static char *ret[]={"des","md5",NULL};
-
-#endif
-#else
-#ifdef MD5_CRYPT
-#ifdef OPENBSD_BLOWFISH
-	static char *ret[]={"des","md5","blowfish",NULL};
-#else
-	static char *ret[]={"des","md5",NULL};
-#endif
-#else
-	static char *ret[]={"des",NULL};
-#endif
-#endif
-
-	return(ret);
-
-}
-
-/*
- * return a string with the CRYPTTYPE
- */
-
-char * crypttype2str(int i) 
-{
-
-	switch(i) {
-
-		case 0:
-			return("DES");
-			break;
-		case 1:
-			return("MD5");
-			break;
-		case 2:
-			return("BLOWFISH");
-			break;
-		case 3:
-			return("SHA256");
-			break;
-		case 4:
-			return("SHA512");
-			break;
-
-		default:
-			return("UNKNOWN");
-			break;
-
-	}
-
-	return("UNKNOWN");
-
-}
-
-int cryptstr2int(char *txt) 
-{
-
-	char *cryptType;
-
-	if (strlen(txt)>10) return(-1);
-
-	cryptType=xmalloc(strlen(txt)+1);
-	strcpy(cryptType,txt);
-	strtoupper(cryptType);
-
-	if (strcmp(cryptType,"DES") == 0 ) return(0);
-	if (strcmp(cryptType,"MD5") == 0 ) return(1);
-	if (strcmp(cryptType,"BLOWFISH") == 0) return(2);
-	if (strcmp(cryptType,"SHA256") == 0) return(3);
-	if (strcmp(cryptType,"SHA512") == 0) return(4);
-
-	return(-1);
-
+return(hash2crypttype(pass));
 }
 
 /*
@@ -610,7 +468,6 @@ int i=0;
 int fd_tmplock=0;
 int lock=0;
 int count=0;
-const char *c=NULL;
 char *passwdfile=PASSWDFILE;
 char *encrypt_pass=NULL;
 struct stat st;
@@ -692,7 +549,6 @@ switch(mode) {
 		break;
 	case 254:
 		encrypt_pass=pass;
-		c=encrypt_pass;
 		i=254;
 		break;
 
@@ -708,80 +564,29 @@ switch(mode) {
 
 if (mode !=254 ) {
 
-	int salt_skipped=0;
 
-	if(i==2) {
+	switch(i) {
 
-#ifdef OPENBSDHOST
-		salt_skipped=1;
-
-		encrypt_pass=xmalloc(255);
-
-		if (crypt_newhash(pass, "blowfish,8", encrypt_pass,254)==0) {
-
-			c=encrypt_pass;
-			i=2;
-
-
-		} else {
-
-			c=NULL;
-			i=-16;
-
-		};
-
-#else
-		i=-13;
-		c=NULL;
-
-#endif
+		case 0:
+		case 1:
+		case 2:
+		case 10:
+              		encrypt_pass=xcryptbyid(pass,i,NULL);
+	     		break;
+		case 3:
+		case 4:
+              		encrypt_pass=xcryptbyid(pass,i,sha2_prefered_rounds);
+	     		break;
+       		default:
+			encrypt_pass=NULL; /* unsupported crypt type! */
+	       		i=-13;
 
 	}
-	
-	if(salt_skipped == 0) {
-
-		c=crypt_make_salt(crypttype2str(i),sha2_prefered_rounds);
-
-		if(c!=NULL) {
-
-			switch(i) {
-
-				case 0:
-               				encrypt_pass=crypt(pass,c);
-					break;
-#ifdef MD5_CRYPT
-#ifdef MODERNCRYPT
-				case 1:
-#ifdef MODERNCRYPT_SHA2 
-				case 3:
-				case 4:
-#endif
-               				encrypt_pass=crypt(pass,c);
-	     				break;
-#else
-       				case 1:
-	     				encrypt_pass=libshadow_md5_crypt(pass,c); 
-	     				break;
-#endif
-#endif
-       				default:
-					c=NULL;            /* unsupported crypt type! */
-	        			i=-13;
-
-			}
-
-		} else {
-
-			i=-13;
-
-		}
-
-	};
 
 }
 
 
-if (c!=NULL) {
+if (encrypt_pass!=NULL) {
 
 	/*
  	* set passwdfile to the real password file

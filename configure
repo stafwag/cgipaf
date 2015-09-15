@@ -2539,6 +2539,24 @@ $as_echo "yes" >&6; }
 
 		fi
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verify if we can enable sha1" >&5
+$as_echo_n "checking Verify if we can enable sha1... " >&6; }
+
+		if test "$MAJORREL" -lt 6; then
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+		else
+
+
+$as_echo "#define NETBSD_SHA1 1" >>confdefs.h
+
+			NETBSD_SHA1=1
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+		fi
   		;;
  openbsd*)
 
@@ -4958,7 +4976,7 @@ fi
 
 	HAVE_CHPASS_CRYPT="CHPASS_CRYPT"
 
-   OBJS="$OBJS pass.o salt.o"
+   OBJS="$OBJS pass.o salt.o xcrypt.o"
 
    if test "$enable_md5crypt" != "no"; then
 
@@ -5132,7 +5150,7 @@ fi
    		as_fn_error $? "no valid pam library found" "$LINENO" 5
    	fi
    	OBJS="$OBJS passpam.o"
-	CHPASSOBJS="$OBJS pass.o salt.o"
+	CHPASSOBJS="$OBJS pass.o salt.o xcrypt.o"
 
    	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for crypt in -lcrypt" >&5
 $as_echo_n "checking for crypt in -lcrypt... " >&6; }

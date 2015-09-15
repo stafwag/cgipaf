@@ -162,12 +162,25 @@ case $host_os in
 
 		else
 			
-			AC_DEFINE(MODERNCRYPT,1,NetBSD 6 has built-in md5 support)
+			AC_DEFINE(MODERNCRYPT,1,NetBSD 6 has modern crypt support)
 			MODERNCRYPT=1
 			AC_MSG_RESULT(yes)
 
 		fi
 
+		AC_MSG_CHECKING(Verify if we can enable sha1)
+
+		if test "$MAJORREL" -lt 6; then
+
+			AC_MSG_RESULT(no)
+
+		else
+			
+			AC_DEFINE(NETBSD_SHA1,1,NetBSD 6 has sha1 support)
+			NETBSD_SHA1=1
+			AC_MSG_RESULT(yes)
+
+		fi
   		;;
  openbsd*) 
     		AC_DEFINE(BSDHOST,1,BSD system)
@@ -439,7 +452,7 @@ dnl      AC_MSG_ERROR(pam support is disabled and crypt.h not found)
 dnl   fi
 dnl
 
-   OBJS="$OBJS pass.o salt.o"
+   OBJS="$OBJS pass.o salt.o xcrypt.o"
    
    if test "$enable_md5crypt" != "no"; then
 
@@ -476,7 +489,7 @@ dnl
    		AC_MSG_ERROR(no valid pam library found)
    	fi
    	OBJS="$OBJS passpam.o"
-	CHPASSOBJS="$OBJS pass.o salt.o"
+	CHPASSOBJS="$OBJS pass.o salt.o xcrypt.o"
 
    	AC_CHECK_LIB(crypt,crypt,CHPASSCRYPT="yes",AC_MSG_WARN(no crypt library ))
 

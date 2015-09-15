@@ -95,6 +95,9 @@ md5crypt.o:  md5crypt.c md5crypt.h md5.o
 salt.o:	salt.c salt.h
 	$(CC) $(CFLAGS) -c salt.c
 
+xcrypt.o:	xcrypt.c xcrypt.h salt.o
+	$(CC) $(CFLAGS) -c xcrypt.c
+
 write_log.o: write_log.c write_log.h 
 	$(CC) $(CFLAGS) -c write_log.c
 

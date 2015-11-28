@@ -39,11 +39,14 @@ char * crypttype2str(int i);
 int cryptstr2int(const char *txt);
 int is_md5(char *p);
 int is_blowfish(char *p);
+int is_sha1(char *p);
 int is_sha256(char *p);
 int is_sha512(char *p);
 int is_des(char *p);
 char ** xcrypt_supported_crypts();
+int * xcrypt_supported_crypt_ids();
 int is_crypt_supported(char * hashname);
+int is_crypt_id_supported(int id);
 int hash2crypttype (char *hash);
 
 #ifndef MODERNCRYPT

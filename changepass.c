@@ -230,23 +230,22 @@ int main (int argn,char **argv)
 
 						algomode=cryptstr2int(algorithme);
 
-						switch(algomode) {
+						if(algomode==-1) {
+							fprintf(stderr,"Sorry, unknown crypt type (%s).\n\n",null2str(algorithme));
+							hlpflag=1;
 
-#ifndef OPENBSD_BLOWFISH
+						} else {
 
-							case 2:
-								fprintf(stderr,"Sorry, blowfish is not supported.\n\n");
-								hlpflag=1;
-								break;
-#endif
+							if (is_crypt_id_supported(algomode)) {
 
-							case -1:
-								fprintf(stderr,"Sorry, unsupported crypt type (%s).\n\n",null2str(algorithme));
-								hlpflag=1;
-								break;
-							default:
 								nopammode=algomode;
-								break;
+
+							} else {
+								fprintf(stderr,"Sorry, unsupported crypt type name = (%s) crypt_id = (%d).\n\n",null2str(algorithme),algomode);
+								hlpflag=1;
+
+
+							}			
 
 						}
 

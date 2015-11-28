@@ -157,10 +157,20 @@ int is_sha512(char *p) {
 int is_des(char *p) {
 
    if (p==NULL) return(0);
-
    if (strlen(p)<4) return(1);
+   if (is_sha1(p)) return(0);
    if (p[0]=='$' && p[2]=='$') return(0);
+
    return(1);
+
+}
+
+int is_sha1(char *p) {
+
+   if (p==NULL) return(0);
+
+   if (strncmp(p,"$sha1$",3) == 0) return(1);
+   return(0);
 
 }
 
@@ -172,6 +182,7 @@ int hash2crypttype (char *hash) {
 	if (is_blowfish(hash)) return(2);;
 	if (is_sha256(hash)) return(3);;
 	if (is_sha512(hash)) return(4);;
+	if (is_sha1(hash)) return(10);;
 
 	return(-1);
 
@@ -219,39 +230,94 @@ int cryptstr2int(const char *txt)
 char ** xcrypt_supported_crypts() {
 
 #ifdef MODERNCRYPT
-#ifdef MODERNCRYPT_SHA2
-
+#ifdef MODERNCRYPT_SHA2 /* SHA2 */
 	static char *ret[]={"des","md5","sha256","sha512",NULL};
 #else
-	static char *ret[]={"des","md5",NULL};
-
-#endif
+#ifdef  NETBSD_SHA1 /* NETBSD */
+	static char *ret[]={"des","md5","sha1",NULL};
 #else
-#ifdef MD5_CRYPT
-#ifdef OPENBSD_BLOWFISH
+	static char *ret[]={"des","md5",NULL};
+#endif	            /* NETBSD */	
+#endif	            /* SHA2 */	
+#else
+#ifdef MD5_CRYPT /* MD5 */
+#ifdef OPENBSD_BLOWFISH /* OPENBSD */
 	static char *ret[]={"des","md5","blowfish",NULL};
 #else
 	static char *ret[]={"des","md5",NULL};
-#endif
+#endif			/* OPENBSD */
 #else
 	static char *ret[]={"des",NULL};
-#endif
-#endif
+#endif		    /* MD5 */
+#endif  /* MODERNCRYPT */
 
 	return(ret);
+
+}
+
+int * xcrypt_supported_crypt_ids() {
+
+	char **supported=xcrypt_supported_crypts();
+	char **cp;
+	static int  *ret=NULL;
+	int  size,length;
+	int  id;
+
+	if(ret!=NULL) return(ret);
+
+	length=1;
+
+	for(cp=supported;*cp!=NULL;cp++) {
+		
+		size=length*sizeof(int);
+		id=cryptstr2int(*cp);
+
+		ret=xrealloc(ret,size);
+		ret[length-1]=id;
+
+		fprintf(stderr,"DEBUG: #1 sizeof(int) = %d length=%d size = %d cp = %s id=%d\n",sizeof(int),length,size,*cp,id);
+		if(length>10) return NULL;
+
+		++length;
+
+	}
+
+	size=length*sizeof(int);
+	ret=xrealloc(ret,size);
+	ret[length-1]=-1;
+
+	fprintf(stderr,"DEBUG: %d end\n",sizeof(ret));
+
+	return(ret);
+
+}
+
+int is_crypt_id_supported(int id) {
+
+
+	int *ids=xcrypt_supported_crypt_ids();
+	int *c;
+
+	for(c=ids;*c!=-1;c++) {
+
+		if(id==*c) return(1);
+
+	}
+
+	return(0);
 
 }
 
 int is_crypt_supported(char * hashname) {
 
 	char **supported=xcrypt_supported_crypts();
-	char *cp;
+	char **cp;
 
 	if(hashname==NULL) return(0);
 
-	for(cp=*supported;cp!=NULL;cp++) {
+	for(cp=supported;*cp!=NULL;cp++) {
 
-		if(!strcmp(hashname,cp)) {
+		if(!strcmp(hashname,*cp)) {
 
 			return(1);	
 			break;
@@ -263,7 +329,6 @@ int is_crypt_supported(char * hashname) {
 	return(0);
 
 }
-
 
 /*
  * return a string with the CRYPTTYPE
@@ -337,6 +402,15 @@ char *xcryptbyid(const char *pass, int typeint,void *arg) {
                         	
 #endif /* OPENBSD_BLOWFISH */
 
+#ifdef  NETBSD_SHA1 /* NETBSD */
+		case 10:
+			salt=xsaltbyid(typeint,arg);
+			if (salt==NULL) return(NULL);
+
+			ret=crypt(pass,salt);
+			break;
+#endif
+
 #ifdef MD5_CRYPT
 		case 1:
 			salt=xsaltbyid(typeint,NULL);
@@ -373,7 +447,6 @@ char *xcryptbyid(const char *pass, int typeint,void *arg) {
 	if(ret==NULL) return(NULL);
 
 	int hashtype;
-
 	hashtype=hash2crypttype(ret);
 
 	if(hashtype!=typeint) return(NULL);

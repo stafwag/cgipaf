@@ -281,7 +281,8 @@ char * str_passerror(int passerror) {
  		"unsupported crypt type",		/* -13 	= unsupported crypt type		*/
  		"pw_mkdb failed ( bsd only )", 		/* -14 	= pw_mkdb failed ( bsd only 	)	*/
  		"encrypt_pass is NULL",  	   	/* -15 = encrypt_pass is NULL 			*/
- 		"crypt_newhash failed (OpenBSD only)"  	/* -16 = encrypt_pass is NULL 			*/
+ 		"crypt_newhash failed (OpenBSD only)", 	/* -16 = crypt_newhash failed (OpenBSD only) */
+ 		"xcrypt failed (NULL)"  		/* -17 = xcrypt retruns NULL 			*/
 		};
 
 	int max=sizeof(passErrorMessages)/sizeof(char *);
@@ -547,6 +548,16 @@ switch(mode) {
 
 		i=4;
 		break;
+
+	case 10:
+
+		/*
+		 * force sha1 password if mode=10
+		 */
+
+		i=10;
+		break;
+
 	case 254:
 		encrypt_pass=pass;
 		i=254;
@@ -585,7 +596,6 @@ if (mode !=254 ) {
 
 }
 
-
 if (encrypt_pass!=NULL) {
 
 	/*
@@ -610,6 +620,10 @@ if (encrypt_pass!=NULL) {
  	*/
 
 	i=update_pwfile(passwdfile,pw,encrypt_pass);
+
+} else {
+
+	i=-17;
 
 }
 

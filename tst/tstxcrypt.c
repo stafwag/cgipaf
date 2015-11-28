@@ -31,32 +31,6 @@ int main() {
 
 	}
 
-
-/*
-
-		e=xcrypt("password","DES",NULL);
-		printf("DES \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","MD5",NULL);
-		printf("MD5 \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","SHA1",NULL);
-		printf("SHA1 \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","BLOWFISH",NULL);
-		printf("BLOWFISH \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","SHA256",&sha2rounds);
-		printf("SHA256 \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","SHA512",&sha2rounds);
-		printf("SHA512 \"%s\"\n",null2str(e));
-
-		e=xcrypt("password","FOO",NULL);
-		printf("FOO \"%s\"\n",null2str(e));
-
-*/
-
 	int i=0;
 
 	for(i=0;i<11;i++) {

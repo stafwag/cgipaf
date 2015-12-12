@@ -1,7 +1,7 @@
 /*
- *  common.h
+ *  cgipaf_version.h
  *
- *  Copyright (C) 2006  Staf Wagemakers Belgie/Belgium
+ *  Copyright (C) 2015  Staf Wagemakers Belgie/Belgium
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,45 +19,11 @@
  *
  */
 
-#ifndef __COMMON_H
-#define __COMMON_H
+#ifndef __CGIPAF_VERSON_H
 
-#include "cgipaf_version.h"
+#define __CGIPAF_VERSON_H
 
-#include "config.h"
-#include "xmalloc.h"
-
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#ifdef	HAVE_STRINGS_H 
-#include <string.h>
-#endif
-
-#ifdef HAVE_CTYPE_H
-#include <ctype.h>
-#endif
-
-#ifdef HAVE_STDINT_H 
-
-#include <stdint.h>
-
-#else
-# if HAVE_SYS_STDINT_H
-#  include <sys/stdint.h>
-# else
-#  if HAVE_INTTYPES_H
-#  	include <inttypes.h>
-#  else
-#    if  HAVE_SYS_INTTYPES_H 
-#	include <sys/inttypes.h>
-#    endif
-# endif /* HAVE_INTTYPES_H */
-#endif 	/* HAVE_SYS_STDINT_H */
-#endif 	/* HAVE_STDINT_H */
-
+#define CGIPAF_VERSION "1.4.0preX"
 
 #endif
-
 

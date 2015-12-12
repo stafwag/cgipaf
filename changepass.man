@@ -1,6 +1,6 @@
-.\" changepass 1.0.0
+.\" changepass 1.4.0preX
 .\"
-.TH CHANGEPASS 8 "AUG 30, 2007"
+.TH CHANGEPASS 8 "DEC ??, 2015"
 .AT 8
 .SH NAME
     \fBchangepass\fP \- update an user's password
@@ -33,15 +33,20 @@ username:password
 .br    
 .SH OPTIONS
 .br
-   -h,--help    print this help
-   -n,--nopam   don't use pam
-   -p,--pam     use pam (default)
-   -e,--encrypt password is already encrypted, this option
-.br             will disable pam
-   -m,--md5     use md5 encryption, this option will
-.br             disable pam
-   -v,--verbose enable verbose output
-
+ -h,--help              print this help
+ -n,--nopam             don't use pam
+ -p,--pam               use pam (default)
+ -e,--encrypt           password is already encrypted, this option
+.br
+                        will disable pam
+ -m,--md5               use md5 algorithm, this option will
+.br
+                        disable pam
+ -c,--crypt-method      use des|md5|sha256|sha512 crypt method this
+.br
+                        option will disable pam
+ -s,--sha-rounds        number of sha2 rounds
+ -v,--verbose           enable verbose output
 .br    
 .SH USAGE
 .br 

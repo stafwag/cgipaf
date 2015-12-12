@@ -55,6 +55,8 @@ int isoptarg(char *optstr) {
 
 void usage() {
 
+	char txt_copyright[]="                        (GPL) 2002-2015 Belgie  Belgium\n                                                            Staf Wagemakers\n                                                  email: staf@wagemakers.be";
+
 	char txt_usage000[]="[OPTION]\n\noptions:\n\n -h,--help\t\tprint this help\n -n,--nopam\t\tdon't use pam\n";
 	char txt_usage001[]=" -p,--pam\t\tuse pam (default)\n";
 	char txt_usage002[]=" -e,--encrypt\t\tpassword is already encrypted";
@@ -72,6 +74,11 @@ void usage() {
 
 	char * txt_supported_algo=string_array_to_str(xcrypt_supported_crypts());
 	replace_char(txt_supported_algo,' ','|');
+
+      	fprintf(stderr,"%s %s",prgname,(char *)CGIPAF_VERSION);
+	fprintf(stderr,"%s\n\n",txt_copyright);
+
+
       	fprintf(stderr,"usage: %s %s",prgname,txt_usage000);
 #ifdef _WITHPAM
 	fprintf(stderr,"%s",txt_usage001);
@@ -127,6 +134,7 @@ int main (int argn,char **argv)
    struct pw_info *pw;
    int hlpflag=0;
    int encryptflag=0;
+   int c_nopamflag=0;
    int nopamflag=0;
    int nopammode=-1;
    int pamflag=0;
@@ -196,26 +204,69 @@ int main (int argn,char **argv)
 						hlpflag=1;
 						break;
 		   		case 'e':
+						if (encryptflag) {
+
+							fprintf(stderr,"Sorry, -e can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
 						encryptflag=1;
 						nopammode=254;
 						break;
 		   		case 'm':
+						if (md5flag) {
+
+							fprintf(stderr,"Sorry, -m can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
 						md5flag=1;
 						nopammode=1;
 						break;
 		   		case 'n':
+						if (c_nopamflag) {
+
+							fprintf(stderr,"Sorry, -n can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
+						c_nopamflag=1;
 						nopamflag=1;
 						break;
 		   		case 'p':
+						if (pamflag) {
+
+							fprintf(stderr,"Sorry, -p can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
 						pamflag=1;
 						break;
 				case 'v':
+						if (verboseflag) {
+
+							fprintf(stderr,"Sorry, -v can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
 						verboseflag=1;
 						break;
 		   		case '?':	
 						hlpflag=1;
 						break;
 				case 'c':
+						if (algoflag) {
+
+							fprintf(stderr,"Sorry, -c can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
 						algoflag=1;
 
 						if(!isoptarg(optarg)) {
@@ -251,6 +302,13 @@ int main (int argn,char **argv)
 
 						break;
 				case 's':
+						if (sharoundsflag) {
+
+							fprintf(stderr,"Sorry, -s can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
    						sharoundsflag=1;
 
 						if(!isoptarg(optarg)) {

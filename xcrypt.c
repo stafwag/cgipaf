@@ -275,7 +275,6 @@ int * xcrypt_supported_crypt_ids() {
 		ret=xrealloc(ret,size);
 		ret[length-1]=id;
 
-		fprintf(stderr,"DEBUG: #1 sizeof(int) = %d length=%d size = %d cp = %s id=%d\n",sizeof(int),length,size,*cp,id);
 		if(length>10) return NULL;
 
 		++length;
@@ -285,8 +284,6 @@ int * xcrypt_supported_crypt_ids() {
 	size=length*sizeof(int);
 	ret=xrealloc(ret,size);
 	ret[length-1]=-1;
-
-	fprintf(stderr,"DEBUG: %d end\n",sizeof(ret));
 
 	return(ret);
 

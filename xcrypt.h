@@ -57,3 +57,5 @@ int hash2crypttype (char *hash);
 #include <crypt.h>
 #endif
 
+char * xcrypt_best_supported_crypt();
+int xcrypt_best_supported_crypt_id();

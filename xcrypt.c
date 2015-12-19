@@ -157,6 +157,9 @@ int is_sha512(char *p) {
 int is_des(char *p) {
 
    if (p==NULL) return(0);
+   if (strlen(p)==0) return(0);
+   if (strlen(p)<3) return(0);
+   if (p[0] == '*') return(0);
    if (strlen(p)<4) return(1);
    if (is_sha1(p)) return(0);
    if (p[0]=='$' && p[2]=='$') return(0);
@@ -252,6 +255,31 @@ char ** xcrypt_supported_crypts() {
 #endif  /* MODERNCRYPT */
 
 	return(ret);
+
+}
+
+char * xcrypt_best_supported_crypt() {
+
+	char **supported=xcrypt_supported_crypts();
+	char **cp;
+	static char *ret=NULL;
+
+	if(ret!=NULL) return(ret);
+
+	for(cp=supported;*cp!=NULL;cp++) {
+
+		ret=*cp;
+
+	}
+
+	return(ret);
+}
+
+int xcrypt_best_supported_crypt_id() {
+
+	char *best=xcrypt_best_supported_crypt();
+
+	return(cryptstr2int(best));
 
 }
 

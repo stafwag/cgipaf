@@ -40,4 +40,8 @@ int main() {
 
 
 	}
+
+	fprintf(stderr,"best supported crypt; %s\n",xcrypt_best_supported_crypt());
+	// xcrypt_best_supported_crypt_id();
+	fprintf(stderr,"best supported crypt id; %d\n",xcrypt_best_supported_crypt_id());
 }

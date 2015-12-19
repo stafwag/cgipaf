@@ -281,8 +281,10 @@ char * str_passerror(int passerror) {
  		"unsupported crypt type",		/* -13 	= unsupported crypt type		*/
  		"pw_mkdb failed ( bsd only )", 		/* -14 	= pw_mkdb failed ( bsd only 	)	*/
  		"encrypt_pass is NULL",  	   	/* -15 = encrypt_pass is NULL 			*/
- 		"crypt_newhash failed (OpenBSD only)", 	/* -16 = crypt_newhash failed (OpenBSD only) */
- 		"xcrypt failed (NULL)"  		/* -17 = xcrypt retruns NULL 			*/
+ 		"crypt_newhash failed (OpenBSD only)", 	/* -16 = crypt_newhash failed (OpenBSD only)    */
+ 		"xcrypt failed (NULL)",  		/* -17 = xcrypt retruns NULL 			*/
+ 		"unlink oshadow failed",  		/* -18 = unlink oshadow failed 			*/
+ 		"ferror on reading pwfile",  		/* -19 = ferror on reading pwfile 		*/
 		};
 
 	int max=sizeof(passErrorMessages)/sizeof(char *);
@@ -374,6 +376,13 @@ while (fgets(buffer,BUFFERLEN-1,pwfile)) {
    
    if (fputs(buffer,tmpfile) == EOF) return(-8);
 } 
+
+/*
+ * return error on ferror
+ */
+
+if (ferror(pwfile)) return(-19);
+
 fclose(tmpfile);
 fclose(pwfile);
 /*
@@ -566,6 +575,8 @@ switch(mode) {
 	default:
 		i=get_crypttype(pw);
 
+		if(i==-1) i=xcrypt_best_supported_crypt_id();
+
 }
 
 /*
@@ -639,11 +650,13 @@ if (i<0) return(i);   /* can't update password */
  * Solaris compatibility
  */
 
-#ifndef BSDHOST
+#ifdef SOLARISHOST
+
+fprintf(stderr,"DEBUG start unlink\n");
 
 if (!strcmp(passwdfile,SHADOWFILE)) {
    if(lstat(OSHADOWFILE,&st)!=-1) {
-      if((i=update_pwfile(OSHADOWFILE,pw,encrypt_pass))<0) return(i);
+      if(unlink(OSHADOWFILE)!=0) return(-18);
       }
    }
 #endif

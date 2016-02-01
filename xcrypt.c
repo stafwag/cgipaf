@@ -75,6 +75,10 @@ char *xsaltbyid (int meth,void *arg) {
 
 }
 
+/*
+ * returns a random salt
+ */
+
 char *xsalt (const char *meth, void *arg) {
 
 	int methId;

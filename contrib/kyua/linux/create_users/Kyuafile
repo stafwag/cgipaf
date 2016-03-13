@@ -3,4 +3,4 @@ syntax(2)
 
 test_suite('create test users')
 
-atf_test_program{name='atf_create_users.sh'}
+plain_test_program{name='create_users.sh'}

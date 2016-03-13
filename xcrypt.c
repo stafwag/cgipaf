@@ -484,6 +484,19 @@ char *xcryptbyid(const char *pass, int typeint,void *arg) {
 
 }
 
+char * hash2name(char *hash) {
+
+	int i=hash2crypttype(hash);
+
+	if(i==-1) {
+
+		return(NULL);
+
+	}
+
+	return(crypttype2str(i));
+
+}
 
 char *xcrypt(const char *pass, const char *type,void *arg) {
 

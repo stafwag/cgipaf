@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# (GPL) 2001 Belgium                            http://www.wagemakers.be
+# (GPL) 2001,2016 Belgium                       http://www.wagemakers.be
 # Staf Wagemakers	                              staf@wagemakers.be
 # ----------------------------------------------------------------------
 
@@ -37,6 +37,9 @@ viewmailcfg.cgi: cgipaf.c ${OBJS} mailconfig.o ${inc_files}
 	
 changepass: changepass.c ${CHPASSOBJS} ${inc_files}
 	$(CC) $(CFLAGS) $(LDFLAGS) -o changepass changepass.c ${CHPASSOBJS} @LIBS@ ${ARG} ${HAVE_CHPASS_CRYPT}
+
+hash2name: hash2name.c ${CHPASSOBJS} ${inc_files}
+	$(CC) $(CFLAGS) $(LDFLAGS) -o hash2name hash2name.c ${CHPASSOBJS} @LIBS@ ${ARG}
 
 install: all
 	/bin/sh ./install.sh
@@ -111,7 +114,7 @@ cgipaf_func.o: cgipaf_func.c cgipaf_func.h xstring.o ccgi.o
 	$(CC) $(CFLAGS) -c cgipaf_func.c
 
 clean:
-	rm -f *.cgi *.o changepass
+	rm -f *.cgi *.o changepass hashname
 
 distclean: dist-clean
 dist-clean: clean

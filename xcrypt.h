@@ -48,6 +48,7 @@ int * xcrypt_supported_crypt_ids();
 int is_crypt_supported(char * hashname);
 int is_crypt_id_supported(int id);
 int hash2crypttype (char *hash);
+char * hash2name(char *hash);
 
 #ifndef MODERNCRYPT
 #include "md5crypt.h"

@@ -21,7 +21,11 @@
 #
 #
 
+which kyua || {
 
+	PATH=$PATH:/usr/local/bin
+
+}
 
 scriptName=`realpath $0`
 scriptDir=`dirname $scriptName`

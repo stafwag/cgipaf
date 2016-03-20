@@ -32,22 +32,45 @@ scriptDir=`dirname $scriptName`
 reportDir="${scriptDir}/reports/"
 
 os=`uname| tr [A-Z] [a-z]`
+release=`uname -r | sed -e 's/^\([^.]*\.[^.]*\)\..*/\1/'`
+majorRelease=`echo $release | cut -f1 -d\.`
+minorRelease=`echo $release | cut -f2 -d\.`
 
-if [ -f $scriptDir/$os/Kyuafile ]; then
+echo "found \"$os\" with release \"$release\" (\"${majorRelease}\".\"${minorRelease}\")"
 
-	cd $scriptDir/$os || {
+kyuaMainDir=""
 
-		echo "ERROR: cd $scriptDir/$os failed"
+case "$os" in
+
+	"linux")
+		kyuaMainDir="scriptDir/$os"
+		;;
+	"freebsd")
+		kyuaMainDir="scriptDir/${os}/${majorRelease}"
+		;;
+	*)
+
+		echo "ERROR: sorry no test define for \"$os\""
+		exit 1
+
+		;;
+
+esac
+
+
+if [ -f ${kyuaMainDir}/Kyuafile ]; then
+
+	cd $kyuaMainDir || {
+
+		echo "ERROR: cd $kyuaMainDir failed"
 		exit 1
 
 	}
 
-
 else
 
-	echo "ERROR: no test defined for $os"
+	echo "ERROR: Kyuafile not found"
 	exit 1
-
 
 fi
 

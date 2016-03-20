@@ -422,14 +422,21 @@ if (uf) {
 #endif
    
    if(!( pid=fork() )) {
-      if (!name)
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,pwd_mkdb_file,NULL);
-      else
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,pwd_mkdb_file,NULL);
+
+      	if (!name) {
+
+         	execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,pwd_mkdb_file,NULL);
+
+	}
+      	else {
+         	execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,pwd_mkdb_file,NULL);
+	}
+
+      return(-14);
    }
    pid = waitpid(pid,&pstat,0);
 
-   if (!(pid=-1 || !WIFEXITED(pstat) || WEXITSTATUS(pstat) != 0)) return(-14);
+   if ((pid == -1 || !WIFEXITED(pstat) || WEXITSTATUS(pstat) != 0)) return(-14);
 #endif
 }
 else { 

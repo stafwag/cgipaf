@@ -114,7 +114,7 @@ cgipaf_func.o: cgipaf_func.c cgipaf_func.h xstring.o ccgi.o
 	$(CC) $(CFLAGS) -c cgipaf_func.c
 
 clean:
-	rm -f *.cgi *.o changepass hashname
+	rm -f *.cgi *.o changepass hash2name
 
 distclean: dist-clean
 dist-clean: clean

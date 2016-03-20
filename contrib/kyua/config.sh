@@ -46,6 +46,19 @@ createUserList() {
 
 }
 
+isBSD () {
+
+	uname | grep -i bsd > /dev/null && {
+
+		return 0
+
+	}
+
+	return 1
+
+
+}
+
 scriptName=`basename $0`
 
 baseDir=`dirname $0`
@@ -64,7 +77,7 @@ hash2name="${changepassDir}/hash2name"
 
 if [ ! -x "$hash2name" ]; then
 
-	echo "ERROR: Sorry failed to find the changepass program \"$hash2name\" "
+	echo "ERROR: Sorry failed to find the changepass hash2name \"$hash2name\" "
 	exit 1
 
 fi

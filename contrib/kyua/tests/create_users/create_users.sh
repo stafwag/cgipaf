@@ -23,6 +23,36 @@
 
 . `dirname $0`/../config.sh
 
+catPasswd() {
+
+
+	isBSD && {
+
+		EDITOR=cat vipw
+		return $?
+
+	}
+
+	cat /etc/passwd
+
+
+}
+
+userAdd() {
+
+	user=$1
+
+	isBSD && {
+
+		pw useradd $user
+		return $?
+
+	}
+
+	useradd $user
+
+}
+
 
 checkIfUserExists() {
 
@@ -35,7 +65,7 @@ checkIfUserExists() {
 	fi
 
 	
-	cat /etc/passwd | sed -e 's/^\([^:]*:\).*$/\1/g' | grep "$user:" >/dev/null && {
+	catPasswd | sed -e 's/^\([^:]*:\).*$/\1/g' | grep "$user:" >/dev/null && {
 
 		 return 0 
 
@@ -51,7 +81,7 @@ createUser() {
 
 	checkIfUserExists $user || {
 
-		useradd $user || {
+		userAdd $user || {
 
 			return $?
 		}

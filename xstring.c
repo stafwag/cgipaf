@@ -682,3 +682,10 @@ void replace_char(char *str,char src,char dest) {
 
 }
 
+char * null2str(char *str) {
+
+        if(str==NULL) return("null");
+        return(str);
+
+}
+

@@ -336,15 +336,27 @@ if (uf) {
    char *mppath = _PATH_PWD;
 #endif
    
-   if(!( pid=fork() )) {
-      if (!name)
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,TMPFILE,NULL);
-      else
-         execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,TMPFILE,NULL);
-   }
-   pid = waitpid(pid,&pstat,0);
+	if(!( pid=fork() )) {
 
-   if (!(pid=-1 || !WIFEXITED(pstat) || WEXITSTATUS(pstat) != 0)) return(-14);
+      		if (!name) {
+
+         		execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,TMPFILE,NULL);
+
+		}
+      		else {
+
+         		execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,TMPFILE,NULL);
+
+		}
+
+      		return(-14);
+   	}
+
+   	pid = waitpid(pid,&pstat,0);
+
+   	if ((pid==-1 || !WIFEXITED(pstat) || WEXITSTATUS(pstat) != 0)) return(-14);
+
+
 #endif
 }
 else { 

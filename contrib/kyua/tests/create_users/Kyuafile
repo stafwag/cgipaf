@@ -1,0 +1,6 @@
+
+syntax(2)
+
+test_suite('create test users')
+
+plain_test_program{name='create_users.sh'}

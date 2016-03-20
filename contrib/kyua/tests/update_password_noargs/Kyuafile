@@ -1,0 +1,7 @@
+
+syntax(2)
+
+test_suite('test default (noargs)')
+
+plain_test_program{name='update_password_noargs.sh', timeout=600}
+

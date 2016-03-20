@@ -52,3 +52,4 @@ int delete_string_pair_item(char ***str_pair,char *item,int free_mode);
 char * clone_string(char *str);
 void free_string_pair (char *** str_pair );
 void replace_char(char *str,char src,char dest);
+char * null2str(char *str);

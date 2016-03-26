@@ -43,7 +43,34 @@ if len(argv) !=2:
 
 l=int(argv[1])
 
-pw= "".join( [random.choice(string.punctuation+string.digits+string.digits+string.ascii_letters+string.ascii_letters) for i in range(l)] )
+if l < 4:
+	print("Sorry, length not be < 4")
+	exit(1)
+
+maxDigitSpecialPlace=l-1
+
+if l >  7:
+	maxDigitSpecialPlace=7
+
+
+digitPlace=random.randint(0,maxDigitSpecialPlace)
+specialPlace=random.randint(0,maxDigitSpecialPlace)
+
+while digitPlace == specialPlace:
+	specialPlace=random.randint(0,maxDigitSpecialPlace)
+
+normalPlace=random.randint(0,maxDigitSpecialPlace)
+
+while (normalPlace == specialPlace) or (normalPlace == digitPlace):
+	normalPlace=random.randint(0,maxDigitSpecialPlace)
+
+pwArray=[random.choice(string.punctuation+string.digits+string.digits+string.ascii_letters+string.ascii_letters) for i in range(l)]
+
+pwArray[normalPlace]=random.choice(string.ascii_letters)
+pwArray[specialPlace]=random.choice(string.punctuation)
+pwArray[digitPlace]=random.choice(string.digits)
+
+pw= "".join(pwArray)
 
 print(pw)
 

@@ -56,7 +56,21 @@ userAdd() {
 
 	}
 
-	useradd $user
+	which useradd > /dev/null 2>&1 && {
+
+		useradd $user
+		return $?
+
+	}
+
+	if [ ! -x /usr/sbin/useradd ]; then
+
+		echo "ERROR: no working useradd found"
+		exit 13
+
+	fi
+
+	/usr/sbin/useradd $user
 
 }
 

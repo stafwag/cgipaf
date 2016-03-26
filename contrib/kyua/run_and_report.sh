@@ -71,6 +71,9 @@ case "$os" in
 	"freebsd"|"netbsd")
 		kyuaMainDir="${scriptDir}/${os}/${majorRelease}"
 		;;
+	"sunos")
+		kyuaMainDir="${scriptDir}/solaris/${release}"
+		;;
 	*)
 
 		echo "ERROR: sorry no test define for \"$os\""

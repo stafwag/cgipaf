@@ -21,14 +21,45 @@
 #
 #
 
+myWhich () {
 
-which kyua || {
 
-	PATH=$PATH:/usr/local/bin
+	cmd=$1
+
+
+	cmdPath=`which cmd`
+
+
+	if [ -x "$cmdPath" ]; then
+
+
+		return 0
+
+
+	fi
+
+	return 1
+
 
 }
 
-which realpath > /dev/null 2>&1
+
+myWhich kyua || {
+
+	PATH=$PATH:/usr/local/bin
+
+	myWhich kyua || {
+
+
+		echo "kyua not found"
+		exit 1
+
+
+	}
+
+}
+
+myWhich realpath > /dev/null 2>&1
 
 if [ $? = "0" ]; then
 

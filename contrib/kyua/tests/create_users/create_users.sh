@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set +x
+
 #
 # create_users.sh
 #
@@ -56,10 +58,14 @@ userAdd() {
 
 	}
 
-	which useradd > /dev/null 2>&1 && {
+	myUserAdd=`which useradd > /dev/null 2>&1` && {
 
-		useradd $user
-		return $?
+		if [ -x "$myUserAdd" ]; then
+
+			$myUserAdd $user
+			return $?
+
+		fi
 
 	}
 

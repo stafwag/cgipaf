@@ -90,9 +90,9 @@ update_passwords() {
 
 changepass="$changepass $@"
 
-echo "changepass set to \"$changepass\"" 
-echo "chkpass set to \"$chkPass\"" 
-echo "genpass set to \"$genPass\"" 
+$Echo "changepass set to \"$changepass\"" 
+$Echo "chkpass set to \"$chkPass\"" 
+$Echo "genpass set to \"$genPass\"" 
 
 myCounter=0
 max=10
@@ -110,7 +110,7 @@ while [ "$myCounter" -lt "$max" ]; do
 
 	}
 
-	passSize=$((8+$myCounter))
+	passSize=`expr 8 + $myCounter`
 
 	for user in $users; do
 
@@ -124,9 +124,9 @@ while [ "$myCounter" -lt "$max" ]; do
 
 		}
 
-		password=`echo $password | tr ':' '_'`
+		password=`$Echo $password | tr ':' '_'`
 
-		echo "$user:$password" >> ${tmpFile}
+		$Echo "$user:$password" >> ${tmpFile}
 
 	done
 
@@ -186,7 +186,7 @@ while [ "$myCounter" -lt "$max" ]; do
 
 	}
 
-	myCounter=$(($myCounter+1))
+	myCounter=`expr $myCounter + 1`
 
 done
 

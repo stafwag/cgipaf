@@ -39,7 +39,7 @@ getShadowLine() {
 	if [ "$isBSD" = "yes" ]; then
 
 
-		hashLine=`EDITOR=cat vipw | grep -E "^${user}:"` || {
+		hashLine=`EDITOR=cat vipw | egrep "^${user}:"` || {
 
 			echo ""
 			return 1
@@ -49,7 +49,7 @@ getShadowLine() {
 
 	else
 
-		hashLine=`cat /etc/shadow | grep -E "^${user}:"` || {
+		hashLine=`cat /etc/shadow | egrep "^${user}:"` || {
 
 
 			echo ""

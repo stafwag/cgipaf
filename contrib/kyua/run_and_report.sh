@@ -26,9 +26,7 @@ myWhich () {
 
 	cmd=$1
 
-
-	cmdPath=`which cmd`
-
+	cmdPath=`which $cmd`
 
 	if [ -x "$cmdPath" ]; then
 

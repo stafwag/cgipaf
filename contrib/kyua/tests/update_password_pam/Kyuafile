@@ -3,4 +3,4 @@ syntax(2)
 
 test_suite('test pam (-n)')
 
-plain_test_program{name='update_password_pam.sh',timeout=600}
+plain_test_program{name='update_password_pam.sh',timeout=1200}

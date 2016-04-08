@@ -26,9 +26,7 @@ myWhich () {
 
 	cmd=$1
 
-
-	cmdPath=`which cmd`
-
+	cmdPath=`which $cmd`
 
 	if [ -x "$cmdPath" ]; then
 
@@ -63,7 +61,13 @@ else
 
 	fi
 
-	scriptName=`$pyRealPath $0`
+	scriptName=`$pyRealPath $0` || {
+
+		echo "ERROR: Sorry $pyRealPath $0 failed"
+		exit 1
+
+	}
+
 
 fi
 

@@ -3,4 +3,4 @@ syntax(2)
 
 test_suite('tst mv pwd_mkdb')
 
-plain_test_program{name='update_password_mv_pwd_mkdb.sh'}
+plain_test_program{name='update_password_mv_pwd_mkdb.sh',timeout=1200}

@@ -21,16 +21,10 @@
 . `dirname $0`/../config.sh
 
 
-echo $baseDir
+solTestDir="$baseDir/../"
 
-exit 2
-
-
-create_users/create_users.sh
-update_password_noargs/update_password_noargs.sh
-Kyuafile
-update_password_pam.sh
-Kyuafile
-update_password_nopam.sh
-Kyuafile
-update_password_md5.sh
+${solTestDir}/create_users/create_users.sh
+${solTestDir}/update_password_noargs/update_password_noargs.sh
+${solTestDir}/update_password_pam/update_password_pam.sh
+${solTestDir}/update_password_nopam/update_password_nopam.sh
+${solTestDir}/update_password_md5/update_password_md5.sh

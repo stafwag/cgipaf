@@ -44,20 +44,6 @@ myWhich () {
 }
 
 
-myWhich kyua || {
-
-	PATH=$PATH:/usr/local/bin
-
-	myWhich kyua || {
-
-
-		echo "kyua not found"
-		exit 1
-
-
-	}
-
-}
 
 myWhich realpath > /dev/null 2>&1
 
@@ -114,6 +100,12 @@ case "$os" in
 
 esac
 
+if [ ! -d "$reportDir" ]; then
+
+	echo "ERROR: reportDir \"$reportDir\"  doesn't exists"
+	exit 1
+
+fi
 
 if [ -f ${kyuaMainDir}/Kyuafile ]; then
 
@@ -126,17 +118,38 @@ if [ -f ${kyuaMainDir}/Kyuafile ]; then
 
 else
 
-	echo "ERROR: Kyuafile \"${kyuaMainDir}/Kyuafile\" not found"
-	exit 1
+
+	if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
+
+
+		${kyuaMainDir}/tst/run_tests.sh
+		exit $?
+
+
+	else
+
+		echo "ERROR: Kyuafile \"${kyuaMainDir}/Kyuafile\" not found"
+		echo "ERROR: script alternative \"${kyuaMainDir}/tst/run_tests.sh\" not found"
+		exit 1
+
+	fi
 
 fi
 
-if [ ! -d "$reportDir" ]; then
+myWhich kyua || {
 
-	echo "ERROR: reportDir \"$reportDir\"  doesn't exists"
-	exit 1
+	PATH=$PATH:/usr/local/bin
 
-fi
+	myWhich kyua || {
+
+
+		echo "kyua not found"
+		exit 1
+
+
+	}
+
+}
 
 kyua test
 kyua report-junit > ${reportDir}/kyua_report.xml

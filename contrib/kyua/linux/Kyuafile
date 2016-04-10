@@ -4,6 +4,5 @@ syntax(2)
 include("create_users/Kyuafile")
 include("update_password_noargs/Kyuafile")
 include("update_password_pam/Kyuafile")
-include("update_password_des/Kyuafile")
 include("update_password_md5/Kyuafile")
 

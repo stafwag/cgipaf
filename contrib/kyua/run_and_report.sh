@@ -162,4 +162,4 @@ exitCode=$?
 echo "Creating kyua report: \"kyua report-junit > ${reportDir}/kyua_report.xml\""
 kyua report-junit > ${reportDir}/kyua_report.xml
 
-exit $exitCode
+# exit $exitCode

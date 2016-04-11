@@ -176,6 +176,9 @@ while [ "$myCounter" -lt "$max" ]; do
 
 	echo "running chkpass..."
 
+	TERM=vt100
+	export TERM
+
 	cat $tmpFile | $chkPass || {
 
 		exitCode=$?

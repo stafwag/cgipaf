@@ -51,7 +51,7 @@ userAdd() {
 
 	isNetBsd && {
 
-		user add $user
+		/usr/sbin/user add $user
 		return $?
 
 	}

@@ -28,7 +28,15 @@ catPasswd() {
 
 	isBSD && {
 
-		EDITOR=cat vipw
+		viPw=vipw
+
+		which vipw || {
+
+			viPw=/usr/sbin/vipw
+
+		}
+
+		EDITOR=cat $viPw
 		return $?
 
 	}

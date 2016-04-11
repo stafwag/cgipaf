@@ -38,8 +38,18 @@ getShadowLine() {
 
 	if [ "$isBSD" = "yes" ]; then
 
+		viPw=vipw
 
-		hashLine=`EDITOR=cat vipw | egrep "^${user}:"` || {
+		which vipw || {
+
+
+			viPw=/usr/sbin/vipw
+
+
+		}
+
+
+		hashLine=`EDITOR=cat $viPw | egrep "^${user}:"` || {
 
 			echo ""
 			return 1

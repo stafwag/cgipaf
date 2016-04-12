@@ -148,6 +148,22 @@ myWhich kyua || {
 
 
 		echo "kyua not found"
+
+		if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
+
+
+			${kyuaMainDir}/tst/run_tests.sh
+			exit $?
+
+
+		else
+
+			echo "ERROR: Kyuafile \"${kyuaMainDir}/Kyuafile\" not found"
+			echo "ERROR: script alternative \"${kyuaMainDir}/tst/run_tests.sh\" not found"
+			exit 1
+
+		fi
+
 		exit 1
 
 

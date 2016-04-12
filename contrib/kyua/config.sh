@@ -119,6 +119,25 @@ isSolaris && {
 } 
 
 
+len=`$Echo "\n" | wc -l`
+
+if [ "$len" -ne "1" ]; then
+
+	Echo="/bin/echo"
+
+	len=`$Echo "\n" | wc -l`
+	
+	if [ "$len" -ne "1" ]; then
+
+		echo "Sorry no valid echo found"
+		exit 1
+
+	fi
+
+fi
+
+
+
 changepassDir="${baseDir}/../../../../"
 changepass="${changepassDir}/changepass"
 

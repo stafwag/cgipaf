@@ -1,4 +1,4 @@
-* version 1.3.5		( ?? ??? 2016)
+* version 1.3.5		( 13 Apr 2016)
   + BUGFIX: pwd_mkdb errors were not handled correctly on BSD 
   + kyua test scripts added 
 

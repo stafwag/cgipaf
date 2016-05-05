@@ -40,9 +40,23 @@ createUserList() {
 
                 fi
 
-                n=$(($n+1))
+		n=`expr $n + 1`
 
         done
+
+}
+
+isSolaris() {
+
+	uname | grep -i sunos > /dev/null && {
+
+		return 0
+
+
+	}
+
+	return 1
+
 
 }
 
@@ -59,9 +73,70 @@ isBSD () {
 
 }
 
+isFreeBsd () {
+
+	uname | grep -i freebsd > /dev/null && {
+
+		return 0
+
+	}
+
+	return 1
+
+
+}
+
+isNetBsd () {
+
+	uname | grep -i netbsd > /dev/null && {
+
+		return 0
+
+	}
+
+	return 1
+
+
+}
+
 scriptName=`basename $0`
 
 baseDir=`dirname $0`
+
+Echo="echo"
+
+isSolaris && {
+
+	Echo="/usr/ucb/echo"
+
+	if [ ! -x "$Echo" ]; then
+
+		echo "Sorry no valid echo found"
+		exit 1
+
+	fi
+
+} 
+
+
+len=`$Echo "\n" | wc -l`
+
+if [ "$len" -ne "1" ]; then
+
+	Echo="/bin/echo"
+
+	len=`$Echo "\n" | wc -l`
+	
+	if [ "$len" -ne "1" ]; then
+
+		echo "Sorry no valid echo found"
+		exit 1
+
+	fi
+
+fi
+
+
 
 changepassDir="${baseDir}/../../../../"
 changepass="${changepassDir}/changepass"

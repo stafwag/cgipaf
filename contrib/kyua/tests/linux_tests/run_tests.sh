@@ -1,8 +1,5 @@
-#! /usr/bin/env python3
+#!/bin/sh
 
-#
-# chkpass.py
-#
 # Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,59 +18,32 @@
 #
 #
 
+. `dirname $0`/../config.sh
 
 
-import os
-import re
-import pexpect
-from sys import stdin,stderr,stdout,argv
+solTestDir="$baseDir/../"
 
-prgName=os.path.basename(argv[0])
+exitCode=0
 
+${solTestDir}/create_users/create_users.sh
 
-def usage():
+exitCode=`expr $exitCode + $?`
 
-	print("Usage: <stdin> (username:password) " + prgName)
-	exit(1)
+${solTestDir}/update_password_noargs/update_password_noargs.sh
 
-if len(argv) !=1:
+exitCode=`expr $exitCode + $?`
 
-	usage() 
+${solTestDir}/update_password_pam/update_password_pam.sh
 
-for line in stdin:
+exitCode=`expr $exitCode + $?`
 
-	line=line.rstrip()
+${solTestDir}/update_password_nopam/update_password_nopam.sh
 
-	if len(line) == 0:
-		continue
+exitCode=`expr $exitCode + $?`
 
-	print("line = " + line + " len " + str(len(line)))
+${solTestDir}/update_password_md5/update_password_md5.sh
 
-	(user,password) = line.split(":")
+exitCode=`expr $exitCode + $?`
 
-	user=user.rstrip()
-	password=password.rstrip()
-
-	print("user:\"" + user + "\" password: \"" + password + "\"\n")
-
-	loginStr="ssh " + user + "@localhost"
-
-
-	try:
-
-		mySsh=pexpect.spawn(loginStr)
-		mySsh.expect("assword.*:")
-		mySsh.sendline(password)
-		mySsh.expect("\$ ")
-		mySsh.send("exit")
-
-	except Exception as e:
-
-		print("logon failed",e)
-		exit(1)
-
-	
-
-
-
+exit $exitCode
 

@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 #
-# chkpass.py
+# realpath.py
 #
 # Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
 #
@@ -21,11 +21,7 @@
 #
 #
 
-
-
 import os
-import re
-import pexpect
 from sys import stdin,stderr,stdout,argv
 
 prgName=os.path.basename(argv[0])
@@ -33,46 +29,16 @@ prgName=os.path.basename(argv[0])
 
 def usage():
 
-	print("Usage: <stdin> (username:password) " + prgName)
-	exit(1)
+        print("Usage: <stdin> (username:password) " + prgName)
+        exit(1)
 
-if len(argv) !=1:
+if len(argv) !=2:
 
-	usage() 
+        usage()
 
-for line in stdin:
+myPath=argv[1]
 
-	line=line.rstrip()
-
-	if len(line) == 0:
-		continue
-
-	print("line = " + line + " len " + str(len(line)))
-
-	(user,password) = line.split(":")
-
-	user=user.rstrip()
-	password=password.rstrip()
-
-	print("user:\"" + user + "\" password: \"" + password + "\"\n")
-
-	loginStr="ssh " + user + "@localhost"
-
-
-	try:
-
-		mySsh=pexpect.spawn(loginStr)
-		mySsh.expect("assword.*:")
-		mySsh.sendline(password)
-		mySsh.expect("\$ ")
-		mySsh.send("exit")
-
-	except Exception as e:
-
-		print("logon failed",e)
-		exit(1)
-
-	
+print(os.path.realpath(myPath))
 
 
 

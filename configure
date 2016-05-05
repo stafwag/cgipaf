@@ -2381,12 +2381,8 @@ $as_echo "\"Major version below 7 disabling PAM\"" >&6; }
 $as_echo "\"Version below 7.3 disabling PAM\"" >&6; }
     					ARG="NOPAM"
 
+
 				fi
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if modern crypt shoud support sha2 protocols" >&5
-$as_echo_n "checking Verifing if modern crypt shoud support sha2 protocols... " >&6; }
-
-$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
-
 
 			fi
 
@@ -2394,8 +2390,30 @@ $as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
 
 		if test "$ARG" = "WITHPAM"; then
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"yes\"" >&5
-$as_echo "\"yes\"" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+		fi
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if modern crypt is supported" >&5
+$as_echo_n "checking Verifing if modern crypt is supported... " >&6; }
+
+		if test "$MAJORREL" -ge 7; then
+
+
+$as_echo "#define MODERNCRYPT 1" >>confdefs.h
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Verifing if modern crypt supports SHA2" >&5
+$as_echo_n "checking Verifing if modern crypt supports SHA2... " >&6; }
+
+$as_echo "#define MODERNCRYPT_SHA2 1" >>confdefs.h
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
 		fi
 

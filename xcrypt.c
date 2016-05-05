@@ -237,6 +237,7 @@ int cryptstr2int(const char *txt)
 char ** xcrypt_supported_crypts() {
 
 #ifdef MODERNCRYPT
+
 #ifdef MODERNCRYPT_SHA2 /* SHA2 */
 	static char *ret[]={"des","md5","sha256","sha512",NULL};
 #else

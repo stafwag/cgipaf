@@ -1,7 +1,7 @@
-#! /usr/bin/env python3
+#!/bin/sh
 
 #
-# chkpass.py
+# update_password_mv_pwd_mkdb.sh
 #
 # Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
 #
@@ -23,57 +23,36 @@
 
 
 
-import os
-import re
-import pexpect
-from sys import stdin,stderr,stdout,argv
+. `dirname $0`/../config.sh
 
-prgName=os.path.basename(argv[0])
+mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst || {
 
 
-def usage():
+	echo "ERROR: mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst failed"
+	exit 1
 
-	print("Usage: <stdin> (username:password) " + prgName)
-	exit(1)
+}
 
-if len(argv) !=1:
+echo "tst1:qwerty" | $changepass -n
 
-	usage() 
+exitCode=$?
 
-for line in stdin:
+mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb || {
 
-	line=line.rstrip()
+	echo "ERROR: mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb failed"
+	exit 1	
 
-	if len(line) == 0:
-		continue
+}
 
-	print("line = " + line + " len " + str(len(line)))
+if [ "$exitCode" = 0 ]; then
 
-	(user,password) = line.split(":")
-
-	user=user.rstrip()
-	password=password.rstrip()
-
-	print("user:\"" + user + "\" password: \"" + password + "\"\n")
-
-	loginStr="ssh " + user + "@localhost"
+	echo "ERROR: changepass was successful but it should fail"
+	exit 1
 
 
-	try:
+fi
 
-		mySsh=pexpect.spawn(loginStr)
-		mySsh.expect("assword.*:")
-		mySsh.sendline(password)
-		mySsh.expect("\$ ")
-		mySsh.send("exit")
-
-	except Exception as e:
-
-		print("logon failed",e)
-		exit(1)
+exit 0
 
 	
-
-
-
 

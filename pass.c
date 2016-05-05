@@ -417,7 +417,7 @@ if (uf) {
    /* assume FREEBSD */
 #else
    char *mppath = _PATH_PWD;
-   char *pwd_mkdb_file=basename(TMPFILE);
+   char *pwd_mkdb_file=TMPFILE;
 #endif
 #endif
    
@@ -429,7 +429,9 @@ if (uf) {
 
 	}
       	else {
+
          	execl(_PATH_PWD_MKDB,"pwd_mkdb","-p","-d",mppath,"-u",name,pwd_mkdb_file,NULL);
+
 	}
 
       return(-14);
@@ -659,7 +661,6 @@ if (i<0) return(i);   /* can't update password */
 
 #ifdef SOLARISHOST
 
-fprintf(stderr,"DEBUG start unlink\n");
 
 if (!strcmp(passwdfile,SHADOWFILE)) {
    if(lstat(OSHADOWFILE,&st)!=-1) {

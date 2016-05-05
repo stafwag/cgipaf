@@ -28,7 +28,15 @@ catPasswd() {
 
 	isBSD && {
 
-		EDITOR=cat vipw
+		viPw=vipw
+
+		which vipw || {
+
+			viPw=/usr/sbin/vipw
+
+		}
+
+		EDITOR=cat $viPw
 		return $?
 
 	}
@@ -42,14 +50,39 @@ userAdd() {
 
 	user=$1
 
-	isBSD && {
+	isFreeBsd && {
 
 		pw useradd $user
 		return $?
 
 	}
 
-	useradd $user
+	isNetBsd && {
+
+		/usr/sbin/user add $user
+		return $?
+
+	}
+
+	myUserAdd=`which useradd > /dev/null 2>&1` && {
+
+		if [ -x "$myUserAdd" ]; then
+
+			$myUserAdd $user
+			return $?
+
+		fi
+
+	}
+
+	if [ ! -x /usr/sbin/useradd ]; then
+
+		echo "ERROR: no working useradd found"
+		exit 13
+
+	fi
+
+	/usr/sbin/useradd $user
 
 }
 

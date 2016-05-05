@@ -53,9 +53,8 @@ case $host_os in
 					AC_MSG_RESULT("Version below 7.3 disabling PAM")
     					ARG="NOPAM"
 
+
 				fi
-				AC_MSG_CHECKING(Verifing if modern crypt shoud support sha2 protocols)
-				AC_DEFINE(MODERNCRYPT_SHA2,1,FreeBSD 7.3 should support sha2)
 
 			fi
 
@@ -63,7 +62,21 @@ case $host_os in
 
 		if test "$ARG" = "WITHPAM"; then
 
-			AC_MSG_RESULT("yes")
+			AC_MSG_RESULT(yes)
+
+		fi
+
+
+		AC_MSG_CHECKING(Verifing if modern crypt is supported)
+
+		if test "$MAJORREL" -ge 7; then
+
+			AC_DEFINE(MODERNCRYPT,1,FreeBSD 8+ should support modern crypt)
+			AC_MSG_RESULT(yes)
+
+			AC_MSG_CHECKING(Verifing if modern crypt supports SHA2)
+			AC_DEFINE(MODERNCRYPT_SHA2,1,FreeBSD  8+ should support sha2)
+			AC_MSG_RESULT(yes)
 
 		fi
 

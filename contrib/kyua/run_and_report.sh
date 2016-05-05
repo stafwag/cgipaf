@@ -21,14 +21,58 @@
 #
 #
 
-which kyua || {
+myWhich () {
 
-	PATH=$PATH:/usr/local/bin
+
+	cmd=$1
+
+	cmdPath=`which $cmd`
+
+	if [ -x "$cmdPath" ]; then
+
+
+		return 0
+
+
+	fi
+
+	return 1
+
 
 }
 
-scriptName=`realpath $0`
+
+
+myWhich realpath > /dev/null 2>&1
+
+if [ $? = "0" ]; then
+
+	scriptName=`realpath $0`
+
+else
+
+	toolsDir="`dirname $0`/tools/"
+	pyRealPath="${toolsDir}/realpath.py"
+
+	if [ ! -x "${pyRealPath}" ]; then
+
+		echo "ERROR: no realpath tool found"
+		exit 1
+
+	fi
+
+	scriptName=`$pyRealPath $0` || {
+
+		echo "ERROR: Sorry $pyRealPath $0 failed"
+		exit 1
+
+	}
+
+
+fi
+
 scriptDir=`dirname $scriptName`
+
 reportDir="${scriptDir}/reports/"
 
 os=`uname| tr [A-Z] [a-z]`
@@ -43,10 +87,13 @@ kyuaMainDir=""
 case "$os" in
 
 	"linux")
-		kyuaMainDir="scriptDir/$os"
+		kyuaMainDir="${scriptDir}/$os"
 		;;
-	"freebsd")
-		kyuaMainDir="scriptDir/${os}/${majorRelease}"
+	"freebsd"|"netbsd")
+		kyuaMainDir="${scriptDir}/${os}/${majorRelease}"
+		;;
+	"sunos")
+		kyuaMainDir="${scriptDir}/solaris/${release}"
 		;;
 	*)
 
@@ -57,6 +104,12 @@ case "$os" in
 
 esac
 
+if [ ! -d "$reportDir" ]; then
+
+	echo "ERROR: reportDir \"$reportDir\"  doesn't exists"
+	exit 1
+
+fi
 
 if [ -f ${kyuaMainDir}/Kyuafile ]; then
 
@@ -69,17 +122,60 @@ if [ -f ${kyuaMainDir}/Kyuafile ]; then
 
 else
 
-	echo "ERROR: Kyuafile not found"
-	exit 1
+
+	if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
+
+
+		${kyuaMainDir}/tst/run_tests.sh
+		exit $?
+
+
+	else
+
+		echo "ERROR: Kyuafile \"${kyuaMainDir}/Kyuafile\" not found"
+		echo "ERROR: script alternative \"${kyuaMainDir}/tst/run_tests.sh\" not found"
+		exit 1
+
+	fi
 
 fi
 
-if [ ! -d "$reportDir" ]; then
+myWhich kyua || {
 
-	echo "ERROR: reportDir \"$reportDir\"  doesn't exists"
-	exit 1
+	PATH=$PATH:/usr/local/bin
 
-fi
+	myWhich kyua || {
+
+
+		echo "kyua not found"
+
+		if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
+
+
+			${kyuaMainDir}/tst/run_tests.sh
+			exit $?
+
+
+		else
+
+			echo "ERROR: Kyuafile \"${kyuaMainDir}/Kyuafile\" not found"
+			echo "ERROR: script alternative \"${kyuaMainDir}/tst/run_tests.sh\" not found"
+			exit 1
+
+		fi
+
+		exit 1
+
+
+	}
+
+}
 
 kyua test
+
+exitCode=$?
+
+echo "Creating kyua report: \"kyua report-junit > ${reportDir}/kyua_report.xml\""
 kyua report-junit > ${reportDir}/kyua_report.xml
+
+exit $exitCode

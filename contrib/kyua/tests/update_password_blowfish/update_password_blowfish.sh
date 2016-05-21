@@ -1,6 +1,8 @@
+#!/bin/sh
 
-syntax(2)
 
-test_suite('test blowfish')
+. `dirname $0`/../config.sh
 
-plain_test_program{name='update_password_blowfish.sh',timeout=3600}
+requiredHashType="blowfish"
+
+update_passwords -c blowfish

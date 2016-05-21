@@ -166,6 +166,7 @@ int is_des(char *p) {
    if (p[0] == '*') return(0);
    if (strlen(p)<4) return(1);
    if (is_sha1(p)) return(0);
+   if (is_blowfish(p)) return(0);
    if (p[0]=='$' && p[2]=='$') return(0);
 
    return(1);
@@ -414,7 +415,6 @@ char *xcryptbyid(const char *pass, int typeint,void *arg) {
 #ifdef OPENBSD_BLOWFISH
 
 		case 2:
-
                 	ret=xmalloc(255);
 
                 	if (crypt_newhash(pass, "blowfish,8", ret,254)!=0) {
@@ -479,7 +479,12 @@ char *xcryptbyid(const char *pass, int typeint,void *arg) {
 	int hashtype;
 	hashtype=hash2crypttype(ret);
 
-	if(hashtype!=typeint) return(NULL);
+	if(hashtype!=typeint) {
+
+
+ 		return(NULL);
+
+	}
 
 	return(ret);
 

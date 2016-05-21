@@ -25,6 +25,7 @@ int main() {
 
 	else {
 
+		puts("DES:");
 		puts(e);
 
 
@@ -34,7 +35,7 @@ int main() {
 
 	if (mysalt!=NULL) {  
 
-		e=crypt("password",crypt_make_salt("UNKOWN",NULL));
+		e=crypt("password",crypt_make_salt("UNKNOWN",NULL));
 
 		if (e==NULL) {
 
@@ -44,6 +45,7 @@ int main() {
 
 		else {
 
+			puts("unknown:");
 			puts(e);
 
 
@@ -67,6 +69,7 @@ int main() {
 
 	else {
 
+		puts("md5:");
 		puts(e);
 
 
@@ -84,6 +87,8 @@ int main() {
 
 	else {
 
+		puts("sha256:");
+
 		puts(e);
 
 
@@ -99,6 +104,7 @@ int main() {
 
 	else {
 
+		puts("sha512:");
 		puts(e);
 
 

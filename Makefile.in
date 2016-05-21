@@ -125,3 +125,7 @@ dist-clean: clean
 	rm -f cgipaf.conf
 	rm -f config.h
 	rm -f *~
+	rm -f contrib/kyua/tmp/*
+	rm -f contrib/kyua/reports/kyua_report.xml
+	rm -f tst/tstcrypt
+	

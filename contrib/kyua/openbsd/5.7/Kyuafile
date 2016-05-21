@@ -1,0 +1,10 @@
+
+syntax(2)
+
+include("create_users/Kyuafile")
+include("update_password_noargs/Kyuafile")
+include("update_password_nopam/Kyuafile")
+include("update_password_mv_pwd_mkdb/Kyuafile")
+include("update_password_des/Kyuafile")
+include("update_password_blowfish/Kyuafile")
+

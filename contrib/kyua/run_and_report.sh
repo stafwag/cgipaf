@@ -92,8 +92,8 @@ case "$os" in
 	"freebsd"|"netbsd")
 		kyuaMainDir="${scriptDir}/${os}/${majorRelease}"
 		;;
-	"sunos")
-		kyuaMainDir="${scriptDir}/solaris/${release}"
+	"sunos"|"openbsd")
+		kyuaMainDir="${scriptDir}/${os}/${release}"
 		;;
 	*)
 

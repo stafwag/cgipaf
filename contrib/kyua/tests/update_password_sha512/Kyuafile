@@ -1,6 +1,6 @@
 
 syntax(2)
 
-test_suite('test pam (-p)')
+test_suite('test sha512')
 
-plain_test_program{name='update_password_sha512.sh',timeout=600}
+plain_test_program{name='update_password_sha512.sh',timeout=3600}

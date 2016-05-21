@@ -1,6 +1,6 @@
 
 syntax(2)
 
-test_suite('test pam (-n)')
+test_suite('test nopam (-n)')
 
-plain_test_program{name='update_password_nopam.sh', timeout=1200}
+plain_test_program{name='update_password_nopam.sh', timeout=3600}

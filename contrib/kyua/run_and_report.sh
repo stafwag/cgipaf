@@ -127,6 +127,19 @@ else
 
 
 		${kyuaMainDir}/tst/run_tests.sh
+
+		exitCode=$?
+
+		if [ "$exitCode" == "0" ]; then
+
+			touch ${reportDir}/kyua_report.xml
+
+		else 
+
+			rm ${reportDir}/kyua_report.xml
+
+		fi
+
 		exit $?
 
 

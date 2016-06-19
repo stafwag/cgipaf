@@ -125,6 +125,7 @@ else
 
 	if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
 
+		echo "Running ${kyuaMainDir}/tst/run_tests.sh"
 
 		${kyuaMainDir}/tst/run_tests.sh
 
@@ -132,15 +133,19 @@ else
 
 		if [ "$exitCode" == "0" ]; then
 
+			echo "Test were successful creating ${reportDir}/kyua_report.xml"
+
 			touch ${reportDir}/kyua_report.xml
 
 		else 
+
+			echo "ERROR: test failed unlinking ${reportDir}/kyua_report.xml"
 
 			rm ${reportDir}/kyua_report.xml
 
 		fi
 
-		exit $?
+		exit $exitCode
 
 
 	else

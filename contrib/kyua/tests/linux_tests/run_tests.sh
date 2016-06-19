@@ -30,20 +30,34 @@ ${solTestDir}/create_users/create_users.sh
 exitCode=`expr $exitCode + $?`
 
 ${solTestDir}/update_password_noargs/update_password_noargs.sh
-
+ 
 exitCode=`expr $exitCode + $?`
-
+ 
 ${solTestDir}/update_password_pam/update_password_pam.sh
-
+ 
 exitCode=`expr $exitCode + $?`
-
+ 
 ${solTestDir}/update_password_nopam/update_password_nopam.sh
-
+ 
 exitCode=`expr $exitCode + $?`
-
+ 
 ${solTestDir}/update_password_md5/update_password_md5.sh
-
+ 
 exitCode=`expr $exitCode + $?`
+
+if [ "$exitCode" = "0" ]; then
+
+     echo "Test were successful creating ${reportDir}/kyua_report.xml"
+
+     touch ${reportDir}/kyua_report.xml
+
+else
+
+     echo "ERROR: test failed unlinking ${reportDir}/kyua_report.xml"
+
+     rm ${reportDir}/kyua_report.xml
+
+fi
 
 exit $exitCode
 

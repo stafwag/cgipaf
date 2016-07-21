@@ -75,6 +75,11 @@ scriptDir=`dirname $scriptName`
 
 reportDir="${scriptDir}/reports/"
 
+export scriptDir
+export reportDir
+
+echo "DEBUG: reportDir: $reportDir"
+
 os=`uname| tr [A-Z] [a-z]`
 release=`uname -r | sed -e 's/^\([^.]*\.[^.]*\)\..*/\1/'`
 majorRelease=`echo $release | cut -f1 -d\.`
@@ -121,7 +126,6 @@ if [ -f ${kyuaMainDir}/Kyuafile ]; then
 	}
 
 else
-
 
 	if [ -x "${kyuaMainDir}/tst/run_tests.sh" ]; then
 

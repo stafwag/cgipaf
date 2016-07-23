@@ -3,6 +3,7 @@
 <properties>
 </properties>
 <testcase classname="dummy.sh" name="main" time="10">
+</testcase>
 <system-out>
 </system-out>
 <system-err>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<testsuite>
+<properties>
+</properties>
+<testcase classname="dummy.sh" name="main" time="10">
+<system-out>
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+

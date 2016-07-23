@@ -49,7 +49,7 @@ if [ "$exitCode" = "0" ]; then
 
      echo "Test were successful creating ${reportDir}/kyua_report.xml"
 
-     touch ${reportDir}/kyua_report.xml
+     cp ${reportDir}/kyua_report_dummy_ok.xml ${reportDir}/kyua_report.xml
 
 else
 

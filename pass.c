@@ -1,7 +1,7 @@
 /*
  * pass.c
  *
- * Copyright (C) 2000,2002,2007,2015 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2000,2002,2007,2015,2016 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -479,6 +479,7 @@ int chpw(struct pw_info *pw,char *pass)
  * returns:
  *             -2:  lockfile exists
  *             -3:  can't create lockfile
+ *             -13:  unsupported crypt type
  */
 
 int chpw_nopam (struct pw_info *pw, char *pass,int mode)
@@ -491,6 +492,16 @@ char *passwdfile=PASSWDFILE;
 char *encrypt_pass=NULL;
 struct stat st;
 
+if (mode<5) {
+
+	if(!is_crypt_id_supported(mode)) {
+
+		return(-13);
+
+
+	}
+
+}
 
 /*
  * wait until the lockfile is unlocked
@@ -584,7 +595,11 @@ switch(mode) {
 	default:
 		i=get_crypttype(pw);
 
-		if(i==-1) i=xcrypt_best_supported_crypt_id();
+		if( (i==-1) || !is_crypt_id_supported(i) ) {
+
+				i=xcrypt_best_supported_crypt_id();
+
+		}
 
 }
 

@@ -43,6 +43,7 @@ int is_sha1(char *p);
 int is_sha256(char *p);
 int is_sha512(char *p);
 int is_des(char *p);
+int xcrypt_set_supported_crypts_type(int crypt_type);
 char ** xcrypt_supported_crypts();
 int * xcrypt_supported_crypt_ids();
 int is_crypt_supported(char * hashname);

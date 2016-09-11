@@ -1,7 +1,7 @@
 /*
  * changepass.c
  *
- * Copyright (C) 2002,2006,2007,2015 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002,2006,2007,2015,2016 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,12 +55,26 @@ int isoptarg(char *optstr) {
 
 void usage() {
 
-	char txt_copyright[]="                        (GPL) 2002-2015 Belgie  Belgium\n                                                            Staf Wagemakers\n                                                  email: staf@wagemakers.be";
+	char txt_copyright[]="                        (GPL) 2002-2016 Belgie  Belgium\n                                                            Staf Wagemakers\n                                                  email: staf@wagemakers.be";
 
 	char txt_usage000[]="[OPTION]\n\noptions:\n\n -h,--help\t\tprint this help\n -n,--nopam\t\tdon't use pam\n";
 	char txt_usage001[]=" -p,--pam\t\tuse pam (default)\n";
 	char txt_usage002[]=" -e,--encrypt\t\tpassword is already encrypted";
-	char txt_usage003[]=" -m,--md5\t\tuse md5 algorithm";
+	char txt_md5_supported[]=" -m,--md5\t\tuse md5 algorithm";
+	char txt_md5_unsupported[]=" -m,--md5\t\tuse md5 algorithm (unsupported on this platform)";
+	char *txt_usage003;
+
+	if(is_crypt_supported("md5")) {
+
+		txt_usage003=txt_md5_supported;
+
+	}
+	else {
+		txt_usage003=txt_md5_unsupported;
+
+
+	}
+
 	char txt_usage004[]=" -c,--crypt-method\tuse";
 	char txt_usage005[]="crypt method";
 	char txt_usage006[]=" -s,--sha-rounds\tnumber of sha2 rounds\n";
@@ -218,6 +232,13 @@ int main (int argn,char **argv)
 						if (md5flag) {
 
 							fprintf(stderr,"Sorry, -m can only be used ones\n\n");
+							hlpflag=1;
+
+						}
+
+						if (!is_crypt_supported("md5")) {
+
+							fprintf(stderr,"Sorry, md5 is not supported on this platform\n\n");
 							hlpflag=1;
 
 						}
@@ -751,6 +772,7 @@ int main (int argn,char **argv)
 	   			if (md5flag) {
 
 		   			mode=1;
+
 
 	   			}
 	   			else {

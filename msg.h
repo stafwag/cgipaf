@@ -1,7 +1,7 @@
 /*
  * msg.h
  *
- * Copyright (C) 1999,2000-03 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999,2000-03,2016 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ char msg_changed[]   =	"Password changed...\n";
 char msg_updated[]   =  "Mail configuration updated...\n";
 char *err_chpw[]     ={	"Couldn't open passwd file",                 /* 0 */
 			"Couldn't lock passwd file",                 /* 1 */
-			"Couldnt't lock lockfile",                   /* 2 */
+			"Couldn't lock lockfile",                    /* 2 */
 			"Couldn't open tmp file",                    /* 3 */
 			"fileno() failed",                           /* 4 */
 			"fchmod() failed",                           /* 5 */

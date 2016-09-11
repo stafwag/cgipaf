@@ -230,6 +230,28 @@ int cryptstr2int(const char *txt)
 
 }
 
+/*
+ * set the supported behaviour
+ *
+ * 0 -> work with all supported crypts
+ * 1 -> work with only passwd support crypt (default)
+ */
+
+int xcrypt_set_supported_crypts_type(int crypt_type) {
+
+        static xcrypt_supported_crypt_type=1;
+
+        if (crypt_type != -1 ) {
+
+                xcrypt_supported_crypt_type=crypt_type;
+
+        }
+
+        return xcrypt_supported_crypt_type;
+
+
+}
+
 
 /*
  * returns an array with the supported crypt types
@@ -237,28 +259,53 @@ int cryptstr2int(const char *txt)
 
 char ** xcrypt_supported_crypts() {
 
+	char **ret=NULL;
+
 #ifdef MODERNCRYPT
 
 #ifdef MODERNCRYPT_SHA2 /* SHA2 */
-	static char *ret[]={"des","md5","sha256","sha512",NULL};
+	static char *supported_crypts[]={"des","md5","sha256","sha512",NULL};
+	static char **passwd_supported_crypts=supported_crypts;
 #else
 #ifdef  NETBSD_SHA1 /* NETBSD */
-	static char *ret[]={"des","md5","sha1",NULL};
+	static char *supported_crypts[]={"des","md5","sha1",NULL};
+	static char **passwd_supported_crypts=supported_crypts;
 #else
-	static char *ret[]={"des","md5",NULL};
+	static char *supported_crypts[]={"des","md5",NULL};
+	static char **passwd_supported_crypts=supported_crypts;
 #endif	            /* NETBSD */	
 #endif	            /* SHA2 */	
 #else
 #ifdef MD5_CRYPT /* MD5 */
 #ifdef OPENBSD_BLOWFISH /* OPENBSD */
-	static char *ret[]={"des","md5","blowfish",NULL};
+	
+	static char *supported_crypts[]={"des","md5","blowfish",NULL};
+	static char *passwd_supported_crypts[]={"blowfish",NULL};
 #else
-	static char *ret[]={"des","md5",NULL};
+	static char *supported_crypts[]={"des","md5",NULL};
+	static char **passwd_supported_crypts=supported_crypts;
 #endif			/* OPENBSD */
 #else
-	static char *ret[]={"des",NULL};
+	static char *supported_crypts[]={"des",NULL};
+	static char **passwd_supported_crypts=supported_crypts;
 #endif		    /* MD5 */
 #endif  /* MODERNCRYPT */
+
+	switch(xcrypt_set_supported_crypts_type(-1)) {
+
+		case 0:
+			ret=supported_crypts;
+			break;
+
+		case 1:
+			ret=passwd_supported_crypts;
+			break;
+
+		default:
+			ret=supported_crypts;
+			break;
+
+	}
 
 	return(ret);
 

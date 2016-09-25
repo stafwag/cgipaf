@@ -217,13 +217,14 @@ case $host_os in
 
 		if test $MAJORREL -lt "5"; then
 
-  	   		AC_MSG_ERROR($host_os is not supported)
+  	   		AC_MSG_ERROR($host_os is not supported major version too low)
 
-		fi
 
-		if test $MINORREL -lt "7"; then
+			if test $MINORREL -lt "7"; then
 
-  	   		AC_MSG_ERROR($host_os is not supported)
+  	   			AC_MSG_ERROR($host_os is not supported minor version too low)
+
+			fi
 
 		fi
 		AC_MSG_RESULT(yes)

@@ -2611,13 +2611,14 @@ $as_echo_n "checking Checking if this OpenBSD Release is supported... " >&6; }
 
 		if test $MAJORREL -lt "5"; then
 
-  	   		as_fn_error $? "$host_os is not supported" "$LINENO" 5
+  	   		as_fn_error $? "$host_os is not supported major version too low" "$LINENO" 5
 
-		fi
 
-		if test $MINORREL -lt "7"; then
+			if test $MINORREL -lt "7"; then
 
-  	   		as_fn_error $? "$host_os is not supported" "$LINENO" 5
+  	   			as_fn_error $? "$host_os is not supported minor version too low" "$LINENO" 5
+
+			fi
 
 		fi
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5

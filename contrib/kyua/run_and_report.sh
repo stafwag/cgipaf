@@ -91,13 +91,13 @@ kyuaMainDir=""
 
 case "$os" in
 
-	"linux")
+	"linux"|"openbsd")
 		kyuaMainDir="${scriptDir}/$os"
 		;;
 	"freebsd"|"netbsd")
 		kyuaMainDir="${scriptDir}/${os}/${majorRelease}"
 		;;
-	"sunos"|"openbsd")
+	"sunos")
 		kyuaMainDir="${scriptDir}/${os}/${release}"
 		;;
 	*)
@@ -197,7 +197,29 @@ kyua test
 
 exitCode=$?
 
-echo "Creating kyua report: \"kyua report-junit > ${reportDir}/kyua_report.xml\""
-kyua report-junit > ${reportDir}/kyua_report.xml
+kyua help 2>&1 | grep -i report-junit
+
+if [ $? = "0" ]; then
+
+	echo "Creating kyua report: \"kyua report-junit > ${reportDir}/kyua_report.xml\""
+	kyua report-junit > ${reportDir}/kyua_report.xml
+
+else
+
+	if [ $exitCode = "0" ]; then
+
+		echo "No kyua report-junit support: using dummy report"
+		cp ${reportDir}/../dummy_reports/kyua_report_dummy_ok.xml ${reportDir}/kyua_report.xml
+
+	else
+
+		echo "kyua failed"
+
+		rm ${reportDir}/kyua_report.xml
+
+
+	fi
+
+fi
 
 exit $exitCode

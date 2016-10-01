@@ -47,7 +47,7 @@ exitCode=`expr $exitCode + $?`
 
 if [ "$exitCode" = "0" ]; then
 
-     echo "Test were successful creating ${reportDir}/kyua_report.xml"
+     echo "(linux tests) Tests were successful creating ${reportDir}/kyua_report.xml"
 
      cp ${reportDir}/../dummy_reports/kyua_report_dummy_ok.xml ${reportDir}/kyua_report.xml
 

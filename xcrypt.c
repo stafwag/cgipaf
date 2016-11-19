@@ -239,7 +239,7 @@ int cryptstr2int(const char *txt)
 
 int xcrypt_set_supported_crypts_type(int crypt_type) {
 
-        static xcrypt_supported_crypt_type=1;
+        static int xcrypt_supported_crypt_type=1;
 
         if (crypt_type != -1 ) {
 

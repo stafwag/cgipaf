@@ -135,7 +135,7 @@ else
 
 		exitCode=$?
 
-		if [ "$exitCode" == "0" ]; then
+		if [ "$exitCode" = "0" ]; then
 
 			echo "Tests were successful creating ${reportDir}/kyua_report.xml"
 			cp ${reportDir}/../dummy_reports/kyua_report_dummy_ok.xml ${reportDir}/kyua_report.xml

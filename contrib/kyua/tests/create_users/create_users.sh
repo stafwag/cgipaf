@@ -80,11 +80,11 @@ userAdd() {
 
 	}
 
-	$userAddArg="-m"
+	userAddArg=""
 
-	isOpenBsd && {
+	isLinux && {
 
-		$userAddArg=""
+		userAddArg="-m"
 
 	}
 

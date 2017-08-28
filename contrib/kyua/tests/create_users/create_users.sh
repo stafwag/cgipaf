@@ -23,6 +23,8 @@
 
 . `dirname $0`/../config.sh
 
+
+
 catPasswd() {
 
 
@@ -64,18 +66,17 @@ userAdd() {
 
 	}
 
-	myUserAdd=`which useradd > /dev/null 2>&1` || {
+	myUserAdd=`which useradd` || {
 
 
-		if [ ! -x /usr/sbin/useradd ]; then
+		if [ -x /usr/sbin/useradd ]; then
 
-			echo "ERROR: no working useradd found"
-			exit 13
+			myUserAdd="/usr/sbin/useradd"
 
 		fi
 
-		myUserAdd=`/usr/sbin/useradd`
-
+		echo "ERROR: no working useradd found"
+		exit 13
 
 	}
 
@@ -86,7 +87,7 @@ userAdd() {
 
 	fi
 
-	echo "ERROR: useradd $myUserAdd does not working"
+	echo "ERROR: useradd \"$myUserAdd\" does not work"
 	exit 13
 
 

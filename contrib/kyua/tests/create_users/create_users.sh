@@ -3,7 +3,7 @@
 #
 # create_users.sh
 #
-# Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2017 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,25 +64,32 @@ userAdd() {
 
 	}
 
-	myUserAdd=`which useradd > /dev/null 2>&1` && {
+	myUserAdd=`which useradd > /dev/null 2>&1` || {
 
-		if [ -x "$myUserAdd" ]; then
 
-			$myUserAdd $user
-			return $?
+		if [ ! -x /usr/sbin/useradd ]; then
+
+			echo "ERROR: no working useradd found"
+			exit 13
 
 		fi
 
+		myUserAdd=`/usr/sbin/useradd`
+
+
 	}
 
-	if [ ! -x /usr/sbin/useradd ]; then
+	if [ -x "$myUserAdd" ]; then
 
-		echo "ERROR: no working useradd found"
-		exit 13
+		$myUserAdd -m $user
+		return $?
 
 	fi
 
-	/usr/sbin/useradd $user
+	echo "ERROR: useradd $myUserAdd does not working"
+	exit 13
+
+
 
 }
 
@@ -97,8 +104,7 @@ checkIfUserExists() {
 
 	fi
 
-	
-	catPasswd | sed -e 's/^\([^:]*:\).*$/\1/g' | grep "$user:" >/dev/null && {
+	id $user && {
 
 		 return 0 
 

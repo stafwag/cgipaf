@@ -3,7 +3,7 @@
 #
 # config.sh
 #
-# Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2017 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,6 +43,22 @@ createUserList() {
 		n=`expr $n + 1`
 
         done
+
+}
+
+isLinux() {
+
+        uname | grep -i linux > /dev/null && {
+
+                return 0
+
+
+        }
+
+        return 1
+
+
+
 
 }
 
@@ -87,6 +103,19 @@ isFreeBsd () {
 }
 
 isNetBsd () {
+
+	uname | grep -i netbsd > /dev/null && {
+
+		return 0
+
+	}
+
+	return 1
+
+
+}
+
+isOpenBsd () {
 
 	uname | grep -i netbsd > /dev/null && {
 

@@ -22,7 +22,7 @@
 
 while read userLine; do
 
-        echo $userLine | grep -E "^tst..\:" > /dev/null && {
+        echo $userLine | grep -E "^tst.{1,2}\:" > /dev/null && {
 
                 user=`echo $userLine | cut -f 1 -d \:`
 

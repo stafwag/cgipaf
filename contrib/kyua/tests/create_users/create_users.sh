@@ -80,9 +80,18 @@ userAdd() {
 
 	}
 
+	$userAddArg="-m"
+
+	isOpenBsd && {
+
+		$userAddArg=""
+
+	}
+
+
 	if [ -x "$myUserAdd" ]; then
 
-		$myUserAdd -m $user
+		$myUserAdd $userAddArg $user
 		return $?
 
 	fi

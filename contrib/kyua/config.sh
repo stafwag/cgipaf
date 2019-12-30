@@ -3,7 +3,7 @@
 #
 # config.sh
 #
-# Copyright (C) 2016, 2017 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2017, 2019 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -57,9 +57,6 @@ isLinux() {
 
         return 1
 
-
-
-
 }
 
 isSolaris() {
@@ -73,7 +70,6 @@ isSolaris() {
 
 	return 1
 
-
 }
 
 isBSD () {
@@ -85,7 +81,6 @@ isBSD () {
 	}
 
 	return 1
-
 
 }
 
@@ -99,7 +94,6 @@ isFreeBsd () {
 
 	return 1
 
-
 }
 
 isNetBsd () {
@@ -111,7 +105,6 @@ isNetBsd () {
 	}
 
 	return 1
-
 
 }
 
@@ -125,7 +118,6 @@ isOpenBsd () {
 
 	return 1
 
-
 }
 
 scriptName=`basename $0`
@@ -136,17 +128,24 @@ Echo="echo"
 
 isSolaris && {
 
-	Echo="/usr/ucb/echo"
+        if [ -x "/usr/bin/gecho" ]; then
 
-	if [ ! -x "$Echo" ]; then
+		Echo="/usr/bin/gecho"
 
-		echo "Sorry no valid echo found"
-		exit 1
+	else 
+
+		Echo="/usr/ucb/echo"
+
+		if [ ! -x "$Echo" ]; then
+
+			echo "Sorry no valid echo found"
+			exit 1
+
+		fi
 
 	fi
 
 } 
-
 
 len=`$Echo "\n" | wc -l`
 
@@ -164,8 +163,6 @@ if [ "$len" -ne "1" ]; then
 	fi
 
 fi
-
-
 
 changepassDir="${baseDir}/../../../../"
 changepass="${changepassDir}/changepass"

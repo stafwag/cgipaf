@@ -33,46 +33,47 @@ prgName=os.path.basename(argv[0])
 
 def usage():
 
-	print("Usage: <stdin> (username:password) " + prgName)
-	exit(1)
+        print("Usage: <stdin> (username:password) " + prgName)
+        exit(1)
 
 if len(argv) !=1:
 
-	usage() 
+        usage() 
 
 for line in stdin:
 
-	line=line.rstrip()
+        line=line.rstrip()
 
-	if len(line) == 0:
-		continue
+        if len(line) == 0:
+                continue
 
-	print("line = " + line + " len " + str(len(line)))
+        print("line = " + line + " len " + str(len(line)))
 
-	(user,password) = line.split(":")
+        (user,password) = line.split(":")
 
-	user=user.rstrip()
-	password=password.rstrip()
+        user=user.rstrip()
+        password=password.rstrip()
 
-	print("user:\"" + user + "\" password: \"" + password + "\"\n")
+        print("user:\"" + user + "\" password: \"" + password + "\"\n")
 
-	loginStr="ssh " + user + "@localhost"
+        loginStr="ssh " + user + "@localhost"
 
 
-	try:
+        try:
 
-		mySsh=pexpect.spawn(loginStr)
-		mySsh.expect("assword.*:")
-		mySsh.sendline(password)
-		mySsh.expect("\$ ")
-		mySsh.send("exit")
+                mySsh=pexpect.spawn(loginStr)
+                mySsh.timeout=60
+                mySsh.expect("assword.*:")
+                mySsh.sendline(password)
+                mySsh.expect("\$ ")
+                mySsh.send("exit")
 
-	except Exception as e:
+        except Exception as e:
 
-		print("logon failed",e)
-		exit(1)
+                print("logon failed",e)
+                exit(1)
 
-	
+        
 
 
 

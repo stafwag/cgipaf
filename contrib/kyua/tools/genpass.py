@@ -44,13 +44,13 @@ if len(argv) !=2:
 l=int(argv[1])
 
 if l < 4:
-	print("Sorry, length not be < 4")
-	exit(1)
+  print("Sorry, length not be < 4")
+  exit(1)
 
 maxDigitSpecialPlace=l-1
 
 if l >  7:
-	maxDigitSpecialPlace=7
+  maxDigitSpecialPlace=7
 
 
 digitPlace=random.randint(0,maxDigitSpecialPlace)
@@ -59,14 +59,14 @@ normalPlace=random.randint(0,maxDigitSpecialPlace)
 normalPlace2=random.randint(0,maxDigitSpecialPlace)
 
 while digitPlace == specialPlace:
-	specialPlace=random.randint(0,maxDigitSpecialPlace)
+  specialPlace=random.randint(0,maxDigitSpecialPlace)
 
 
 while (normalPlace == specialPlace) or (normalPlace == digitPlace) or (normalPlace == normalPlace2):
-	normalPlace=random.randint(0,maxDigitSpecialPlace)
+  normalPlace=random.randint(0,maxDigitSpecialPlace)
 
 while (normalPlace2 == specialPlace) or (normalPlace2 == digitPlace) or (normalPlace2 == normalPlace):
-	normalPlace2=random.randint(0,maxDigitSpecialPlace)
+  normalPlace2=random.randint(0,maxDigitSpecialPlace)
 
 pwArray=[random.choice(string.punctuation+string.digits+string.digits+string.ascii_letters+string.ascii_letters) for i in range(l)]
 
@@ -78,14 +78,14 @@ pwArray[digitPlace]=random.choice(string.digits)
 
 for i in range(len(pwArray)):
 
-	c=pwArray[i]
+  c=pwArray[i]
 
-	if c == " ":
+  if c == " ":
 
-		while (c == " "):
-			c=random.choice(string.punctuation) 
+    while (c == " "):
+      c=random.choice(string.punctuation) 
 
-		pwArray[i]=c
+    pwArray[i]=c
 
 pw= "".join(pwArray)
 print(pw)

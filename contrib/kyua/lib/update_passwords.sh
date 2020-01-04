@@ -3,7 +3,7 @@
 #
 # update_passwords.sh
 #
-# Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,8 +48,7 @@ getShadowLine() {
 
 		}
 
-
-		hashLine=`EDITOR=cat sudo $viPw | egrep "^${user}:"` || {
+		hashLine=`sudo EDITOR=cat $viPw | egrep "^${user}:"` || {
 
 			echo ""
 			return 1

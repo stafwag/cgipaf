@@ -3,7 +3,7 @@
 #
 # update_password_mv_pwd_mkdb.sh
 #
-# Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 
 . `dirname $0`/../config.sh
 
-mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst || {
+sudo mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst || {
 
 
-	echo "ERROR: mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst failed"
+	echo "ERROR: sudo mv /usr/sbin/pwd_mkdb /usr/sbin/pwd_mkdb_cgipaf_tst failed"
 	exit 1
 
 }
@@ -37,9 +37,9 @@ echo "tst1:qwerty" | $changepass -n
 
 exitCode=$?
 
-mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb || {
+sudo mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb || {
 
-	echo "ERROR: mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb failed"
+	echo "ERROR: sudo mv /usr/sbin/pwd_mkdb_cgipaf_tst /usr/sbin/pwd_mkdb failed"
 	exit 1	
 
 }

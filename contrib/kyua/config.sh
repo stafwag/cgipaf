@@ -3,7 +3,7 @@
 #
 # config.sh
 #
-# Copyright (C) 2016, 2017, 2019 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2017, 2019, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -119,6 +119,9 @@ isOpenBsd () {
 	return 1
 
 }
+
+LANG=C
+export LANG
 
 scriptName=`basename $0`
 

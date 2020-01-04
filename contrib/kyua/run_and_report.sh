@@ -3,7 +3,7 @@
 #
 # run_and_report.sh
 #
-# Copyright (C) 2016 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ myWhich () {
 
 }
 
-
+LANG=C
+export LANG
 
 myWhich realpath > /dev/null 2>&1
 
@@ -188,7 +189,6 @@ myWhich kyua || {
 		fi
 
 		exit 1
-
 
 	}
 

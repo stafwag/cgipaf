@@ -61,20 +61,14 @@ for line in stdin:
 
         try:
 
-                mySsh=pexpect.spawn(loginStr)
-                mySsh.timeout=60
-                mySsh.expect("assword.*:")
-                mySsh.sendline(password)
-                mySsh.expect("\$ ")
-                mySsh.send("exit")
+                mySu=pexpect.spawn(loginStr)
+                mySu.timeout=60
+                mySu.expect("assword.*:")
+                mySu.sendline(password)
+                mySu.expect("\$ ")
+                mySu.send("exit")
 
         except Exception as e:
 
                 print("logon failed",e)
                 exit(1)
-
-        
-
-
-
-

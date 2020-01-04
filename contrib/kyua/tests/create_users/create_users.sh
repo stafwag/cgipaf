@@ -54,14 +54,14 @@ userAdd() {
 
 	isFreeBsd && {
 
-		pw useradd $user
+		sudo pw useradd $user
 		return $?
 
 	}
 
 	isNetBsd && {
 
-		/usr/sbin/user add $user
+		sudo /usr/sbin/user add $user
 		return $?
 
 	}
@@ -91,14 +91,13 @@ userAdd() {
 
 	if [ -x "$myUserAdd" ]; then
 
-		$myUserAdd $userAddArg $user
+		sudo $myUserAdd $userAddArg $user
 		return $?
 
 	fi
 
 	echo "ERROR: useradd \"$myUserAdd\" does not work"
 	exit 13
-
 
 
 }

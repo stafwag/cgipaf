@@ -49,7 +49,7 @@ getShadowLine() {
 		}
 
 
-		hashLine=`EDITOR=cat $viPw | egrep "^${user}:"` || {
+		hashLine=`EDITOR=cat sudo $viPw | egrep "^${user}:"` || {
 
 			echo ""
 			return 1
@@ -59,7 +59,7 @@ getShadowLine() {
 
 	else
 
-		hashLine=`cat /etc/shadow | egrep "^${user}:"` || {
+		hashLine=`sudo cat /etc/shadow | egrep "^${user}:"` || {
 
 
 			echo ""
@@ -144,7 +144,7 @@ while [ "$myCounter" -lt "$max" ]; do
 
 	echo "running changepass..."
 
-	cat $tmpFile | $changepass || {
+	cat $tmpFile | sudo $changepass || {
 
 		exitCode=$?
 		echo "ERROR: Sorry changepass failed"

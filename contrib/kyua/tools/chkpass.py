@@ -56,7 +56,7 @@ for line in stdin:
 
         print("user:\"" + user + "\" password: \"" + password + "\"\n")
 
-        loginStr="ssh " + user + "@localhost"
+        loginStr="su " + user
 
 
         try:

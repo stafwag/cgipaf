@@ -3,7 +3,7 @@
 #
 # create_users.sh
 #
-# Copyright (C) 2016, 2017 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2016, 2017, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,14 +54,14 @@ userAdd() {
 
 	isFreeBsd && {
 
-		pw useradd $user
+		sudo pw useradd $user
 		return $?
 
 	}
 
 	isNetBsd && {
 
-		/usr/sbin/user add $user
+		sudo /usr/sbin/user add $user
 		return $?
 
 	}
@@ -72,11 +72,12 @@ userAdd() {
 		if [ -x /usr/sbin/useradd ]; then
 
 			myUserAdd="/usr/sbin/useradd"
+	        else 
+
+			echo "ERROR: no working useradd found"
+			exit 13
 
 		fi
-
-		echo "ERROR: no working useradd found"
-		exit 13
 
 	}
 
@@ -91,14 +92,13 @@ userAdd() {
 
 	if [ -x "$myUserAdd" ]; then
 
-		$myUserAdd $userAddArg $user
+		sudo $myUserAdd $userAddArg $user
 		return $?
 
 	fi
 
 	echo "ERROR: useradd \"$myUserAdd\" does not work"
 	exit 13
-
 
 
 }

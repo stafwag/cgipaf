@@ -1,25 +1,27 @@
 /*
  * xstring.h
  *
- * Copyright (C) 2001,2007,2015 Staf Wagemakers Belgie/Belgium
+ *  Copyright (C) 2001, 2006, 2020  Staf Wagemakers Belgie/Belgium
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
 #include "common.h"
+#include <stdlib.h>
+#include <string.h>
 void cut_space (char *c);
 void cut_after_quote(char *c);
 void cut_after_char(char *c, char ch);
@@ -36,7 +38,9 @@ char * replace_needles(char *txt, char ***needles);
 char * cut_between(char *txt,char *head, char *tail);
 int strtoupper(char *str);
 int strtolower(char *str);
-char *istrstr(char *haystack, char *needle);
+#ifndef HAVE_STRCASESTR
+char *strcasestr(char *haystack, char *needle);
+#endif
 void rmchar(char *str,char rmc);
 void rmpos (char *c,unsigned i);
 void stripslahes (char *c);
@@ -52,6 +56,15 @@ int update_string_pair_item(char ***str_pair,char *item, char *value, int free_m
 int delete_string_pair_item(char ***str_pair,char *item,int free_mode);
 char * clone_string(char *str);
 void free_string_pair (char *** str_pair );
+unsigned utf8_strsize(char *c);
 void replace_char(char *str,char src,char dest);
 char * null2str(char *str);
+char * utf8_firstchar(char *c);
+unsigned utf8_strlen(char *str);
+char * right_align_2_strings(char * str1, char * str2, int width);
+char * str_nchars(int n, char c);
+char ** combine_string_array_pointers( char **src1, char **src2);
+char * combine_2_strings(char *str1,char *str2);
+char * combine_strings(char **strs);
 int isstrdigit(char *str);
+int isbin(unsigned char c);

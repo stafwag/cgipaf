@@ -1,7 +1,7 @@
 /*
  * configfile.c
  *
- * Copyright (C) 1999,2001,2003,2007 Staf Wagemakers Belgie/Belgium 
+ * Copyright (C) 1999, 2001, 2003, 2007, 2020 Staf Wagemakers Belgie/Belgium 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ while(1) {
       strcat(end_section,*current_section);
       strcat(end_section,">");
   
-      if((found=istrstr(s,end_section))==NULL) {
+      if((found=strcasestr(s,end_section))==NULL) {
 	 break;
       }
       s=found+strlen(end_section);
@@ -125,13 +125,13 @@ char * real_get_config(FILE *fp,char *section_name,char *var_name,int mode)
   		if(ss==NULL) return (NULL);
   		if (section_name!=NULL) {
      			if (!sect) {
-        			if((c=istrstr(ss,start_section))!=NULL) {
+        			if((c=strcasestr(ss,start_section))!=NULL) {
           			ss=c;sect=1;
         			}
      			}
  
    			if (sect) {
-      				if ((c=istrstr(ss,end_section))!=NULL) {
+      				if ((c=strcasestr(ss,end_section))!=NULL) {
          			ss=c;sect=0;
       				}
     			}

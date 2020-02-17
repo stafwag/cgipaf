@@ -1,7 +1,7 @@
 /*
  * xstring.c  	- Tired of writing these things over and over again -
  *
- * Copyright (C) 2001,2003,2007,2015 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2001,2015,2020  Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,34 +20,28 @@
  */
 
 #include "xstring.h"
-
 /*
- *
  * replaces the first ch in c with a '\0', if ch == '\0' 
  * the first space is replaced                                  
- *
  */
 void cut_after_char (char *c,char ch)
 {
-
-	if(c==NULL) return;
-	if(strlen(c)==0) return;
-
-	do {
-   		if (ch=='\0') {
-      			if (isspace(*c)) { 
-         			*c='\0';
-         			break;
-	 		}
-      	}
-      		else {
-         		if (*c==ch) { 
-            		*c='\0';
-	    		break;
-	 		}
-      		}
-   		++c;
-   	} while (*c);
+if (c==NULL) return;
+if(strlen(c)==0) return;
+for(;*c!='\0';c++) {
+   if (ch=='\0') {
+      if (isspace(*c)) { 
+         *c='\0';
+         break;
+	 }
+      }
+      else {
+         if (*c==ch) { 
+            *c='\0';
+	    break;
+	 }
+      }
+   }
 }
 
 /*
@@ -57,40 +51,29 @@ void cut_after_char (char *c,char ch)
  */
 void cut_after_quote (char *c) 
 {
+char *cp=c;
 
-char *cp;
+if (c==NULL) return;
 
-cp = c;
+for(;*c!='\0';c++) {
+   if(*c=='\"') {
+      if(c==cp) 
+	{
+	   *c='\0';
+	   break;
+	}
+      if(*(c-1)!='\\')
+	{
+	   *c='\0';
+	   break;
+	}
+   }
+}
 
-do {
-
-	if(*c=='\"') {
-
-      		if(c==cp) {
-
-	   		*c='\0';
-	   		break;
-
-		}
-
-      		if(*(c-1)!='\\') {
-
-	   		*c='\0';
-	   		break;
-
-		}
-
-   	}
-
-	++c;
-
-} while(*c);
 }
 
 /*
- *
  * get the size of a item
- *
  */
 int get_quoted_item_size (char *c)
 {
@@ -107,40 +90,31 @@ return(c-cc);
    
    
 /*
- *
  * removes everything after a space           
- *
  */
 void cut_space (char *c)
 {
 cut_after_char(c,'\0');
 }
-
 /*
- *
  * removes everything after a #                
- *
  */
 void cut_rem (char *c)
 {
 cut_after_char(c,'#');
 }
-
 /*
- *
  * move to the next item                       
- *
  */
 char * mv_2_next (char *c)
 {
+if (c==NULL) return NULL;
 do if (isspace(*c)) ++c; else break; while (*c);
 return c;
 }
 
 /*
- *
  * get the size of a item ch=IFS
- *
  */
 int get_char_item_size (char *c,char ch)
 {
@@ -150,9 +124,7 @@ return(c-cc);
 }
 
 /*
- *
  * get the size of a item
- *
  */
 int get_item_size (char *c)
 {
@@ -163,22 +135,19 @@ return(c-cc);
 
 
 /*
- *
  * frees an array of strings
- *
  */
 void free_null_array (char **cc)
 {
 char ** cc2;
+if (cc==NULL) return;
 cc2=cc;
 while (*cc2) { free(*cc2);cc2++; }
 free(cc);
 }
 
 /*
- * 
  * replaces a needle with a new string head & tail are added to needle 
- *
  */
 char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *head,char *tail)
 {
@@ -206,9 +175,7 @@ char * replace_headtail_needle(char *txt, char *needle1, char *replace,char *hea
 }
 
 /*
- * 
  * replace needle with a new string
- *
  */
 char * replace_needle(char *txt, char *needle, char *replace)
 {
@@ -216,10 +183,8 @@ char * replace_needle(char *txt, char *needle, char *replace)
 }
 
 /*
- *
  * replaces an array of head-tail needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
- *
  */
 char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail)
 {
@@ -241,10 +206,8 @@ char * replace_headtail_needles(char *txt, char ***needles,char *head,char *tail
 }
 
 /*
- *
  * replaces an array of needles
  * needles[0][0] = needle1 , needles[0][1] = value1 , ...
- *
  */
 char * replace_needles(char *txt, char ***needles)
 {
@@ -252,10 +215,8 @@ char * replace_needles(char *txt, char ***needles)
 }
 
 /*
- *
  * kill all animals with head and tail.
  * !!!! txt be will freed !!!!!
- *
  */
 char * real_cut_between(char *txt,char *head, char *tail) {
    char *ret,*s,*c;
@@ -282,9 +243,7 @@ char * real_cut_between(char *txt,char *head, char *tail) {
 }
 
 /*
- *
  * delete all animals with head and tail.
- *
  */
 char * cut_between(char *txt,char *head, char *tail) 
 {
@@ -295,9 +254,7 @@ char * cut_between(char *txt,char *head, char *tail)
 }
 
 /*
- *
- * str to lowercase
- *
+ * convert str to lower case
  */
 int strtolower(char *str) {
    char *c;
@@ -311,9 +268,7 @@ int strtolower(char *str) {
 }
 
 /*
- *
- * str to UPPERCASE
- *
+ * convert str to UPPERCASE
  */
 int strtoupper(char *str) {
    char *c;
@@ -326,15 +281,16 @@ int strtoupper(char *str) {
    return 0;
 }
 
+#ifndef HAVE_STRCASESTR
 /*
- *
- * ignore case strstr
- *
+ * like strstr but ignore case
+ * Please use strcasestr if you can
  */
-char * istrstr(char *haystack, char *needle) {
+char * strcasestr(char *haystack, char *needle) {
    char *ihaystack, *ineedle;
    char *c,*r=NULL;
    int l;
+
    ihaystack=xmalloc(strlen(haystack)+1);
    ineedle=xmalloc(strlen(needle)+1);
    
@@ -348,18 +304,17 @@ char * istrstr(char *haystack, char *needle) {
       r=haystack+l;
    }
 
-   free(ihaystack);
-   free(ineedle);
+   xfree(ihaystack);
+   xfree(ineedle);
    return(r);
 }
+#endif
 
 /*
- *
  * removes all rmc chars from string
- *
  */
 void rmchar(char *str,char rmc) {
-char *c,*cc;
+   char *c,*cc;
 
    for( c=str;*c!='\0';c++) {  
       while(*c==rmc) {
@@ -370,14 +325,11 @@ char *c,*cc;
 }
 
 /*
- *
- * Verwijderen v/e karakter in een string
+ * Deletes a char in a string
  * char     *c -> string
- * unsigned i  -> positie in string
+ * unsigned i  -> position
  *
- * P.S. Deze funktie schuift de kar's ook
- * naar rechts!
- * 
+ * This wil shift all chars to the right
  */
 void rmpos (char *c,unsigned i)
 {
@@ -387,9 +339,7 @@ void rmpos (char *c,unsigned i)
 }
 
 /*
- *
- * converts \char s to their \
- *
+ * removes all back slashes from a string
  */
 void stripslahes (char *c) 
 {
@@ -418,11 +368,9 @@ for(;*c!='\0';c++) {
 }
 
 /*
- *
- * returns 1 is var is "yes"|"on"|"1"
- * returns 0 is var is "no"|"off"|"0"
+ * returns 1 if var is "yes"|"on"|"1"
+ * returns 0 if var is "no"|"off"|"0"
  * returns -1 is undefined
- *
  */
 int is_var_yes(char *var)
 {
@@ -438,9 +386,7 @@ int is_var_yes(char *var)
 }
 
 /*
- *
  * frees a NULL terminated string array
- *
  */
 void free_string_array (char **array) {
 	char **ccp;
@@ -461,9 +407,7 @@ void free_string_array (char **array) {
 }
 
 /*
- *
  * number of string in a NULL terminated string array
- *
  */
 int number_of_strings (char **array) {
 	char **ccp;
@@ -474,8 +418,7 @@ int number_of_strings (char **array) {
 }
 
 /*
- *
- * clones a string array
+ * copy the string pointers from src to dest
  */
 int copy_string_array_pointers (char **dest, char **src) {
 	char **ccp;
@@ -493,36 +436,22 @@ int copy_string_array_pointers (char **dest, char **src) {
 	return(0);
 }
 
-/*
- * converts an array of string to a string
- */
+char ** combine_string_array_pointers( char **src1, char **src2) {
 
-char * string_array_to_str(char **array) {
+  char ** dest;
 
-        char *txt=NULL;
-        char **cc=array;
+  int length_src1=number_of_strings(src1);
+  int length_src2=number_of_strings(src2);
 
-        for(;*cc!=NULL;cc++) {
+  if ( (length_src1<0) || (length_src2<0) ) return NULL;
 
-                if(txt==NULL) {
+  dest=xcalloc(number_of_strings(src1)+number_of_strings(src2), sizeof(char *));
+  copy_string_array_pointers(dest,src1);
+  copy_string_array_pointers(dest+(length_src1-1),src2);
 
-                        txt=xmalloc(strlen(*cc)+1);
-                        strcpy(txt,*cc);
-                        continue;
-
-
-                }
-
-                txt=xrealloc(txt,strlen(txt)+strlen(" ")+strlen(*cc)+1);
-                strcat(txt," ");
-                strcat(txt,*cc);
-
-        };
-
-        return(txt);
+  return dest;
 
 }
-
 
 /*
  *
@@ -657,17 +586,13 @@ int delete_string_pair_item(char ***str_pair,char *item,int free_mode) {
 			break;
 		}
 
-	
 	}
-		
 
 	return(ret);
-
 
 }
 
 void free_string_pair (char ***str_pair) {
-
 
 	char ***pt;
 
@@ -732,6 +657,162 @@ int isstrdigit(char *str) {
 
 	return(1);
 
+}
 
+/*
+ * return 0 if c is \n or bacspace
+ *          if c is no acscii
+ */
+int isbin(unsigned char c)
+{
+if (c==10||c==8) return 0;
+if ((c<32)||(c>126&&c<160)) return 1;
+  else return 0;
+}
+
+/*
+ * calculate the char length of a utf8 string
+ */
+unsigned utf8_strlen(char *str) {
+
+  unsigned u=0;
+  unsigned size=strlen(str);
+  unsigned pointer=0; 
+  char *c;
+  c=str;
+
+  while (*c) {
+
+      pointer=pointer+utf8_strsize(c);
+
+      if (*c == 0x08 ) {
+        if (u) --u;
+      } else {
+        ++u;
+      }
+
+      if(pointer>size) return u;
+      c=str+pointer;
+
+  }
+
+  return u;
+}
+
+/*
+ * returns a string with the first utf8 char
+ */
+char * utf8_firstchar(char *c) {
+
+  char *str;
+  int   number_of_chars=utf8_strsize(c);
+
+  str=xcalloc(number_of_chars + 1, sizeof(char));
+
+  if ( (number_of_chars==1) && isbin(*c)) {
+    str[0]='.';
+  } else {
+    strncpy(str,c,number_of_chars);
+  }
+
+  return(str);
+
+}
+
+/*
+ * calcuates the byte size for utf8 string
+ */
+unsigned utf8_strsize(char *c) {
+
+  int   number_of_chars=0;
+
+  switch (*c) {
+    case 0x00 ... 0x7F:
+      number_of_chars=1;
+      break;
+    case 0xffffffC0 ... 0xffffffDF:
+      number_of_chars=2;
+      break;
+    case 0xffffffE0 ... 0xffffffEF:
+      number_of_chars=3;
+      break;
+    case 0xffffffF0 ... 0xffffffF7:
+      number_of_chars=4;
+      break;
+    default:
+      number_of_chars=1;
+      break;
+  }
+
+  return(number_of_chars);
+
+}
+
+/*
+ * returns a string with str1 to the left side
+ * str to the right size aligned to width
+ */
+
+char * right_align_2_strings(char * str1, char * str2, int width) {
+  char *ret=NULL;
+  int number_of_spaces=0;
+  int total_string_length=strlen(str1)+strlen(str2);
+
+  if (width < total_string_length) return NULL;
+
+  number_of_spaces=width-total_string_length;
+  if (number_of_spaces < 0) return NULL;
+
+  ret=xmalloc(strlen(str1)+strlen(str2)+number_of_spaces+1);
+  if (sprintf(ret,"%s%*c%s",str1,number_of_spaces,' ',str2) < 0) return NULL;
+  return ret;
+
+}
+
+/*
+ * combines 2 string
+ */
+char * combine_2_strings(char *str1, char *str2) {
+
+  char *ret=NULL;
+  if ( ( str1 == NULL ) || ( str2 ==NULL ) ) return NULL;
+
+  ret=xcalloc(strlen(str1)+strlen(str2), sizeof(char));
+  strcpy(ret,str1);
+  strcat(ret,str2);
+
+  return ret;
+}
+
+/*
+ * combines an array of strings
+ */
+char * combine_strings(char **strs) {
+
+  char *ret=xcalloc(1,sizeof(char));
+  char **cc=NULL;
+
+  for(cc=strs;*cc!=NULL;cc++) {
+
+    ret=xrealloc(ret,strlen(ret)+strlen(*cc)+1);
+    strcat(ret,*cc);
+
+  }
+
+  return(ret);
+
+}
+
+/*
+ * return a string  n * c
+ */
+
+char * str_nchars(int n, char c) {
+  char *ret=xcalloc(n+1,sizeof(char));
+  int i=0;
+  for (i=0;i<n;i++) {
+    ret[i]=c;
+  }
+  return ret;
 }
 

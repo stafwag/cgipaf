@@ -1,7 +1,7 @@
 /*
  * changepass.c
  *
- * Copyright (C) 2002,2006,2007,2015,2016 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 2002, 2006, 2007, 2015, 2016, 2020 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ void usage() {
 	char txt_disable_pam[]="\n";
 #endif
 
-	char * txt_supported_algo=string_array_to_str(xcrypt_supported_crypts());
+	char * txt_supported_algo=combine_strings(xcrypt_supported_crypts());
 	replace_char(txt_supported_algo,' ','|');
 
       	fprintf(stderr,"%s %s",prgname,(char *)CGIPAF_VERSION);

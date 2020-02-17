@@ -6,6 +6,8 @@ AC_CONFIG_HEADER(config.h)
 AC_SUBST(ARG)
 AC_SUBST(NEED_COMPAT_H)
 
+AC_USE_SYSTEM_EXTENSIONS
+
 dnl
 dnl OS Checks
 dnl
@@ -731,7 +733,7 @@ AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 
-AC_CHECK_FUNCS(free realloc strdup strerror strstr strcasecmp strncasecmp strrchr strchr strnchr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid getspnam gettimeofday memset l64a)
+AC_CHECK_FUNCS(free realloc strdup strerror strstr strcasestr strcasecmp strncasecmp strrchr strchr strnchr va_start va_end vsnprintf strncat strncpy openlog syslog closelog setuid setreuid getuid getspnam gettimeofday memset l64a)
 AC_CHECK_FUNCS(unsetenv,,NEED_COMPAT_H="yes")
 AC_CHECK_FUNCS(setenv,,NEED_COMPAT_H="yes")
 

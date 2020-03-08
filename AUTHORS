@@ -12,3 +12,6 @@ Daniel R.,
 
  * created a patch with the ability to list words in /etc/cgipaf.conf that 
    should not be a part of new passwords.
+
+Koen de Jonge
+  * Dutch translation

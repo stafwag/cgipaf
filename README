@@ -63,6 +63,18 @@ OVERVIEW
     It's possible to use a redirect for the error messages, instead of plain 
     html files.
 
+COPYRIGHT
+
+    Copyright (c) 2002, 2007 Staf Wagemakers.
+
+    Permission is granted to copy, distribute and/or modify this document
+    under the terms of the GNU Public License, Version  2  or  any later
+    version published by the Free Software Foundation.
+
+    You are free to distribute this software under the terms of the 
+    GNU General Public License. The complete text of the GNU General
+    Public License can be found at http://www.gnu.org/licenses/gpl.html
+
 CONFIGURATION
  
     see Configuration.html
@@ -74,4 +86,3 @@ CONTACT INFO
     Future improvements will be available at 
     http://www.wagemakers.be/english/programs/cgipaf/
 
-    

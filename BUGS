@@ -47,3 +47,12 @@ version 1.0rc2
 version 1.0rc1
 
   + Configure doesn't work on non PAM systems
+
+
+COPYRIGHT NOTICE
+
+  Copyright (c) 2002 - 2020 Staf Wagemakers
+
+  Permission is granted to copy, distribute and/or modify this document
+  under the terms of the GNU Public License, Version  2  or  any later
+  version published by the Free Software Foundation.

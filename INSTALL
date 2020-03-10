@@ -121,7 +121,15 @@ CONFIGURATION
     and "run_after_mailcfg" to restore it. See Configuration.html for more 
     information.
 
-    Examples with vacation support are available in the exmaples directory
+    Examples with vacation support are available in the examples directory
+
+COPYRIGHT NOTICE
+
+    Copyright (c) 2002 - 2020 Staf Wagemakers
+
+    Permission is granted to copy, distribute and/or modify this document
+    under the terms of the GNU Public License, Version  2  or  any later
+    version published by the Free Software Foundation.
     
 THAT'S ALL FOLKS
 

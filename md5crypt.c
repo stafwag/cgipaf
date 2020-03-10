@@ -8,7 +8,7 @@
  */
 
 /*
- * Ported from FreeBSD to Linux, only minimal changes.  --marekm
+ * Ported from FreeBSD to GNU/Linux, only minimal changes.  --marekm
  */
 
 #include "md5crypt.h"

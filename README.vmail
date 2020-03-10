@@ -24,3 +24,13 @@ to UserMaildmains that are hosted on your server.
 	AclOrder 		Deny,Allow
 	DenyUserMaildomains	*
 	AllowUserMaildomains	mydomain1.com mydomain2.com
+
+
+
+Copyright Notice
+
+Copyright (c) 2004 Staf Wagemakers
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Public License, Version  2  or  any later
+version published by the Free Software Foundation.

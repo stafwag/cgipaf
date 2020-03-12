@@ -211,10 +211,11 @@ COPYRIGHT NOTICE
 	"compiled" forms (HTML, PDF and so forth) with or without modification,
 	are permitted provided that the following conditions are met:
 
-	Redistributions of source code (Markdown, plaintext, et. al.) must 
+	1. Redistributions of source code (Markdown, plaintext, et. al.) must 
 	retain the above copyright notice, this list of conditions and the
-	following disclaimer as the first lines of this file unmodified.
-	Redistributions in compiled form (HTML, PDF and so on) must reproduce
+	following disclaimer.
+
+	2. Redistributions in compiled form (HTML, PDF and so on) must reproduce
 	the above copyright notice, this list of conditions and the following
 	disclaimer in the documentation and/or other materials provided with
 	the distribution.

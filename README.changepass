@@ -1,4 +1,4 @@
-CHANGEPASS(8)                                                    CHANGEPASS(8)
+CHANGEPASS(8)               System Manager's Manual              CHANGEPASS(8)
 
 
 
@@ -42,10 +42,58 @@ AAUUTTHHOORR
 
 
 CCOOPPYYRRIIGGHHTT
-       Copyright (c)2002, 2007 Staf Wagemakers.
-       You  are  free  to  distribute this software under the terms of the GNU
-       General Public License. The complete text of  the  GNU  General  Public
-       License can be found at http://www.gnu.org/licenses/gpl.html
+   DDooccuummeennttaattiioonn
+       The documentation for CGIpaf is licensed under the terms of the FreeBSD
+       Documentation License.
+
+       The FreeBSD Documentation License
+
+       Copyright (c) 2001 - 2020 Staf Wagemakers
+
+       Redistribution and use in source (plaintext, HTML) and 'compiled' forms
+       (SGML, HTML, PDF, PostScript, RTF and so forth) with or without modifi-
+       cation, are permitted provided that the following conditions are met:
+
+       1. Redistributions of source code (plaintext,  HTML)  must  retain  the
+       above  copyright notice, this list of conditions and the following dis-
+       claimer.
+
+       2. Redistributions in compiled form (transformed to  other  DTDs,  con-
+       verted  to  PDF,  PostScript, RTF and other formats) must reproduce the
+       above copyright notice, this list of conditions and the following  dis-
+       claimer  in  the documentation and/or other materials provided with the
+       distribution.
+
+       THIS DOCUMENTATION IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED  WAR-
+       RANTIES,  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MER-
+       CHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE  DISCLAIMED.   IN
+       NO  EVENT  SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DI-
+       RECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR  CONSEQUENTIAL  DAM-
+       AGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+       SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOW-
+       EVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+       LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING  IN  ANY
+       WAY OUT OF THE USE OF THIS DOCUMENTATION, EVEN IF ADVISED OF THE POSSI-
+       BILITY OF SUCH DAMAGE.
+
+   SSooffttwwaarree
+       CGIpaf (the software) is licensed under the terms of  the  GNU  General
+       Public License version 2 or later.
+
+       Copyright (c) 2002, 2007 Staf Wagemakers.
+
+       This program is free software: you can redistribute it and/or modify it
+       under the terms of the GNU General Public License as published  by  the
+       Free  Software Foundation, either version 2 of the License, or (at your
+       option) any later version.
+
+       This program is distributed in the hope that it  will  be  useful,  but
+       WITHOUT  ANY  WARRANTY;  without  even  the  implied  warranty  of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  General
+       Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 

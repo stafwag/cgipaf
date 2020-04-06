@@ -1,7 +1,7 @@
 /*
  * mailconfig.c
  *
- * Copyright (C) 1999,2000-02 Staf Wagemakers Belgie/Belgium
+ * Copyright (C) 1999, 2000, 2001, 2002, 2020 Staf Wagemakers Belgie/Belgium
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,6 @@ char * add2home(struct passwd *p,char *dir)
 /* 
  * write the $HOME/.procmailrc header 
  */
-
 int write_procmailrchead(struct pw_info *pw, char *sendmail,char *formail)
 {
    FILE *fp;
@@ -66,7 +65,6 @@ int write_procmailrchead(struct pw_info *pw, char *sendmail,char *formail)
 /*
  * autoreply enabled?
  */
-
 int get_reply(struct pw_info *pw)
 {
    FILE *fp;
@@ -89,7 +87,6 @@ int get_reply(struct pw_info *pw)
 /*
  * get the vacation excuse
  */
-
 char * get_vacations(struct pw_info *pw)
 {
    FILE *fp;
@@ -118,7 +115,6 @@ char * get_vacations(struct pw_info *pw)
 /*
  * wrapper to get the forward_to email addres
  */
-
 char * realget_forward(struct pw_info *pw,int mode)
 {
    FILE *fp;
@@ -148,14 +144,17 @@ char * realget_forward(struct pw_info *pw,int mode)
       for(needle=*current_needle;needle!=NULL;needle=*(++current_needle)) {
 
       	if (!strcmp(buf,needle)) {
-	 	i=1;
-	 	break;
-      		}
-       	}
+	 	      i=1;
+	 	      break;
+      	}
+
+      }
 
    }
 
-   if ((!i)||(buf==NULL)) {fclose(fp); return(NULL);}
+   if (!i) {
+     fclose(fp); return(NULL);
+   }
    if (strstr(buf,"X-Loop")==NULL) {
       strcpy(mailadres,buf+2);
    }
@@ -186,7 +185,6 @@ char * get_forward(struct pw_info *pw)
 /* 
  * returns the forward_to if forwarding with keep msgs is enabled
  */
-
 char * get_kforward(struct pw_info *pw)
 {
    if (use_statefile) return(get_mailcfg_kforward(pw));
@@ -196,7 +194,6 @@ char * get_kforward(struct pw_info *pw)
 /*
  * tries to the domainname
  */
-
 char *get_maildomain(char *domain)
 {
    char domainname[100],hostname[100];
@@ -210,7 +207,7 @@ char *get_maildomain(char *domain)
    if(hostname!=NULL) strcat(hostdomainname,hostname);
    strcat(hostdomainname,".");
 
-   if(domainname!=NULL) strcat(hostdomainname,domainname);
+   strcat(hostdomainname,domainname);
 
    replace_char(hostdomainname,'(','_');
    replace_char(hostdomainname,')','_');
@@ -221,7 +218,6 @@ char *get_maildomain(char *domain)
 /*
  * write the autoreply part to the user's .procmailrc
  */
-
 int enable_reply(struct pw_info *pw,char *domain)
 {
    FILE *fp;
@@ -248,7 +244,6 @@ int enable_reply(struct pw_info *pw,char *domain)
 /*
  * write the forward body part the user's .procmailrc
  */
-
 int write_forwardbody(FILE *fp,struct pw_info *pw,char *mailadres,char *domain)
 {
    char *loopdomain=get_maildomain(domain);
@@ -261,7 +256,6 @@ int write_forwardbody(FILE *fp,struct pw_info *pw,char *mailadres,char *domain)
 /*
  * writes the forward part to the user's .procmailrc
  */
-
 int enable_forward(struct pw_info *pw,char *mailadres,char *domain)
 {
    FILE *fp;
@@ -281,7 +275,6 @@ int enable_forward(struct pw_info *pw,char *mailadres,char *domain)
 /*
  * writes the keep forward part to the user's .procmailrc
  */
-
 int enable_kforward(struct pw_info *pw, char *mailadres,char *domain)
 {
    FILE *fp;
@@ -301,7 +294,6 @@ int enable_kforward(struct pw_info *pw, char *mailadres,char *domain)
 /*
  * Is the emailaddres valid?
  */
-
 int tst_emailaddress(char *emailaddress)
 {
    char *cp,*address=NULL;
@@ -415,6 +407,7 @@ char * real_get_mailcfg_forward(struct pw_info *pw,int mode)
    }
    return(buf);
 }
+
 char * get_mailcfg_forward(struct pw_info *pw) 
 { 
    return(real_get_mailcfg_forward(pw,0));

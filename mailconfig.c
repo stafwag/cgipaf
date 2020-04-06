@@ -204,7 +204,7 @@ char *get_maildomain(char *domain)
    gethostname(hostname,99);
    searchdomain(domainname,99);
 
-   if(hostname!=NULL) strcat(hostdomainname,hostname);
+   strcat(hostdomainname,hostname);
    strcat(hostdomainname,".");
 
    strcat(hostdomainname,domainname);

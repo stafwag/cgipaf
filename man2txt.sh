@@ -3,7 +3,7 @@
 #
 # man2txt.sh
 #
-# Copyright (C) 2007 Staf Wagemakers Belgie/Belgium
+# Copyright (C) 2007, 2020 Staf Wagemakers Belgie/Belgium
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,4 +37,4 @@ if [ $# != "1" ]; then
 
 fi
 
-groff -t -e -mandoc -Tascii $1
+groff -t -e -mandoc -Tascii $1 | col -bx 
